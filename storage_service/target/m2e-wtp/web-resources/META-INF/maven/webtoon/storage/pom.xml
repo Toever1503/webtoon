@@ -51,7 +51,13 @@
 
 
 	</dependencies>
-	<build>
+	<build>	
 		<finalName>storage</finalName>
+		<resources>
+			<resource>
+				<directory>src/main/resources</directory>
+				<filtering>true</filtering>
+			</resource>
+		</resources>
 	</build>
 </project>
