@@ -1,4 +1,4 @@
-package webtoon.storage.api;
+package webtoon.storage.api.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import webtoon.storage.domain.repositories.IFileRepositoty;
+import webtoon.storage.domain.utils.FileUploadProvider;
 import webtoon.storage.infras.jpa.PageableBean;
 
 @RestController
@@ -22,10 +23,13 @@ public class MutationResource {
 	@Lazy
 	private PageableBean pageableBean;
 
-	public MutationResource(IFileRepositoty fileRepositoty) {
+	@Autowired
+	private FileUploadProvider fileUploadProvider;
+
+	public MutationResource() {
 		super();
 		// TODO Auto-generated constructor stub
-		System.out.println("hello world + " + fileRepositoty.count());
+		System.out.println("hello world + ");
 	}
 
 	@GetMapping
@@ -35,7 +39,7 @@ public class MutationResource {
 
 	@PostMapping("upload")
 	public String uploadFile(@RequestPart MultipartFile file, @RequestParam(required = false) String folder) {
-		return "uploaded";
+		return fileUploadProvider.uploadFile(file);
 	}
 
 	@PostMapping("bulk-upload")

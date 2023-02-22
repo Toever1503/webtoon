@@ -1,4 +1,4 @@
-package webtoon.storage.api;
+package webtoon.storage.api.resources;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
