@@ -21,6 +21,12 @@
 		<module>storage_service</module>
 	</modules>
 
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>2.4.5</version>
+	</parent>
+
 	<properties>
 		<spring.maven.artifact.version>5.3.6</spring.maven.artifact.version>
 		<org.egovframe.rte.version>4.0.0</org.egovframe.rte.version>
@@ -50,6 +56,21 @@
 	</repositories>
 
 	<dependencyManagement>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-web</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-tomcat</artifactId>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+			<artifactId>tomcat-embed-jasper</artifactId>
+		</dependency>
+		
 		<dependencies>
 			<dependency>
 				<groupId>junit</groupId>
@@ -168,7 +189,7 @@
 				<artifactId>mariadb-java-client</artifactId>
 				<version>3.1.2</version>
 			</dependency>
-			
+
 			<!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
 			<dependency>
 				<groupId>org.glassfish.jaxb</groupId>
