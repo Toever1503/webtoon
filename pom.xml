@@ -19,17 +19,21 @@
 
 	<modules>
 		<module>storage_service</module>
+		<module>account_service</module>
+		<module>comment_service</module>
+		<module>manga_service</module>
 	</modules>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>2.4.5</version>
+		<version>2.7.8</version>
 	</parent>
 
 	<properties>
 		<spring.maven.artifact.version>5.3.6</spring.maven.artifact.version>
 		<org.egovframe.rte.version>4.0.0</org.egovframe.rte.version>
+		<java.version>11</java.version>
 	</properties>
 
 	<repositories>
@@ -60,17 +64,21 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-		
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-tomcat</artifactId>
+			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
-		
+
 		<dependency>
-			<groupId>org.apache.tomcat.embed</groupId>
-			<artifactId>tomcat-embed-jasper</artifactId>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-test</artifactId>
+			<scope>test</scope>
 		</dependency>
-		
+
+	<!-- end for springboot -->
+
 		<dependencies>
 			<dependency>
 				<groupId>junit</groupId>
@@ -176,12 +184,6 @@
 				<dependency> <groupId>org.hibernate.orm</groupId> <artifactId>hibernate-core</artifactId> 
 				<version>6.2.0.CR2</version> </dependency> -->
 
-			<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
-			<dependency>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-starter-data-jpa</artifactId>
-				<version>2.7.8</version>
-			</dependency>
 
 			<!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->
 			<dependency>

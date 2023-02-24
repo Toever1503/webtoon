@@ -9,12 +9,13 @@
 		<artifactId>webtoon</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	<groupId>webtoon</groupId>
-	<artifactId>storage</artifactId>
-	<version>1.0.0</version>
+
+	<groupId>webtoon.storage</groupId>
+	<artifactId>webtoon-storage-service</artifactId>
 	<packaging>war</packaging>
 	<name>storage Maven Webapp</name>
 	<url>http://maven.apache.org</url>
+
 	<dependencies>
 		<dependency>
 			<groupId>junit</groupId>

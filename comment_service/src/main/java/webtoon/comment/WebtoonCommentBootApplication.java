@@ -1,4 +1,4 @@
-package webtoon.account;
+package webtoon.comment;
 
 import org.springframework.boot.Banner;
 import org.springframework.boot.SpringApplication;
@@ -8,18 +8,18 @@ import org.springframework.context.annotation.Import;
 
 @ServletComponentScan
 @SpringBootApplication
-@Import({ WebtoonAccountApplicationInitializer.class })
+@Import({ WebtoonCommentApplicationInitializer.class })
 
-public class WebtoonAccountBootApplication {
+public class WebtoonCommentBootApplication {
 	public static void main(String[] args) {
-		System.out.println("##### Webtoon account service Start #####");
+		System.out.println("##### Webtoon comment service Start #####");
 
-		SpringApplication springApplication = new SpringApplication(WebtoonAccountBootApplication.class);
+		SpringApplication springApplication = new SpringApplication(WebtoonCommentBootApplication.class);
 		springApplication.setBannerMode(Banner.Mode.OFF);
 		// springApplication.setLogStartupInfo(false);
 		springApplication.run(args);
 
-		System.out.println("##### Webtoon account service End #####");
+		System.out.println("##### Webtoon comment service End #####");
 	}
 
 }

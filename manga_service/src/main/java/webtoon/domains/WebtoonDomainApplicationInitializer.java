@@ -1,4 +1,4 @@
-package webtoon.account;
+package webtoon.domains;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -10,7 +10,7 @@ import org.springframework.web.servlet.i18n.LocaleChangeInterceptor;
 import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
-public class WebtoonAccountApplicationInitializer implements WebMvcConfigurer {
+public class WebtoonDomainApplicationInitializer implements WebMvcConfigurer {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {

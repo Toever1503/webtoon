@@ -9,12 +9,12 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<groupId>webtoon.account</groupId>
-	<artifactId>webtoon-account-service</artifactId>
+	<groupId>webtoon.comment</groupId>
+	<artifactId>webtoon-comment-service</artifactId>
 	<packaging>jar</packaging>
-	<name>account_service</name>
+	<version>1.0.0</version>
+	<name>webtoon-comment-service</name>
 	<url>http://www.egovframe.go.kr</url>
-
 
 	<dependencies>
 		<dependency>
