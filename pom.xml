@@ -35,6 +35,7 @@
 		<spring.maven.artifact.version>5.3.6</spring.maven.artifact.version>
 		<org.egovframe.rte.version>4.0.0</org.egovframe.rte.version>
 		<java.version>11</java.version>
+		<childModule.version>0.0.1-SNAPSHOT </childModule.version>
 	</properties>
 
 	<repositories>
@@ -298,6 +299,22 @@
 				<artifactId>ojdbc</artifactId> <version>14</version> <scope>system</scope> 
 				<systemPath>${basedir}/src/main/webapp/WEB-INF/lib/ojdbc-14.jar</systemPath> 
 				</dependency> -->
+
+			<!-- child module -->
+			<dependency>
+				<groupId>webtoon.account</groupId>
+				<artifactId>webtoon-account-service</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<dependency>
+				<groupId>webtoon.storage</groupId>
+				<artifactId>webtoon-storage-service</artifactId>
+				<version>1.0.0</version>
+			</dependency>
+
+			<!-- end child module -->
+
 		</dependencies>
 	</dependencyManagement>
 

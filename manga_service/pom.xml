@@ -6,7 +6,6 @@
 	<groupId>webtoon.domain</groupId>
 	<artifactId>webtoon-manga-service</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
 	<name>webtoon-manga-service</name>
 	<url>http://www.egovframe.go.kr</url>
 
@@ -15,7 +14,13 @@
 		<artifactId>webtoon</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	
+
+	<modules>
+		<module>
+			account_service
+		</module>
+	</modules>
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
@@ -33,6 +38,12 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
+
+		<dependency>
+			<groupId>webtoon.account</groupId>
+			<artifactId>webtoon-account-service</artifactId>
+		</dependency>
+
 	</dependencies>
 	<reporting>
 		<outputDirectory>${basedir}/target/site</outputDirectory>

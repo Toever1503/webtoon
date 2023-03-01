@@ -6,6 +6,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Import;
 
+
 @ServletComponentScan
 @SpringBootApplication
 @Import({ WebtoonDomainApplicationInitializer.class })
