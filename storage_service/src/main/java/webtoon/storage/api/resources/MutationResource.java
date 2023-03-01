@@ -40,9 +40,9 @@ public class MutationResource {
 		logger.info("MutationResource created.");
 	}
 
-	@PostMapping("upload")
-	public FileDto uploadFile(@RequestPart MultipartFile file, @RequestParam(required = false) String folder) {
-		return fileService.uploadFile(file, folder);
+	@PostMapping(value = "upload", consumes = {"multipart/*"})
+	public FileDto uploadFile(@RequestPart MultipartFile file) {
+		return fileService.uploadFile(file, null);
 	}
 
 	@PostMapping("bulk-upload")
