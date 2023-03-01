@@ -40,9 +40,10 @@ public class MutationResource {
 		logger.info("MutationResource created.");
 	}
 
-	@PostMapping(value = "upload", consumes = {"multipart/*"})
-	public FileDto uploadFile(@RequestPart MultipartFile file) {
-		return fileService.uploadFile(file, null);
+	@PostMapping("upload")
+	public FileDto uploadFile(@RequestPart MultipartFile file,
+			@RequestParam(required = false) String folder) {
+		return fileService.uploadFile(file, folder);
 	}
 
 	@PostMapping("bulk-upload")
@@ -53,7 +54,6 @@ public class MutationResource {
 
 	@DeleteMapping("delete-files")
 	public void deleteFile(@RequestParam List<Long> ids) {
-		
 		this.fileService.deleteFile(ids);
 	}
 }

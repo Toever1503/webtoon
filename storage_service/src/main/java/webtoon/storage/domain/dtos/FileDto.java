@@ -15,7 +15,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class FileDto {
 	
-	private String id;
+	private Long id;
 	private String fileName;
 	private String fileType;
 	private String url;
