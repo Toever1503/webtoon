@@ -6,7 +6,6 @@
 	<groupId>webtoon.domain</groupId>
 	<artifactId>webtoon-manga-service</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
 	<name>webtoon-manga-service</name>
 	<url>http://www.egovframe.go.kr</url>
 
@@ -15,8 +14,14 @@
 		<artifactId>webtoon</artifactId>
 		<version>1.0.0</version>
 	</parent>
-	
+
 	<dependencies>
+		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+		<dependency>
+			<groupId>mysql</groupId>
+			<artifactId>mysql-connector-java</artifactId>
+
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
