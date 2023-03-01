@@ -40,12 +40,12 @@ public class FileEntity {
 	private Long createdBy;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "created_date", nullable = false)
+	@Column(name = "created_at", nullable = false)
 	@CreationTimestamp
-	private Date createdDate;
+	private Date createdAt;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	@Column(name = "updated_date", nullable = false)
+	@Column(name = "updated_at", nullable = false)
 	@CreationTimestamp
-	private Date updatedDate;
+	private Date updatedAt;
 }
