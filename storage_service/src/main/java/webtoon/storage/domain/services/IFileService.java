@@ -8,6 +8,8 @@ import webtoon.storage.domain.dtos.FileDto;
 
 public interface IFileService {
 	FileDto uploadFile(MultipartFile file, String folder);
-
+	
 	List<FileDto> uploadBulkFile(List<MultipartFile> files, String folder);
+	
+	void deleteFile(List<Long> ids);
 }

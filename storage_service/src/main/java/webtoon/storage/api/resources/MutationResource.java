@@ -1,5 +1,9 @@
 package webtoon.storage.api.resources;
 
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -11,7 +15,9 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import webtoon.storage.domain.dtos.FileDto;
 import webtoon.storage.domain.repositories.IFileRepositoty;
+import webtoon.storage.domain.services.IFileService;
 import webtoon.storage.domain.utils.FileUploadProvider;
 import webtoon.storage.infras.jpa.PageableBean;
 
@@ -24,31 +30,30 @@ public class MutationResource {
 	private PageableBean pageableBean;
 
 	@Autowired
-	private FileUploadProvider fileUploadProvider;
+	private IFileService fileService;
+
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	public MutationResource() {
 		super();
 		// TODO Auto-generated constructor stub
-		System.out.println("hello world + ");
-	}
-
-	@GetMapping
-	public Object test() {
-		return pageableBean.getPageable().toString();
+		logger.info("MutationResource created.");
 	}
 
 	@PostMapping("upload")
-	public String uploadFile(@RequestPart MultipartFile file, @RequestParam(required = false) String folder) {
-		return fileUploadProvider.uploadFile(file);
+	public FileDto uploadFile(@RequestPart MultipartFile file, @RequestParam(required = false) String folder) {
+		return fileService.uploadFile(file, folder);
 	}
 
 	@PostMapping("bulk-upload")
-	public String uploadBulkFile(@RequestPart MultipartFile files, @RequestParam(required = false) String folder) {
-		return "uploaded";
+	public List<FileDto> uploadBulkFile(@RequestPart List<MultipartFile> files,
+			@RequestParam(required = false) String folder) {
+		return fileService.uploadBulkFile(files, folder);
 	}
 
 	@DeleteMapping("delete-files")
-	public void deleteFile() {
-
+	public void deleteFile(@RequestParam List<Long> ids) {
+		
+		this.fileService.deleteFile(ids);
 	}
 }
