@@ -5,21 +5,17 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>webtoon.domain</groupId>
 	<artifactId>webtoon-manga-service</artifactId>
-	<packaging>jar</packaging>
+
+
 	<name>webtoon-manga-service</name>
 	<url>http://www.egovframe.go.kr</url>
+	<packaging>jar</packaging>
 
 	<parent>
 		<groupId>webtoon</groupId>
 		<artifactId>webtoon</artifactId>
 		<version>1.0.0</version>
 	</parent>
-
-	<modules>
-		<module>
-			account_service
-		</module>
-	</modules>
 
 	<dependencies>
 		<dependency>

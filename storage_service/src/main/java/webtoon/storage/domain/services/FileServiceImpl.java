@@ -3,8 +3,13 @@ package webtoon.storage.domain.services;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import javax.transaction.Transactional;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -15,6 +20,7 @@ import webtoon.storage.domain.repositories.IFileRepositoty;
 import webtoon.storage.domain.utils.FileUploadProvider;
 
 @Service
+@Transactional
 public class FileServiceImpl implements IFileService {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
@@ -40,6 +46,7 @@ public class FileServiceImpl implements IFileService {
 		if (folder != null)
 			entity = this.fileUploadProvider.uploadFile(file, folder);
 		entity = this.fileUploadProvider.uploadFile(file);
+		this.fileRepository.save(entity);
 		return fileMapper.toDto(entity);
 	}
 
@@ -63,6 +70,12 @@ public class FileServiceImpl implements IFileService {
 		fileUrls.forEach(url -> {
 			this.fileUploadProvider.deleteFile(url);
 		});
+	}
+
+	@Override
+	public Page<FileDto> filterFile(Pageable pageable, Specification<FileEntity> specs) {
+		// TODO Auto-generated method stub
+		return this.fileMapper.toDtoPage(this.fileRepository.findAll(specs, pageable));
 	}
 
 }

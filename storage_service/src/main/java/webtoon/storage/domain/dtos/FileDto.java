@@ -22,10 +22,10 @@ public class FileDto {
 	private String alt;
 	private String title;
 	
-	@JsonFormat(pattern="HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createdAt;
 	
-	@JsonFormat(pattern="HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date updatedAt;
 
 }

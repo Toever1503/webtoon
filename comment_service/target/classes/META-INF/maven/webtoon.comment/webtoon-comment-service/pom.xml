@@ -6,7 +6,6 @@
 	<groupId>webtoon.comment</groupId>
 	<artifactId>webtoon-comment-service</artifactId>
 	<packaging>jar</packaging>
-	<version>1.0.0</version>
 	<name>webtoon-comment-service</name>
 	<url>http://www.egovframe.go.kr</url>
 
@@ -29,10 +28,11 @@
 		</dependency>
 
 		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
-		<dependency>
+		<!-- <dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+		</dependency> -->
+		
 	</dependencies>
 
 	<build>
