@@ -51,7 +51,7 @@ private EMangaStatus status;
 private EMangaSTS mangaSts;
 
 @Column(name = "comment_count")
-private int commentCount;
+private Integer commentCount;
 
 @JoinColumn(name = "manga_type")
 private EMangaType mangaType;
@@ -67,10 +67,10 @@ private Date created_at;
 private Date modifed_at;
 
 @Column(name = "rating")
-private int rating;
+private Integer rating;
 
 @Column(name = "view_count")
-private int view_Count;
+private Integer view_Count;
 
 @Column
 @Temporal(TemporalType.TIMESTAMP)
@@ -149,11 +149,11 @@ public void setMangaSts(EMangaSTS mangaSts) {
 	this.mangaSts = mangaSts;
 }
 
-public int getCommentCount() {
+public Integer getCommentCount() {
 	return commentCount;
 }
 
-public void setCommentCount(int commentCount) {
+public void setCommentCount(Integer commentCount) {
 	this.commentCount = commentCount;
 }
 
@@ -181,19 +181,19 @@ public void setModifed_at(Date modifed_at) {
 	this.modifed_at = modifed_at;
 }
 
-public int getRating() {
+public Integer getRating() {
 	return rating;
 }
 
-public void setRating(int rating) {
+public void setRating(Integer rating) {
 	this.rating = rating;
 }
 
-public int getView_Count() {
+public Integer getView_Count() {
 	return view_Count;
 }
 
-public void setView_Count(int view_Count) {
+public void setView_Count(Integer view_Count) {
 	this.view_Count = view_Count;
 }
 
