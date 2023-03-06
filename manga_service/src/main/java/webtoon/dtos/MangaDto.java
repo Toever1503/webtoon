@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import webtoon.entities.MangaEntity;
 import webtoon.enums.EMangaSTS;
 import webtoon.enums.EMangaStatus;
 import webtoon.enums.EMangaType;
@@ -33,5 +34,25 @@ public class MangaDto {
 	private Integer view_Count;
 	private Date published_date;
 	
-
+	public static MangaDto toDto(MangaEntity mangaEntity) {
+		if(mangaEntity == null) return null;
+		
+		return MangaDto.builder()
+				.id(mangaEntity.getId())
+				.title(mangaEntity.getTitle())
+				.alternativeTitle(mangaEntity.getAlternativeTitle())
+				.concerpt(mangaEntity.getConcerpt())
+				.description(mangaEntity.getDescription())
+				.mangaName(mangaEntity.getMangaName())
+				.featuredImage(mangaEntity.getFeaturedImage())
+//				.status(null)
+//				.mangaSts(null)
+				.commentCount(mangaEntity.getCommentCount())
+//				.mangaType(null)
+				.rating(mangaEntity.getRating())
+				.view_Count(mangaEntity.getView_Count())
+				.created_at(mangaEntity.getCreated_at())
+				.modifed_at(mangaEntity.getModifed_at())
+				.build();
+	}
 }
