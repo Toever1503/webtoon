@@ -10,5 +10,4 @@ public enum EnumSex {
     Other("Other");
 
     private final String value;
-
 }

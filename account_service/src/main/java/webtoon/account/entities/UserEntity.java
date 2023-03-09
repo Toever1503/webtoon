@@ -6,12 +6,13 @@ import lombok.Setter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import webtoon.account.enums.EnumSex;
+import webtoon.account.enums.EnumStatus;
 
 import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "tb_user")
+@Table(name = "tbl_user")
 @Getter
 @Setter
 @Builder
@@ -21,24 +22,29 @@ public class UserEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username", nullable = false)
+    @Column(name = "username")
     private String username;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "full_name")
     private String fullName;
 
-    @Column(name = "email", nullable = false)
+    @OneToOne
+    @JoinColumn(name = "avatar")
+    private FileEntity avatar;
+
+    @Column(name = "email")
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "password")
     private String password;
 
-    @Column(name = "sex", nullable = false)
+    @Column(name = "sex")
     @Enumerated(EnumType.STRING)
     private EnumSex sex;
 
-    @Column(name = "status", columnDefinition = "boolean default true")
-    private Boolean status;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private EnumStatus status;
 
     @Column(name = "has_blocked", columnDefinition = "boolean default false")
     private Boolean hasBlocked;
