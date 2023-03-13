@@ -49,18 +49,4 @@ public class PostDto {
 
 	private List<TagEntity> tags;
 
-	public static PostDto toDto(PostEntity postEntity) {
-		if (postEntity == null)
-			return null;
-		return PostDto.builder().id(postEntity.getId()).title(postEntity.getTitle()).excerpt(postEntity.getExcerpt())
-				.content(postEntity.getContent()).commentCount(postEntity.getCommentCount())
-				.viewCount(postEntity.getViewCount()).status(postEntity.getStatus())
-				.createdBy(postEntity.getCreatedBy()).modifiedBy(postEntity.getModifiedBy())
-				.createdDate(postEntity.getCreatedDate()).modifiedDate(postEntity.getModifiedDate())
-				.featuredImage(postEntity.getFeaturedImage()).category(postEntity.getCategory())
-				.tags(postEntity.getTagRelations() != null
-						? postEntity.getTagRelations().stream().map(t -> t.getTag()).collect(Collectors.toList())
-						: Collections.emptyList())
-				.build();
-	}
 }

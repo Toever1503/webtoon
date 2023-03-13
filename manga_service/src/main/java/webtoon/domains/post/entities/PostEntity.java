@@ -71,7 +71,7 @@ public class PostEntity {
 	@ManyToOne
 	private CategoryEntity category;
 
-	@OneToMany
+	@OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
 	@JoinColumn(name = "object_id")
 	@Where(clause = "tag_type = 'post'")
 	private List<TagEntityRelation> tagRelations;

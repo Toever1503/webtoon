@@ -10,7 +10,6 @@ import org.springframework.context.annotation.Import;
 @ServletComponentScan
 @SpringBootApplication
 @Import({ WebtoonDomainApplicationInitializer.class })
-
 public class WebtoonDomainBootApplication {
 	public static void main(String[] args) {
 		System.out.println("##### Webtoon account service Start #####");

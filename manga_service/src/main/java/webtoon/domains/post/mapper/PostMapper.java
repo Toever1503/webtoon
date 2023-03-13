@@ -17,27 +17,21 @@ import webtoon.domains.post.entities.dtos.PostDto;
 import webtoon.domains.post.input.PostInput;
 import webtoon.domains.tag.entity.ITagRelationRepository;
 import webtoon.domains.tag.entity.ITagRepository;
+import webtoon.domains.tag.entity.TagEntity;
 import webtoon.domains.tag.entity.TagEntityRelation;
 
 @Component
 public class PostMapper {
 
-	private final IPostRepository postRepository;
 	private final ICategoryRepository categoryRepository;
-	private final ITagRepository tagRepository;
-	private final ITagRelationRepository tagRelationRepository;
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-	public PostMapper(IPostRepository postRepository, ICategoryRepository categoryRepository,
-			ITagRepository tagRepository, ITagRelationRepository tagRelationRepository) {
+	public PostMapper( ICategoryRepository categoryRepository) {
 		super();
-		this.postRepository = postRepository;
 		this.categoryRepository = categoryRepository;
-		this.tagRepository = tagRepository;
-		this.tagRelationRepository = tagRelationRepository;
 	}
 
-	private PostDto toDto(PostEntity entity) {
+	public PostDto toDto(PostEntity entity) {
 		this.logger.info("PostMapper`s converting entity id: {} to dto.", entity.getId());
 		return PostDto.builder().id(entity.getId()).title(entity.getTitle()).excerpt(entity.getExcerpt())
 				.content(entity.getContent()).commentCount(entity.getCommentCount()).viewCount(entity.getViewCount())
@@ -50,7 +44,7 @@ public class PostMapper {
 				.build();
 	}
 
-	private PostEntity toEntity(PostInput input) {
+	public PostEntity toEntity(PostInput input) {
 		this.logger.info("PostMapper`s converting input.");
 
 		PostEntity entity = PostEntity.builder().id(input.getId()).title(input.getTitle()).excerpt(input.getExcerpt())
@@ -58,28 +52,15 @@ public class PostMapper {
 				.featuredImage(input.getFeaturedImage()).build();
 		entity.setCategory(this.categoryRepository.getById(input.getCategory()));
 
-//		if (input.getTagRelations() != null) {
-//			List<TagEntityRelation> tags = new ArrayList<TagEntityRelation>();
-//
-//			input.getTagRelations().forEach(t -> {
-//				TagEntityRelation relation = this.tagRelationRepository.findByObjectIDAndTagType(t, "post");
-//				if (relation == null) {
-//					tags.add(relation);
-//				}
-//				else 
-//					tags.add(TagEntityRelation.builder().objectID(t));
-//			});
-//
-//		} else {
-//		}
+
 		return entity;
 	}
 
-	private List<PostDto> toDtoList(List<PostEntity> entities) {
+	public List<PostDto> toDtoList(List<PostEntity> entities) {
 		return entities.stream().map(this::toDto).collect(Collectors.toList());
 	}
 
-	private Page<PostDto> toDtoPage(Page<PostEntity> entityPage) {
+	public Page<PostDto> toDtoPage(Page<PostEntity> entityPage) {
 		return entityPage.map(this::toDto);
 	}
 

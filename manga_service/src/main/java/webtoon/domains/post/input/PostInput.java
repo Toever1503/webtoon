@@ -38,5 +38,5 @@ public class PostInput {
 	private Long category;
 
 	@NotNull
-	private List<Long> tagRelations;
+	private List<String> tagRelations;
 }
