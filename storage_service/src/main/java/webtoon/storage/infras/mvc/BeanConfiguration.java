@@ -24,15 +24,12 @@ public class BeanConfiguration implements WebMvcConfigurer {
     BeanConfiguration(@Value("${app.root-content-path}") String ROOT_CONTENT_SYS, @Value("${app.domain}") String HOST) {
         BeanConfiguration.DOMAIN = HOST;
         BeanConfiguration.ROOT_CONTENT_SYS = ROOT_CONTENT_SYS;
-        System.out.println("hello worlds");
     }
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/uploads/**").addResourceLocations("file:///".concat(ROOT_CONTENT_SYS));
     }
-
-
 
     //WebMvcConfigurer bean
     @Bean

@@ -15,7 +15,8 @@
 		location="/resources/" />
 	<mvc:resources mapping="/css/**" location="/css/" />
 
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
 
 	<bean
 		class="org.springframework.web.servlet.view.UrlBasedViewResolver"

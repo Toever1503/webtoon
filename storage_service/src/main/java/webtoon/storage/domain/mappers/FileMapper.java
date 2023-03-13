@@ -13,7 +13,7 @@ import webtoon.storage.domain.entities.FileEntity;
 public class FileMapper {
 
 	public FileDto toDto(FileEntity fileEntity) {
-		return FileDto.builder().fileName(fileEntity.getFileName()).fileType(fileEntity.getFileType())
+		return FileDto.builder().id(fileEntity.getId()).fileName(fileEntity.getFileName()).fileType(fileEntity.getFileType())
 				.url(fileEntity.getUrl()).title(fileEntity.getTitle()).alt(fileEntity.getAlt())
 				.createdAt(fileEntity.getCreatedAt()).updatedAt(fileEntity.getUpdatedAt())
 //				.createdBy(null)

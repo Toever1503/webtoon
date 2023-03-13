@@ -8,7 +8,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import webtoon.storage.domain.mappers.FileMapper;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -16,17 +15,17 @@ import webtoon.storage.domain.mappers.FileMapper;
 @Builder
 public class FileDto {
 	
-	private String id;
+	private Long id;
 	private String fileName;
 	private String fileType;
 	private String url;
 	private String alt;
 	private String title;
 	
-	@JsonFormat(pattern="HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date createdAt;
 	
-	@JsonFormat(pattern="HH:mm:ss")
+	@JsonFormat(pattern="yyyy-MM-dd HH:mm:ss")
 	private Date updatedAt;
 
 }

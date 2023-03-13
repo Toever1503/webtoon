@@ -1,5 +1,6 @@
 package webtoon.domain;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
@@ -11,6 +12,12 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 
 @Configuration
 public class WebtoonDomainApplicationInitializer implements WebMvcConfigurer {
+
+	public WebtoonDomainApplicationInitializer(@Value("${spring.datasource.url}") String url) {
+		super();
+		System.out.println("url: " + url);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {

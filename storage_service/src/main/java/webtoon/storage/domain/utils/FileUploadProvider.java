@@ -18,7 +18,6 @@ public class FileUploadProvider {
 		StringBuilder datePath = new StringBuilder().append(calendar.get(Calendar.YEAR)).append("/")
 				.append(calendar.get(Calendar.MONTH) + 1).append("/");
 		return this.uploadFile(file, datePath.toString());
-
 	}
 
 	public void deleteFile(String url) {
@@ -59,8 +58,7 @@ public class FileUploadProvider {
 				.toString();
 
 		FileEntity fileEntity = FileEntity.builder().fileName(fileName.toString()).fileType(file.getContentType())
-				.url(domainPath).title(file.getOriginalFilename()).alt(file.getOriginalFilename())
-//				.createdBy(null)
+				.url(domainPath).title(file.getOriginalFilename()).alt(file.getOriginalFilename()).createdBy(1L)
 				.build();
 		return fileEntity;
 	}
