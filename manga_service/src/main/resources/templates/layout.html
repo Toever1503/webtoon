@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<head>
+<title>Default layout title</title>
+<meta charset="UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- <link href="../../static//main.css" rel="stylesheet"> -->
+<link href="/static/main.css" rel="stylesheet">
+
+<link rel="stylesheet"
+	href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.1/css/fontawesome.min.css"
+	integrity="sha384-QYIZto+st3yW+o8+5OHfT6S482Zsvz2WfOzpFSXMF9zqeLcFV0/wlZpMtyFcZALm"
+	crossorigin="anonymous">
+</head>
+
+<body>
+	<header th:replace="fragments/header-component :: header" />
+
+	<div class="main-layout w-[1100px] mx-auto"
+		layout:fragment="content">
+		<div class="breadcrumb py-[10px]">
+			<nav class="w-full rounded-md">
+				<ol class="list-reset flex">
+					<li><a href="#"
+						class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Home</a>
+					</li>
+					<li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+					</li>
+					<li><a href="#"
+						class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Library</a>
+					</li>
+					<li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+					</li>
+					<li><a
+						class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400 ">Library</a>
+					</li>
+				</ol>
+			</nav>
+		</div>
+
+		<div class="main_layout_content w-full flex">
+			<div class="main_layout_content_left w-[800px]"
+				layout:fragment="main-layout-left"></div>
+
+			<div class="main_layout_content_right w-[300px] pl-[10px]"
+				style="border: 1px solid gainsboro;">fsafs</div>
+		</div>
+	</div>
+</body>
+
+</html>
