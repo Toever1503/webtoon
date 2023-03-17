@@ -1,8 +1,6 @@
 package webtoon.account.entities;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import webtoon.account.enums.EnumSex;
@@ -15,6 +13,8 @@ import java.util.Date;
 @Table(name = "tbl_user")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class UserEntity {
     @Id

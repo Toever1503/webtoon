@@ -1,8 +1,6 @@
 package webtoon.account.entities;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -15,6 +13,8 @@ import java.util.Date;
 @Table(name = "tb_file")
 @Getter
 @Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Builder
 public class FileEntity {
     @Id
