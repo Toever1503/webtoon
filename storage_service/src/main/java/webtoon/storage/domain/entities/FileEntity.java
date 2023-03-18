@@ -24,7 +24,7 @@ public class FileEntity {
 	@Column(name = "file_name", nullable = false, length = 300)
 	private String fileName;
 
-	@Column(name = "file_type", nullable = false, length = 20)
+	@Column(name = "file_type", nullable = false, length = 100)
 	private String fileType;
 
 	@Column(name = "url", nullable = false, length = 255)
