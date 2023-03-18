@@ -10,7 +10,7 @@ spring:
     jpa:
         hibernate:
             ddl-auto: create-drop
-#            dialect: org.hibernate.dialect.MySQL5Dialect
+            dialect: org.hibernate.dialect.MySQL5Dialect
         show-sql: true
     mail:
         host: smtp.gmail.com

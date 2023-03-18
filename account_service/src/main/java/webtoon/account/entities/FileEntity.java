@@ -31,8 +31,8 @@ public class FileEntity {
     private String tile;
     @Column(name = "atl")
     private String atl;
-    @OneToOne
-    private UserEntity user;
+//    @OneToOne
+//    private UserEntity user;
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     @CreatedDate
@@ -41,13 +41,13 @@ public class FileEntity {
     @Column(name = "modified_at")
     @LastModifiedDate
     private Date modifiedAt;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "created_by")
-    @CreatedBy
-    private UserEntity createdBy;
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "modified_by")
-    @LastModifiedBy
-    private UserEntity modifiedBy;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "created_by")
+//    @CreatedBy
+//    private UserEntity createdBy;
+//    @ManyToOne(fetch = FetchType.LAZY)
+//    @JoinColumn(name = "modified_by")
+//    @LastModifiedBy
+//    private UserEntity modifiedBy;
 
 }

@@ -28,9 +28,8 @@ public class UserEntity {
     @Column(name = "full_name")
     private String fullName;
 
-    @OneToOne
-    @JoinColumn(name = "avatar")
-    private FileEntity avatar;
+    @Column(name = "avatar")
+    private String avatar;
 
     @Column(name = "email")
     private String email;
@@ -46,10 +45,10 @@ public class UserEntity {
     @Enumerated(EnumType.STRING)
     private EnumStatus status;
 
-    @Column(name = "has_blocked", columnDefinition = "boolean default false")
+    @Column(name = "has_blocked")
     private Boolean hasBlocked;
 
-    @Column(name = "number of failed sign in", columnDefinition = "int default 0")
+    @Column(name = "number_of_failed_signin")
     private Integer numberOfFailedSignIn;
 
     @Temporal(TemporalType.TIMESTAMP)

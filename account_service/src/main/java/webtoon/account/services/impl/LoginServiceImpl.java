@@ -26,11 +26,7 @@ public class LoginServiceImpl implements LoginService {
                                         UserEntity.builder()
                                                 .username(oAuth2User.getName())
                                                 .fullName(oAuth2User.getAttribute("given_name"))
-                                                .avatar(
-                                                        FileEntity.builder()
-                                                                .url(oAuth2User.getAttribute("picture"))
-                                                                .build()
-                                                )
+                                                .avatar(oAuth2User.getAttribute("picture"))
                                                 .email(oAuth2User.getAttribute("email"))
                                                 .status(EnumStatus.ENABLED)
                                                 .build()
