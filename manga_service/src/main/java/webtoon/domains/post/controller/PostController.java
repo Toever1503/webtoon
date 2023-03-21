@@ -27,7 +27,7 @@ public class PostController {
 
     @GetMapping
     public ModelAndView test() {
-        ModelAndView modelAndView = new ModelAndView("layout");
+        ModelAndView modelAndView = new ModelAndView("homepage");
         return modelAndView;
     }
 
@@ -43,4 +43,5 @@ public class PostController {
 
         return "post/detail-post";
     }
+    
 }

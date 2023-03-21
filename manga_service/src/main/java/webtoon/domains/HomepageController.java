@@ -1,12 +1,10 @@
 package webtoon.domains;
 
 
-import org.slf4j.Logger;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@RequestMapping
-@Controller
+//@Controller
 public class HomepageController {
 
 //	private final Logger logger = LoggerFactory
@@ -18,6 +16,7 @@ public class HomepageController {
 
 	@RequestMapping("/")
     public String homepage(){
+		System.out.println("hello 122 ");
         return "homepage";
     }
 }
