@@ -1,7 +1,6 @@
 package webtoon.account.controller;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;

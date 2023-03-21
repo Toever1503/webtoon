@@ -3,6 +3,7 @@ package webtoon.account.entities;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import webtoon.account.enums.EnumAccountType;
 import webtoon.account.enums.EnumSex;
 import webtoon.account.enums.EnumStatus;
 
@@ -22,7 +23,7 @@ public class UserEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username")
+    @Column(name = "username", unique = true)
     private String username;
 
     @Column(name = "full_name")
@@ -31,8 +32,12 @@ public class UserEntity {
     @Column(name = "avatar")
     private String avatar;
 
-    @Column(name = "email")
+    @Column(name = "email", unique = true)
     private String email;
+
+    @Column(name = "account_type")
+    @Enumerated(EnumType.STRING)
+    private EnumAccountType accountType;
 
     @Column(name = "password")
     private String password;

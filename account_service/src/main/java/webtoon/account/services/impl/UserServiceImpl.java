@@ -3,9 +3,11 @@ package webtoon.account.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.UserEntity;
+import webtoon.account.enums.EnumAccountType;
 import webtoon.account.enums.EnumSex;
 import webtoon.account.models.CreateUserModel;
 import webtoon.account.models.UpdateUserModel;
@@ -13,10 +15,13 @@ import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.UserService;
 import webtoon.utils.exception.CustomHandleException;
 
+import java.util.Objects;
+
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
+    private final PasswordEncoder passwordEncoder;
 
     private final IUserRepository userRepository;
 
@@ -29,25 +34,32 @@ public class UserServiceImpl implements UserService {
     public UserDto findById(Long id) {
         UserEntity entity = this.userRepository.findById(id)
                 .orElseThrow(
-                        () -> new CustomHandleException(1)
+                        () -> new CustomHandleException(0)
                 );
         return UserDto.toDto(entity);
     }
 
     @Override
     public UserDto add(CreateUserModel model) {
+        if (!Objects.equals(model.getPassword(), model.getRePassword())) {
+            throw new CustomHandleException(2);
+        }
+
         if (this.userRepository.existsByUsername(model.getUsername()))
             throw new CustomHandleException(1);
         if (this.userRepository.existsByEmail(model.getEmail()))
-            throw new CustomHandleException(1);
+            throw new CustomHandleException(2);
 
         return UserDto.toDto(
                 this.userRepository.save(
                         UserEntity.builder()
                                 .username(model.getUsername())
+                                .password(this.passwordEncoder.encode(model.getPassword()))
                                 .fullName(model.getFullName())
                                 .email(model.getEmail())
+                                .accountType(EnumAccountType.DATABASE)
                                 .sex(model.getSex())
+//                                .status(EnumStatus.NOT_ACTIVE)
                                 .build()
                 )
         );
@@ -60,8 +72,9 @@ public class UserServiceImpl implements UserService {
                         () -> new CustomHandleException(0)
                 );
 
-        if (this.userRepository.existsByEmailAndIdNotLike(model.getEmail(), model.getId()))
+        if (this.userRepository.existsByEmailAndIdNotLike(model.getEmail(), model.getId())) {
             throw new CustomHandleException(2);
+        }
 
         entity.setEmail(model.getEmail());
         entity.setFullName(model.getFullName());
@@ -89,7 +102,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void checkHasBlockedAndUpdateNumberOfFailedSignInAndUpdateHasBlockedByNumberOfFailedSignIn(String username) {
-        UserEntity entity = this.findByUsernameAndStatusIsTrue(username);
+        UserEntity entity = this.findByUsername(username);
 
         if (entity.getHasBlocked())
             throw new CustomHandleException(2);
@@ -103,7 +116,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void unHasBlockedByNumberOfFailedSignInAndResetNumberOfFailedSignIn(String username) {
-        UserEntity entity = this.findByUsernameAndStatusIsTrue(username);
+        UserEntity entity = this.findByUsername(username);
 
         entity.setHasBlocked(Boolean.TRUE);
         entity.setNumberOfFailedSignIn(0);
@@ -111,8 +124,11 @@ public class UserServiceImpl implements UserService {
         this.userRepository.saveAndFlush(entity);
     }
 
-    private UserEntity findByUsernameAndStatusIsTrue(String username) {
-        return this.userRepository.findByUsername(username)
+    private UserEntity findByUsername(String username) {
+        return this.userRepository.findByAccountTypeAndUsername(
+                        EnumAccountType.DATABASE,
+                        username
+                )
                 .orElseThrow(
                         () -> new CustomHandleException(0)
                 );

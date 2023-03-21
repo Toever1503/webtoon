@@ -1,22 +1,23 @@
 package webtoon.account.models;
 
-import lombok.Builder;
-import lombok.Getter;
+import lombok.*;
 import webtoon.account.enums.EnumSex;
 
 @Getter
-@Builder
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class CreateUserModel {
-    private final String username;
+    private String username;
 
-    private final String fullName;
+    private String fullName;
 
-    private final String password;
+    private String email;
 
-    private final String rePassword;
+    private String password;
 
-    private final String email;
+    private String rePassword;
 
-    private final EnumSex sex;
+    private EnumSex sex;
 
 }
