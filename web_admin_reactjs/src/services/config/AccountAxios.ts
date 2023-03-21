@@ -7,8 +7,7 @@ function getInstance() {
         return axiosInstance
     }
     axiosInstance = axios.create({
-        // baseURL: "http://localhost:1000",
-        baseURL: "http://54.254.195.71:8080",
+        // baseURL: "http://localhost:8080",
         headers: {},
     });
 
@@ -63,7 +62,7 @@ function de(endpointApiUrl: any, payload = {}) {
     return getInstance().delete(endpointApiUrl, { data: payload });
 }
 
-export const mangaAxios = {
+export const accountAxios = {
     axiosInstance,
     get,
     post,

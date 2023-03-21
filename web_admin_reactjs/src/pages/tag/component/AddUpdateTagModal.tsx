@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
 import { addTag, updateTag } from "../../../stores/features/manga/tagSlice";
+import tagService from "../../../services/TagService";
 
 
 interface AddUpdateGenreModalProps {
@@ -9,7 +10,7 @@ interface AddUpdateGenreModalProps {
 }
 
 const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | any) => {
-    
+
 
     const dispatch = useDispatch();
     const [form] = Form.useForm();
@@ -25,10 +26,31 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        if(config.type === 'add')
-            dispatch(addTag(values));
-        else
-            dispatch(updateTag(values));
+        setIsSubmitting(true);
+        if (config.type === 'add') {
+            tagService
+                .addTag(values)
+                .then((res) => {
+                    console.log('add tag: ', res.data);
+                    dispatch(addTag(res.data));
+                    handleCancel();
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
+        }
+        else {
+            tagService
+                .updateTag({ ...values, id: config.record.id })
+                .then((res) => {
+                    console.log('update tag: ', res.data);
+                    dispatch(updateTag(res.data));
+                    handleCancel();
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
+        }
     };
 
     const onFinishFailed = (errorInfo: any) => {
@@ -36,8 +58,13 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
     };
 
     useEffect(() => {
-        if (config.visible)
+        if (config.visible) {
             form.resetFields();
+            if (config.type === 'update') {
+                console.log('config.record', config.record);
+                form.setFieldsValue(config.record);
+            }
+        }
     }, [config]);
 
     return (
@@ -54,7 +81,7 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
             >
                 <Form.Item
                     label="Name"
-                    name="name"
+                    name="tagName"
                     rules={[{ required: true, message: 'Please input your name!' }]}
                 >
                     <Input />
