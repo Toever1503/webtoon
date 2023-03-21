@@ -1,9 +1,15 @@
 import { configureStore } from '@reduxjs/toolkit'
 import counterSlice from './features/counter/counterSlice'
+import notificationSlice from './features/notification/notificationSlice';
+import genreSlice from './features/manga/genreSlice';
+import tagSlice from './features/manga/tagSlice';
 
 export const store = configureStore({
   reducer: {
-    counter: counterSlice
+    counter: counterSlice,
+    genre: genreSlice,
+    tag: tagSlice,
+    notification: notificationSlice
   },
 })
 
