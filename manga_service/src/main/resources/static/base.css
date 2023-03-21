@@ -5,3 +5,7 @@
 :root {
     --swiper-pagination-bottom: -50px;
   }
+
+  a{
+    color: #333333;
+  }
