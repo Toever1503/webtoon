@@ -10,4 +10,6 @@ public interface IPostService {
     PostDto findByID(Long postID);
     
     PostEntity getByID(Long ID);
+
+    PostDto[] findNextPrevPosts(Long postID, Long categoryId);
 }

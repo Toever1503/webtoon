@@ -1,0 +1,239 @@
+
+    <div th:fragment="post-sidebar" class="w-[300px] border mx-auto mt-2 divide-y">
+
+        <div class="sidebar-section px-[10px] py-[10px]">
+            <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
+                Popular Posts
+            </h3>
+
+            <ul class="sidebar-posts divide-y mt-[10px]">
+                <li>
+                    <a class="w-full h-full flex gap-x-[5px] py-3">
+                        <div class="w-[90px] h-[100px] post_feature_image">
+                            <img class="w-[90px] h-[100px]"
+                                src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
+                        </div>
+                        <div class="post-infor w-[200px]">
+                            <h2
+                                class="post-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            </h2>
+
+                            <div class="post-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
+                                <span>
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+
+                                <span>|</span>
+
+                                <span>
+                                    <i class="far fa-eye"></i>
+                                    202
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+
+        <div class="sidebar-section px-[10px] py-[10px]">
+            <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
+                Popular Manga
+            </h3>
+
+            <ul class="sidebar-manga-list divide-y mt-[10px]">
+                <li class="manga-item">
+                    <a class="w-full h-full flex gap-x-[5px] py-3">
+                        <div class="w-[90px] h-[100px] manga_feature_image relative">
+                            <img class="w-[90px] h-[100px]"
+                                src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
+
+                            <span
+                                class="ml-2 inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[9px] font-bold leading-none text-danger-700 bg-yellow-500 absolute top-0 right-0">
+                                Require some fee
+                            </span>
+                        </div>
+
+                        <div class="manga-infor w-[200px]">
+                            <h2
+                                class="manga-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
+
+                                <span
+                                    class="manga-title-badget inline-block bg-[#eb3349] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    HOT
+                                </span>
+
+                                <span
+                                    class="manga-title-badget inline-block bg-[#37b7da] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    NEW
+                                </span>
+
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            </h2>
+
+                            <div class="manga-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
+                                <span>
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+
+                                <span>|</span>
+
+                                <span>
+                                    <i class="far fa-eye"></i>
+                                    202
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="latest-chapters mx-auto w-fit">
+                        <li class="flex gap-[5px] py-[5px]">
+                            <a href="#" class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                Chapter 12
+                            </a>
+                            <a href="#" class="text-[12px] text-[#666666] hover:text-[#eb3349] h-full cursor-pointer duration-300 py-[2px]">Volume 2</a>
+
+                                <span class="text-[12px] text-[#52515168] py-[2px] ml-[10px]">
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+                        </li>
+
+
+                        <a href="#" class="block w-fit mx-auto text-[#eb3349] text-[12px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300 mb-[5px]">
+                            View all chapters </a>
+                    </ul>
+                </li>
+
+                <li class="manga-item">
+                    <a class="w-full h-full flex gap-x-[5px] py-3">
+                        <div class="w-[90px] h-[100px] manga_feature_image relative">
+                            <img class="w-[90px] h-[100px]"
+                                src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
+
+                            <span
+                                class="ml-2 inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[9px] font-bold leading-none text-danger-700 bg-yellow-500 absolute top-0 right-0">
+                                Require some fee
+                            </span>
+                        </div>
+
+                        <div class="manga-infor w-[200px]">
+                            <h2
+                                class="manga-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
+
+                                <span
+                                    class="manga-title-badget inline-block bg-[#eb3349] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    HOT
+                                </span>
+
+                                <span
+                                    class="manga-title-badget inline-block bg-[#37b7da] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    NEW
+                                </span>
+
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            </h2>
+
+                            <div class="manga-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
+                                <span>
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+
+                                <span>|</span>
+
+                                <span>
+                                    <i class="far fa-eye"></i>
+                                    202
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="latest-chapters mx-auto w-fit">
+                        <li class="flex gap-[5px] py-[5px]">
+                            <a href="#" class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                Chapter 12
+                            </a>
+                            <a href="#" class="text-[12px] text-[#666666] hover:text-[#eb3349] h-full cursor-pointer duration-300 py-[2px]">Volume 2</a>
+
+                                <span class="text-[12px] text-[#52515168] py-[2px] ml-[10px]">
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+                        </li>
+
+
+                        <a href="#" class="block w-fit mx-auto text-[#eb3349] text-[12px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300 mb-[5px]">
+                            View all chapters </a>
+                    </ul>
+                </li>
+                <li class="manga-item">
+                    <a class="w-full h-full flex gap-x-[5px] py-3">
+                        <div class="w-[90px] h-[100px] manga_feature_image relative">
+                            <img class="w-[90px] h-[100px]"
+                                src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
+
+                            <span
+                                class="ml-2 inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[9px] font-bold leading-none text-danger-700 bg-yellow-500 absolute top-0 right-0">
+                                Require some fee
+                            </span>
+                        </div>
+
+                        <div class="manga-infor w-[200px]">
+                            <h2
+                                class="manga-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
+
+                                <span
+                                    class="manga-title-badget inline-block bg-[#eb3349] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    HOT
+                                </span>
+
+                                <span
+                                    class="manga-title-badget inline-block bg-[#37b7da] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    NEW
+                                </span>
+
+                                Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                            </h2>
+
+                            <div class="manga-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
+                                <span>
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+
+                                <span>|</span>
+
+                                <span>
+                                    <i class="far fa-eye"></i>
+                                    202
+                                </span>
+                            </div>
+                        </div>
+                    </a>
+                    <ul class="latest-chapters mx-auto w-fit">
+                        <li class="flex gap-[5px] py-[5px]">
+                            <a href="#" class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                Chapter 12
+                            </a>
+                            <a href="#" class="text-[12px] text-[#666666] hover:text-[#eb3349] h-full cursor-pointer duration-300 py-[2px]">Volume 2</a>
+
+                                <span class="text-[12px] text-[#52515168] py-[2px] ml-[10px]">
+                                    <i class="far fa-calendar-alt"></i>
+                                    2021-09-01
+                                </span>
+                        </li>
+
+
+                        <a href="#" class="block w-fit mx-auto text-[#eb3349] text-[12px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300 mb-[5px]">
+                            View all chapters </a>
+                    </ul>
+                </li>
+                
+            </ul>
+        </div>
+
+    </div>
