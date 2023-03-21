@@ -11,13 +11,15 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import webtoon.domains.tag.entity.TagEntity;
 import webtoon.domains.tag.service.ITagService;
 
-@RestController("api/tags")
+@RestController
+@RequestMapping("api/tags")
 public class TagResource {
 
 	private final ITagService tagService;
