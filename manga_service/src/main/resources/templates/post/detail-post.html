@@ -61,7 +61,7 @@
 			<!-- end post tags -->
 
 			<!-- begin prev-next post max characters: 71  -->
-			<div th:replace="posts/sections/next-prev-post :: next-prev-post" />
+			<div th:replace="post/sections/next-prev-post :: next-prev-post" />
 			<!-- end prev-next post -->
 			
 			<!-- begin post comment -->
@@ -69,7 +69,13 @@
 			<!-- end post comment -->
 
 		</div>
+	</div>
+	<div layout:fragment="main-layout-right">
 
+		fafa
+			<!-- begin post sidebar -->
+			<div th:replace="post/sections/post-sidebar :: post-sidebar" />
+			<!-- end post sidebar -->
 	</div>
 </body>
 
