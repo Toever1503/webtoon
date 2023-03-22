@@ -1,224 +1,140 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link href="../static/main.css" rel="stylesheet" />
-  </head>
+<html lang="en"
+	xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<head>
+<meta charset="UTF-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Document</title>
+<link href="../static/main.css" rel="stylesheet" />
+</head>
 
-  <body>
-    <br class="container mx-auto">
-      <div class=" mt-20 mb-10 mx-20">
-        <h1 class="font-bold text-2xl">Manga Text Chapter - Chapter 6</h1>
-      </div>
+<body>
+	<div class="container mx-auto" layout:fragment="content">
+		<div
+			class="grid grid-flow-row-dense grid-cols-6 grid-rows-1 bg-slate-100 scale-75">
+			<div class="col-span-4">
+				<div>
+					<h1 class="font-bold m-5 text-2xl font-mono">Có gì mới?</h1>
+					<hr />
+				</div>
+				<div class="grid grid-cols-3 gap-4 mt-5 mx-10">
+					<div>
+						<div class="max-w-sm rounded overflow-hidden shadow-lg">
+							<img
+								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
+								alt="Sunset in the mountains" />
+							<div class="px-6 py-4">
+								<div class="font-bold text-xl mb-2">Tin tức 1</div>
+								<p class="text-gray-700 text-base">nội dung ...</p>
+							</div>
 
-      <div class=" mx-20 mb-8" >
-        <div class="flex justify-between ">
-          <div >
-            <nav class="w-full rounded-md">
-              <ol class="list-reset flex">
-                <li>
-                  <a
-                    href="#"
-                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                    >Home</a
-                  >
-                </li>
-                <li>
-                  <span class="mx-2 text-neutral-500 dark:text-neutral-400"
-                    >/</span
-                  >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                    >Library</a
-                  >
-                </li>
-                <li>
-                  <span class="mx-2 text-neutral-500 dark:text-neutral-400"
-                    >/</span
-                  >
-                </li>
-                <li class="text-neutral-500 dark:text-neutral-400">Data</li>
-              </ol>
-            </nav>
-          </div>
+						</div>
+					</div>
+					<div>
+						<div class="max-w-sm rounded overflow-hidden shadow-lg">
+							<img
+								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
+								alt="Sunset in the mountains" />
+							<div class="px-6 py-4">
+								<div class="font-bold text-xl mb-2">Tin tức 1</div>
+								<p class="text-gray-700 text-base">nội dung ...</p>
+							</div>
 
-          <div class="mr-20">
-            <div class="grid grid-cols-4 gap-4">
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-plus-circle fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
-                    <path
-                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                    />
-                  </svg>
-                </button>
-              </div>
+						</div>
+					</div>
+					<div>
+						<div class="max-w-sm rounded overflow-hidden shadow-lg">
+							<img
+								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
+								alt="Sunset in the mountains" />
+							<div class="px-6 py-4">
+								<div class="font-bold text-xl mb-2">Tin tức 1</div>
+								<p class="text-gray-700 text-base">nội dung ...</p>
+							</div>
 
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-dash-circle fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
-                    <path
-                      d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"
-                    />
-                  </svg>
-                </button>
-              </div>
+						</div>
+					</div>
+					<div>
+						<div class="max-w-sm rounded overflow-hidden shadow-lg">
+							<img
+								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
+								alt="Sunset in the mountains" />
+							<div class="px-6 py-4">
+								<div class="font-bold text-xl mb-2">Tin tức 1</div>
+								<p class="text-gray-700 text-base">nội dung ...</p>
+							</div>
 
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-bookmark-fill fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"
-                    />
-                  </svg>
-                </button>
-              </div>
+						</div>
+					</div>
+					<div>
+						<div class="max-w-sm rounded overflow-hidden shadow-lg">
+							<img
+								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
+								alt="Sunset in the mountains" />
+							<div class="px-6 py-4">
+								<div class="font-bold text-xl mb-2">Tin tức 1</div>
+								<p class="text-gray-700 text-base">nội dung ...</p>
+							</div>
 
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-circle-half fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"
-                    />
-                  </svg>
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+						</div>
+					</div>
+					<div>
+						<div class="max-w-sm rounded overflow-hidden shadow-lg">
+							<img
+								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
+								alt="Sunset in the mountains" />
+							<div class="px-6 py-4">
+								<div class="font-bold text-xl mb-2">Tin tức 1</div>
+								<p class="text-gray-700 text-base">nội dung ...</p>
+							</div>
 
-      <div class="flex justify-start mb-2">
-        <div class="ml-20 ">
-          <select
-            data-te-select-init
-            data-te-select-size="lg"
-            class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
-          >
-            <option value="1">Vol.3</option>
-            <option value="2">Vol.2</option>
-            <option value="3">Vol.1</option>
-          </select>
-        </div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="col-span-2  mt-10 ">
+				<div class="grid grid-cols-3 gap-4">
+					<div class="col-span-2 bg-slate-100 shadow-md">
+						<h1 class="m-3 font-bold text-2xl">Thể loại</h1>
+						<div class="grid grid-cols-2 gap-4 mt-3 ml-5">
+							<div class="m-3">Thể loại</div>
 
-        <div class="ml-5">
-          <select
-            data-te-select-init
-            data-te-select-size="lg"
-            class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
-          >
-            <option value="1">Chapter 6</option>
-            <option value="2">Chapter 5</option>
-          </select>
-        </div>
-      </div>
+							<div class="m-3">Thể loại</div>
 
-      <div class=" mx-20 mb-10 ">
-        <div class="flex justify-end mx-20">
-          <div class="bg-slate-400">
-            <button
-              class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-              style="
-                display: flex;
+							<div class="m-3">Thể loại</div>
 
-                align-items: center;
-              "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-left-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-              Prev
-            </button>
-          </div>
+							<div class="m-3">Thể loại</div>
 
-          <div class="bg-indigo-400 ml-5">
-            <button
-              class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-              style="
-                display: flex;
+							<div class="m-3">Thể loại</div>
 
-                align-items: center;
-              "
-            >
-            Next
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-right-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-                />
-              </svg>
-              
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class=" mx-20 mb-10 ">
-        <h1 class="font-bold text-2xl ml-2">There’s something about being the last child born in a family.</h1>
-        <div class="text-left mt-4 mx-7">
-            Something about being the only daughter. I’m the youngest in the family, the fourth child born after my three brothers. My whole life I’ve been coddled, protected, bullied, bribed, and all of that is all fine, because I love my brothers, I love my family, but sometimes I wish I were the eldest, so I wouldn’t be underestimated the way I am now. My name is Lana, but to them and my dad, I’m their Lainie baby even at twenty-two. <br> <br> <br>
+							<div class="m-3">Thể loại</div>
 
-            My brothers and dad stand by our tent at the side of the track. Dozens of cars zoom past. Blue, black, yellow colors flying by, helmets with rainbow visors, sponsor logos, and testosterone galore. Other than the fact that they are all Formula One race cars, they have one other thing in common: none of those cars are ours. None of those cars are being driven by one of our drivers. <br> <br> <br>
-            
-            I sigh and carry the lemonade cups back to our tent. The autumn cold air cuts into my cheeks and steals under my ponytail to freeze the back of my neck. This fall, while testing possible drivers, I’ve gained two bright spots on my cheeks, thank you wind-chill combined with sunlight, and judging by the way my face is stinging now, I’ll bet the red is spreading to my ears and nose. <br> <br <br>>
-        </h3>
-      </div>
-    </div>
-  </body>
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+							<div class="m-3">Thể loại</div>
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
 </html>
