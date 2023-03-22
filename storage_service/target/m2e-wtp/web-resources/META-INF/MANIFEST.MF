@@ -1,0 +1,8 @@
+Manifest-Version: 1.0
+Built-By: orisu
+Build-Jdk: 11.0.16.1
+Implementation-Title: storage Maven Webapp
+Implementation-Version: 1.0.0
+Implementation-Vendor-Id: webtoon.storage
+Created-By: Maven Integration for Eclipse
+
