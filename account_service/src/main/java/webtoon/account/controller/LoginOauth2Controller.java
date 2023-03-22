@@ -1,6 +1,11 @@
 package webtoon.account.controller;
 
 import lombok.RequiredArgsConstructor;
+
+import java.io.IOException;
+
+import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -27,7 +32,7 @@ public class LoginOauth2Controller {
 
     @ResponseBody
     @PostMapping
-    public String form(@ModelAttribute("loginModel") LoginModel model) {
+    public String form(@ModelAttribute("loginModel") LoginModel model, HttpServletResponse res) throws IOException {
         try{
             this.loginService.loginForm(model);
         }catch (CustomHandleException e){
@@ -35,7 +40,8 @@ public class LoginOauth2Controller {
                 return "login error";
             }
         }
-        return "login success";
+        res.sendRedirect("http://localhost:8080/");
+		return null;
     }
 
 
