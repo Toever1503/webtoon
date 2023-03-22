@@ -1,0 +1,40 @@
+app:
+  domain: http://localhost:8080/storage/uploads/
+  root-content-path: C:/Users/orisu/Desktop/DATN 2023/web/uploads/
+spring:
+  datasource:
+    driverClassName: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://free02.123host.vn:3306/stovizkj_webtoon_hoan?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Bangkok&createDatabaseIfNotExist=true
+    username: stovizkj_webtoon_hoan
+    password: $Abcd1234
+  jpa:
+    hibernate:
+      ddl-auto: update
+      dialect: org.hibernate.dialect.MySQL5Dialect
+    show-sql: true
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: hoannvph17079@fpt.edu.vn
+    password: <login password to smtp server>
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
+  security:
+    oauth2:
+      client:
+        registration:
+          facebook:
+            client-id: 611318980394625
+            client-secret: f94e6d38ef9d1dcdb468aef0cd8b8cc1
+          google:
+            client-id: 833366962467-apna5sfac5csj02085fnef3th3c88qa1.apps.googleusercontent.com
+            client-secret: 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
+logging:
+  level:
+    .org.springframework.web: DEBUG
+    .org.hibernate: ERROR
+
