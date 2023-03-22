@@ -3,10 +3,11 @@ import {
     TeamOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import type { MenuProps } from 'antd';
+import { MenuProps, notification } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { Outlet } from 'react-router-dom';
 import { DashboardOutlined } from '@ant-design/icons/lib/icons';
+import NotificationComponent from '../components/NotificationComponent';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -58,30 +59,36 @@ const App: React.FC = () => {
         token: { colorBgContainer },
     } = theme.useToken();
 
+    
+
     return (
-        <Layout style={{ minHeight: '100vh' }}>
+        <>
+            <NotificationComponent />
+            <Layout style={{ minHeight: '100vh' }}>
 
-            <Sider theme="light" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                <div style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
-                    My APP
-                </div>
-                <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={items} />
-            </Sider>
+                <Sider theme="light" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                    <div style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
+                        My APP
+                    </div>
+                    <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={items} />
+                </Sider>
 
-            <Layout className="site-layout">
-                <Header style={{ padding: 0, background: colorBgContainer }} >
-                    fsafs
-                </Header>
+                <Layout className="site-layout">
 
-                <Content style={{ margin: '0 16px' }}>
-                    <Outlet />
-                </Content>
+                    <Header style={{ padding: 0, background: colorBgContainer }} >
+                        fsafs
+                    </Header>
+
+                    <Content style={{ margin: '0 16px' }}>
+                        <Outlet />
+                    </Content>
 
 
 
-                <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+                    <Footer style={{ textAlign: 'center' }}>Ant Design ©2023 Created by Ant UED</Footer>
+                </Layout>
             </Layout>
-        </Layout>
+        </>
     );
 };
 
