@@ -40,16 +40,15 @@ public class LoginOauth2Controller {
                 return "login error";
             }
         }
-        res.sendRedirect("http://localhost:8080/");
+        res.sendRedirect("http://localhost:8000/");
 		return null;
     }
 
 
-    @ResponseBody
     @GetMapping(value = "success")
-    public String success(OAuth2AuthenticationToken token) {
+    public void success(OAuth2AuthenticationToken token, HttpServletResponse res) throws IOException {
         this.loginService.loginFormOAuth2(token);
-        return "login success";
+        res.sendRedirect("http://localhost:8000/");
     }
 
     @GetMapping(value = "error")
