@@ -39,7 +39,6 @@ public class PaymentController {
 		String orderType = "ATM";
 		String vnp_IpAddr = "0:0:0:0:0:0:0:1";
 		String vnp_TmnCode = VnPayConfig.vnp_TmnCode;
-		amount = amount * 100;
 
 		Map<String, String> vnp_Params = new HashMap<>();
 		vnp_Params.put("vnp_Version", vnp_Version);
@@ -109,5 +108,10 @@ public class PaymentController {
 		String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
 
 		resp.sendRedirect(paymentUrl);
+	}
+
+	@GetMapping("/load")
+	public String Payment() {
+		return "chonGoi";
 	}
 }

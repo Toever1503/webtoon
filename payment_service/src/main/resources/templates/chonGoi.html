@@ -4,9 +4,11 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Chọn gói phù hợp</title>
     <link href="../static/main.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
+    <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
+
   </head>
 
   <body>
@@ -34,7 +36,7 @@
       >
         <div>
           <button
-            type="button"
+            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=20000' |"
             class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
           >
           <ul>
@@ -50,7 +52,7 @@
         </div>
         <div>
           <button
-            type="button"
+            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=51000' |"
             class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
           >
           <ul>
@@ -68,7 +70,7 @@
         </div>
         <div>
           <button
-            type="button"
+            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=180000' |"
             class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
           >
           <ul>
@@ -84,18 +86,8 @@
             </ul>
           </button>
         </div>
-        <div></div>
       </div>
-      <div
-        class="flex 2xl:justify-end xl:justify-end md:justify-end sm:justify-center justify-center md:mr-40 2xl:mr-48 mt-6"
-      >
-        <button
-          type="button"
-          class="text-white bg-red-500 border border-red-300 focus:outline-gray-100 hover:bg-red-600 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-sm px-5 py-2.5"
-        >
-          Tiếp theo
-        </button>
-      </div>
+
     </div>
   </body>
 </html>

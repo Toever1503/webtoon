@@ -1,24 +1,25 @@
 package webtoon.payment.controller;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Collections;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.TimeZone;
+import java.util.*;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -86,5 +87,53 @@ public class RefundController {
 		String paymentUrl = VnPayConfig.vnp_RefundUrl + "?" + queryUrl;
 
 		resp.sendRedirect(paymentUrl);
+	}
+
+	@GetMapping("/ket-qua")
+	public String ketQua(HttpServletRequest request, HttpServletResponse resp, Model model) throws ServletException, IOException {
+		Map fields = new HashMap();
+		for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
+			String fieldName = (String) params.nextElement();
+			String fieldValue = request.getParameter(fieldName);
+			if ((fieldValue != null) && (fieldValue.length() > 0)) {
+				fields.put(fieldName, fieldValue);
+			}
+		}
+
+		String vnp_SecureHash = request.getParameter("vnp_SecureHash");
+		if (fields.containsKey("vnp_SecureHashType")) {
+			fields.remove("vnp_SecureHashType");
+		}
+		if (fields.containsKey("vnp_SecureHash")) {
+			fields.remove("vnp_SecureHash");
+		}
+		String signValue = VnPayConfig.hashAllFields(fields);
+		String maDonHang = request.getParameter("vnp_TxnRef");
+		String amount = request.getParameter("vnp_Amount");
+		String noiDungTT = request.getParameter("vnp_OrderInfo");
+		String maPhanHoi = request.getParameter("vnp_ResponseCode");
+		String maGD = request.getParameter("vnp_TransactionNo");
+		String maNganHang = request.getParameter("vnp_BankCode");
+		String thoiGianTT = request.getParameter("vnp_PayDate");
+		String ketQua = "";
+		if ("00".equals(maPhanHoi)) {
+			ketQua = "Giao dịch thành công";
+		}else {
+			ketQua = "Giao dịch không thành thành công";
+//			veServiceImpl.deleteVeByHD(Integer.parseInt(maDonHang));
+//			hoaDonServiceImpl.deleteHoaDonById(Integer.parseInt(maDonHang));
+		}
+
+//		System.out.println(signValue);
+		System.out.println(vnp_SecureHash);
+		model.addAttribute("maDonHang", maDonHang);
+		model.addAttribute("soTien", amount);
+		model.addAttribute("noiDungTT", noiDungTT);
+		model.addAttribute("maPhanHoi", maPhanHoi);
+		model.addAttribute("maGD", maGD);
+		model.addAttribute("maNganHang", maNganHang);
+		model.addAttribute("thoiGianTT", thoiGianTT);
+		model.addAttribute("ketQua", ketQua);
+		return "order_detail";
 	}
 }

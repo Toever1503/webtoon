@@ -27,4 +27,5 @@ public class PaymentResource {
         paymentModel.setId(id);
         return ResponseEntity.ok(paymentService.update(paymentModel));
     }
+
 }
