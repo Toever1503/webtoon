@@ -3,7 +3,8 @@ import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, D
 import MangaChapterForm from './component/MangaChapterForm';
 import { PlusOutlined } from '@ant-design/icons';
 import debounce from '../../utils/debounce';
-
+import RichtextEditorForm from '../../components/RichtextEditorForm';
+import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
 
 const AddNewManga: React.FC = () => {
     // begin tag search
@@ -36,6 +37,10 @@ const AddNewManga: React.FC = () => {
     }
     // end author search
 
+    const [mangaContentEditorRef, setMangaContentEditorRef] = useState<RichTextEditorComponent>();
+    const onReadyMangaContentEditor = (rteObj: RichTextEditorComponent) => {
+        setMangaContentEditorRef(rteObj);
+    };
 
     return (
         <div className="space-y-3 py-3">
@@ -44,16 +49,19 @@ const AddNewManga: React.FC = () => {
             </div>
 
             <div className='flex gap-[15px] justify-between'>
-                <div>
+                <div className='w-[calc(100%_-_280px)] grid gap-y-[15px]'>
                     <section className='border'>
                         <Input placeholder="Title" />
 
-                        <Input className='mt-[50px]' placeholder="Content" />
+                        <div className='max-w-[700px]'>
+                            <RichtextEditorForm onReady={onReadyMangaContentEditor} />
+                        </div>
                     </section>
 
                     <MangaChapterForm />
                 </div>
-                <div className='manga-form-sideba w-[280px] grid gap-y-[15px]' >
+
+                <div className='manga-form-sidebar w-[280px] grid gap-y-[15px]' >
                     <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
                         <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>More Info</p>
                         <div className='flex justify-between items-center px-[10px]'>
@@ -84,6 +92,7 @@ const AddNewManga: React.FC = () => {
 
                             <Select
                                 className='w-full'
+                                mode="multiple"
                                 placeholder="custom dropdown render"
                                 // @ts-ignore
                                 onSearch={onSearchTag}
@@ -115,6 +124,7 @@ const AddNewManga: React.FC = () => {
                             <Select
                                 className='w-full'
                                 placeholder="custom dropdown render"
+                                mode="multiple"
                                 // @ts-ignore
                                 onSearch={onSearchAuthor}
                                 labelInValue
