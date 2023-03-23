@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 
 @Getter
@@ -24,4 +25,17 @@ public class MangaChapterDto {
 	private Integer chapterIndex;
 	
 	private Boolean requiredVip;
+	
+	public static MangaChapterDto toDto(MangaChapterEntity mangaEntity) {
+		if(mangaEntity == null) return null;
+		
+		return MangaChapterDto.builder()
+				.id(mangaEntity.getId())
+				.mangaId(mangaEntity.getMangaId())
+				.name(mangaEntity.getName())
+				.content(mangaEntity.getContent())
+				.chapterIndex(mangaEntity.getChapterIndex())
+				.requiredVip(mangaEntity.getRequiredVip())
+				.build();
+	}
 }

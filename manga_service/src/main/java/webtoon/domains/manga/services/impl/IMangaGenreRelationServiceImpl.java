@@ -1,6 +1,9 @@
 package webtoon.domains.manga.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -45,8 +48,13 @@ public class IMangaGenreRelationServiceImpl implements IMangaGenreRelationServic
 			return false;
 		}
 	}
+	
+	@Override
+	public Page<MangaGenreRelationDto> filter(Pageable pageable,Specification<MangaGenreRelationEntity> specs){
+		return genreRelationRepository.findAll(specs, pageable).map(MangaGenreRelationDto::toDto);
+	}
 
 	public MangaGenreRelationEntity getById(Long id) {
-		return this.genreRelationRepository.findById(id).orElseThrow();
+		return this.genreRelationRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 	}
 }

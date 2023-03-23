@@ -9,14 +9,15 @@
   </head>
 
   <body>
-    <br class="container mx-auto">
-      <div class=" mt-20 mb-10 mx-20">
+    <div class="container mx-auto">
+      <div class="mt-20 mb-10 mx-20">
         <h1 class="font-bold text-2xl">Manga Text Chapter - Chapter 6</h1>
       </div>
 
-      <div class=" mx-20 mb-8" >
-        <div class="flex justify-between ">
-          <div >
+      <!-- Đường link breadcrumb -->
+      <div class="mx-20 mb-8">
+        <div class="flex justify-between">
+          <div>
             <nav class="w-full rounded-md">
               <ol class="list-reset flex">
                 <li>
@@ -127,97 +128,466 @@
           </div>
         </div>
       </div>
+      <!-- Kết thúc breadcrumb -->
 
-      <div class="flex justify-start mb-2">
-        <div class="ml-20 ">
-          <select
-            data-te-select-init
-            data-te-select-size="lg"
-            class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
-          >
-            <option value="1">Vol.3</option>
-            <option value="2">Vol.2</option>
-            <option value="3">Vol.1</option>
-          </select>
-        </div>
+      <div class="relative">
+        <div class="flex justify-between sticky top-0">
+          <!-- <div class="sticky top-0"> -->
+          <div class="flex justify-start mb-2">
+            <div class="ml-20">
+              <select
+                data-te-select-init
+                data-te-select-size="lg"
+                class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
+              >
+                <option value="1">Vol.3</option>
+                <option value="2">Vol.2</option>
+                <option value="3">Vol.1</option>
+              </select>
+            </div>
 
-        <div class="ml-5">
-          <select
-            data-te-select-init
-            data-te-select-size="lg"
-            class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
-          >
-            <option value="1">Chapter 6</option>
-            <option value="2">Chapter 5</option>
-          </select>
+            <div class="ml-5">
+              <select
+                data-te-select-init
+                data-te-select-size="lg"
+                class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
+              >
+                <option value="1">Chapter 6</option>
+                <option value="2">Chapter 5</option>
+              </select>
+            </div>
+          </div>
+          <!-- <div>02</div> -->
+
+          <div class="mx-20 mb-8">
+            <div class="flex justify-end mx-20 mt-10">
+              <div class="bg-slate-400">
+                <button
+                  class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                  style="
+                    display: flex;
+
+                    align-items: center;
+                  "
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-arrow-left-short"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
+                    />
+                  </svg>
+                  Prev
+                </button>
+              </div>
+
+              <div class="bg-indigo-400 ml-5">
+                <button
+                  class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                  style="
+                    display: flex;
+
+                    align-items: center;
+                  "
+                >
+                  Next
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    fill="currentColor"
+                    class="bi bi-arrow-right-short"
+                    viewBox="0 0 16 16"
+                  >
+                    <path
+                      fill-rule="evenodd"
+                      d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
+                    />
+                  </svg>
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- </div> -->
         </div>
       </div>
 
-      <div class=" mx-20 mb-10 ">
-        <div class="flex justify-end mx-20">
-          <div class="bg-slate-400">
-            <button
-              class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-              style="
-                display: flex;
-
-                align-items: center;
-              "
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-left-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-              Prev
-            </button>
-          </div>
-
-          <div class="bg-indigo-400 ml-5">
-            <button
-              class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-              style="
-                display: flex;
-
-                align-items: center;
-              "
-            >
-            Next
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-right-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-                />
-              </svg>
-              
-            </button>
-          </div>
-        </div>
-      </div>
-      <div class=" mx-20 mb-10 ">
-        <h1 class="font-bold text-2xl ml-2">There’s something about being the last child born in a family.</h1>
+      <div class="mx-20 mb-10">
+        <h1 class="font-bold text-2xl ml-2">
+          There’s something about being the last child born in a family.
+        </h1>
         <div class="text-left mt-4 mx-7">
-            Something about being the only daughter. I’m the youngest in the family, the fourth child born after my three brothers. My whole life I’ve been coddled, protected, bullied, bribed, and all of that is all fine, because I love my brothers, I love my family, but sometimes I wish I were the eldest, so I wouldn’t be underestimated the way I am now. My name is Lana, but to them and my dad, I’m their Lainie baby even at twenty-two. <br> <br> <br>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
 
-            My brothers and dad stand by our tent at the side of the track. Dozens of cars zoom past. Blue, black, yellow colors flying by, helmets with rainbow visors, sponsor logos, and testosterone galore. Other than the fact that they are all Formula One race cars, they have one other thing in common: none of those cars are ours. None of those cars are being driven by one of our drivers. <br> <br> <br>
-            
-            I sigh and carry the lemonade cups back to our tent. The autumn cold air cuts into my cheeks and steals under my ponytail to freeze the back of my neck. This fall, while testing possible drivers, I’ve gained two bright spots on my cheeks, thank you wind-chill combined with sunlight, and judging by the way my face is stinging now, I’ll bet the red is spreading to my ears and nose. <br> <br <br>>
-        </h3>
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+          <h3>
+            Something about being the only daughter. I’m the youngest in the
+            family, the fourth child born after my three brothers. My whole life
+            I’ve been coddled, protected, bullied, bribed, and all of that is
+            all fine, because I love my brothers, I love my family, but
+            sometimes I wish I were the eldest, so I wouldn’t be underestimated
+            the way I am now. My name is Lana, but to them and my dad, I’m their
+            Lainie baby even at twenty-two. <br />
+            <br />
+            <br />
+
+            My brothers and dad stand by our tent at the side of the track.
+            Dozens of cars zoom past. Blue, black, yellow colors flying by,
+            helmets with rainbow visors, sponsor logos, and testosterone galore.
+            Other than the fact that they are all Formula One race cars, they
+            have one other thing in common: none of those cars are ours. None of
+            those cars are being driven by one of our drivers. <br />
+            <br />
+            <br />
+
+            I sigh and carry the lemonade cups back to our tent. The autumn cold
+            air cuts into my cheeks and steals under my ponytail to freeze the
+            back of my neck. This fall, while testing possible drivers, I’ve
+            gained two bright spots on my cheeks, thank you wind-chill combined
+            with sunlight, and judging by the way my face is stinging now, I’ll
+            bet the red is spreading to my ears and nose. <br />
+            <br/> <br />
+          </h3>
+        </div>
       </div>
     </div>
   </body>

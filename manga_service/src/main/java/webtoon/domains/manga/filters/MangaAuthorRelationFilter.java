@@ -7,8 +7,6 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MangaGenreFilter {
-	private String name;
-
-	private String slug;
+public class MangaAuthorRelationFilter {
+	private String authorType;
 }

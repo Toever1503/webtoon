@@ -27,34 +27,33 @@ public class MangaResource {
 	public MangaResource(IMangaService iMangaService) {
 		this.iMangaService = iMangaService;
 	}
-	
+
 	@PostMapping(value = "/add")
 	public ResponseDto addManga(@RequestBody MangaModel mangaModel) {
 		mangaModel.setId(null);
 		return ResponseDto.of(this.iMangaService.add(mangaModel));
 	}
-	
-	@PutMapping("/update")
-	public ResponseDto updateManga(@PathVariable Long id,@RequestBody MangaModel mangaModel) {
+
+	@PutMapping("/update/{id}")
+	public ResponseDto updateManga(@PathVariable Long id, @RequestBody MangaModel mangaModel) {
 		mangaModel.setId(id);
 		return ResponseDto.of(this.iMangaService.update(mangaModel));
 	}
-	
+
 	@DeleteMapping("/delete/{id}")
 	public void delete(@PathVariable long id) {
 		this.iMangaService.deleteById(id);
 	}
-	
+
 	@PostMapping("/filter")
-	public ResponseDto filter(@RequestBody MangaFilterModel filterModel,Pageable pageable) {
+	public ResponseDto filter(@RequestBody MangaFilterModel filterModel, Pageable pageable) {
 		Specification<MangaEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(
-					criteriaBuilder.like(root.get("title"), "%" + filterModel.getTitle() + "%" ),
-					criteriaBuilder.like(root.get("mangaName"), "%" + filterModel.getMangaName() + "%" ),
-					criteriaBuilder.like(root.get("concerpt"), "%" + filterModel.getConcerpt() + "%" )
-					
+			return criteriaBuilder.or(criteriaBuilder.like(root.get("title"), "%" + filterModel.getTitle() + "%"),
+					criteriaBuilder.like(root.get("mangaName"), "%" + filterModel.getMangaName() + "%"),
+					criteriaBuilder.like(root.get("concerpt"), "%" + filterModel.getConcerpt() + "%")
+
 			);
 		};
-	        return ResponseDto.of(this.iMangaService.filter(pageable, Specification.where(specification)));
+		return ResponseDto.of(this.iMangaService.filter(pageable, Specification.where(specification)));
 	}
 }

@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MangaGenreFilter {
-	private String name;
+public class MangaChapterImageFilter {
+	private String image;
 
-	private String slug;
+	private Integer imageIndex;
 }
