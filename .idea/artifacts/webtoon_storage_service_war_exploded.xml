@@ -102,6 +102,11 @@
           <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-api:0.11.5" />
           <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-impl:0.11.5" />
           <element id="library" level="project" name="Maven: io.jsonwebtoken:jjwt-jackson:0.11.5" />
+<<<<<<< HEAD
+=======
+          <element id="library" level="project" name="Maven: jakarta.validation:jakarta.validation-api:3.0.2" />
+          <element id="library" level="project" name="Maven: jstl:jstl:1.2" />
+>>>>>>> d6a293f459cd09001491132a54086bb4fe7de090
         </element>
       </element>
       <element id="directory" name="META-INF">
