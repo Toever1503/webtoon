@@ -76,8 +76,7 @@
 			<groupId>jakarta.xml.bind</groupId>
 			<artifactId>jakarta.xml.bind-api</artifactId>
 		</dependency>
-<<<<<<< HEAD
-=======
+
 
 		<!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
 		<dependency>
@@ -98,7 +97,7 @@
 		</dependency>
 
 
->>>>>>> d6a293f459cd09001491132a54086bb4fe7de090
+
 	</dependencies>
 	<reporting>
 		<outputDirectory>${basedir}/target/site</outputDirectory>
