@@ -3,8 +3,13 @@ import { RichTextEditorComponent } from "@syncfusion/ej2-react-richtexteditor";
 import { Button, Checkbox, Divider, Input, InputRef, Select, Space } from "antd";
 import { useRef, useState } from "react";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
+import { MangaInput } from "../../../../services/MangaService";
 
-const MangaUploadSingleChapter: React.FC = () => {
+type MangaUploadSingleChapterProps = {
+    mangaInput: MangaInput,
+}
+
+const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props: MangaUploadSingleChapterProps) => {
     const [volumeOptions, setVolumeOptions] = useState(['jack', 'lucy']);
     const [isAddingNewVolume, setIsAddingNewVolume] = useState<boolean>(false);
     const volumeInputRef = useRef<InputRef>(null);

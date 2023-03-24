@@ -1,48 +1,39 @@
-import React, { useRef, useState } from 'react';
+import React, { ChangeEvent, ChangeEventHandler, EventHandler, useEffect, useRef, useState } from 'react';
 import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef } from 'antd';
 import MangaChapterForm from './component/MangaChapterForm';
 import { PlusOutlined } from '@ant-design/icons';
 import debounce from '../../utils/debounce';
 import RichtextEditorForm from '../../components/RichtextEditorForm';
 import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
+import { useTranslation } from "react-i18next";
+import dayjs from 'dayjs';
+import { MangaInput, MangaStatus, ReleaseStatus } from '../../services/MangaService';
 
 
-type MangaStatus = 'PUBLISHED' | 'DELETED' | 'DRAFTED';
-type ReleaseStatus = 'COMING' | 'GOING' | 'STOPED' | 'CANCELED' |  'FINISHED';
-type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
-interface MangaInput{
-    id?: number | string;
-    title: string;
-    content: string;
-    mangaStatus: MangaStatus;
-    releaseStatus: ReleaseStatus;
-    releaseYear: string;
-    mangaType: MangaType;
-    genres: string[];
-    authors: string[];
-    featureImage: string;
-}
 
-interface MangaInputError{
+interface MangaInputError {
     title: string;
     content: string;
     genres: string;
     authors: string;
     featureImage: string;
+    tags: string;
 }
 
 const AddNewManga: React.FC = () => {
+    const { t, i18n } = useTranslation();
+
     // begin tag search
-    const [tagOptions, setTagOptions] = useState(['jack', 'lucy']);
-    const [tagSearchVal, setTagSearchVal] = useState('');
-    const tagSearchRef = useRef<InputRef>(null);
-    const [isAddingNewTag, setIsAddingNewTag] = useState<boolean>(false);
-    const onSearchTag = debounce((val: string) => {
+    const [genreOptions, setGenreOptions] = useState(['jack', 'lucy']);
+    const [genreSearchVal, setGenreSearchVal] = useState('');
+    const genreSearchRef = useRef<InputRef>(null);
+    const [isAddingNewGenre, setIsAddingNewGenre] = useState<boolean>(false);
+    const onSearchGenre = debounce((val: string) => {
         setTagSearchVal(val);
         console.log('search tag: ', val);
     });
 
-    const addTag = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+    const addGenre = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
         console.log('add tag:', e.target);
     }
     // end tag search
@@ -62,48 +53,145 @@ const AddNewManga: React.FC = () => {
     }
     // end author search
 
+    // begin tag search
+    const [tagOptions, setTagOptions] = useState(['jack', 'lucy']);
+    const [tagSearchVal, setTagSearchVal] = useState('');
+    const tagSearchRef = useRef<InputRef>(null);
+    const [isAddingNewTag, setIsAddingNewTag] = useState<boolean>(false);
+    const onSearchTag = debounce((val: string) => {
+        setTagSearchVal(val);
+        console.log('search tag: ', val);
+    });
+
+    const addTag = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
+        console.log('add tag:', e.target);
+    }
+    // end tag search
+
+
+
+    // manga info
+    const [mangaInput, setMangaInput] = useState<MangaInput>({
+        title: '',
+        content: '',
+        excerpt: '',
+        postName: '',
+        mangaStatus: 'DRAFTED',
+        releaseStatus: 'COMING',
+        releaseYear: dayjs(),
+        mangaType: 'UNSET',
+        genres: ['lucy'],
+        authors: ['lucy'],
+        tags: ['lucy'],
+        featureImage: '',
+    });
+    const [isSavingMangaInfo, setIsSavingMangaInfo] = useState<boolean>(false);
     const [mangaContentEditorRef, setMangaContentEditorRef] = useState<RichTextEditorComponent>();
     const onReadyMangaContentEditor = (rteObj: RichTextEditorComponent) => {
         setMangaContentEditorRef(rteObj);
     };
 
-    const onSaveMangaInfo = () => {
-        console.log('mangaContentEditorRef', mangaContentEditorRef?.value);
+    const onSaveMangaInfo = async () => {
+        if (isSavingMangaInfo)
+            return;
+
+        // setIsSavingMangaInfo(true);
+
+        const mangaContent = mangaContentEditorRef?.getHtml() || '';
+        const mangaExcerpt = mangaContentEditorRef?.getText().slice(0, 160 || '') || '';
+        setMangaInput({
+            ...mangaInput,
+            content: mangaContent,
+            excerpt: mangaExcerpt,
+        });
+
+        console.log('mangaInput', mangaInput);
+        if (!mangaInput.title)
+            mangaInputError.title = 'manga.form.errors.title-required';
+        if (!mangaInput.content)
+            mangaInputError.content = 'manga.form.errors.content-required';
+        if (!mangaInput.genres || mangaInput.genres.length === 0)
+            mangaInputError.genres = 'manga.form.errors.genres-required';
+        if (!mangaInput.authors || mangaInput.authors.length === 0)
+            mangaInputError.authors = 'manga.form.errors.authors-required';
+        if (!mangaInput.featureImage)
+            mangaInputError.featureImage = 'manga.form.errors.feature-image-required';
     };
 
-    const [mangaInputError, setMangaInputError] = useState<MangaInputError>();
+    const autoSaveMangaInfo = () => {
+        console.log('autoSaveMangaInfo');
+    };
+
+    const [mangaInputError, setMangaInputError] = useState<MangaInputError>({
+        title: '',
+        content: '',
+        genres: '',
+        authors: '',
+        featureImage: '',
+        tags: '',
+    });
+
+
+    useEffect(() => {
+        setInterval(() => {
+            autoSaveMangaInfo();
+        }, 10000);
+    }, []);
 
     return (
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
                 <p className="text-[23px] font-[600]">Add New Manga</p>
-                <Button type="primary">Save</Button>
+                <Button type="primary" loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Save</Button>
             </div>
 
-            <div className='flex gap-[15px] justify-between'>
-                <div className='w-[calc(100%_-_280px)] grid gap-y-[15px]'>
-                    <section className='border'>
-                        <Input placeholder="Title" />
-                        <p className='text-[14px] text-red-500 px-[5px]'>
-                            sss
-                        </p>
+            <div className='flex gap-[15px]'>
+                <div className='grid gap-y-[15px]'>
+                    <section className='border max-w-[1200px]'>
+                        <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                            <span className='text-red-500'>*</span>
+                            <span> Title:</span>
+                        </label>
+                        <Input className='' value={mangaInput.title} placeholder="Title" />
+                        {
+                            <p className='text-[12px] text-red-500 px-[5px]'>
+                                {mangaInputError.title && t(mangaInputError.title)}
+                            </p>
+                        }
 
-                        <div className='max-w-[700px]'>
+                        <div className=''>
+                            <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                                <span className='text-red-500'>*</span>
+                                <span>Content:</span>
+                            </label>
                             <RichtextEditorForm onReady={onReadyMangaContentEditor} />
+                            {
+                                <p className='text-[12px] text-red-500 px-[5px]'>
+                                    {mangaInputError.content && t(mangaInputError.content)}
+                                </p>
+                            }
                         </div>
                     </section>
 
-                    <MangaChapterForm />
+                    <MangaChapterForm mangaInput={mangaInput} setMangaInput={setMangaInput} />
                 </div>
 
                 <div className='manga-form-sidebar w-[280px] grid gap-y-[15px]' >
                     <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
                         <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>More Info</p>
+
+                        <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
+                            <span className='text-[14px] font-bold'>Alternative Title:</span>
+                            <Input value={mangaInput.alternativeTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setMangaInput({ ...mangaInput, alternativeTitle: e.target.value })} placeholder='alternate title' />
+                        </div>
+
+
                         <div className='flex justify-between items-center px-[10px]'>
                             <span className='text-[14px] font-bold'>Manga Status:</span>
                             <Select
                                 className='min-w-[150px]'
-                                defaultValue="DRAFTED"
+                                value={mangaInput.mangaStatus}
+                                onChange={(val: MangaStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
                                 options={[
                                     { value: 'PUBLISHED', label: 'PUBLISHED' },
                                     { value: 'DRAFTED', label: 'DRAFTED' },
@@ -116,10 +204,11 @@ const AddNewManga: React.FC = () => {
                             <Select
                                 className='min-w-[150px]'
                                 defaultValue="COMING"
+                                onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, releaseStatus: val }) }}
                                 options={[
                                     { value: 'COMING', label: 'COMING' },
                                     { value: 'GOING', label: 'GOING' },
-                                    { value: 'STOP', label: 'STOP' },
+                                    { value: 'STOPED', label: 'STOPED' },
                                     { value: 'CANCELED', label: 'CANCELED' },
                                     { value: 'FINISHED', label: 'FINISHED' },
                                 ]}
@@ -128,20 +217,23 @@ const AddNewManga: React.FC = () => {
 
                         <div className='flex justify-between items-center px-[10px]'>
                             <span className='text-[14px] font-bold'>Release year:</span>
-                            <DatePicker placement='bottomRight' picker="year" />
+                            <DatePicker allowClear={false} mode='year' onChange={(val: any) => setMangaInput({ ...mangaInput, releaseYear: val })} value={mangaInput.releaseYear} placement='bottomRight' picker="year" />
                         </div>
 
-                        <div className='grid gap-y-[10px] px-[10px]'>
-                            <span className='text-[14px] font-bold'>Genres:</span>
-
+                        <div className='grid gap-y-[5px] px-[10px]'>
+                            <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                                <span className='text-red-500'>*</span>
+                                <span> Genres:</span>
+                            </label>
                             <Select
                                 className='w-full'
                                 mode="multiple"
                                 placeholder="custom dropdown render"
                                 // @ts-ignore
-                                onSearch={onSearchTag}
+                                onSearch={onSearchGenre}
                                 labelInValue
                                 showSearch
+                                allowClear
                                 filterOption={false}
                                 dropdownRender={(menu) => (
                                     <>
@@ -150,21 +242,32 @@ const AddNewManga: React.FC = () => {
                                         <Space style={{ padding: '0 8px 4px' }}>
                                             <Input
                                                 placeholder="Please enter item"
-                                                ref={tagSearchRef}
+                                                ref={genreSearchRef}
                                             />
-                                            <Button type="text" icon={<PlusOutlined />} loading={isAddingNewTag} onClick={addTag}>
+                                            <Button type="text" icon={<PlusOutlined />} loading={isAddingNewGenre} onClick={addTag}>
                                                 Add item
                                             </Button>
                                         </Space>
                                     </>
                                 )}
-                                options={tagOptions.map((item) => ({ label: item, value: item }))}
+                                value={mangaInput.genres}
+                                onChange={(val: any) => { setMangaInput({ ...mangaInput, genres: val.map((e: any) => e.value) }) }}
+                                options={genreOptions.map((item) => ({ label: item, value: item }))}
                             />
+
+                            {
+                                mangaInputError.genres &&
+                                <p className='text-[12px] text-red-500 px-[5px]'>
+                                    {t(mangaInputError.genres)}
+                                </p>
+                            }
                         </div>
 
-                        <div className='grid gap-y-[10px] px-[10px]'>
-                            <span className='text-[14px] font-bold'>Authors:</span>
-
+                        <div className='grid gap-y-[5px] px-[10px]'>
+                            <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                                <span className='text-red-500'>*</span>
+                                <span> Authors:</span>
+                            </label>
                             <Select
                                 className='w-full'
                                 placeholder="custom dropdown render"
@@ -173,7 +276,10 @@ const AddNewManga: React.FC = () => {
                                 onSearch={onSearchAuthor}
                                 labelInValue
                                 showSearch
+                                allowClear
                                 filterOption={false}
+                                value={mangaInput.authors}
+                                onChange={(val: any) => { setMangaInput({ ...mangaInput, authors: val.map((e: any) => e.value) }) }}
                                 dropdownRender={(menu) => (
                                     <>
                                         {menu}
@@ -191,17 +297,82 @@ const AddNewManga: React.FC = () => {
                                 )}
                                 options={authorOptions.map((item) => ({ label: item, value: item }))}
                             />
+
+                            {
+                                mangaInputError.authors &&
+                                <p className='text-[12px] text-red-500 px-[5px]'>
+                                    {t(mangaInputError.authors)}
+                                </p>
+                            }
+                        </div>
+
+                        <div className='grid gap-y-[5px] px-[10px]'>
+                            <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                                <span className='text-red-500'>*</span>
+                                <span> Tags:</span>
+                            </label>
+                            <Select
+                                className='w-full'
+                                mode="multiple"
+                                placeholder="choose tag"
+                                // @ts-ignore
+                                onSearch={onSearchTag}
+                                labelInValue
+                                showSearch
+                                allowClear
+                                filterOption={false}
+                                value={mangaInput.tags}
+                                onChange={(val: any) => { setMangaInput({ ...mangaInput, tags: val.map((e: any) => e.value) }) }}
+                                dropdownRender={(menu) => (
+                                    <>
+                                        {menu}
+                                        <Divider style={{ margin: '8px 0' }} />
+                                        <Space style={{ padding: '0 8px 4px' }}>
+                                            <Input
+                                                placeholder="Please enter item"
+                                                ref={tagSearchRef}
+                                            />
+                                            <Button type="text" icon={<PlusOutlined />} loading={isAddingNewTag} onClick={addTag}>
+                                                Add item
+                                            </Button>
+                                        </Space>
+                                    </>
+                                )}
+                                options={tagOptions.map((item) => ({ label: item, value: item }))}
+                            />
+
+                            {
+                                mangaInputError.tags &&
+                                <p className='text-[12px] text-red-500 px-[5px]'>
+                                    {t(mangaInputError.tags)}
+                                </p>
+                            }
                         </div>
 
                     </section>
 
-                    <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
-                        <p className='text-[18px] font-bold p-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Featured image</p>
-                        <div className='flex justify-between px-[10px]'>
+                    <section className='bg-white gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
+
+                        <div className='p-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>
+                            <span className='text-red-500 text-base'>*</span>
+                            <span className='text-[18px] font-bold'> Featured image:</span>
+                        </div>
+
+
+                        <div className='flex justify-between p-[10px]'>
                             <a className='text-[13px]'>Choose image</a>
 
-                            <img className='h-[120px] w-[120px]' src='https://s.pstatic.net/static/newsstand/2023/0322/article_img/new_main/9044/121821_001.jpg' />
+                            {
+                                !mangaInput.featureImage &&
+                                <img className='h-[120px] w-[120px]' src='https://s.pstatic.net/static/newsstand/2023/0322/article_img/new_main/9044/121821_001.jpg' />
+                            }
                         </div>
+                        {
+                            !mangaInputError.featureImage &&
+                            <p className='text-[12px] text-red-500 px-[5px]'>
+                                {t(mangaInputError.featureImage)}
+                            </p>
+                        }
                     </section>
                 </div>
             </div>
