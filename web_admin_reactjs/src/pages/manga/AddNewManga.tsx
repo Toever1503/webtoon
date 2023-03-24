@@ -6,6 +6,31 @@ import debounce from '../../utils/debounce';
 import RichtextEditorForm from '../../components/RichtextEditorForm';
 import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
 
+
+type MangaStatus = 'PUBLISHED' | 'DELETED' | 'DRAFTED';
+type ReleaseStatus = 'COMING' | 'GOING' | 'STOPED' | 'CANCELED' |  'FINISHED';
+type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
+interface MangaInput{
+    id?: number | string;
+    title: string;
+    content: string;
+    mangaStatus: MangaStatus;
+    releaseStatus: ReleaseStatus;
+    releaseYear: string;
+    mangaType: MangaType;
+    genres: string[];
+    authors: string[];
+    featureImage: string;
+}
+
+interface MangaInputError{
+    title: string;
+    content: string;
+    genres: string;
+    authors: string;
+    featureImage: string;
+}
+
 const AddNewManga: React.FC = () => {
     // begin tag search
     const [tagOptions, setTagOptions] = useState(['jack', 'lucy']);
@@ -42,16 +67,26 @@ const AddNewManga: React.FC = () => {
         setMangaContentEditorRef(rteObj);
     };
 
+    const onSaveMangaInfo = () => {
+        console.log('mangaContentEditorRef', mangaContentEditorRef?.value);
+    };
+
+    const [mangaInputError, setMangaInputError] = useState<MangaInputError>();
+
     return (
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
                 <p className="text-[23px] font-[600]">Add New Manga</p>
+                <Button type="primary">Save</Button>
             </div>
 
             <div className='flex gap-[15px] justify-between'>
                 <div className='w-[calc(100%_-_280px)] grid gap-y-[15px]'>
                     <section className='border'>
                         <Input placeholder="Title" />
+                        <p className='text-[14px] text-red-500 px-[5px]'>
+                            sss
+                        </p>
 
                         <div className='max-w-[700px]'>
                             <RichtextEditorForm onReady={onReadyMangaContentEditor} />
@@ -65,21 +100,30 @@ const AddNewManga: React.FC = () => {
                     <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
                         <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>More Info</p>
                         <div className='flex justify-between items-center px-[10px]'>
-                            <span className='text-[14px] font-bold'>Status:</span>
+                            <span className='text-[14px] font-bold'>Manga Status:</span>
                             <Select
-                                className='w-fit'
-                                defaultValue="lucy"
+                                className='min-w-[150px]'
+                                defaultValue="DRAFTED"
                                 options={[
-                                    { value: 'jack', label: 'PUBLISHED' },
-                                    { value: 'lucy', label: 'DELETED' },
-                                    { value: 'Yiminghe', label: 'DRAFTED' },
+                                    { value: 'PUBLISHED', label: 'PUBLISHED' },
+                                    { value: 'DRAFTED', label: 'DRAFTED' },
                                 ]}
                             />
                         </div>
 
                         <div className='flex justify-between items-center px-[10px]'>
-                            <span className='text-[14px] font-bold'>Posted on:</span>
-                            <DatePicker placement='bottomRight' />
+                            <span className='text-[14px] font-bold'>Release status:</span>
+                            <Select
+                                className='min-w-[150px]'
+                                defaultValue="COMING"
+                                options={[
+                                    { value: 'COMING', label: 'COMING' },
+                                    { value: 'GOING', label: 'GOING' },
+                                    { value: 'STOP', label: 'STOP' },
+                                    { value: 'CANCELED', label: 'CANCELED' },
+                                    { value: 'FINISHED', label: 'FINISHED' },
+                                ]}
+                            />
                         </div>
 
                         <div className='flex justify-between items-center px-[10px]'>
