@@ -11,6 +11,10 @@ export default {
                 'authors-required': 'Author is required',
                 'tags-required': 'Tags is required',
                 'featured-image-required': 'Featured image is required',
+                'volume-required': 'Please enter volume name!',
+                'chapter-name-required': 'Chapter name is required',
+                'chapter-images-required': 'Chapter image is required',
+                'chapter-content-required': 'Chaptr content is required',
             }
         }
     }

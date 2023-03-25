@@ -59,7 +59,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
     };
 
 
-    const defaultContent = 'The Rich Text Editor component is WYSIWYG ("what you see is what you get") editor that provides the best user experience to create and update the content. Users can format their content using standard toolbar commands.';
+    const [content, setContent] = useState<string>('The Rich Text Editor component is WYSIWYG ("what you see is what you get") editor that provides the best user experience to create and update the content. Users can format their content using standard toolbar commands.');
 
     useEffect(() => {
         console.log('richtext editor mounted');
@@ -68,7 +68,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
 
     return (
         <div className="richtext-editor">
-            <RichTextEditorComponent value={defaultContent} ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor)}
+            <RichTextEditorComponent value={content} ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor, setContent)}
                 toolbarSettings={toolbarSettings} fontFamily={fontFamily}>
 
                 <Inject services={[Toolbar, Image, Link, HtmlEditor, Count, Table, QuickToolbar]} />

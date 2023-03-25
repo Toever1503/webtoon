@@ -9,15 +9,16 @@ type MangaChapterFormProps = {
     setMangaInput: Function,
     mangaInput: MangaInput
 };
+export type MangaType = 'TEXT' | 'IMAGE';
+
 const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFormProps) => {
 
-    type MangaType = 'TEXT' | 'IMAGE';
     type ChapterMenuType = 'INFO' | 'UPLOAD_SINGLE';
 
     const [mangaType, setMangaType] = useState<MangaType>('TEXT');
-    const [chapterMenuValue, setChapterMenuValue] = useState<ChapterMenuType>('INFO');
+    const [chapterMenuValue, setChapterMenuValue] = useState<ChapterMenuType>('UPLOAD_SINGLE');
 
-    const [hasConfirmedMangaType, setHasConfirmedMangaType] = useState<boolean>(!false);
+    const [hasConfirmedMangaType, setHasConfirmedMangaType] = useState<boolean>(false);
     const onChangeChapterMenu = (val: ChapterMenuType) => {
         setChapterMenuValue(val);
     }
