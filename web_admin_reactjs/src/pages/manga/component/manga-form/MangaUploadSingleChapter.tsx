@@ -4,8 +4,10 @@ import { Button, Checkbox, Divider, Input, InputRef, message, Radio, Select, Spa
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
-import { MangaInput } from "../../../../services/MangaService";
+import mangaService, { MangaInput } from "../../../../services/MangaService";
+import { showNofification } from "../../../../stores/features/notification/notificationSlice";
 
 type MangaUploadSingleChapterProps = {
     mangaInput: MangaInput,
@@ -15,7 +17,6 @@ interface ChapterInput {
     volume: number,
     chapterName: string,
     chapterIndex?: number,
-    isRequireVip: boolean,
     chapterContent: string,
     chapterImages: File[],
 }
@@ -26,14 +27,20 @@ interface ChapterInputError {
     chapterImages: string,
 }
 
+type VolumeOptionType = {
+    id: number,
+    name: string,
+}
+
 const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props: MangaUploadSingleChapterProps) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
     // begin volume select
-    const [volumeOptions, setVolumeOptions] = useState([
+    const [volumeOptions, setVolumeOptions] = useState<VolumeOptionType[]>([
         {
-            id: 1,
+            id: 0,
             name: 'Volume 1'
-        },
+        }
     ]);
 
     const [isAddingNewVolume, setIsAddingNewVolume] = useState<boolean>(false);
@@ -42,14 +49,30 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         console.log('add tag:', volumeVal);
         if (volumeVal) {
             setIsAddingNewVolume(true);
-            setTimeout(() => {
-                setVolumeOptions([...volumeOptions, {
-                    id: volumeOptions.length + 1,
-                    name: volumeVal
-                }]);
-                setVolumeVal('');
-                setIsAddingNewVolume(false);
-            }, 1000);
+
+            mangaService.createNewVolume(
+                {
+                    mangaID: props.mangaInput.id,
+                    name: volumeVal,
+                    volumeIndex: 0
+                }
+            )
+                .then((res) => {
+                    console.log(res);
+                    setVolumeOptions([...volumeOptions, {
+                        id: res.data.id,
+                        name: volumeVal
+                    }]);
+                    message.success(t('manga.form.success.create-volume'));
+                    setVolumeVal('');
+                })
+                .catch((err) => {
+                    console.log(err);
+                    message.error(t('manga.form.errors.create-volume-failed'));
+                })
+                .finally(() => {
+                    setIsAddingNewVolume(false);
+                });
         }
         else {
             message.error(t('manga.form.errors.volume-required'));
@@ -117,10 +140,9 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
     // begin chapter input
     const [chapterInput, setChapterInput] = useState<ChapterInput>({
-        volume: selectedVolume,
+        volume: 0,
         chapterName: '',
         chapterIndex: 0,
-        isRequireVip: false,
         chapterContent: '',
         chapterImages: [],
     });
@@ -131,40 +153,96 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         chapterImages: '',
     });
 
+    const resetChapterInput = () => {
+        setChapterInput({
+            volume: 0,
+            chapterName: '',
+            chapterIndex: 0,
+            chapterContent: '',
+            chapterImages: [],
+        });
+        setChapterInputError({
+            chapterName: '',
+            chapterContent: '',
+            chapterImages: '',
+        });
+        setMangaTextChapter('');
+    }
+
     const [isCreatingChapter, setIsCreatingChapter] = useState<boolean>(false);
     const onCreateChapter = () => {
         console.log('on create chapter');
 
         let errorCount = 0;
         if (!chapterInput.chapterName) {
-            setChapterInputError({
-                ...chapterInputError,
-                chapterName: 'manga.form.errors.chapter-name-required'
-            });
+            chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
             errorCount++;
         }
+        else chapterInputError.chapterName = '';
+
         if (props.mangaInput.mangaType === 'IMAGE') {
             if (chapterInput.chapterImages.length === 0) {
-                setChapterInputError({
-                    ...chapterInputError,
-                    chapterImages: 'manga.form.errors.chapter-images-required'
-                });
+                chapterInputError.chapterImages = 'manga.form.errors.chapter-images-required';
                 errorCount++;
             }
+            else chapterInputError.chapterImages = '';
         }
         else if (props.mangaInput.mangaType === 'TEXT') {
-            if (!chapterInput.chapterContent) {
-                setChapterInputError({
-                    ...chapterInputError,
-                    chapterContent: 'manga.form.errors.chapter-content-required'
-                });
+            const chapterContent = chapterContentEditorRef?.getHtml() || '';
+            setChapterInput({
+                ...chapterInput,
+                chapterContent: chapterContent
+            });
+            if (!chapterContent) {
+                chapterInputError.chapterContent = 'manga.form.errors.chapter-content-required';
                 errorCount++;
             }
+            else chapterInputError.chapterContent = '';
         }
 
 
         if (errorCount === 0) {
+            setIsCreatingChapter(true);
+            if (props.mangaInput.mangaType === 'IMAGE') {
 
+            }
+            else if (props.mangaInput.mangaType === 'TEXT') {
+                mangaService.createTextChapter({
+                    chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
+                    chapterName: chapterInput.chapterName,
+                    chapterContent: chapterInput.chapterContent,
+                    isRequiredVip: isRequireVipChapter,
+                    volumeID: chapterInput.volume,
+                    // mangaID: props.mangaInput.id || 1
+                    mangaID: 1
+                })
+                    .then((res) => {
+                        console.log('create text chapter success:', res.data);
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: t('manga.form.success.create-chapter')
+                        }));
+                        resetChapterInput();
+                    })
+                    .catch((err) => {
+                        console.log('create text chapter error:', err);
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('manga.form.errors.create-chapter-failed')
+                        }))
+                    })
+                    .finally(() => {
+                        setIsCreatingChapter(false);
+                    })
+            }
+        }
+        else {
+            console.log(chapterInputError);
+
+            dispatch(showNofification({
+                type: 'error',
+                message: t('manga.form.errors.check-again')
+            }))
         }
     }
 
@@ -175,7 +253,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                     <span> Volume:</span>
                 </label>
                 <Select
-                    className="min-w-[180px]"
+                    className="min-w-[250px]"
                     placeholder="custom dropdown render"
                     // @ts-ignore
                     labelInValue
@@ -209,7 +287,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                     <span className='text-red-500'>*</span>
                     <span> Chapter name:</span>
                 </label>
-                <Input placeholder="enter your chapter name" />
+                <Input placeholder="enter your chapter name" value={chapterInput.chapterName} onChange={val => setChapterInput({ ...chapterInput, chapterName: val.target.value })} />
                 {
                     <p className='text-[12px] text-red-500 px-[5px] m-0'>
                         {chapterInputError.chapterName && t(chapterInputError.chapterName)}
@@ -221,13 +299,13 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                 <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
                     <span> Chapter Index(Optional):</span>
                 </label>
-                <Input placeholder="enter your chapter name" />
+                <Input type="number" placeholder="enter index" value={chapterInput.chapterIndex} onChange={val => setChapterInput({ ...chapterInput, chapterIndex: Number(val.target.value) })} />
             </section>
             <section className="flex items-center space-x-3">
                 <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
                     <span> Require vip:</span>
                 </label>
-                <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.value)} />
+                <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.checked)} />
             </section>
 
             {/* for text chapter content */}

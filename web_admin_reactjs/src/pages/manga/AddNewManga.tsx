@@ -74,6 +74,7 @@ const AddNewManga: React.FC = () => {
 
     // manga info
     const [mangaInput, setMangaInput] = useState<MangaInput>({
+        id: '',
         title: 'test',
         description: 'The Rich Text Editor component is WYSIWYG ("what you see is what you get") editor that provides the best user experience to create and update the content. Users can format their content using standard toolbar commands.',
         excerpt: '',
@@ -205,11 +206,11 @@ const AddNewManga: React.FC = () => {
 
 
     useEffect(() => {
-        let id: number | undefined;
-        id = setInterval(() => {
-            autoSaveMangaInfo();
-        }, 15000);
-        return () => clearInterval(id);
+        // let id: number | undefined;
+        // id = setInterval(() => {
+        //     autoSaveMangaInfo();
+        // }, 15000);
+        // return () => clearInterval(id);
     }, [mangaInput]);
 
 

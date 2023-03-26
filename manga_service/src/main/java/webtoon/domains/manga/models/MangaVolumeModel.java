@@ -4,16 +4,16 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.Long;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class MangaVolumeModel {
-	private Long id;
+	private java.lang.Long id;
 
-	private MangaEntity mangaId;
+	private Long mangaId;
 	
 	private String name;
 	

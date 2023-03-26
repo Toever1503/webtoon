@@ -31,11 +31,11 @@ import webtoon.domains.manga.enums.EMangaType;
 @Builder
 @Getter
 @Setter
-public class MangaEntity {
+public class Long {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long id;
+    private java.lang.Long id;
 
     @Column(name = "title")
     private String title;

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.Long;
 import webtoon.domains.manga.filters.MangaFilterModel;
 import webtoon.domains.manga.services.IMangaService;
 
@@ -28,19 +28,19 @@ public class MangaController {
 	}
 
 	@GetMapping("{name}/{id}")
-	public String mangaDetail(@PathVariable Long id, @PathVariable String name) {
+	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name) {
 
 		return "trangtruyen";
 	}
 
 	@GetMapping("{name}/chapter/{id}")
-	public String readMangaChapter(@PathVariable Long id, @PathVariable String name) {
+	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name) {
 
 		return "read-manga-page";
 	}
 	@PostMapping("/index")
 	public String showMangaList(Model model,Pageable pageable,@RequestBody MangaFilterModel filterModel  ) {
-		Specification<MangaEntity> specification = (root, query, criteriaBuilder) -> {
+		Specification<Long> specification = (root, query, criteriaBuilder) -> {
 			return criteriaBuilder.or(criteriaBuilder.like(root.get("title"), "%" + filterModel.getTitle() + "%"),
 					criteriaBuilder.like(root.get("mangaName"), "%" + filterModel.getMangaName() + "%"),
 					criteriaBuilder.like(root.get("concerpt"), "%" + filterModel.getConcerpt() + "%")

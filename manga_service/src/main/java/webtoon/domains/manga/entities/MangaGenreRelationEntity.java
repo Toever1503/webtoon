@@ -4,7 +4,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -25,7 +24,7 @@ public class MangaGenreRelationEntity {
 	@Id
 	@Column(name = "id")
 	@GeneratedValue()
-	private Long id;
+	private java.lang.Long id;
 	
 	
 	@JoinColumn(name = "genre_id")
@@ -34,5 +33,5 @@ public class MangaGenreRelationEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "manga_id")
-	private MangaEntity mangaId; 
+	private Long mangaId;
 }

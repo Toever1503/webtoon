@@ -1,10 +1,8 @@
 package webtoon.domains.manga.resources2;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
+import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.services.IMangaService;
 
@@ -22,4 +20,13 @@ public class MangaResource2 {
     public MangaDto createMangaInfo(@RequestBody MangaModel input) {
         return mangaService.add(input);
     }
+
+    @PatchMapping("set-type/{id}")
+    public void setMangaType(@PathVariable Long id, @RequestParam EMangaType type){
+        if(type.equals(EMangaType.UNSET))
+            throw new RuntimeException("type is not support");
+        this.mangaService.setMangaType(id, type);
+    }
+
+
 }

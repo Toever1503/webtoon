@@ -5,7 +5,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
@@ -28,7 +27,7 @@ public class MangaAuthorRelationEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private java.lang.Long id;
 	
 	@JoinColumn(name = "author_id")
 	@ManyToOne
@@ -37,7 +36,7 @@ public class MangaAuthorRelationEntity {
 	
 	@JoinColumn(name = "manga_id")
 	@ManyToOne
-	private MangaEntity mangaId;
+	private Long mangaId;
 	
 	@Column(name = "author_type")
 	private String authorType;

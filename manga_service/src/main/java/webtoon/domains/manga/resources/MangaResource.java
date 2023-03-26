@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import webtoon.domains.manga.dtos.ResponseDto;
-import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.Long;
 import webtoon.domains.manga.filters.MangaFilterModel;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.services.IMangaService;
@@ -35,7 +35,7 @@ public class MangaResource {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseDto updateManga(@PathVariable Long id, @RequestBody MangaModel mangaModel) {
+	public ResponseDto updateManga(@PathVariable java.lang.Long id, @RequestBody MangaModel mangaModel) {
 		mangaModel.setId(id);
 		return ResponseDto.of(this.iMangaService.update(mangaModel));
 	}
@@ -47,7 +47,7 @@ public class MangaResource {
 
 	@PostMapping("/filter")
 	public ResponseDto filter(@RequestBody MangaFilterModel filterModel, Pageable pageable) {
-		Specification<MangaEntity> specification = (root, query, criteriaBuilder) -> {
+		Specification<Long> specification = (root, query, criteriaBuilder) -> {
 			return criteriaBuilder.or(criteriaBuilder.like(root.get("title"), "%" + filterModel.getTitle() + "%"),
 					criteriaBuilder.like(root.get("mangaName"), "%" + filterModel.getMangaName() + "%"),
 					criteriaBuilder.like(root.get("concerpt"), "%" + filterModel.getConcerpt() + "%")

@@ -3,16 +3,15 @@ package webtoon.domains.manga.mappers;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Service;
 import webtoon.domains.manga.dtos.MangaDto;
-import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.Long;
 import webtoon.domains.manga.models.MangaModel;
-import webtoon.domains.manga.repositories.IMangaRepository;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class MangaMapper {
-    public MangaDto toDto(MangaEntity entity) {
+    public MangaDto toDto(Long entity) {
         return MangaDto.builder()
                 .id(entity.getId())
                 .title(entity.getTitle())
@@ -32,8 +31,8 @@ public class MangaMapper {
                 .build();
     }
 
-    public MangaEntity toEntity(MangaModel input) {
-        return MangaEntity.builder()
+    public Long toEntity(MangaModel input) {
+        return Long.builder()
                 .id(input.getId())
                 .title(input.getTitle())
                 .alternativeTitle(input.getAlternativeTitle())
@@ -49,11 +48,11 @@ public class MangaMapper {
                 .build();
     }
 
-    public List<MangaDto> toDtoList(List<MangaEntity> entities) {
+    public List<MangaDto> toDtoList(List<Long> entities) {
         return entities.stream().map(this::toDto).collect(Collectors.toList());
     }
 
-    public Page<MangaDto> toDtoPage(Page<MangaEntity> entityPage) {
+    public Page<MangaDto> toDtoPage(Page<Long> entityPage) {
         return entityPage.map(this::toDto);
     }
 }

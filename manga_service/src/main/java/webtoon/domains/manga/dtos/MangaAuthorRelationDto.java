@@ -6,18 +6,18 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.entities.MangaAuthorRelationEntity;
-import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.Long;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class MangaAuthorRelationDto {
-	private Long id;
+	private java.lang.Long id;
 	
 	private MangaAuthorEntity authorId;
 	
-	private MangaEntity mangaId;
+	private Long mangaId;
 	
 	private String authorType;
 	public static MangaAuthorRelationDto toDto(MangaAuthorRelationEntity mangaEntity) {

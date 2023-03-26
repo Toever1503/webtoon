@@ -1,6 +1,6 @@
 import { Button, Radio } from "antd";
 import { useState } from "react";
-import { MangaInput } from "../../../services/MangaService";
+import mangaService, { MangaInput } from "../../../services/MangaService";
 import MangaChapterInfo from "./manga-form/MangaChapterInfo";
 import MangaUploadSingleChapter from "./manga-form/MangaUploadSingleChapter";
 
@@ -29,6 +29,15 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             ...props.mangaInput,
             mangaType: mangaType
         });
+        props.mangaInput.id = '1';
+        if (props.mangaInput.id)
+            mangaService.setMangaType(props.mangaInput.id, mangaType)
+                .then((res) => {
+                    console.log('set manga type success ', res.data);
+                })
+                .catch(err => {
+                    console.log('set manga type failed ', err);
+                });
     }
 
 

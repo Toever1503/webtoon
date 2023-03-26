@@ -40,6 +40,8 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 				.volumeIndex(entity.getVolumeIndex()).build();
 	}
 
+
+
 	@Override
 	public boolean deleteById(Long id) {
 		try {

@@ -9,7 +9,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaDto;
-import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.Long;
+import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.repositories.IMangaRepository;
@@ -28,7 +29,7 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public MangaDto add(MangaModel model) {
-        MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
+        Long mangaEntity = this.mangaMapper.toEntity(model);
 
         mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
         mangaEntity.setRating(0F);
@@ -42,7 +43,7 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public MangaDto update(MangaModel model) {
 
-        MangaEntity mangaEntity = this.getById(model.getId());
+        Long mangaEntity = this.getById(model.getId());
         mangaEntity.setTitle(model.getTitle());
         mangaEntity.setAlternativeTitle(model.getAlternativeTitle());
         mangaEntity.setExcerpt(model.getExcerpt());
@@ -73,14 +74,23 @@ public class IMangaServiceImpl implements IMangaService {
 
     }
 
+    @Override
+    public void setMangaType(java.lang.Long id, EMangaType type) {
+        Long entity = this.getById(id);
+        if (!entity.getMangaType().equals(EMangaType.UNSET))
+            throw new RuntimeException("Manga has already set type");
+        entity.setMangaType(type);
+        this.mangaRepository.saveAndFlush(entity);
+    }
 
-    public MangaEntity getById(Long id) {
+
+    public Long getById(java.lang.Long id) {
         return this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }
 
 
     @Override
-    public boolean deleteById(Long id) {
+    public boolean deleteById(java.lang.Long id) {
         try {
             this.mangaRepository.deleteById(id);
             return true;
@@ -91,7 +101,7 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
+    public Page<MangaDto> filter(Pageable pageable, Specification<Long> specs) {
         return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
     }
 

@@ -30,7 +30,7 @@ public class MangaChapterEntity {
 	
 	@JoinColumn(name = "manga_id")
 	@ManyToOne
-	private MangaVolumeEntity mangaId;
+	private MangaVolumeEntity mangaVolume;
 	
 	@Column(name = "name")
 	private String name;

@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.models.MangaChapterModel;
+import webtoon.domains.manga.models.MangaUploadChapterInput;
 
 public interface IMangaChapterService {
 
@@ -18,4 +19,5 @@ public interface IMangaChapterService {
 
 	Page<MangaChapterDto> filter(Pageable pageable, Specification<MangaChapterEntity> specs);
 
+    void createTextChapter(MangaUploadChapterInput input);
 }
