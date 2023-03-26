@@ -1,6 +1,6 @@
 import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { RichTextEditorComponent } from "@syncfusion/ej2-react-richtexteditor";
-import { Button, Checkbox, Divider, Input, InputRef, message, Select, Space } from "antd";
+import { Button, Checkbox, Divider, Input, InputRef, message, Radio, Select, Space } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
 import { useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -88,12 +88,16 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         fileInput.click();
     }
 
+
+    // begin image chapter
+    const [imageUploadType, setImageUploadType] = useState<'ZIP' | 'IMAGE'>('ZIP');
     const [imageChapterFiles, setImageChapterFiles] = useState<File[]>([]);
     const uploadImageChapter = () => {
         const fileInput = document.createElement('input');
         fileInput.type = 'file';
-        fileInput.accept = '.png,.jpg,.jpeg,.zip';
-        fileInput.multiple = true;
+        // fileInput.accept = '.png,.jpg,.jpeg,.zip';
+        fileInput.accept = '.zip';
+        // fileInput.multiple = true;
         fileInput.onchange = () => {
             const fileList: FileList | null = fileInput.files;
             const files: File[] = [];
@@ -111,6 +115,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         setImageChapterFiles(newFiles);
     }
 
+    // begin chapter input
     const [chapterInput, setChapterInput] = useState<ChapterInput>({
         volume: selectedVolume,
         chapterName: '',
@@ -166,7 +171,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
     return (
         <div className="px-[15px] grid gap-y-[10px]">
             <section>
-                <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
                     <span> Volume:</span>
                 </label>
                 <Select
@@ -200,7 +205,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
             <section>
 
-                <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                     <span className='text-red-500'>*</span>
                     <span> Chapter name:</span>
                 </label>
@@ -213,13 +218,13 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             </section>
 
             <section>
-                <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
                     <span> Chapter Index(Optional):</span>
                 </label>
                 <Input placeholder="enter your chapter name" />
             </section>
             <section className="flex items-center space-x-3">
-                <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
                     <span> Require vip:</span>
                 </label>
                 <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.value)} />
@@ -229,7 +234,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             {
                 props.mangaInput.mangaType === 'TEXT' &&
                 <section >
-                    <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                    <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                         <span className='text-red-500'>*</span>
                         <span> Chapter content:</span>
                     </label>
@@ -254,11 +259,17 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             {
                 props.mangaInput.mangaType === 'IMAGE' &&
                 <section >
-                    <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                    <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                         <span className='text-red-500'>*</span>
                         <span> Chapter Image:</span>
                     </label>
-                    <a className="mb-[10px] block text-[12px]" onClick={uploadImageChapter}>Upload .zip folder or image file (support .png, jpg, jpeg), all files aren't format will be discard</a>
+
+                    {/* <Radio.Group className="py-[5px]" size="small" value={imageUploadType} onChange={e => setImageUploadType(e.target.value)} >
+                            <Radio value={'ZIP'} className="text-[12px]">zip file</Radio>
+                            <Radio value={'IMAGE'} className="text-[12px]">Images</Radio>
+                        </Radio.Group> */}
+
+                    <a className="mb-[10px] block text-[12px] underline" onClick={uploadImageChapter}>Upload .zip folder(maximum 100MB), all files aren't format will be discard</a>
 
                     <div>
                         {imageChapterFiles && imageChapterFiles.length > 0 && (

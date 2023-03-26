@@ -12,6 +12,7 @@ import './plugins/i18n';
 import {registerLicense} from '@syncfusion/ej2-base';
 
 registerLicense('ORg4AjUWIQA/Gnt2VVhkQlFac1xJXGFWfVJpTGpQdk5xdV9DaVZUTWY/P1ZhSXxQdkZhXH5edX1QRGFcVkM=');
+
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
   <Provider store={store}>
     <React.StrictMode>
