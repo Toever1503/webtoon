@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import webtoon.domains.manga.entities.MangaAuthorEntity;
 
 @Data
 @AllArgsConstructor
@@ -14,4 +15,12 @@ public class MangaAuthorDto {
 	private Long id;
 
 	private String name;
+	public static MangaAuthorDto toDto(MangaAuthorEntity mangaEntity) {
+		if(mangaEntity == null) return null;
+		
+		return MangaAuthorDto.builder()
+				.id(mangaEntity.getId())
+				.name(mangaEntity.getName())
+				.build();
+	}
 }

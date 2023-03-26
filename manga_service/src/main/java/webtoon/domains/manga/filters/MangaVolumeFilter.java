@@ -7,8 +7,8 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MangaGenreFilter {
+public class MangaVolumeFilter {
 	private String name;
 
-	private String slug;
+	private Integer volumeIndex;
 }
