@@ -18,7 +18,7 @@ import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.services.IMangaService;
 
 @RestController
-@RequestMapping("/manga")
+@RequestMapping("/mangatest")
 public class MangaResource {
 
 	@Autowired

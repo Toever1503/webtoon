@@ -118,4 +118,6 @@ public class IMangaServiceImpl implements IMangaService {
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
         return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
     }
+    
+    
 }
