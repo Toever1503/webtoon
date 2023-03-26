@@ -7,13 +7,15 @@ import RichtextEditorForm from '../../components/RichtextEditorForm';
 import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
 import { useTranslation } from "react-i18next";
 import dayjs from 'dayjs';
-import { MangaInput, MangaStatus, ReleaseStatus } from '../../services/MangaService';
+import mangaService, { MangaInput, MangaStatus, ReleaseStatus } from '../../services/MangaService';
+import { useDispatch } from 'react-redux';
+import { showNofification } from '../../stores/features/notification/notificationSlice';
 
 
 
 interface MangaInputError {
     title: string;
-    content: string;
+    description: string;
     genres: string;
     authors: string;
     featureImage: string;
@@ -22,7 +24,7 @@ interface MangaInputError {
 
 const AddNewManga: React.FC = () => {
     const { t, i18n } = useTranslation();
-
+    const dispatch = useDispatch();
     // begin tag search
     const [genreOptions, setGenreOptions] = useState(['jack', 'lucy']);
     const [genreSearchVal, setGenreSearchVal] = useState('');
@@ -72,23 +74,24 @@ const AddNewManga: React.FC = () => {
 
     // manga info
     const [mangaInput, setMangaInput] = useState<MangaInput>({
-        title: '',
-        content: '',
+        title: 'test',
+        description: 'The Rich Text Editor component is WYSIWYG ("what you see is what you get") editor that provides the best user experience to create and update the content. Users can format their content using standard toolbar commands.',
         excerpt: '',
-        postName: '',
-        mangaStatus: 'DRAFTED',
-        releaseStatus: 'COMING',
+        mangaName: '',
+        status: 'DRAFTED',
+        mangaStatus: 'COMING',
         releaseYear: dayjs(),
         mangaType: 'UNSET',
         genres: ['lucy'],
         authors: ['lucy'],
         tags: ['lucy'],
-        featureImage: '',
+        featureImage: 'http://ima.ac',
     });
     const [isSavingMangaInfo, setIsSavingMangaInfo] = useState<boolean>(false);
     const [mangaContentEditorRef, setMangaContentEditorRef] = useState<RichTextEditorComponent>();
-    const onReadyMangaContentEditor = (rteObj: RichTextEditorComponent) => {
+    const onReadyMangaContentEditor = (rteObj: RichTextEditorComponent, setContent: Function) => {
         setMangaContentEditorRef(rteObj);
+        setContent(mangaInput.description);
     };
 
     const onSaveMangaInfo = async () => {
@@ -101,30 +104,99 @@ const AddNewManga: React.FC = () => {
         const mangaExcerpt = mangaContentEditorRef?.getText().slice(0, 160 || '') || '';
         setMangaInput({
             ...mangaInput,
-            content: mangaContent,
+            description: mangaContent,
             excerpt: mangaExcerpt,
         });
 
         console.log('mangaInput', mangaInput);
-        if (!mangaInput.title)
+
+        let errorCount = 0;
+        if (!mangaInput.title) {
+            errorCount++;
             mangaInputError.title = 'manga.form.errors.title-required';
-        if (!mangaInput.content)
-            mangaInputError.content = 'manga.form.errors.content-required';
-        if (!mangaInput.genres || mangaInput.genres.length === 0)
-            mangaInputError.genres = 'manga.form.errors.genres-required';
-        if (!mangaInput.authors || mangaInput.authors.length === 0)
-            mangaInputError.authors = 'manga.form.errors.authors-required';
-        if (!mangaInput.featureImage)
+        }
+        else mangaInputError.title = '';
+
+        if (!mangaInput.description) {
+            errorCount++;
+            mangaInputError.description = 'manga.form.errors.content-required';
+        }
+        else mangaInputError.description = '';
+
+        // if (!mangaInput.genres || mangaInput.genres.length === 0) {
+        //     errorCount++;
+        //     mangaInputError.genres = 'manga.form.errors.genres-required';
+        // }
+
+        // if (!mangaInput.authors || mangaInput.authors.length === 0) {
+        //     errorCount++;
+        //     mangaInputError.authors = 'manga.form.errors.authors-required';
+        // }
+
+        if (!mangaInput.featureImage) {
+            errorCount++;
             mangaInputError.featureImage = 'manga.form.errors.feature-image-required';
+        }
+        else mangaInputError.featureImage = '';
+        setMangaInputError({ ...mangaInputError });
+
+        if (errorCount === 0) {
+            console.log('begin save manga');
+
+            setIsSavingMangaInfo(true);
+            mangaService.addMangaInfo(mangaInput)
+                .then((res) => {
+                    console.log('add manga success', res.data);
+                    dispatch(showNofification({
+                        type: 'success',
+                        message: t('manga.form.errors.add-success'),
+                    }));
+                })
+                .catch((err) => {
+                    console.log(err);
+                    dispatch(showNofification({
+                        type: 'error',
+                        message: t('manga.form.errors.add-failed'),
+                    }));
+                })
+                .finally(() => {
+                    setIsSavingMangaInfo(false);
+                });
+        }
+        else {
+            console.log(mangaInputError);
+
+            dispatch(showNofification({
+                type: 'error',
+                message: t('manga.form.errors.check-again'),
+            }))
+        }
     };
 
+    let [isAutoSavingMangaInfo, setIsAutoSavingMangaInfo] = useState<boolean>(false);
     const autoSaveMangaInfo = () => {
-        console.log('autoSaveMangaInfo');
+        if (isAutoSavingMangaInfo) return;
+        console.log('autoSaveMangaInfo: id ', mangaInput.id);
+
+        isAutoSavingMangaInfo = true;
+        mangaService.addMangaInfo(mangaInput)
+            .then((res) => {
+                console.log('auto save manga success', res.data);
+                mangaInput.id = res.data.id;
+            })
+            .catch((err) => {
+                console.log('auto save manga failed');
+                console.log(err);
+            })
+            .finally(() => {
+                isAutoSavingMangaInfo = false;
+
+            })
     };
 
     const [mangaInputError, setMangaInputError] = useState<MangaInputError>({
         title: '',
-        content: '',
+        description: '',
         genres: '',
         authors: '',
         featureImage: '',
@@ -133,10 +205,13 @@ const AddNewManga: React.FC = () => {
 
 
     useEffect(() => {
-        setInterval(() => {
+        let id: number | undefined;
+        id = setInterval(() => {
             autoSaveMangaInfo();
-        }, 10000);
-    }, []);
+        }, 15000);
+        return () => clearInterval(id);
+    }, [mangaInput]);
+
 
     return (
         <div className="space-y-3 py-3">
@@ -152,7 +227,7 @@ const AddNewManga: React.FC = () => {
                             <span className='text-red-500'>*</span>
                             <span> Title:</span>
                         </label>
-                        <Input className='' value={mangaInput.title} placeholder="Title" />
+                        <Input className='' value={mangaInput.title} onChange={(val: any) => setMangaInput({ ...mangaInput, title: val.target.value })} placeholder="Title" />
                         {
                             <p className='text-[12px] text-red-500 px-[5px]'>
                                 {mangaInputError.title && t(mangaInputError.title)}
@@ -167,7 +242,7 @@ const AddNewManga: React.FC = () => {
                             <RichtextEditorForm onReady={onReadyMangaContentEditor} />
                             {
                                 <p className='text-[12px] text-red-500 px-[5px]'>
-                                    {mangaInputError.content && t(mangaInputError.content)}
+                                    {mangaInputError.description && t(mangaInputError.description)}
                                 </p>
                             }
                         </div>
@@ -190,8 +265,8 @@ const AddNewManga: React.FC = () => {
                             <span className='text-[14px] font-bold'>Manga Status:</span>
                             <Select
                                 className='min-w-[150px]'
-                                value={mangaInput.mangaStatus}
-                                onChange={(val: MangaStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
+                                value={mangaInput.status}
+                                onChange={(val: MangaStatus) => { setMangaInput({ ...mangaInput, status: val }) }}
                                 options={[
                                     { value: 'PUBLISHED', label: 'PUBLISHED' },
                                     { value: 'DRAFTED', label: 'DRAFTED' },
@@ -204,13 +279,13 @@ const AddNewManga: React.FC = () => {
                             <Select
                                 className='min-w-[150px]'
                                 defaultValue="COMING"
-                                onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, releaseStatus: val }) }}
+                                onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
                                 options={[
                                     { value: 'COMING', label: 'COMING' },
                                     { value: 'GOING', label: 'GOING' },
-                                    { value: 'STOPED', label: 'STOPED' },
-                                    { value: 'CANCELED', label: 'CANCELED' },
-                                    { value: 'FINISHED', label: 'FINISHED' },
+                                    { value: 'STOPPED', label: 'STOPED' },
+                                    { value: 'CANCELLED', label: 'CANCELED' },
+                                    { value: 'COMPLETED', label: 'COMPLETED' },
                                 ]}
                             />
                         </div>

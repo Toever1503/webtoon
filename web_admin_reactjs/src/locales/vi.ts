@@ -4,6 +4,7 @@ export default {
         form:
         {
             errors: {
+                'check-again': 'Vui lòng kiểm tra lại thông tin!',
                 'title-required': 'Title is required',
                 'title-max': 'Title must be at most 255 characters',
                 'content-required': 'Content is required',
@@ -14,7 +15,9 @@ export default {
                 'volume-required': 'Please enter volume name!',
                 'chapter-name-required': 'Chapter name is required',
                 'chapter-images-required': 'Chapter image is required',
-                'chapter-content-required': 'Chaptr content is required',
+                'chapter-content-required': 'Chapter content is required',
+                'add-failed': 'Thêm thất bại!',
+                'add-success': 'Thêm thành công!'
             }
         }
     }

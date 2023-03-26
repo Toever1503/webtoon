@@ -20,17 +20,14 @@ public class MangaModel {
 	private Long id;
 	private String title;
 	private String alternativeTitle;
-	private String concerpt;
+	private String excerpt;
 	private String description;
 	private String mangaName;
 	private String featuredImage ;
 	private EMangaStatus status;
-	private EMangaSTS mangaSts;
-	private Integer commentCount;
+	private EMangaSTS mangaStatus;
 	private EMangaType mangaType;
-	private Date created_at;
-	private Date modifed_at;
-	private Integer rating;
-	private Integer view_Count;
+	private Date createdAt;
+	private Date modifiedAt;
 	
 }

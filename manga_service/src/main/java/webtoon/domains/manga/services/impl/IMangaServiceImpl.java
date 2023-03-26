@@ -10,9 +10,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.repositories.IMangaRepository;
 import webtoon.domains.manga.services.IMangaService;
+import webtoon.utils.ASCIIConverter;
 //import webtoon.utils.exception.CustomHandleException;
 
 @Service
@@ -21,78 +23,52 @@ public class IMangaServiceImpl implements IMangaService {
     @Autowired
     private IMangaRepository mangaRepository;
 
+    @Autowired
+    private MangaMapper mangaMapper;
+
     @Override
     public MangaDto add(MangaModel model) {
-        MangaEntity mangaEntity = MangaEntity.builder()
-                .title(model.getTitle())
-                .alternativeTitle(model.getAlternativeTitle())
-                .concerpt(model.getConcerpt())
-                .description(model.getDescription())
-                .mangaName(model.getMangaName())
-                .featuredImage(model.getFeaturedImage())
-                .status(model.getStatus()) // enum status
-                .mangaSts(model.getMangaSts())
-                .commentCount(model.getCommentCount())
-                .mangaType(model.getMangaType())
-                .rating(model.getRating())
-                .created_at(model.getCreated_at())
-                .modifed_at(model.getModifed_at())
-                .build();
-        this.mangaRepository.saveAndFlush(mangaEntity);
-        return MangaDto.builder()
-                .title(mangaEntity.getTitle())
-                .alternativeTitle(mangaEntity.getAlternativeTitle())
-                .concerpt(mangaEntity.getConcerpt())
-                .description(mangaEntity.getDescription())
-                .mangaName(mangaEntity.getMangaName())
-                .featuredImage(mangaEntity.getFeaturedImage())
-                .status(mangaEntity.getStatus())
-                .mangaSts(mangaEntity.getMangaSts())
-                .commentCount(mangaEntity.getCommentCount())
-                .mangaType(mangaEntity.getMangaType())
-                .rating(mangaEntity.getRating())
-                .view_Count(mangaEntity.getView_Count())
-                .created_at(mangaEntity.getCreated_at())
-                .modifed_at(mangaEntity.getModifed_at())
-                .build();
+        MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
 
+        mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
+        mangaEntity.setRating(0F);
+        mangaEntity.setViewCount(0);
+        mangaEntity.setCommentCount(0);
+
+        this.mangaRepository.saveAndFlush(mangaEntity);
+        return this.mangaMapper.toDto(mangaEntity);
     }
 
     @Override
     public MangaDto update(MangaModel model) {
 
         MangaEntity mangaEntity = this.getById(model.getId());
-
         mangaEntity.setTitle(model.getTitle());
         mangaEntity.setAlternativeTitle(model.getAlternativeTitle());
-        mangaEntity.setConcerpt(model.getConcerpt());
+        mangaEntity.setExcerpt(model.getExcerpt());
         mangaEntity.setDescription(model.getDescription());
         mangaEntity.setMangaName(model.getMangaName());
         mangaEntity.setFeaturedImage(model.getFeaturedImage());
         mangaEntity.setStatus(model.getStatus());
-        mangaEntity.setMangaSts(model.getMangaSts());
+        mangaEntity.setMangaStatus(model.getMangaStatus());
         mangaEntity.setMangaType(model.getMangaType());
-        mangaEntity.setCommentCount(model.getCommentCount());
-        mangaEntity.setCreated_at(model.getCreated_at());
-        mangaEntity.setModifed_at(model.getModifed_at());
-        mangaEntity.setRating(model.getRating());
-        mangaEntity.setView_Count(model.getView_Count());
+        mangaEntity.setCreatedAt(model.getCreatedAt());
+        mangaEntity.setModifiedAt(model.getModifiedAt());
         mangaRepository.saveAndFlush(mangaEntity);
         return MangaDto.builder()
                 .title(mangaEntity.getTitle())
                 .alternativeTitle(mangaEntity.getAlternativeTitle())
-                .concerpt(mangaEntity.getConcerpt())
+                .excerpt(mangaEntity.getExcerpt())
                 .description(mangaEntity.getDescription())
                 .mangaName(mangaEntity.getMangaName())
                 .featuredImage(mangaEntity.getFeaturedImage())
                 .status(mangaEntity.getStatus())
-                .mangaSts(mangaEntity.getMangaSts())
+                .mangaStatus(mangaEntity.getMangaStatus())
                 .commentCount(mangaEntity.getCommentCount())
                 .mangaType(mangaEntity.getMangaType())
-                .rating(mangaEntity.getRating())
-                .view_Count(mangaEntity.getView_Count())
-                .created_at(mangaEntity.getCreated_at())
-                .modifed_at(mangaEntity.getModifed_at())
+                .viewCount(mangaEntity.getViewCount())
+                .createdAt(mangaEntity.getCreatedAt())
+                .modifiedAt(mangaEntity.getModifiedAt())
                 .build();
 
     }
@@ -118,6 +94,6 @@ public class IMangaServiceImpl implements IMangaService {
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
         return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
     }
-    
-    
+
+
 }
