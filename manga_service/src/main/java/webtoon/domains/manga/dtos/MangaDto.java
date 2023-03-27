@@ -7,7 +7,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import webtoon.domains.manga.entities.Long;
+import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaStatus;
 import webtoon.domains.manga.enums.EMangaType;
@@ -34,7 +34,7 @@ public class MangaDto {
 	private Float rating;
 	private Integer viewCount;
 
-	public static MangaDto toDto(Long mangaEntity) {
+	public static MangaDto toDto(MangaEntity mangaEntity) {
 		if(mangaEntity == null) return null;
 		
 		return MangaDto.builder()

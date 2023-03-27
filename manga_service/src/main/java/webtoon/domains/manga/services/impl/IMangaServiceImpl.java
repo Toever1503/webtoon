@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaDto;
-import webtoon.domains.manga.entities.Long;
+import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
@@ -29,7 +29,7 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public MangaDto add(MangaModel model) {
-        Long mangaEntity = this.mangaMapper.toEntity(model);
+        MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
 
         mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
         mangaEntity.setRating(0F);
@@ -43,7 +43,7 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public MangaDto update(MangaModel model) {
 
-        Long mangaEntity = this.getById(model.getId());
+        MangaEntity mangaEntity = this.getById(model.getId());
         mangaEntity.setTitle(model.getTitle());
         mangaEntity.setAlternativeTitle(model.getAlternativeTitle());
         mangaEntity.setExcerpt(model.getExcerpt());
@@ -76,7 +76,7 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public void setMangaType(java.lang.Long id, EMangaType type) {
-        Long entity = this.getById(id);
+        MangaEntity entity = this.getById(id);
         if (!entity.getMangaType().equals(EMangaType.UNSET))
             throw new RuntimeException("Manga has already set type");
         entity.setMangaType(type);
@@ -84,7 +84,7 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
 
-    public Long getById(java.lang.Long id) {
+    public MangaEntity getById(java.lang.Long id) {
         return this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }
 
@@ -101,7 +101,7 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public Page<MangaDto> filter(Pageable pageable, Specification<Long> specs) {
+    public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
         return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
     }
 

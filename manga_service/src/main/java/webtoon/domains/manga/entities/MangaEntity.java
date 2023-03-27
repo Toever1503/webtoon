@@ -31,7 +31,7 @@ import webtoon.domains.manga.enums.EMangaType;
 @Builder
 @Getter
 @Setter
-public class Long {
+public class MangaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

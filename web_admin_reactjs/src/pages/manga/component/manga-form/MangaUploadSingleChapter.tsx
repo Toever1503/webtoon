@@ -52,13 +52,14 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
             mangaService.createNewVolume(
                 {
-                    mangaID: props.mangaInput.id,
+                    // mangaId: props.mangaInput.id,
+                    mangaId: 1,
                     name: volumeVal,
                     volumeIndex: 0
                 }
             )
                 .then((res) => {
-                    console.log(res);
+                    console.log(res.data);
                     setVolumeOptions([...volumeOptions, {
                         id: res.data.id,
                         name: volumeVal
@@ -129,6 +130,8 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                     files.push(fileList[i]);
                 }
                 setImageChapterFiles(files)
+                console.log('files', files);
+                
             }
         };
         fileInput.click();
@@ -171,7 +174,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
     const [isCreatingChapter, setIsCreatingChapter] = useState<boolean>(false);
     const onCreateChapter = () => {
-        console.log('on create chapter');
+        console.log('on create chapter', chapterInput.chapterImages);
 
         let errorCount = 0;
         if (!chapterInput.chapterName) {
@@ -199,11 +202,42 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             }
             else chapterInputError.chapterContent = '';
         }
-
+        setChapterInputError({ ...chapterInputError });
 
         if (errorCount === 0) {
             setIsCreatingChapter(true);
             if (props.mangaInput.mangaType === 'IMAGE') {
+                console.log('create image chapter');
+                
+                const formdata = new FormData();
+                formdata.append('chapterIndex', chapterInput.chapterIndex ? chapterInput.chapterIndex.toString() : '0');
+                formdata.append('chapterName', chapterInput.chapterName);
+                formdata.append('isRequiredVip', isRequireVipChapter.toString());
+                formdata.append('volumeID', chapterInput.volume.toString());
+                formdata.append('mangaID', '1');
+                chapterInput.chapterImages.forEach((file: File) => {
+                    formdata.append('multipartFiles[]', file);
+                });
+                mangaService
+                    .createImageChapter(formdata)
+                    .then((res) => {
+                        console.log('create image chapter success:', res.data);
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: t('manga.form.success.create-chapter')
+                        }));
+                        resetChapterInput();
+                    })
+                    .catch((err) => {
+                        console.log('create image chapter error:', err);
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('manga.form.errors.create-chapter')
+                        }));
+                    })
+                    .finally(() => {
+                        setIsCreatingChapter(false);
+                    });
 
             }
             else if (props.mangaInput.mangaType === 'TEXT') {

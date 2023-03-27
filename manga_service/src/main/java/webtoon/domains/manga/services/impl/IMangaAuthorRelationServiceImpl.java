@@ -12,6 +12,7 @@ import webtoon.domains.manga.entities.MangaAuthorRelationEntity;
 import webtoon.domains.manga.models.MangaAuthorRelationModel;
 import webtoon.domains.manga.repositories.IMangaAuthorRelationRepository;
 import webtoon.domains.manga.services.IMangaAuthorRelationService;
+import webtoon.domains.manga.services.IMangaService;
 
 @Service
 @Transactional
@@ -20,26 +21,28 @@ public class IMangaAuthorRelationServiceImpl implements IMangaAuthorRelationServ
 	@Autowired
 	private IMangaAuthorRelationRepository authorRelationRepository;
 
+	@Autowired
+	private IMangaService mangaService;
 	@Override
 	public MangaAuthorRelationDto add(MangaAuthorRelationModel model) {
 
 		MangaAuthorRelationEntity authorRelationEntity = MangaAuthorRelationEntity.builder()
-				.authorId(model.getAuthorId()).mangaId(model.getMangaId()).authorType(model.getAuthorType()).build();
+				.authorId(model.getAuthorId()).mangaId(mangaService.getById(model.getMangaId())).authorType(model.getAuthorType()).build();
 		this.authorRelationRepository.saveAndFlush(authorRelationEntity);
 
 		return MangaAuthorRelationDto.builder().authorId(authorRelationEntity.getAuthorId())
-				.mangaId(authorRelationEntity.getMangaId()).authorType(authorRelationEntity.getAuthorType()).build();
+				.mangaId(authorRelationEntity.getMangaId().getId()).authorType(authorRelationEntity.getAuthorType()).build();
 	}
 
 	@Override
 	public MangaAuthorRelationDto update(MangaAuthorRelationModel model) {
 		MangaAuthorRelationEntity authorRelationEntity = this.getById(model.getId());
 		authorRelationEntity.setAuthorId(model.getAuthorId());
-		authorRelationEntity.setMangaId(model.getMangaId());
+		authorRelationEntity.setMangaId(this.mangaService.getById(model.getMangaId()));
 		authorRelationEntity.setAuthorType(model.getAuthorType());
 		authorRelationRepository.saveAndFlush(authorRelationEntity);
 		return MangaAuthorRelationDto.builder().authorId(authorRelationEntity.getAuthorId())
-				.mangaId(authorRelationEntity.getMangaId()).authorType(authorRelationEntity.getAuthorType()).build();
+				.mangaId(authorRelationEntity.getMangaId().getId()).authorType(authorRelationEntity.getAuthorType()).build();
 
 	}
 

@@ -36,7 +36,7 @@ public class MangaAuthorRelationEntity {
 	
 	@JoinColumn(name = "manga_id")
 	@ManyToOne
-	private Long mangaId;
+	private MangaEntity mangaId;
 	
 	@Column(name = "author_type")
 	private String authorType;

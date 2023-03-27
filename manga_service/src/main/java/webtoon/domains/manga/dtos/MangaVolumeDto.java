@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import webtoon.domains.manga.entities.Long;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 
 @Data
@@ -25,7 +24,7 @@ public class MangaVolumeDto {
 		
 		return MangaVolumeDto.builder()
 				.id(entity.getId())
-				.mangaId(entity.getMangaId())
+				.mangaId(entity.getManga().getId())
 				.name(entity.getName())
 				.volumeIndex(entity.getVolumeIndex())
 				.build();

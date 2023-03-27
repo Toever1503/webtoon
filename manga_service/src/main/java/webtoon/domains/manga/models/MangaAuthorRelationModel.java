@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
-import webtoon.domains.manga.entities.Long;
 
 @Data
 @AllArgsConstructor

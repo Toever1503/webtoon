@@ -1,11 +1,12 @@
 package webtoon.domains.manga.resources2;
 
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
 import webtoon.domains.manga.services.IMangaChapterService;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/manga/chapter")
@@ -20,5 +21,10 @@ public class MangaChapterResource2 {
     @PostMapping("create-text-chapter")
     public void createTextChapter(@RequestBody MangaUploadChapterInput input){
         this.mangaChapterService.createTextChapter(input);
+    }
+
+    @PostMapping("create-image-chapter")
+    public void createImageChapter(MangaUploadChapterInput input, @RequestPart List<MultipartFile> multipartFiles){
+        this.mangaChapterService.createImageChapter(input, multipartFiles);
     }
 }

@@ -41,12 +41,12 @@ const setMangaType = async (id: number | string, type: MangaType) => mangaAxios.
 const deleteMangaInfo = async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
 const createTextChapter = async (model: MangaChapterInput) => mangaAxios.post(`${basePath}/chapter/create-text-chapter`, model);
-const createImageChapter = async (model: MangaChapterInput) => mangaAxios.post(`${basePath}/chapter/create-image-chapter`, model);
+const createImageChapter = async (model: FormData) => mangaAxios.post(`${basePath}/chapter/create-image-chapter`, model);
 
 
 type MangaVolumeInput = {
     id?: number | string;
-    mangaID: number | string;
+    mangaId: number | string;
     name: string;
     volumeIndex: number;
 }

@@ -12,6 +12,7 @@ import webtoon.domains.manga.entities.MangaGenreRelationEntity;
 import webtoon.domains.manga.models.MangaGenreRelationModel;
 import webtoon.domains.manga.repositories.IMangaGenreRelationRepository;
 import webtoon.domains.manga.services.IMangaGenreRelationService;
+import webtoon.domains.manga.services.IMangaService;
 
 @Service
 @Transactional
@@ -20,21 +21,24 @@ public class IMangaGenreRelationServiceImpl implements IMangaGenreRelationServic
 	@Autowired
 	private IMangaGenreRelationRepository genreRelationRepository;
 
+	@Autowired
+	private IMangaService mangaService;
+
 	@Override
 	public MangaGenreRelationDto add(MangaGenreRelationModel model) {
 		MangaGenreRelationEntity entity = MangaGenreRelationEntity.builder().genreId(model.getGenreId())
-				.mangaId(model.getMangaId()).build();
+				.mangaId(this.mangaService.getById(model.getMangaId())).build();
 		genreRelationRepository.saveAndFlush(entity);
-		return MangaGenreRelationDto.builder().genreId(entity.getGenreId()).mangaId(entity.getMangaId()).build();
+		return MangaGenreRelationDto.builder().genreId(entity.getGenreId()).mangaId(entity.getMangaId().getId()).build();
 	}
 
 	@Override
 	public MangaGenreRelationDto update(MangaGenreRelationModel model) {
 		MangaGenreRelationEntity entity = this.getById(model.getId());
 		entity.setGenreId(model.getGenreId());
-		entity.setMangaId(model.getMangaId());
+		entity.setMangaId(this.mangaService.getById(model.getMangaId()));
 		genreRelationRepository.saveAndFlush(entity);
-		return MangaGenreRelationDto.builder().genreId(entity.getGenreId()).mangaId(entity.getMangaId()).build();
+		return MangaGenreRelationDto.builder().genreId(entity.getGenreId()).mangaId(entity.getMangaId().getId()).build();
 
 	}
 

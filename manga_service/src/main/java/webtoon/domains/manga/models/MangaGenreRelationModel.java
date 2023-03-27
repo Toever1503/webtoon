@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import webtoon.domains.manga.entities.Long;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 
 @Data

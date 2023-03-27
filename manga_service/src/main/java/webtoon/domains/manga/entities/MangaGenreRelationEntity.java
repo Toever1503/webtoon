@@ -33,5 +33,5 @@ public class MangaGenreRelationEntity {
 	
 	@ManyToOne
 	@JoinColumn(name = "manga_id")
-	private Long mangaId;
+	private MangaEntity mangaId;
 }

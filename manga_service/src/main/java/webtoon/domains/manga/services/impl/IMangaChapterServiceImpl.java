@@ -7,9 +7,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
-import webtoon.domains.manga.entities.Long;
+import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
@@ -17,6 +18,8 @@ import webtoon.domains.manga.repositories.IMangaChapterRepository;
 import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
+
+import java.util.List;
 
 @Service
 @Transactional
@@ -73,12 +76,12 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
     @Override
     public void createTextChapter(MangaUploadChapterInput input) {
-        Long mangaEntity = this.mangaService.getById(input.getMangaID());
+        MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
         MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeID())
                 .orElse(
                         MangaVolumeEntity.builder()
                                 .name("Volume 1")
-                                .mangaId(mangaEntity)
+                                .manga(mangaEntity)
                                 .volumeIndex(0)
                                 .build()
                 );
@@ -91,6 +94,11 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 .requiredVip(input.getIsRequiredVip())
                 .build();
         this.chapterRepository.saveAndFlush(mangaChapterEntity);
+    }
+
+    @Override
+    public void createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
+
     }
 
     public MangaChapterEntity getById(java.lang.Long id) {

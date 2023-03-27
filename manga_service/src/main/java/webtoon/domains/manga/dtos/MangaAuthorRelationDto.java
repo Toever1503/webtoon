@@ -6,7 +6,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.entities.MangaAuthorRelationEntity;
-import webtoon.domains.manga.entities.Long;
 
 @Data
 @AllArgsConstructor
@@ -26,7 +25,7 @@ public class MangaAuthorRelationDto {
 		return MangaAuthorRelationDto.builder()
 				.id(mangaEntity.getId())
 				.authorId(mangaEntity.getAuthorId())
-				.mangaId(mangaEntity.getMangaId())
+				.mangaId(mangaEntity.getMangaId().getId())
 				.authorType(mangaEntity.getAuthorType())
 				.build();
 	}

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import webtoon.domains.manga.entities.Long;
+import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.filters.MangaFilterModel;
 import webtoon.domains.manga.services.IMangaService;
 
@@ -40,7 +40,7 @@ public class MangaController {
 	}
 	@PostMapping("/index")
 	public String showMangaList(Model model,Pageable pageable,@RequestBody MangaFilterModel filterModel  ) {
-		Specification<Long> specification = (root, query, criteriaBuilder) -> {
+		Specification<MangaEntity> specification = (root, query, criteriaBuilder) -> {
 			return criteriaBuilder.or(criteriaBuilder.like(root.get("title"), "%" + filterModel.getTitle() + "%"),
 					criteriaBuilder.like(root.get("mangaName"), "%" + filterModel.getMangaName() + "%"),
 					criteriaBuilder.like(root.get("concerpt"), "%" + filterModel.getConcerpt() + "%")

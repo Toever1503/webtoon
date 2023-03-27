@@ -11,6 +11,7 @@ import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.models.MangaVolumeModel;
 import webtoon.domains.manga.repositories.IMangaVolumeRepository;
+import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
 
 @Service
@@ -20,23 +21,28 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 	@Autowired
 	private IMangaVolumeRepository mangaVolumeRepository;
 
+	@Autowired
+	private IMangaService mangaService;
+
 	@Override
 	public MangaVolumeDto add(MangaVolumeModel model) {
-		MangaVolumeEntity entity = MangaVolumeEntity.builder().mangaId(model.getMangaId()).name(model.getName())
+		MangaVolumeEntity entity = MangaVolumeEntity.builder()
+				.manga(mangaService.getById(model.getMangaId()))
+				.name(model.getName())
 				.volumeIndex(model.getVolumeIndex()).build();
 		mangaVolumeRepository.saveAndFlush(entity);
-		return MangaVolumeDto.builder().mangaId(entity.getMangaId()).name(model.getName())
+		return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(model.getName())
 				.volumeIndex(model.getVolumeIndex()).build();
 	}
 
 	@Override
 	public MangaVolumeDto update(MangaVolumeModel model) {
 		MangaVolumeEntity entity = this.getById(model.getId());
-		entity.setMangaId(model.getMangaId());
+		entity.setManga(this.mangaService.getById(model.getMangaId()));
 		entity.setName(model.getName());
 		entity.setVolumeIndex(model.getVolumeIndex());
 		mangaVolumeRepository.saveAndFlush(entity);
-		return MangaVolumeDto.builder().mangaId(entity.getMangaId()).name(entity.getName())
+		return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(entity.getName())
 				.volumeIndex(entity.getVolumeIndex()).build();
 	}
 

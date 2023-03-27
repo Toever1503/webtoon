@@ -29,7 +29,7 @@ public class MangaVolumeEntity {
 	
 	@JoinColumn(name = "manga_id")
 	@ManyToOne
-	private Long mangaId;
+	private MangaEntity manga;
 	
 	@Column(name = "name")
 	private String name;

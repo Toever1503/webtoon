@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import webtoon.domains.manga.entities.Long;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.entities.MangaGenreRelationEntity;
 
@@ -26,6 +25,6 @@ public class MangaGenreRelationDto {
 		return MangaGenreRelationDto.builder()
 				.id(entity.getId())
 				.genreId(entity.getGenreId())
-				.mangaId(entity.getMangaId()).build();
+				.mangaId(entity.getMangaId().getId()).build();
 	}
 }
