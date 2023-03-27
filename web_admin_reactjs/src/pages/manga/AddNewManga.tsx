@@ -10,6 +10,8 @@ import dayjs from 'dayjs';
 import mangaService, { MangaInput, MangaStatus, ReleaseStatus } from '../../services/MangaService';
 import { useDispatch } from 'react-redux';
 import { showNofification } from '../../stores/features/notification/notificationSlice';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { AppDispatch } from '../../stores';
 
 
 
@@ -24,7 +26,8 @@ interface MangaInputError {
 
 const AddNewManga: React.FC = () => {
     const { t, i18n } = useTranslation();
-    const dispatch = useDispatch();
+    const dispatch: AppDispatch = useDispatch();
+    const navigate: NavigateFunction = useNavigate();
     // begin tag search
     const [genreOptions, setGenreOptions] = useState(['jack', 'lucy']);
     const [genreSearchVal, setGenreSearchVal] = useState('');
@@ -99,7 +102,7 @@ const AddNewManga: React.FC = () => {
         if (isSavingMangaInfo)
             return;
 
-        // setIsSavingMangaInfo(true);
+        setIsSavingMangaInfo(true);
 
         const mangaContent = mangaContentEditorRef?.getHtml() || '';
         const mangaExcerpt = mangaContentEditorRef?.getText().slice(0, 160 || '') || '';
@@ -152,6 +155,7 @@ const AddNewManga: React.FC = () => {
                         type: 'success',
                         message: t('manga.form.errors.add-success'),
                     }));
+                    navigate(`/manga`);
                 })
                 .catch((err) => {
                     console.log(err);
@@ -222,8 +226,8 @@ const AddNewManga: React.FC = () => {
             </div>
 
             <div className='flex gap-[15px]'>
-                <div className='grid gap-y-[15px]'>
-                    <section className='border max-w-[1200px]'>
+                <div className=''>
+                    <section className='border max-w-[1000px] h-fit'>
                         <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
                             <span className='text-red-500'>*</span>
                             <span> Title:</span>
@@ -439,7 +443,7 @@ const AddNewManga: React.FC = () => {
                             <a className='text-[13px]'>Choose image</a>
 
                             {
-                                !mangaInput.featureImage &&
+                                mangaInput.featureImage &&
                                 <img className='h-[120px] w-[120px]' src='https://s.pstatic.net/static/newsstand/2023/0322/article_img/new_main/9044/121821_001.jpg' />
                             }
                         </div>
