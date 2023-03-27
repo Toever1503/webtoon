@@ -210,16 +210,15 @@
         <div class="text-left mt-4 mx-7" th:case="*">
           <div th:each="item : ${model}">
             <div th:if="${item.mangaType} == 'TEXT'">
-				<h1>đây là trang chữ</h1>
+              <h1>đây là trang chữ</h1>
               <h1 th:text="${item.mangaName}"></h1>
               <h3 th:text="${item.description}"></h3>
             </div>
-            <div th:unless="${item.mangaType} == 'IMAGE'">
-				<h1>đây là trang ảnh</h1>
-
-				<h1 th:text="${item.mangaName}"></h1>
+            <div thelse="${item.mangaType} == 'IMAGE'">
+              <h1>đây là trang ảnh</h1>
+              <h1 th:text="${item.mangaName}"></h1>
               <h3 th:text="${item.description}"></h3>
-			</div>
+            </div>
           </div>
         </div>
       </div>
