@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EMangaStatus;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
 
 @AllArgsConstructor
@@ -25,7 +25,7 @@ public class MangaDto {
 	private String description;
 	 String mangaName;
 	private String featuredImage ;
-	private EMangaStatus status;
+	private EStatus status;
 	private EMangaSTS mangaStatus;
 	private Integer commentCount;
 	private EMangaType mangaType;

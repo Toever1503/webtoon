@@ -1,12 +1,17 @@
 package webtoon.domains.manga.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
@@ -15,15 +20,17 @@ import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
+import webtoon.domains.manga.repositories.IMangaChapterImageRepository;
 import webtoon.domains.manga.repositories.IMangaChapterRepository;
 import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
+import webtoon.storage.domain.dtos.FileDto;
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+import java.util.stream.Collectors;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -37,6 +44,8 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     private IMangaService mangaService;
     @Autowired
     private IMangaVolumeRepository mangaVolumeRepository;
+    @Autowired
+    private IMangaChapterImageRepository chapterImageRepository;
 
     @Override
     public MangaChapterDto add(MangaChapterModel model) {
@@ -125,10 +134,37 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                     .build();
             this.chapterRepository.saveAndFlush(mangaChapterEntity);
 
-            List<MangaChapterImageEntity> mangaChapterImages = getImagesFromZipFile(mangaEntity.getId().toString(), multipartFiles.get(0));
+            RestTemplate restTemplate = new RestTemplate();
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+
+            MultiValueMap<String, Object> body
+                    = new LinkedMultiValueMap<>();
+            body.add("file", multipartFiles.get(0).getResource());
+
+            HttpEntity<MultiValueMap<String, Object>> requestEntity
+                    = new HttpEntity<>(body, headers);
+
+            String serverUrl = "http://localhost:8080/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
+            ResponseEntity<List<FileDto>> response = restTemplate.exchange(
+                    serverUrl,
+                    HttpMethod.POST, requestEntity,
+                    new ParameterizedTypeReference<>() {
+                    });
+
+            List<FileDto> imageList = response.getBody();
+            AtomicInteger imageIndex = new AtomicInteger();
+            List<MangaChapterImageEntity> mangaChapterImages = imageList.stream().map(file -> MangaChapterImageEntity.builder()
+                    .mangaChapter(mangaChapterEntity)
+                    .image(file.getUrl())
+                    .imageIndex(imageIndex.getAndIncrement())
+                    .build()).collect(Collectors.toList());
+            this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
+
         } catch (Exception e) {
             e.printStackTrace();
             // need remove image
+            throw e;
         }
 
     }

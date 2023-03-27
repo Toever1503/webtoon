@@ -44,6 +44,8 @@ const createTextChapter = async (model: MangaChapterInput) => mangaAxios.post(`$
 const createImageChapter = async (model: FormData) => mangaAxios.post(`${basePath}/chapter/create-image-chapter`, model);
 
 
+const getVolumeForManga = (mangaId: number | string) => mangaAxios.get(`${basePath}/volume/get-all-for-manga/${mangaId}`);
+
 type MangaVolumeInput = {
     id?: number | string;
     mangaId: number | string;
@@ -52,6 +54,12 @@ type MangaVolumeInput = {
 }
 const createNewVolume = async (input: MangaVolumeInput) => mangaAxios.post(`${basePath}/volume`, input);
 
+// for read action
+type MangaFileInput = {
+    status?: MangaStatus;
+    q?: string;
+};
+const getMangaList = async (input: MangaFileInput) => mangaAxios.post(`${basePath}/filter`, input);
 
 const mangaService = {
     addMangaInfo,
@@ -60,7 +68,9 @@ const mangaService = {
     deleteMangaInfo,
     createTextChapter,
     createImageChapter,
-    createNewVolume
+    createNewVolume,
+    getVolumeForManga,
+    getMangaList
 };
 
 export default mangaService;

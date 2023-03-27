@@ -21,7 +21,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EMangaStatus;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
 
 @Entity
@@ -57,7 +57,7 @@ public class MangaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private EMangaStatus status;
+    private EStatus status;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "manga_status")

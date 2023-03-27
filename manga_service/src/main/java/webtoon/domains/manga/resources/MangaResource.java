@@ -22,29 +22,30 @@ import webtoon.domains.manga.services.IMangaService;
 @RequestMapping("/mangatest")
 public class MangaResource {
 
-	@Autowired
-	private IMangaService iMangaService;
+    @Autowired
+    private IMangaService iMangaService;
 
-	public MangaResource(IMangaService iMangaService) {
-		this.iMangaService = iMangaService;
-	}
+    public MangaResource(IMangaService iMangaService) {
+        this.iMangaService = iMangaService;
+    }
 
-	@PostMapping(value = "/add")
-	public ResponseDto addManga(@RequestBody MangaModel mangaModel) {
-		mangaModel.setId(null);
-		return ResponseDto.of(this.iMangaService.add(mangaModel));
-	}
+    @PostMapping(value = "/add")
+    public ResponseDto addManga(@RequestBody MangaModel mangaModel) {
+        mangaModel.setId(null);
+        return ResponseDto.of(this.iMangaService.add(mangaModel));
+    }
 
-	@PutMapping("/update/{id}")
-	public ResponseDto updateManga(@PathVariable java.lang.Long id, @RequestBody MangaModel mangaModel) {
-		mangaModel.setId(id);
-		return ResponseDto.of(this.iMangaService.update(mangaModel));
-	}
+    @PutMapping("/update/{id}")
+    public ResponseDto updateManga(@PathVariable java.lang.Long id, @RequestBody MangaModel mangaModel) {
+        mangaModel.setId(id);
+        return ResponseDto.of(this.iMangaService.update(mangaModel));
+    }
 
-	@DeleteMapping("/delete/{id}")
-	public void delete(@PathVariable long id) {
-		this.iMangaService.deleteById(id);
-	}
+    @DeleteMapping("/delete/{id}")
+    public void delete(@PathVariable long id) {
+        this.iMangaService.deleteById(id);
+    }
+
 
 	@GetMapping("/filter")
 	public Page<MangaEntity> filter(@RequestParam String s, Pageable page){
