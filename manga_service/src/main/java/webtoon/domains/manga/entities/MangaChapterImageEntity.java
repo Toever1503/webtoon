@@ -30,7 +30,7 @@ public class MangaChapterImageEntity {
 	
 	@JoinColumn(name = "manga_chapter_id")
 	@ManyToOne
-	private MangaChapterEntity mangaChapterId;
+	private MangaChapterEntity mangaChapter;
 	
 	@Column(name = "image")
 	private String image;

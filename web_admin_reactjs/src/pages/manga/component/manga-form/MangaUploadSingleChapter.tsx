@@ -18,7 +18,6 @@ interface ChapterInput {
     chapterName: string,
     chapterIndex?: number,
     chapterContent: string,
-    chapterImages: File[],
 }
 
 interface ChapterInputError {
@@ -121,7 +120,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         fileInput.type = 'file';
         // fileInput.accept = '.png,.jpg,.jpeg,.zip';
         fileInput.accept = '.zip';
-        // fileInput.multiple = true;
+        fileInput.multiple = true;
         fileInput.onchange = () => {
             const fileList: FileList | null = fileInput.files;
             const files: File[] = [];
@@ -147,7 +146,6 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         chapterName: '',
         chapterIndex: 0,
         chapterContent: '',
-        chapterImages: [],
     });
 
     const [chapterInputError, setChapterInputError] = useState<ChapterInputError>({
@@ -162,7 +160,6 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             chapterName: '',
             chapterIndex: 0,
             chapterContent: '',
-            chapterImages: [],
         });
         setChapterInputError({
             chapterName: '',
@@ -174,7 +171,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
     const [isCreatingChapter, setIsCreatingChapter] = useState<boolean>(false);
     const onCreateChapter = () => {
-        console.log('on create chapter', chapterInput.chapterImages);
+        console.log('on create chapter', imageChapterFiles);
 
         let errorCount = 0;
         if (!chapterInput.chapterName) {
@@ -184,7 +181,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
         else chapterInputError.chapterName = '';
 
         if (props.mangaInput.mangaType === 'IMAGE') {
-            if (chapterInput.chapterImages.length === 0) {
+            if (imageChapterFiles.length === 0) {
                 chapterInputError.chapterImages = 'manga.form.errors.chapter-images-required';
                 errorCount++;
             }
@@ -215,8 +212,8 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                 formdata.append('isRequiredVip', isRequireVipChapter.toString());
                 formdata.append('volumeID', chapterInput.volume.toString());
                 formdata.append('mangaID', '1');
-                chapterInput.chapterImages.forEach((file: File) => {
-                    formdata.append('multipartFiles[]', file);
+                imageChapterFiles.forEach((file: File) => {
+                    formdata.append('multipartFiles', file);
                 });
                 mangaService
                     .createImageChapter(formdata)
