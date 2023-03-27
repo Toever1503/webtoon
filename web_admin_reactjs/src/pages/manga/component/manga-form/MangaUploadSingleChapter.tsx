@@ -53,8 +53,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
             mangaService.createNewVolume(
                 {
-                    // mangaId: props.mangaInput.id,
-                    mangaId: 1,
+                    mangaId: props.mangaInput.id,
                     name: volumeVal,
                     volumeIndex: 0
                 }
@@ -214,7 +213,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                 formdata.append('chapterName', chapterInput.chapterName);
                 formdata.append('isRequiredVip', isRequireVipChapter.toString());
                 formdata.append('volumeID', chapterInput.volume.toString());
-                formdata.append('mangaID', '1');
+                formdata.append('mangaID', props.mangaInput.id.toString());
                 imageChapterFiles.forEach((file: File) => {
                     formdata.append('multipartFiles', file);
                 });
@@ -244,11 +243,10 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                 mangaService.createTextChapter({
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
                     chapterName: chapterInput.chapterName,
-                    chapterContent: chapterInput.chapterContent,
+                    chapterContent: chapterContentEditorRef?.getHtml(),
                     isRequiredVip: isRequireVipChapter,
                     volumeID: chapterInput.volume,
-                    // mangaID: props.mangaInput.id || 1
-                    mangaID: 1
+                    mangaID: props.mangaInput.id
                 })
                     .then((res) => {
                         console.log('create text chapter success:', res.data);
@@ -282,14 +280,14 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
     useEffect(() => {
         mangaService
-        .getVolumeForManga(1)
-        .then((res: AxiosResponse<MangaVolumeOptionType[]>) => {
-            setVolumeOptions(res.data);
-        })
-        .catch((err) => {
-            console.log('get volume error:', err);
-        })
-    }, []);
+            .getVolumeForManga(props.mangaInput.id)
+            .then((res: AxiosResponse<MangaVolumeOptionType[]>) => {
+                setVolumeOptions(res.data);
+            })
+            .catch((err) => {
+                console.log('get volume error:', err);
+            })
+    }, [props]);
 
     return (
         <div className="px-[15px] grid gap-y-[10px]">

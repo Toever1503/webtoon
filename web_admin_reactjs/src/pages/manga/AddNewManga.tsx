@@ -195,7 +195,6 @@ const AddNewManga: React.FC = () => {
             })
             .finally(() => {
                 isAutoSavingMangaInfo = false;
-
             })
     };
 
@@ -210,11 +209,11 @@ const AddNewManga: React.FC = () => {
 
 
     useEffect(() => {
-        // let id: number | undefined;
-        // id = setInterval(() => {
-        //     autoSaveMangaInfo();
-        // }, 15000);
-        // return () => clearInterval(id);
+        let id: number | undefined;
+        id = setInterval(() => {
+            autoSaveMangaInfo();
+        }, 15000);
+        return () => clearInterval(id);
     }, [mangaInput]);
 
 

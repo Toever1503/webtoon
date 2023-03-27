@@ -54,6 +54,12 @@ type MangaVolumeInput = {
 }
 const createNewVolume = async (input: MangaVolumeInput) => mangaAxios.post(`${basePath}/volume`, input);
 
+// for read action
+type MangaFileInput = {
+    status?: MangaStatus;
+    q?: string;
+};
+const getMangaList = async (input: MangaFileInput) => mangaAxios.post(`${basePath}/filter`, input);
 
 const mangaService = {
     addMangaInfo,
@@ -63,7 +69,8 @@ const mangaService = {
     createTextChapter,
     createImageChapter,
     createNewVolume,
-    getVolumeForManga
+    getVolumeForManga,
+    getMangaList
 };
 
 export default mangaService;

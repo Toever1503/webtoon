@@ -1,7 +1,5 @@
 package webtoon.domains.manga.enums;
 
-import javax.persistence.Column;
-
-public enum EMangaStatus {
+public enum EStatus {
 	PUBLISHED, DRAFTED, DELETED
 }

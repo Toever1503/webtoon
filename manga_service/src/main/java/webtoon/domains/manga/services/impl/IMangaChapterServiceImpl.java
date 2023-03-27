@@ -145,7 +145,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
             HttpEntity<MultiValueMap<String, Object>> requestEntity
                     = new HttpEntity<>(body, headers);
 
-            String serverUrl = "http://localhost:8001/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
+            String serverUrl = "http://localhost:8080/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
             ResponseEntity<List<FileDto>> response = restTemplate.exchange(
                     serverUrl,
                     HttpMethod.POST, requestEntity,
