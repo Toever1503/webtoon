@@ -1,7 +1,5 @@
 package webtoon.domains.manga.services;
 
-import java.util.Optional;
-
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
@@ -22,7 +20,12 @@ public interface IMangaService {
 	Page<MangaEntity> filter(String s, Pageable page);
 
 
-	Optional<MangaEntity> findById(Long id);
+	MangaDto findByID(Long id);
+
+
+	MangaEntity getById(Long id);
+
+
 
 
 }

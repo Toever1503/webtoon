@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.services.IMangaService;
 
@@ -39,9 +40,8 @@ public class MangaController {
 
 	@GetMapping("{name}/chapter/{id}")
 	public String readMangaChapter(@PathVariable Long id, @PathVariable String name, Model model) {
+		MangaDto entity = mangaService.findByID(id);
 		
-		MangaEntity entity = mangaService.findById(id)
-				.orElseThrow(() -> new RuntimeException("22"));
 		
 		model.addAttribute("model", entity);
 		return "read-manga-page";

@@ -20,22 +20,22 @@
 					<h1 class="font-bold m-5 text-2xl font-mono">Có gì mới?</h1>
 					<hr />
 				</div>
-				<!-- <div class="grid grid-cols-3 gap-4 mt-5 mx-10" th:switch="${model}">
+				<div class="grid grid-cols-3 gap-4 mt-5 mx-10" th:switch="${model}">
 					<h2 th:case="null">Không có dữ liệu!</h2>
 					<div th:case="*" >
 						<div class="max-w-sm rounded overflow-hidden shadow-lg" th:each="model : ${model}" >
-							<img
+							<!-- <img
 								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"
-								alt="Sunset in the mountains" />
-								<h2>dữ liệu m</h2>
+								alt="Sunset in the mountains" /> -->
+								<h2>dữ liệu manga</h2>
 							<div class="px-6 py-4">
 								<div class="font-bold text-xl mb-2" th:text="${model.mangaName}"></div>
 								<p class="text-gray-700 text-base" th:text="${model.title}"></p>
 							</div>
 
 						</div>
-					</div> -->
-					<div class="grid grid-cols-3 gap-4 mt-5 mx-10" th:switch="${model}">
+					</div>
+					<!-- <div class="grid grid-cols-3 gap-4 mt-5 mx-10" th:switch="${model}">
 						<div >
 							<div class="max-w-sm rounded overflow-hidden shadow-lg">
 								<img
@@ -107,7 +107,7 @@
 							</div>
 
 						</div>
-					</div>
+					</div> -->
 				</div>
 			</div>
 			<div class="col-span-2  mt-10 ">
