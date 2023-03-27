@@ -2,7 +2,8 @@ import { DeleteOutlined, PlusOutlined } from "@ant-design/icons";
 import { RichTextEditorComponent } from "@syncfusion/ej2-react-richtexteditor";
 import { Button, Checkbox, Divider, Input, InputRef, message, Radio, Select, Space } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
-import { useRef, useState } from "react";
+import { AxiosResponse } from "axios";
+import { useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
@@ -26,16 +27,17 @@ interface ChapterInputError {
     chapterImages: string,
 }
 
-type VolumeOptionType = {
+export type MangaVolumeOptionType = {
     id: number,
     name: string,
+    volumeIndex?: number,
 }
 
 const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props: MangaUploadSingleChapterProps) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
     // begin volume select
-    const [volumeOptions, setVolumeOptions] = useState<VolumeOptionType[]>([
+    const [volumeOptions, setVolumeOptions] = useState<MangaVolumeOptionType[]>([
         {
             id: 0,
             name: 'Volume 1'
@@ -130,7 +132,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                 }
                 setImageChapterFiles(files)
                 console.log('files', files);
-                
+
             }
         };
         fileInput.click();
@@ -167,6 +169,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             chapterImages: '',
         });
         setMangaTextChapter('');
+        setImageChapterFiles([]);
     }
 
     const [isCreatingChapter, setIsCreatingChapter] = useState<boolean>(false);
@@ -205,7 +208,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             setIsCreatingChapter(true);
             if (props.mangaInput.mangaType === 'IMAGE') {
                 console.log('create image chapter');
-                
+
                 const formdata = new FormData();
                 formdata.append('chapterIndex', chapterInput.chapterIndex ? chapterInput.chapterIndex.toString() : '0');
                 formdata.append('chapterName', chapterInput.chapterName);
@@ -276,6 +279,17 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
             }))
         }
     }
+
+    useEffect(() => {
+        mangaService
+        .getVolumeForManga(1)
+        .then((res: AxiosResponse<MangaVolumeOptionType[]>) => {
+            setVolumeOptions(res.data);
+        })
+        .catch((err) => {
+            console.log('get volume error:', err);
+        })
+    }, []);
 
     return (
         <div className="px-[15px] grid gap-y-[10px]">

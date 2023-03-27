@@ -68,7 +68,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
 
     return (
         <div className="richtext-editor">
-            <RichTextEditorComponent value={content} ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor, setContent)}
+            <RichTextEditorComponent className='min-h-[360px]' height={'100%'} value={content} ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor, setContent)}
                 toolbarSettings={toolbarSettings} fontFamily={fontFamily}>
 
                 <Inject services={[Toolbar, Image, Link, HtmlEditor, Count, Table, QuickToolbar]} />
