@@ -1,6 +1,8 @@
 package webtoon.domains.manga.services.impl;
 
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -115,9 +117,17 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
-        return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
+	public Page<MangaEntity> filter(String s, Pageable page){
+    	return this.mangaRepository.findAll((root,query,cb) -> {
+    		return cb.like(root.get("title"), "%" + s + "%");
+    	}, page);
     }
+
+	@Override
+	public Optional<MangaEntity> findById(Long id) {
+		return mangaRepository.findById(id);
+	}
+    
     
     
 }

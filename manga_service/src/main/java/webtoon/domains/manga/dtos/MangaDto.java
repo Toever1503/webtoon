@@ -23,7 +23,7 @@ public class MangaDto {
 	private String alternativeTitle;
 	private String concerpt;
 	private String description;
-	private String mangaName;
+	 String mangaName;
 	private String featuredImage ;
 	private EMangaStatus status;
 	private EMangaSTS mangaSts;
