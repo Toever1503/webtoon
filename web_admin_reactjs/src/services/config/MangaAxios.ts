@@ -1,19 +1,18 @@
-import axios from "axios";
+import axios, { AxiosInstance } from "axios";
 
-let axiosInstance: any = null;
-
-function getInstance() {
+let axiosInstance: AxiosInstance | null = null;
+function getInstance(): AxiosInstance {
     if (axiosInstance != null) {
         return axiosInstance
     }
     axiosInstance = axios.create({
-        baseURL: "http://localhost:8080/api",
+        baseURL: "http://localhost:8000/api",
         headers: {},
     });
 
     //hook interceptor cài ở đây
-    axiosInstance.interceptors.request.use((config: { headers: { Authorization: string; }; }) => {
-        const token = localStorage.getItem('token');
+    axiosInstance.interceptors.request.use((config) => {
+        const token: string | null = localStorage.getItem('token');
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
@@ -37,6 +36,7 @@ function getInstance() {
             return Promise.reject(error);
         }
     );
+
     return axiosInstance;
 }
 
@@ -53,6 +53,9 @@ function post(endpointApiUrl: any, payload = {}) {
 function put(endpointApiUrl: any, payload = {}) {
     return getInstance().put(endpointApiUrl, payload);
 }
+function patch(endpointApiUrl: any, payload = {}) {
+    return getInstance().patch(endpointApiUrl, payload);
+}
 
 function del(endpointApiUrl: any, payload = {}) {
     return getInstance().delete(endpointApiUrl, { data: payload });
@@ -67,6 +70,7 @@ export const mangaAxios = {
     get,
     post,
     put,
+    patch,
     del,
     de,
 };

@@ -32,64 +32,59 @@ import webtoon.domains.manga.enums.EMangaType;
 @Getter
 @Setter
 public class MangaEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private java.lang.Long id;
 
-	@Column(name = "title")
-	private String title;
+    @Column(name = "title")
+    private String title;
 
-	@Column(name = "alternative_title")
-	private String alternativeTitle;
+    @Column(name = "alternative_title")
+    private String alternativeTitle;
 
-	@Column(name = "concerpt")
-	private String concerpt;
+    @Column(name = "excerpt")
+    private String excerpt;
 
-	@Column(name = "description")
-	private String description;
+    @Column(name = "description")
+    private String description;
 
-	@Column(name = "manga_name")
-	private String mangaName;
+    @Column(name = "manga_name")
+    private String mangaName;
 
-	@Column(name = "featured_image")
-	private String featuredImage;
+    @Column(name = "featured_image")
+    private String featuredImage;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "status")
-	private EMangaStatus status;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private EMangaStatus status;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "manga_sts")
-	private EMangaSTS mangaSts;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "manga_status")
+    private EMangaSTS mangaStatus;
 
-	@Column(name = "comment_count")
-	private Integer commentCount;
+    @Column(name = "comment_count")
+    private Integer commentCount;
 
-	@Enumerated(EnumType.STRING)
-	@Column(name = "manga_type")
-	private EMangaType mangaType;
+    @Enumerated(EnumType.STRING)
+    @Column(name = "manga_type")
+    private EMangaType mangaType;
 
-	@Column
-	@Temporal(TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	private Date created_at;
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date createdAt;
 
-	@Column
-	@Temporal(TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	private Date modifed_at;
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date modifiedAt;
 
-	@Column(name = "rating")
-	private Integer rating;
+    @Column(name = "rating")
+    private Float rating;
 
-	@Column(name = "view_count")
-	private Integer view_Count;
-
-	@Column
-	@Temporal(TemporalType.TIMESTAMP)
-	@UpdateTimestamp
-	private Date published_date;
+    @Column(name = "view_count")
+    private Integer viewCount;
 
 //private  created_by;
 //

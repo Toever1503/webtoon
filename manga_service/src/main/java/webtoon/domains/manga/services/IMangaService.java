@@ -2,30 +2,24 @@ package webtoon.domains.manga.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.models.MangaModel;
 
 public interface IMangaService {
 
 	MangaDto add(MangaModel model);
+	MangaEntity getById(java.lang.Long id);
 
+	Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
 
-	boolean deleteById(Long id);
+	boolean deleteById(java.lang.Long id);
 
 	MangaDto update(MangaModel model);
 
 
-	Page<MangaEntity> filter(String s, Pageable page);
-
-
-	MangaDto findByID(Long id);
-
-
-	MangaEntity getById(Long id);
-
-
-
-
+    void setMangaType(java.lang.Long id, EMangaType type);
 }

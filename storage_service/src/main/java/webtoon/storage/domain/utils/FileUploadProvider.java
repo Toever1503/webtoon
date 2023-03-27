@@ -7,6 +7,7 @@ import webtoon.storage.domain.entities.FileEntity;
 import webtoon.storage.infras.mvc.BeanConfiguration;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.Calendar;
 
@@ -61,6 +62,21 @@ public class FileUploadProvider {
 				.url(domainPath).title(file.getOriginalFilename()).alt(file.getOriginalFilename()).createdBy(1L)
 				.build();
 		return fileEntity;
+	}
+
+	public FileEntity uploadFile(byte[] bytes, String folder, String fileName) throws IOException {
+		File folderCheck = new File(BeanConfiguration.ROOT_CONTENT_SYS + folder);
+		if (!folderCheck.exists())
+			folderCheck.mkdirs();
+
+		String filePath = folder + fileName;
+		File newFile = new File(filePath);
+		FileOutputStream fos = new FileOutputStream(BeanConfiguration.ROOT_CONTENT_SYS + newFile);
+		fos.write(bytes);
+		fos.close();
+		FileEntity fileEntity = FileEntity.builder().url(BeanConfiguration.DOMAIN + filePath).createdBy(1L).build();
+		return fileEntity;
+
 	}
 
 	private File checkFileExist(String filePath) {

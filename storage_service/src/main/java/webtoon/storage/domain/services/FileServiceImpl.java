@@ -1,7 +1,13 @@
 package webtoon.storage.domain.services;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipInputStream;
 
 import javax.transaction.Transactional;
 
@@ -76,6 +82,39 @@ public class FileServiceImpl implements IFileService {
 	public Page<FileDto> filterFile(Pageable pageable, Specification<FileEntity> specs) {
 		// TODO Auto-generated method stub
 		return this.fileMapper.toDtoPage(this.fileRepository.findAll(specs, pageable));
+	}
+
+	@Override
+	public List<FileDto> uploadImageByZipFile(MultipartFile file, String folder) throws IOException {
+		// TODO Auto-generated method stub
+
+		ZipInputStream zis = new ZipInputStream(file.getInputStream());
+		ZipEntry zipEntry = zis.getNextEntry();
+
+		List<FileEntity> fileEntities = new ArrayList<FileEntity>();
+		while (zipEntry != null) {
+			if (zipEntry.getName().endsWith(".png") || zipEntry.getName().endsWith(".jpg")
+					|| zipEntry.getName().endsWith(".jpeg")) {
+				System.out.println("zipEntry.getName(): " + zipEntry.getName());
+
+				FileEntity fileEntity = this.fileUploadProvider.uploadFile(zis.readAllBytes(), folder,
+						zipEntry.getName());
+				fileEntity.setFileName(zipEntry.getName());
+				fileEntity.setAlt(zipEntry.getName());
+				fileEntity.setTitle(zipEntry.getName());
+				fileEntity.setFileType(zipEntry.getName());
+				fileEntity
+						.setFileType("image/" + zipEntry.getName().substring(zipEntry.getName().lastIndexOf("/") + 1));
+				fileEntities.add(fileEntity);
+			}
+
+			zipEntry = zis.getNextEntry();
+		}
+		zis.closeEntry();
+		zis.close();
+
+		this.fileRepository.saveAll(fileEntities);
+		return this.fileMapper.toDtoList(fileEntities);
 	}
 
 }

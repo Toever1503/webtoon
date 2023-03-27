@@ -21,10 +21,10 @@ public class IMangaChapterImageServiceImpl implements IMangaChapterImageService 
 
 	@Override
 	public MangaChapterImageDto add(MangaChapterImageModel model) {
-		MangaChapterImageEntity entity = MangaChapterImageEntity.builder().mangaChapterId(model.getMangaChapterId())
+		MangaChapterImageEntity entity = MangaChapterImageEntity.builder().mangaChapter(model.getMangaChapterId())
 				.image(model.getImage()).imageIndex(model.getImageIndex()).build();
 		this.chapterImageRepository.saveAndFlush(entity);
-		return MangaChapterImageDto.builder().mangaChapterId(entity.getMangaChapterId()).image(entity.getImage())
+		return MangaChapterImageDto.builder().mangaChapterId(entity.getMangaChapter()).image(entity.getImage())
 				.imageIndex(entity.getImageIndex()).build();
 	}
 
@@ -32,12 +32,12 @@ public class IMangaChapterImageServiceImpl implements IMangaChapterImageService 
 	public MangaChapterImageDto update(MangaChapterImageModel model) {
 		MangaChapterImageEntity entity = this.getById(model.getId());
 		entity.setImage(model.getImage());
-		entity.setMangaChapterId(model.getMangaChapterId());
+		entity.setMangaChapter(model.getMangaChapterId());
 		entity.setImageIndex(model.getImageIndex());
 		chapterImageRepository.saveAndFlush(entity);
 
 		return MangaChapterImageDto.builder().image(entity.getImage()).imageIndex(entity.getImageIndex())
-				.mangaChapterId(entity.getMangaChapterId()).build();
+				.mangaChapterId(entity.getMangaChapter()).build();
 	}
 
 	@Override

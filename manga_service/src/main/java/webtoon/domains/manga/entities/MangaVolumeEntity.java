@@ -25,11 +25,11 @@ public class MangaVolumeEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
-	private Long id;
+	private java.lang.Long id;
 	
 	@JoinColumn(name = "manga_id")
 	@ManyToOne
-	private MangaEntity mangaId;
+	private MangaEntity manga;
 	
 	@Column(name = "name")
 	private String name;

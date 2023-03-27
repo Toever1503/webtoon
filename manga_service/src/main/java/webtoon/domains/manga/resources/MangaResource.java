@@ -36,7 +36,7 @@ public class MangaResource {
 	}
 
 	@PutMapping("/update/{id}")
-	public ResponseDto updateManga(@PathVariable Long id, @RequestBody MangaModel mangaModel) {
+	public ResponseDto updateManga(@PathVariable java.lang.Long id, @RequestBody MangaModel mangaModel) {
 		mangaModel.setId(id);
 		return ResponseDto.of(this.iMangaService.update(mangaModel));
 	}

@@ -21,7 +21,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
     };
 
     const toolbarSettings: ToolbarSettingsModel = {
-        type: ToolbarType.Scrollable,
+        type: ToolbarType.Expand,
         enableFloating: true,
         items: ['Bold', 'Italic', 'Underline', 'StrikeThrough',
             'FontName', 'FontSize', 'FontColor', 'BackgroundColor',
@@ -59,6 +59,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
     };
 
 
+    const [content, setContent] = useState<string>();
 
     useEffect(() => {
         console.log('richtext editor mounted');
@@ -67,9 +68,9 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
 
     return (
         <div className="richtext-editor">
-            <RichTextEditorComponent className='mt-[15px]' ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor)}
+            <RichTextEditorComponent value={content} ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor, setContent)}
                 toolbarSettings={toolbarSettings} fontFamily={fontFamily}>
-                <p>The Rich Text Editor component is WYSIWYG ("what you see is what you get") editor that provides the best user experience to create and update the content. Users can format their content using standard toolbar commands.</p>
+
                 <Inject services={[Toolbar, Image, Link, HtmlEditor, Count, Table, QuickToolbar]} />
             </RichTextEditorComponent>
         </div>)

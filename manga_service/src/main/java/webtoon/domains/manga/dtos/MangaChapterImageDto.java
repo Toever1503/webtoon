@@ -27,7 +27,7 @@ public class MangaChapterImageDto {
 		
 		return MangaChapterImageDto.builder()
 				.id(mangaEntity.getId())
-				.mangaChapterId(mangaEntity.getMangaChapterId())
+				.mangaChapterId(mangaEntity.getMangaChapter())
 				.image(mangaEntity.getImage())
 				.imageIndex(mangaEntity.getImageIndex())
 				.build();

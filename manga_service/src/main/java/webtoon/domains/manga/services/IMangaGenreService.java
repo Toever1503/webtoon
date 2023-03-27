@@ -8,6 +8,8 @@ import webtoon.domains.manga.dtos.MangaGenreDto;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaGenreModel;
 
+import java.util.List;
+
 public interface IMangaGenreService {
 
 	boolean deleteById(Long id);
@@ -18,4 +20,7 @@ public interface IMangaGenreService {
 
 	Page<MangaGenreDto> filter(Pageable pageable, Specification<MangaGenreEntity> specs);
 
+    Page<MangaGenreEntity> filterGenre(Specification spec, Pageable page);
+
+	void deleteGenreByIds(List<Long> ids);
 }

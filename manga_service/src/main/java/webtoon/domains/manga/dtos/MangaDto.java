@@ -18,23 +18,22 @@ import webtoon.domains.manga.enums.EMangaType;
 @Setter
 @Builder
 public class MangaDto {
-	private Long id;
+	private java.lang.Long id;
 	private String title;
 	private String alternativeTitle;
-	private String concerpt;
+	private String excerpt;
 	private String description;
 	 String mangaName;
 	private String featuredImage ;
 	private EMangaStatus status;
-	private EMangaSTS mangaSts;
+	private EMangaSTS mangaStatus;
 	private Integer commentCount;
 	private EMangaType mangaType;
-	private Date created_at;
-	private Date modifed_at;
-	private Integer rating;
-	private Integer view_Count;
-	private Date published_date;
-	
+	private Date createdAt;
+	private Date modifiedAt;
+	private Float rating;
+	private Integer viewCount;
+
 	public static MangaDto toDto(MangaEntity mangaEntity) {
 		if(mangaEntity == null) return null;
 		
@@ -42,18 +41,18 @@ public class MangaDto {
 				.id(mangaEntity.getId())
 				.title(mangaEntity.getTitle())
 				.alternativeTitle(mangaEntity.getAlternativeTitle())
-				.concerpt(mangaEntity.getConcerpt())
+				.excerpt(mangaEntity.getExcerpt())
 				.description(mangaEntity.getDescription())
 				.mangaName(mangaEntity.getMangaName())
 				.featuredImage(mangaEntity.getFeaturedImage())
-//				.status(null)
-//				.mangaSts(null)
+				.status(mangaEntity.getStatus())
+				.mangaStatus(mangaEntity.getMangaStatus())
 				.commentCount(mangaEntity.getCommentCount())
-//				.mangaType(null)
+				.mangaType(mangaEntity.getMangaType())
 				.rating(mangaEntity.getRating())
-				.view_Count(mangaEntity.getView_Count())
-				.created_at(mangaEntity.getCreated_at())
-				.modifed_at(mangaEntity.getModifed_at())
+				.viewCount(mangaEntity.getViewCount())
+				.createdAt(mangaEntity.getCreatedAt())
+				.modifiedAt(mangaEntity.getModifiedAt())
 				.build();
 	}
 }

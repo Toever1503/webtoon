@@ -4,13 +4,89 @@ import { useState } from "react";
 
 const { Panel } = Collapse;
 
+export type MangaVolumeType = {
+    id: string | number;
+    name: string;
+    chapters: MangaChapterType[];
+}
+
+export type MangaChapterType = {
+    id: string | number;
+    name: string;
+    chapterIndex?: number;
+    content?: string
+    images: MangaChapterImageType[];
+    volume: MangaVolumeType;
+}
+
+export type MangaChapterImageType = {
+    id: string | number;
+    image: string;
+    imageIndex?: number;
+    chapter: MangaChapterType;
+}
+
+export type ChapterOptionType = {
+    id: string | number;
+    name: string;
+}
+
 const MangaChapterInfo: React.FC = () => {
-    const [chapterOptions, setChapterOptions] = useState(['jack', 'lucy']);
+    const [chapterOptions, setChapterOptions] = useState<ChapterOptionType[]>([
+        {
+            id: 'CHAP1',
+            name: 'Chapter 1',
+        },
+        {
+            id: 'CHAP2',
+            name: 'Chapter 2',
+        }
+    ]);
+    const [selectedChapter, setSelectedChapter] = useState<number | string | null>(null);
+
+    const onSelectedChapter = (val: number | string) => {
+        console.log(val);
+        setSelectedChapter(val);
+    };
 
     const onChange = (key: string | string[]) => {
         console.log(key);
     };
 
+    const [volumeOriginalData, setVolumeOriginalData] = useState([
+        {
+            id: 'VOL1',
+            name: 'Volume 1',
+            chapters: [
+                {
+                    id: 'CHAP1',
+                    name: 'Chapter 1',
+                    chapterIndex: 1,
+                    images: [
+                        {
+                            id: 'IMG1',
+                            image: 'https://i.pinimg.co',
+                            imageIndex: 1,
+                            chapter: {
+                                id: 'CHAP1',
+                                name: 'Chapter 1',
+                                chapterIndex: 1,
+                                images: [],
+                            }
+                        }
+                    ],
+                    volume: {
+                        id: 'VOL1',
+                        name: 'Volume 1',
+                        chapters: []
+                    }
+                }
+            ]
+        }]);
+    const [volumeData, setVolumeData] = useState([]);
+
+
+    // begin action
     const [actionVal, setActionVal] = useState('NONE');
     const [moveVolumeVal, setMoveVolumeVal] = useState('VOL1');
 
@@ -26,11 +102,13 @@ const MangaChapterInfo: React.FC = () => {
             default:
                 break;
         }
-    }
+    };
     return (
         <div className="px-[15px]">
             <section>
-                <p className='text-[15px] text-[#1d2327] font-bold py-[10px] m-0 '>Chapter</p>
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                    <span> Chapter:</span>
+                </label>
                 <Select
                     className="min-w-[200px]"
                     placeholder="search chapter"
@@ -38,13 +116,16 @@ const MangaChapterInfo: React.FC = () => {
                     labelInValue
                     showSearch
                     filterOption={true}
-                    options={chapterOptions.map((item) => ({ label: item, value: item }))}
+                    onChange={(val) => onSelectedChapter(val)}
+                    options={chapterOptions.map((item) => ({ label: item.name, value: item.id }))}
                 />
             </section>
 
 
             <section className="mt-[20px]">
-                <span className="text-base font-bold">Action: </span>
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                    <span> Action:</span>
+                </label>
                 <Space>
                     <Select
                         value={actionVal}
