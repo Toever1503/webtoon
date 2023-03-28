@@ -5,6 +5,8 @@ import MangaPage from "../pages/manga/MangaPage";
 import AddNewManga from "../pages/manga/AddNewManga";
 import MangaGenrePage from "../pages/manga/MangaGenrePage";
 import TagPage from "../pages/tag/TagPage";
+import DragPage from "../pages/test/DragPage";
+import UnzipFile from "../pages/test/UnzipFile";
 
 const router = createBrowserRouter([
     {
@@ -36,6 +38,14 @@ const router = createBrowserRouter([
     {
         path: "/counter",
         element: <CounterPage/>
+    },
+    {
+        path: "/drag",
+        element: <DragPage />
+    },
+    {
+        path: "/uploadzip",
+        element: <UnzipFile />
     }
 ]);
 

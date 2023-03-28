@@ -3,6 +3,7 @@ import { Button, Radio } from "antd";
 import { useState } from "react";
 import mangaService, { MangaInput } from "../../../services/MangaService";
 import MangaChapterInfo from "./manga-form/MangaChapterInfo";
+import MangaUploadChapterModal from "./manga-form/MangaUploadChapterModal";
 import MangaUploadSingleChapter from "./manga-form/MangaUploadSingleChapter";
 
 
@@ -41,16 +42,16 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
                 });
     }
 
-    const [showChapterSetting, setShowChapterSetting] = useState<boolean>(false);
+    const [showChapterSetting, setShowChapterSetting] = useState<boolean>(true);
 
-
+   
     return (
         <div className="bg-white w-full h-fit" style={{ border: '1px solid #c3c4c7' }}>
             <div style={{ borderBottom: '1px solid #c3c4c7' }} className='flex justify-between items-center p-[10px]'>
                 <p className='text-[15px] font-bold m-0'>Chapter Setting</p>
                 <DownOutlined className={`cursor-pointer ${showChapterSetting ? 'rotate-180' : ''}`} onClick={() => setShowChapterSetting(!showChapterSetting)} />
             </div>
-
+           
             {
                 showChapterSetting &&
                 <>
