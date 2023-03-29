@@ -24,5 +24,5 @@ public interface IMangaChapterService {
 
     void createTextChapter(MangaUploadChapterInput input);
 
-    void createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles);
+	Long createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles);
 }

@@ -18,7 +18,31 @@ export default {
                 'chapter-content-required': 'Chapter content is required',
                 'add-failed': 'Thêm thất bại!',
                 'add-success': 'Thêm thành công!'
+            },
+            volume: {
+                'volume': 'Tập',
+                'add-volume': 'Thêm tập mới',
+                'edit-volume': 'Sửa tập',
+                'volume-name': 'Tên tập',
+                'volume-name-placeholder': 'Nhập tên tập',
+                'add-volume-btn': 'Thêm tập',
+                'edit-volume-btn': 'Sửa tập',
+                'cancel-volume-btn': 'Hủy',
+                errors: {
+                    'check-again': 'Vui lòng kiểm tra lại thông tin!',
+                    'volume-name-required': 'Tên tập không được để trống!',
+                    'volume-name-max': 'Tên tập không được quá 255 ký tự!',
+                    'add-failed': 'Thêm thất bại!',
+                    'add-success': 'Thêm thành công!',
+                    'edit-failed': 'Sửa thất bại!',
+                    'edit-success': 'Sửa thành công!'
+                }
+            },
+            chapter: {
+                'sure-delete': 'Bạn chăc chắn muốn xóa chương này?',
             }
         }
-    }
+    },
+    'confirm-yes': 'Có',
+    'confirm-no': 'Không',
 }

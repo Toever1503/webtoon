@@ -112,7 +112,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public void createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
+    public Long createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
 
 
         try {
@@ -140,7 +140,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
             MultiValueMap<String, Object> body
                     = new LinkedMultiValueMap<>();
-            body.add("file", multipartFiles.get(0).getResource());
+            multipartFiles.forEach(f -> body.add("files", f.getResource()));
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity
                     = new HttpEntity<>(body, headers);
@@ -161,6 +161,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                     .build()).collect(Collectors.toList());
             this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
 
+            return mangaChapterEntity.getId();
         } catch (Exception e) {
             e.printStackTrace();
             // need remove image

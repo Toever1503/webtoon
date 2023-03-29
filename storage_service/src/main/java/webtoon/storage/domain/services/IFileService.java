@@ -21,5 +21,5 @@ public interface IFileService {
 	void deleteFile(List<Long> ids);
 
 
-	List<FileDto> uploadImageByZipFile(MultipartFile file, String folder)  throws IOException;
+	List<FileDto> uploadImageByZipFile(List<MultipartFile> files, String folder)  throws IOException;
 }

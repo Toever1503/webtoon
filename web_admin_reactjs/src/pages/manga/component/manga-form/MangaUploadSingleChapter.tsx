@@ -76,7 +76,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
     const [selectedVolume, setSelectedVolume] = useState<number>(volumeOptions[0].id);
 
 
-    const [showUploadChapterModal, setShowUploadChapterModal] = useState<boolean>(true);
+    const [showUploadChapterModal, setShowUploadChapterModal] = useState<boolean>(false);
 
     useEffect(() => {
         mangaService
@@ -126,6 +126,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
                     options={volumeOptions.map((item) => ({ label: item.name, value: item.id }))}
                 />
             </section>
+            <Button onClick={() => setShowUploadChapterModal(true)}>Add new chapter</Button>
             <MangaUploadChapterModal visible={showUploadChapterModal} onOk={() => { }} onCancel={() => { setShowUploadChapterModal(false) }} title={'fasf'} mangaInput={props.mangaInput} />
         </div>)
 

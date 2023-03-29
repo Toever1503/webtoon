@@ -26,10 +26,10 @@ public class MangaChapterResource2 {
     }
 
     @PostMapping("create-image-chapter")
-    public void createImageChapter(MangaUploadChapterInput input, @RequestPart List<MultipartFile> multipartFiles) throws IOException {
-        if (multipartFiles.size() == 0)
+    public Long createImageChapter(MangaUploadChapterInput input, @RequestPart List<MultipartFile> files) throws IOException {
+        if (files.size() == 0)
             throw new RuntimeException("File is required");
-        this.mangaChapterService.createImageChapter(input, multipartFiles);
+       return this.mangaChapterService.createImageChapter(input, files);
     }
 
 }

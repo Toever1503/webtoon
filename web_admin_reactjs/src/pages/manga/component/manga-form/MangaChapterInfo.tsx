@@ -1,5 +1,12 @@
 import { Button, Checkbox, Collapse, Select, Space, Timeline } from "antd";
-import { useState } from "react";
+import { AxiosResponse } from "axios";
+import { useEffect, useState } from "react";
+import { useTranslation } from "react-i18next";
+import Sortable from "sortablejs";
+import mangaService, { MangaInput } from "../../../../services/MangaService";
+import MangaAddEditVolumeModal, { VolumeForm } from "./MangaAddEditVolumeModal";
+import MangaUploadChapterModal from "./MangaUploadChapterModal";
+import MangaVolumeInfoItem from "./MangaVolumeInfoItem";
 
 
 const { Panel } = Collapse;
@@ -30,162 +37,80 @@ export type ChapterOptionType = {
     id: string | number;
     name: string;
 }
+type MangaChapterInfoProps = {
+    mangaInput: MangaInput,
+}
 
-const MangaChapterInfo: React.FC = () => {
-    const [chapterOptions, setChapterOptions] = useState<ChapterOptionType[]>([
-        {
-            id: 'CHAP1',
-            name: 'Chapter 1',
-        },
-        {
-            id: 'CHAP2',
-            name: 'Chapter 2',
-        }
+
+
+export type VolumeType = {
+    id: string | number;
+    name: string;
+}
+
+const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterInfoProps) => {
+    const { t } = useTranslation();
+
+
+    const [volumeOptions, setVolumeOptions] = useState<VolumeType[]>([
     ]);
-    const [selectedChapter, setSelectedChapter] = useState<number | string | null>(null);
-
-    const onSelectedChapter = (val: number | string) => {
-        console.log(val);
-        setSelectedChapter(val);
-    };
-
-    const onChange = (key: string | string[]) => {
-        console.log(key);
-    };
-
-    const [volumeOriginalData, setVolumeOriginalData] = useState([
-        {
-            id: 'VOL1',
-            name: 'Volume 1',
-            chapters: [
-                {
-                    id: 'CHAP1',
-                    name: 'Chapter 1',
-                    chapterIndex: 1,
-                    images: [
-                        {
-                            id: 'IMG1',
-                            image: 'https://i.pinimg.co',
-                            imageIndex: 1,
-                            chapter: {
-                                id: 'CHAP1',
-                                name: 'Chapter 1',
-                                chapterIndex: 1,
-                                images: [],
-                            }
-                        }
-                    ],
-                    volume: {
-                        id: 'VOL1',
-                        name: 'Volume 1',
-                        chapters: []
-                    }
-                }
-            ]
-        }]);
-    const [volumeData, setVolumeData] = useState([]);
 
 
+
+    // begin volume modal
+    const [showAddEditVolumeModal, setShowAddEditVolumModal] = useState<boolean>(false);
+    const [addEditVolumTitle, setAddEditVolumTitle] = useState<string>('');
+    const [volumeInput, setVolumeInput] = useState<VolumeForm>();
+    const openAddEditVolumeModal = (modalTitle: string, volume?: VolumeForm) => {
+        setAddEditVolumTitle(modalTitle);
+        setShowAddEditVolumModal(true);
+    }
+    const closeAddEditVolumeModal = () => {
+        setTimeout(() => {
+            setShowAddEditVolumModal(false);
+        }, 50);
+        console.log('modal status: ', showAddEditVolumeModal);
+    }
+    // end volume modal
+
+    let volumeSortable: Sortable;
     // begin action
-    const [actionVal, setActionVal] = useState('NONE');
-    const [moveVolumeVal, setMoveVolumeVal] = useState('VOL1');
+    useEffect(() => {
 
-    const onClickApply = () => {
-        console.log('apply');
-        switch (actionVal) {
-            case 'MOVE':
-                console.log('move to volume: ', moveVolumeVal);
-                break;
-            case 'DELETE':
-                console.log('delete');
-                break;
-            default:
-                break;
-        }
-    };
+        // get volumes 
+        mangaService
+            .getVolumeForManga(1)
+            .then((res: AxiosResponse<VolumeType[]>) => {
+                console.log('res', res.data);
+                setVolumeOptions(res.data.reverse());
+            })
+            .catch((err) => {
+                console.log('get volume error:', err);
+            });
+
+        if (!volumeSortable)
+            // @ts-ignore
+            volumeSortable = Sortable.create(document.getElementById('volume-container'), {
+                animation: 150,
+                ghostClass: 'blue-background-class',
+            });
+    }, [])
     return (
-        <div className="px-[15px]">
-            <section>
-                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
-                    <span> Chapter:</span>
-                </label>
-                <Select
-                    className="min-w-[200px]"
-                    placeholder="search chapter"
-                    // @ts-ignore
-                    labelInValue
-                    showSearch
-                    filterOption={true}
-                    onChange={(val) => onSelectedChapter(val)}
-                    options={chapterOptions.map((item) => ({ label: item.name, value: item.id }))}
-                />
-            </section>
+        <div className="p-[15px]">
+            <Button onClick={() => openAddEditVolumeModal('Add volume')}>
+                Add volume
+                <MangaAddEditVolumeModal visible={showAddEditVolumeModal} onOk={() => { 
+                }} onCancel={closeAddEditVolumeModal} title={addEditVolumTitle} mangaInput={props.mangaInput} volumeInput={volumeInput} />
+            </Button>
 
-
-            <section className="mt-[20px]">
-                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
-                    <span> Action:</span>
-                </label>
-                <Space>
-                    <Select
-                        value={actionVal}
-                        style={{ width: 120 }}
-                        onChange={(val) => setActionVal(val)}
-                        options={[
-                            { value: 'NONE', label: 'None' },
-                            { value: 'MOVE', label: 'Move' },
-                            { value: 'DELETE', label: 'Delete' },
-                        ]}
-                    />
-                    {
-                        actionVal === 'MOVE' && <Select
-                            value={moveVolumeVal}
-                            style={{ width: 120 }}
-                            onChange={(val) => setMoveVolumeVal(val)}
-                            options={[
-                                { value: 'VOL', label: 'Vol' },
-                            ]}
-                        />
-                    }
-                    <Button onClick={onClickApply}>
-                        Apply
-                    </Button>
-                </Space>
-            </section>
-
-            <section className="mt-[20px]">
-                <Collapse defaultActiveKey={['1']} onChange={onChange} expandIconPosition='end'>
-                    <Panel header={<>
-                        <div className="flex space-x-2">
-                            <Checkbox />
-                            <span>No volume</span>
-                        </div>
-                    </>} key="1"  >
-
-                        <Timeline
-                            className="px-[20px]"
-                            items={[
-                                {
-                                    children: 'Create a services site 2015-09-01',
-                                    dot: <Checkbox />,
-                                },
-                                {
-                                    children: 'Solve initial network problems 2015-09-01',
-                                    dot: <Checkbox />,
-                                },
-                                {
-                                    children: 'Technical testing 2015-09-01',
-                                    dot: <Checkbox />,
-                                },
-                                {
-                                    children: 'Network problems being solved 2015-09-01',
-                                    dot: <Checkbox />,
-                                },
-                            ]}
-                        />
-                    </Panel>
-
-                </Collapse>
+            <section id='volume-container' className="py-[20px] px-[10px] max-h-[500px] overflow-auto">
+                {
+                    volumeOptions.length > 0 &&
+                    volumeOptions.map((volume: VolumeType, index: number) =>
+                    (
+                        <MangaVolumeInfoItem key={index} index={index} volume={volume} volumeSize={volumeOptions.length} mangaInput={props.mangaInput} editVolume={(volume: VolumeForm) =>  openAddEditVolumeModal('Add volume', volume)} />
+                    ))
+                }
             </section>
         </div>)
 };

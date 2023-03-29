@@ -1,4 +1,5 @@
 import { Dayjs } from "dayjs";
+import { VolumeForm } from "../pages/manga/component/manga-form/MangaAddEditVolumeModal";
 import { mangaAxios } from "./config/MangaAxios";
 
 const basePath: String = "/manga";
@@ -43,6 +44,7 @@ const deleteMangaInfo = async (ids: Array<number | string>) => mangaAxios.del(`$
 const createTextChapter = async (model: MangaChapterInput) => mangaAxios.post(`${basePath}/chapter/create-text-chapter`, model);
 const createImageChapter = async (model: FormData) => mangaAxios.post(`${basePath}/chapter/create-image-chapter`, model);
 
+const reIndexChapter = async (chapterId: number | string, index: number) => mangaAxios.patch(`${basePath}/chapter/re-index-chapter/${chapterId}?index=${index}`);
 
 const getVolumeForManga = (mangaId: number | string) => mangaAxios.get(`${basePath}/volume/get-all-for-manga/${mangaId}`);
 
@@ -53,6 +55,7 @@ type MangaVolumeInput = {
     volumeIndex: number;
 }
 const createNewVolume = async (input: MangaVolumeInput) => mangaAxios.post(`${basePath}/volume`, input);
+const updateVolume = async (id: number | string, input: VolumeForm) => mangaAxios.post(`${basePath}/volume/${id}`, input);
 
 
 const mangaService = {
@@ -63,6 +66,7 @@ const mangaService = {
     createTextChapter,
     createImageChapter,
     createNewVolume,
+    updateVolume,
     getVolumeForManga
 };
 
