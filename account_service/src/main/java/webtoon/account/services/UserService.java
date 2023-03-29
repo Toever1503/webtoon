@@ -11,6 +11,8 @@ public interface UserService {
 
     Page<UserDto> findAllByStatus(Boolean status, Pageable pageable);
 
+    UserDto findById(Long id);
+
     UserDto add(CreateUserModel model);
 
     UserDto update(UpdateUserModel model);

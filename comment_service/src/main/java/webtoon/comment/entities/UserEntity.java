@@ -1,4 +1,4 @@
-package webtoon.account.entities;
+package webtoon.comment.entities;
 
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;

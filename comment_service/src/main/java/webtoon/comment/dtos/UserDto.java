@@ -1,9 +1,9 @@
-package webtoon.account.dtos;
+package webtoon.comment.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
-import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.ESex;
+import webtoon.comment.entities.UserEntity;
 
 import java.util.Date;
 
