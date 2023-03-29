@@ -205,21 +205,21 @@
           </div>
         </div>
       </div>
-      <div class="mx-20 mb-10" th:switch="${model}">
-        <h2 th:case="null">Không có dữ liệu!</h2>
-        <div class="text-left mt-4 mx-7" th:case="*">
-          <div th:each="item : ${model}">
-            <div th:if="${item.mangaType} == 'TEXT'">
-              <h1>đây là trang chữ</h1>
-              <h1 th:text="${item.mangaName}"></h1>
-              <h3 th:text="${item.description}"></h3>
+      <div class="mx-20 mb-10" >
+        <h2 th:if="${chapterData == null}">Không có dữ liệu!</h2>
+        <div th:else class="text-left mt-4 mx-7">
+            <div th:if="${mangaType} == 'TEXT'">
+              <h1 th:text="${chapterData.name}"></h1>
+              <h3 th:text="${chapterData.content}"></h3>
             </div>
-            <div thelse="${item.mangaType} == 'IMAGE'">
-              <h1>đây là trang ảnh</h1>
-              <h1 th:text="${item.mangaName}"></h1>
-              <h3 th:text="${item.description}"></h3>
+
+            <div th:else="${mangaType} == 'IMAGE'">
+              <h1 th:text="${chapterData.name}"></h1>
+              <p th:each="image : ${chapterData.chapterImageEntities}">
+                <img th:src="${image.image}">
+              </p>
+              <!-- <h3 th:text="${item.chapterEntities.chapterImageEntities}"></h3> -->
             </div>
-          </div>
         </div>
       </div>
     </div>

@@ -5,15 +5,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
+import webtoon.domains.manga.dtos.MangaDto;
+import webtoon.domains.manga.dtos.MangaVolumeDto;
+import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.filters.MangaFilterModel;
+import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
+import webtoon.domains.manga.services.IMangaVolumeService;
 
 @Controller
 @RequestMapping("manga")
@@ -21,7 +23,14 @@ public class MangaController {
 
 	@Autowired
 	private IMangaService mangaService;
-	
+
+	@Autowired
+	private IMangaVolumeService mangaVolumeService;
+
+	@Autowired
+	private IMangaChapterService mangaChapterService;
+
+
 	@GetMapping
 	public String mangaList() {
 		return "trangtruyenchu";
@@ -34,20 +43,20 @@ public class MangaController {
 	}
 
 	@GetMapping("{name}/chapter/{id}")
-	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name) {
+	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
+		MangaChapterEntity chapterEntity = this.mangaChapterService.getById(id);
+		MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
+		MangaEntity mangaEntity = volumeEntity.getManga();
 
+		model.addAttribute("mangaData",mangaEntity);
+		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
+		model.addAttribute("chapterData",chapterEntity);
 		return "read-manga-page";
 	}
 	@PostMapping("/index")
-	public String showMangaList(Model model,Pageable pageable,@RequestBody MangaFilterModel filterModel  ) {
-		Specification<MangaEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("title"), "%" + filterModel.getTitle() + "%"),
-					criteriaBuilder.like(root.get("mangaName"), "%" + filterModel.getMangaName() + "%"),
-					criteriaBuilder.like(root.get("concerpt"), "%" + filterModel.getConcerpt() + "%")
+	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
 
-			);
-		};
-		model.addAttribute("model", mangaService.filter(pageable, Specification.where(specification)));
+		model.addAttribute("model", mangaService.filterBy(s,pageable));
 //		model.addAttribute("users", userRepository.findAll());
 		return "trangtruyenchu";
 	}

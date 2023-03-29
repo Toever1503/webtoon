@@ -14,7 +14,6 @@ public interface IMangaService {
 	MangaDto add(MangaModel model);
 	MangaEntity getById(java.lang.Long id);
 
-	Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
 
 	boolean deleteById(java.lang.Long id);
 
@@ -22,4 +21,10 @@ public interface IMangaService {
 
 
     void setMangaType(java.lang.Long id, EMangaType type);
+
+	Page<MangaEntity> filterBy(String s, Pageable page);
+
+	Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
+
+	MangaDto findById(Long id);
 }

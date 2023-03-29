@@ -1,34 +1,25 @@
 package webtoon.domains.manga.entities;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+import java.util.Set;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import javax.persistence.*;
+
+import lombok.*;
 
 @Entity
-@Table
+@Table(name = "tbl_manga_chapter_entity")
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 public class MangaChapterEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
 	
-	@JoinColumn(name = "manga_id")
+	@JoinColumn(name = "manga_volume_id")
 	@ManyToOne
 	private MangaVolumeEntity mangaVolume;
 	
@@ -43,4 +34,7 @@ public class MangaChapterEntity {
 	
 	@Column(name = "required_vip")
 	private Boolean requiredVip;
+	
+	@OneToMany(mappedBy = "mangaChapter")
+    private Set<MangaChapterImageEntity> chapterImageEntities;
 }

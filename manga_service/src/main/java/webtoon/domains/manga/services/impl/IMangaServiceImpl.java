@@ -100,10 +100,23 @@ public class IMangaServiceImpl implements IMangaService {
         }
     }
 
+
+
+    @Override
+    public Page<MangaEntity> filterBy(String s, Pageable page){
+        return this.mangaRepository.findAll((root, query, cb) -> {
+            return cb.like(root.get("title"),"%" + s + "%");
+        },page);
+    }
+
     @Override
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
         return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
     }
 
+    @Override
+    public MangaDto findById(Long id){
+        return MangaDto.toDto(this.getById(id));
+    }
 
 }

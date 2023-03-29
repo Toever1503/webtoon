@@ -64,7 +64,15 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 		return mangaVolumeRepository.findAll(specs, pageable).map(MangaVolumeDto::toDto);
 	}
 
+	@Override
 	public MangaVolumeEntity getById(Long id) {
 		return this.mangaVolumeRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 	}
+
+	@Override
+	public MangaVolumeDto findById(Long id){
+		return MangaVolumeDto.toDto(this.getById(id));
+	}
+
+
 }

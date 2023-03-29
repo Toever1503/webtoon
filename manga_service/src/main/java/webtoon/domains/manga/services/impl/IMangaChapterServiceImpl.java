@@ -201,4 +201,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         return this.chapterRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }
 
+    @Override
+    public MangaChapterImageEntity getImageForChapter(Long chapterId) {
+        return null;
+    }
+
 }

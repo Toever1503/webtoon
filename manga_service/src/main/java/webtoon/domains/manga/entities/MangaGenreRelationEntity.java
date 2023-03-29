@@ -14,7 +14,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Entity
-@Table
+@Table(name ="tbl_manga_genre_relation")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
