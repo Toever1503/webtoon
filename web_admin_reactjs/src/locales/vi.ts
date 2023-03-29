@@ -21,10 +21,12 @@ export default {
             },
             volume: {
                 'volume': 'Tập',
+                'volume-empty': 'Hiện chưa có tập nào!',
                 'add-volume': 'Thêm tập mới',
                 'edit-volume': 'Sửa tập',
                 'volume-name': 'Tên tập',
                 'volume-name-placeholder': 'Nhập tên tập',
+                'save-volume-btn': 'Lưu',
                 'add-volume-btn': 'Thêm tập',
                 'edit-volume-btn': 'Sửa tập',
                 'cancel-volume-btn': 'Hủy',

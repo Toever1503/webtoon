@@ -26,6 +26,11 @@ public class MangaVolumeResource2 {
     public MangaVolumeDto createVolume(@RequestBody MangaVolumeModel input) {
         return this.mangaVolumeService.add(input);
     }
+    @PostMapping("{id}")
+    public MangaVolumeDto updateVolume(@PathVariable Long id, @RequestBody MangaVolumeModel input) {
+        input.setId(id);
+        return this.mangaVolumeService.update(input);
+    }
 
 
     @GetMapping("get-all-for-manga/{id}")

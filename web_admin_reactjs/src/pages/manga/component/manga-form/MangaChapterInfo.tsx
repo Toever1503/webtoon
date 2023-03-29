@@ -9,7 +9,7 @@ import MangaUploadChapterModal from "./MangaUploadChapterModal";
 import MangaVolumeInfoItem from "./MangaVolumeInfoItem";
 
 
-const { Panel } = Collapse;
+
 
 export type MangaVolumeType = {
     id: string | number;
@@ -46,6 +46,7 @@ type MangaChapterInfoProps = {
 export type VolumeType = {
     id: string | number;
     name: string;
+    volumeIndex: number;
 }
 
 const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterInfoProps) => {
@@ -62,7 +63,15 @@ const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterIn
     const [addEditVolumTitle, setAddEditVolumTitle] = useState<string>('');
     const [volumeInput, setVolumeInput] = useState<VolumeForm>();
     const openAddEditVolumeModal = (modalTitle: string, volume?: VolumeForm) => {
-        setAddEditVolumTitle(modalTitle);
+
+
+        if (volume) {
+            setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${volume.volumeIndex + 1})`);
+            setVolumeInput(volume);
+        }
+        else
+            setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${volumeOptions.length + 1})`);
+
         setShowAddEditVolumModal(true);
     }
     const closeAddEditVolumeModal = () => {
@@ -70,6 +79,18 @@ const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterIn
             setShowAddEditVolumModal(false);
         }, 50);
         console.log('modal status: ', showAddEditVolumeModal);
+    }
+
+    const onVolumeModalOk = (newVolume: VolumeForm) => {
+        if (volumeInput)
+            setVolumeOptions(volumeOptions.map((volume: VolumeType) => {
+                if (volume.id === volumeInput.id)
+                    return newVolume;
+                return volume;
+            }));
+        else
+            setVolumeOptions([newVolume, ...volumeOptions]);
+        closeAddEditVolumeModal();
     }
     // end volume modal
 
@@ -94,22 +115,25 @@ const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterIn
                 animation: 150,
                 ghostClass: 'blue-background-class',
             });
+
+        props.mangaInput.id = 1;
     }, [])
     return (
         <div className="p-[15px]">
-            <Button onClick={() => openAddEditVolumeModal('Add volume')}>
+            <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.add-volume')}`)}>
                 Add volume
-                <MangaAddEditVolumeModal visible={showAddEditVolumeModal} onOk={() => { 
-                }} onCancel={closeAddEditVolumeModal} title={addEditVolumTitle} mangaInput={props.mangaInput} volumeInput={volumeInput} />
+                <MangaAddEditVolumeModal visible={showAddEditVolumeModal} onOk={onVolumeModalOk} onCancel={closeAddEditVolumeModal} title={addEditVolumTitle} mangaInput={props.mangaInput} volumeInput={volumeInput} />
             </Button>
 
             <section id='volume-container' className="py-[20px] px-[10px] max-h-[500px] overflow-auto">
                 {
-                    volumeOptions.length > 0 &&
-                    volumeOptions.map((volume: VolumeType, index: number) =>
-                    (
-                        <MangaVolumeInfoItem key={index} index={index} volume={volume} volumeSize={volumeOptions.length} mangaInput={props.mangaInput} editVolume={(volume: VolumeForm) =>  openAddEditVolumeModal('Add volume', volume)} />
-                    ))
+                    volumeOptions.length > 0 ?
+                        volumeOptions.map((volume: VolumeType, index: number) =>
+                        (
+                            <MangaVolumeInfoItem key={index} index={index} volume={volume} volumeSize={volumeOptions.length} mangaInput={props.mangaInput} editVolume={(volume: VolumeForm) => openAddEditVolumeModal(t('manga.form.volume.edit-volume'), volume)} />
+                        ))
+                        :
+                        <>{t('manga.form.volume.volume-empty')}</>
                 }
             </section>
         </div>)

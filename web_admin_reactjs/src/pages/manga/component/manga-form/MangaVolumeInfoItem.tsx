@@ -72,9 +72,18 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
                     <span>{t('manga.form.volume.volume') + ` ${props.volumeSize - index}`}: {props.volume.name}</span>
                     <Button onClick={(e) => {
                         e.stopPropagation();
+                        props.editVolume({
+                            id: props.volume.id,
+                            name: props.volume.name,
+                            volumeIndex: props.volume.volumeIndex,
+                        });
+                    }} size='small'>Edit vol</Button>
+
+                    <Button onClick={(e) => {
+                        e.stopPropagation();
                         setShowUploadChapterModal(true);
                         setUploadChapterModalTitle('Upload chapter');
-                    }}>Add chapter</Button>
+                    }} size='small'>Add chapter</Button>
                     {/* 
                             <Button  onClick={(e) => {
                                 e.stopPropagation();

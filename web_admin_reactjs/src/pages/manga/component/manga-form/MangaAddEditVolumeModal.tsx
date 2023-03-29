@@ -113,7 +113,7 @@ const MangaAddEditVolumeModal: React.FC<MangaAddEditVolumeModalProps> = (props: 
 
             <Space className="py-[10px]">
                 <Button loading={isSubmitingForm} onClick={onSubmitForm}>
-                    {t('manga.form.volume.add-volume-btn')}
+                    {t('manga.form.volume.save-volume-btn')}
                 </Button>
                 <Button onClick={props.onCancel}>
                     {t('manga.form.volume.cancel-volume-btn')}
