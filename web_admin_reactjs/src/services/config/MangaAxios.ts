@@ -6,7 +6,7 @@ function getInstance(): AxiosInstance {
         return axiosInstance
     }
     axiosInstance = axios.create({
-        baseURL: "http://localhost:8000/api",
+        baseURL: "http://192.168.1.240:7999/api",
         headers: {},
     });
 

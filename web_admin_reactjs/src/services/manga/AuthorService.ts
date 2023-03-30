@@ -21,11 +21,11 @@ const addAuthor = async (model: AuthorInput) => mangaAxios.post(`${basePath}`, m
 const updateAuthor = async (model: AuthorInput) => mangaAxios.put(`${basePath}/${model.id}`, model);
 const deleteAuthor= async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
-const tagService = {
+const authorService = {
     filterAuthor,
     addAuthor,
     updateAuthor,
     deleteAuthor,
 };
 
-export default tagService;
+export default authorService;
