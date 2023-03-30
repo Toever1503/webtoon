@@ -5,7 +5,7 @@ import {
 } from '@ant-design/icons';
 import { MenuProps, notification } from 'antd';
 import { Layout, Menu, theme } from 'antd';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import { DashboardOutlined } from '@ant-design/icons/lib/icons';
 import NotificationComponent from '../components/NotificationComponent';
 
@@ -35,6 +35,11 @@ const items: MenuItem[] = [
         getItem('Add new', 'user-add'),
         getItem('My Profile', 'user-profile'),
     ]),
+    getItem('Manga', 'parent-mangas', <TeamOutlined />, [
+        getItem('All mangas', '/mangas'),
+        getItem('Manga genres', '/mangas/genres'),
+        getItem('Manga authors', '/mangas/authors')
+    ]),
     getItem('Post', 'parent-posts', <TeamOutlined />, [
         getItem('All Posts', 'posts'),
         getItem('Add new', 'post-add')
@@ -45,21 +50,25 @@ const items: MenuItem[] = [
     ]),
 ];
 
-const onMenuClick = (item: MenuItem) => {
-    console.log('onMenuClick', item);
-}
+
 
 const onSubMenuClick = (item: MenuItem) => {
     console.log('onSubMenuClick', item);
 }
 
 const App: React.FC = () => {
+    const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const {
         token: { colorBgContainer },
     } = theme.useToken();
 
-    
+    const onMenuClick = (item: MenuItem) => {
+        console.log('onMenuClick', item?.key);
+        if (item)
+            if (item.key)
+                navigate(item.key.toString());
+    }
 
     return (
         <>

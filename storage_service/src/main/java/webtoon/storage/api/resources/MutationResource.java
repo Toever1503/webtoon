@@ -46,14 +46,8 @@ public class MutationResource {
     }
 
     @PostMapping("upload-image-by-zip-file")
-    public List<FileDto> uploadImageByZipFile(@RequestPart MultipartFile file, @RequestParam String folder) throws IOException {
-        if(!file.getOriginalFilename().endsWith(".zip"))
-            throw new RuntimeException("File isn't zip format");
-//		return fileService.uploadFile(file, folder);
-        System.out.printf("file name: " + file.getName());
-        System.out.printf("folder: " + folder);
-
-        return fileService.uploadImageByZipFile(file, folder);
+    public List<FileDto> uploadImageByZipFile(@RequestPart List<MultipartFile> files, @RequestParam String folder) throws IOException {
+        return fileService.uploadImageByZipFile(files, folder);
     }
 
     @DeleteMapping("delete-files")

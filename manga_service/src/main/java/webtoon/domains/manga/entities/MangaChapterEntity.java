@@ -6,6 +6,8 @@ import javax.persistence.*;
 
 import lombok.*;
 
+import java.util.List;
+
 @Entity
 @Table(name = "tbl_manga_chapter_entity")
 @Getter
@@ -34,7 +36,7 @@ public class MangaChapterEntity {
 	
 	@Column(name = "required_vip")
 	private Boolean requiredVip;
-	
+
 	@OneToMany(mappedBy = "mangaChapter")
-    private Set<MangaChapterImageEntity> chapterImageEntities;
+	private List<MangaChapterImageEntity> chapterImages;
 }

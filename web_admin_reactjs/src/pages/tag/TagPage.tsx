@@ -18,7 +18,7 @@ const TagPage: React.FC = () => {
     const dispatch = useDispatch();
 
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
-        current: 1,
+        current: tagData.current,
         pageSize: tagData.size,
         total: tagData.totalElements,
         showSizeChanger: false,
@@ -40,7 +40,7 @@ const TagPage: React.FC = () => {
             key: 'stt',
         },
         {
-            title: 'Name',
+            title:'Name',
             dataIndex: 'tagName',
             key: 'tagName',
         },

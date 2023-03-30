@@ -1,16 +1,17 @@
 import React, { useEffect } from "react";
 import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
-import genreService from "../../../services/manga/GenreService";
-import {addGenre, updateGenre} from "../../../stores/features/manga/genreSlice";
+import authorService from "../../../services/manga/AuthorService";
+import {addAuthor, updateAuthor} from "../../../stores/features/manga/authorSlice";
 import {showNofification} from "../../../stores/features/notification/notificationSlice";
 
-interface AddUpdateGenreModalProps {
+
+interface AddUpdateAuthorModalProps {
     config: object;
 }
 
-const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | any) => {
-    
+const AddUpdateAuthorModal: React.FC = ({ config }: AddUpdateAuthorModalProps | any) => {
+
 
     const dispatch = useDispatch();
     const [form] = Form.useForm();
@@ -27,26 +28,26 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
     const onFinish = (values: any) => {
         console.log('Success:', values);
         if(config.type === 'add'){
-            genreService
-                .addGenre(values)
+            authorService
+                .addAuthor(values)
                 .then((res) => {
                     console.log('add tag: ', res.data);
-                    dispatch(addGenre(res.data));
+                    dispatch(addAuthor(res.data));
                     handleCancel();
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Add genre successfully',
+                        message: 'Add author successfully',
                     }))
                 })
                 .finally(() => {
                     setIsSubmitting(false);
                 });
         } else{
-            genreService
-                .updateGenre({ ...values, id: config.record.id })
+            authorService
+                .updateAuthor({ ...values, id: config.record.id })
                 .then((res) => {
                     console.log('update tag: ', res.data);
-                    dispatch(updateGenre(res.data));
+                    dispatch(updateAuthor(res.data));
                     handleCancel();
                 })
                 .finally(() => {
@@ -60,7 +61,7 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
     };
 
     useEffect(() => {
-        if (config.visible) {
+        if (config.visible){
             form.resetFields();
             if (config.type === 'update') {
                 console.log('config.record', config.record);
@@ -107,4 +108,4 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
 };
 
 
-export default AddUpdateGenreModal;
+export default AddUpdateAuthorModal;

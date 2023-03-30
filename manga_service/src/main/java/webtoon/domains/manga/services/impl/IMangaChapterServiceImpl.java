@@ -67,9 +67,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 .mangaVolume(model.getMangaVolumeId()).content(model.getContent()).chapterIndex(model.getChapterIndex())
                 .requiredVip(model.getRequiredVip()).build();
         this.chapterRepository.saveAndFlush(chapterEntity);
-        return MangaChapterDto.builder().name(chapterEntity.getName()).mangaVolumeId(chapterEntity.getMangaVolume())
+        return MangaChapterDto.builder().name(chapterEntity.getName()).volumeId(chapterEntity.getMangaVolume())
                 .chapterIndex(chapterEntity.getChapterIndex()).content(chapterEntity.getContent())
-                .requiredVip(chapterEntity.getRequiredVip()).build();
+                .isRequiredVip(chapterEntity.getRequiredVip()).build();
     }
 
     @Override
@@ -83,8 +83,8 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         entity.setRequiredVip(model.getRequiredVip());
         chapterRepository.saveAndFlush(entity);
         return MangaChapterDto.builder().name(entity.getName()).content(entity.getContent())
-                .chapterIndex(entity.getChapterIndex()).mangaVolumeId(entity.getMangaVolume())
-                .requiredVip(entity.getRequiredVip()).build();
+                .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume())
+                .isRequiredVip(entity.getRequiredVip()).build();
     }
 
     @Override
@@ -104,9 +104,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public void createTextChapter(MangaUploadChapterInput input) {
+    public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-        MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeID())
+        MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
                 .orElse(
                         MangaVolumeEntity.builder()
                                 .name("Volume 1")
@@ -115,23 +115,28 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                                 .build()
                 );
         this.mangaVolumeRepository.saveAndFlush(volumeEntity);
+
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
-                .name(input.getChapterName())
-                .chapterIndex(input.getChapterIndex())
+                .id(input.getId())
+                .name(input.getName())
+                .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
                 .mangaVolume(volumeEntity)
-                .content(input.getChapterContent())
+                .content(input.getContent())
                 .requiredVip(input.getIsRequiredVip())
                 .build();
+
         this.chapterRepository.saveAndFlush(mangaChapterEntity);
+
+        return MangaChapterDto.toDto(mangaChapterEntity);
     }
 
     @Override
-    public void createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
+    public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
 
 
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-            MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeID())
+            MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
                     .orElse(
                             MangaVolumeEntity.builder()
                                     .name("Volume 1")
@@ -141,8 +146,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                     );
             this.mangaVolumeRepository.saveAndFlush(volumeEntity);
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
-                    .name(input.getChapterName())
-                    .chapterIndex(input.getChapterIndex())
+                    .id(input.getId())
+                    .name(input.getName())
+                    .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
                     .mangaVolume(volumeEntity)
                     .requiredVip(input.getIsRequiredVip())
                     .build();
@@ -154,12 +160,12 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
             MultiValueMap<String, Object> body
                     = new LinkedMultiValueMap<>();
-            body.add("file", multipartFiles.get(0).getResource());
+            multipartFiles.forEach(f -> body.add("files", f.getResource()));
 
             HttpEntity<MultiValueMap<String, Object>> requestEntity
                     = new HttpEntity<>(body, headers);
 
-            String serverUrl = "http://localhost:8080/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
+            String serverUrl = "http://localhost:8001/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
             ResponseEntity<List<FileDto>> response = restTemplate.exchange(
                     serverUrl,
                     HttpMethod.POST, requestEntity,
@@ -175,12 +181,19 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                     .build()).collect(Collectors.toList());
             this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
 
+            return MangaChapterDto.toDto(mangaChapterEntity);
         } catch (Exception e) {
             e.printStackTrace();
             // need remove image
             throw e;
         }
 
+    }
+
+    @Override
+    public List<MangaChapterDto> getAllByVolumeId(Long id) {
+        return this.chapterRepository.findByMangaVolumeId(id)
+                .stream().map(MangaChapterDto::toDto).collect(Collectors.toList());
     }
 
     private List<MangaChapterImageEntity> getImagesFromZipFile(String mangaName, MultipartFile file) throws IOException {

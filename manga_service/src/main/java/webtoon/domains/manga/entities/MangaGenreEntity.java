@@ -31,4 +31,7 @@ public class MangaGenreEntity {
 	
 	@Column(name = "slug")
 	private String slug;
+
+	@Column(name = "manga_count", columnDefinition = "int default 0")
+	private Integer mangaCount;
 }

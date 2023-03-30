@@ -7,7 +7,7 @@ import RichtextEditorForm from '../../components/RichtextEditorForm';
 import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
 import { useTranslation } from "react-i18next";
 import dayjs from 'dayjs';
-import mangaService, { MangaInput, MangaStatus, ReleaseStatus } from '../../services/MangaService';
+import mangaService, { MangaInput, MangaStatus, ReleaseStatus } from '../../services/manga/MangaService';
 import { useDispatch } from 'react-redux';
 import { showNofification } from '../../stores/features/notification/notificationSlice';
 import { NavigateFunction, useNavigate } from 'react-router-dom';

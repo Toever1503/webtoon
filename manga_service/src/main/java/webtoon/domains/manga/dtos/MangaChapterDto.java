@@ -8,34 +8,41 @@ import lombok.Setter;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class MangaChapterDto {
-	private Long id;
-	
-	private MangaVolumeEntity mangaVolumeId;
-	
-	private String name;
-	
-	private String content;
-	
-	private Integer chapterIndex;
-	
-	private Boolean requiredVip;
-	
-	public static MangaChapterDto toDto(MangaChapterEntity mangaEntity) {
-		if(mangaEntity == null) return null;
-		
-		return MangaChapterDto.builder()
-				.id(mangaEntity.getId())
-				.mangaVolumeId(mangaEntity.getMangaVolume())
-				.name(mangaEntity.getName())
-				.content(mangaEntity.getContent())
-				.chapterIndex(mangaEntity.getChapterIndex())
-				.requiredVip(mangaEntity.getRequiredVip())
-				.build();
-	}
+    private Long id;
+
+    private MangaVolumeEntity volumeId;
+
+    private String name;
+
+    private String content;
+
+    private Integer chapterIndex;
+
+    private Boolean isRequiredVip;
+
+    private List<MangaChapterImageDto> chapterImages;
+
+    public static MangaChapterDto toDto(MangaChapterEntity mangaEntity) {
+        if (mangaEntity == null) return null;
+
+        return MangaChapterDto.builder()
+                .id(mangaEntity.getId())
+                .volumeId(mangaEntity.getMangaVolume())
+                .name(mangaEntity.getName())
+                .content(mangaEntity.getContent())
+                .chapterIndex(mangaEntity.getChapterIndex())
+                .isRequiredVip(mangaEntity.getRequiredVip())
+                .chapterImages(mangaEntity.getChapterImages() != null ? mangaEntity.getChapterImages().stream().map(MangaChapterImageDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
+                .build();
+    }
 }

@@ -18,51 +18,49 @@ import webtoon.domains.manga.services.IMangaVolumeService;
 @Transactional
 public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 
-	@Autowired
-	private IMangaVolumeRepository mangaVolumeRepository;
+    @Autowired
+    private IMangaVolumeRepository mangaVolumeRepository;
 
-	@Autowired
-	private IMangaService mangaService;
+    @Autowired
+    private IMangaService mangaService;
 
-	@Override
-	public MangaVolumeDto add(MangaVolumeModel model) {
-		MangaVolumeEntity entity = MangaVolumeEntity.builder()
-				.manga(mangaService.getById(model.getMangaId()))
-				.name(model.getName())
-				.volumeIndex(model.getVolumeIndex()).build();
-		mangaVolumeRepository.saveAndFlush(entity);
-		return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(model.getName())
-				.volumeIndex(model.getVolumeIndex()).build();
-	}
+    @Override
+    public MangaVolumeDto add(MangaVolumeModel model) {
+        MangaVolumeEntity entity = MangaVolumeEntity.builder()
+                .manga(mangaService.getById(model.getMangaId()))
+                .name(model.getName()).build();
+        Long volumeIndex = this.mangaVolumeRepository.getLastIndex(model.getMangaId()).orElse(-1L);
+        entity.setVolumeIndex(volumeIndex.intValue() + 1);
+        mangaVolumeRepository.saveAndFlush(entity);
+        return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(model.getName())
+                .volumeIndex(model.getVolumeIndex()).build();
+    }
 
-	@Override
-	public MangaVolumeDto update(MangaVolumeModel model) {
-		MangaVolumeEntity entity = this.getById(model.getId());
-		entity.setManga(this.mangaService.getById(model.getMangaId()));
-		entity.setName(model.getName());
-		entity.setVolumeIndex(model.getVolumeIndex());
-		mangaVolumeRepository.saveAndFlush(entity);
-		return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(entity.getName())
-				.volumeIndex(entity.getVolumeIndex()).build();
-	}
-
+    @Override
+    public MangaVolumeDto update(MangaVolumeModel model) {
+        MangaVolumeEntity entity = this.getById(model.getId());
+        entity.setName(model.getName());
+        mangaVolumeRepository.saveAndFlush(entity);
+        return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(entity.getName())
+                .volumeIndex(entity.getVolumeIndex()).build();
+    }
 
 
-	@Override
-	public boolean deleteById(Long id) {
-		try {
-			mangaVolumeRepository.deleteById(id);
-			return true;
-		} catch (Exception e) {
-			return false;
-			// TODO: handle exception
-		}
-	}
-	
-	@Override
-	public Page<MangaVolumeDto> filter(Pageable pageable,Specification<MangaVolumeEntity> specs){
-		return mangaVolumeRepository.findAll(specs, pageable).map(MangaVolumeDto::toDto);
-	}
+    @Override
+    public boolean deleteById(Long id) {
+        try {
+            mangaVolumeRepository.deleteById(id);
+            return true;
+        } catch (Exception e) {
+            return false;
+            // TODO: handle exception
+        }
+    }
+
+    @Override
+    public Page<MangaVolumeDto> filter(Pageable pageable, Specification<MangaVolumeEntity> specs) {
+        return mangaVolumeRepository.findAll(specs, pageable).map(MangaVolumeDto::toDto);
+    }
 
 	@Override
 	public MangaVolumeEntity getById(Long id) {

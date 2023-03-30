@@ -11,12 +11,12 @@ import java.util.List;
 @NoArgsConstructor
 public class MangaUploadChapterInput {
     private Long id;
-    private String chapterName;
+    private String name;
     private Integer chapterIndex;
-    private Long volumeID;
+    private Long volumeId;
     private Long mangaID;
     private Boolean isRequiredVip;
 
-    private String chapterContent;
+    private String content;
     private List<String> chapterImages;
 }

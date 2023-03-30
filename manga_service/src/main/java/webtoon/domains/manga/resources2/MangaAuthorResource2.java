@@ -32,13 +32,13 @@ public class MangaAuthorResource2 {
     }
 
     @PostMapping
-    public MangaAuthorDto addNew(@RequestBody MangaAuthorModel input) {
+    public MangaAuthorEntity addNew(@RequestBody MangaAuthorModel input) {
         input.setId(null);
         return this.mangaAuthorService.add(input);
     }
 
     @PutMapping("{id}")
-    public MangaAuthorDto update(@PathVariable Long id, @RequestBody MangaAuthorModel input) {
+    public MangaAuthorEntity update(@PathVariable Long id, @RequestBody MangaAuthorModel input) {
         input.setId(id);
         return this.mangaAuthorService.update(input);
     }

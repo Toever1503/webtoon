@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 
 
 interface RichtextEditorFormProps {
-    onReady: Function
+    onReady: Function,
+    toolbarSettings?: ToolbarSettingsModel
 }
 
 const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEditorFormProps) => {
@@ -59,7 +60,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
     };
 
 
-    const [content, setContent] = useState<string>();
+    const [content, setContent] = useState<string>('a');
 
     useEffect(() => {
         console.log('richtext editor mounted');
@@ -69,7 +70,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
     return (
         <div className="richtext-editor">
             <RichTextEditorComponent className='min-h-[360px]' height={'100%'} value={content} ref={(richtexteditor: RichTextEditorComponent) => props.onReady(richtexteditor, setContent)}
-                toolbarSettings={toolbarSettings} fontFamily={fontFamily}>
+                toolbarSettings={props.toolbarSettings || toolbarSettings} fontFamily={fontFamily}>
 
                 <Inject services={[Toolbar, Image, Link, HtmlEditor, Count, Table, QuickToolbar]} />
             </RichTextEditorComponent>
