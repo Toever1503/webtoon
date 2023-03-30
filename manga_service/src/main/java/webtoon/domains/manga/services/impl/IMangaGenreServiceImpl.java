@@ -13,6 +13,7 @@ import webtoon.domains.manga.models.MangaGenreModel;
 import webtoon.domains.manga.repositories.IMangaGenreRepository;
 import webtoon.domains.manga.services.IMangaGenreService;
 import webtoon.domains.tag.entity.TagEntity;
+import webtoon.utils.ASCIIConverter;
 
 import java.util.List;
 
@@ -26,6 +27,10 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
     @Override
     public MangaGenreEntity add(MangaGenreModel model) {
         MangaGenreEntity entity = MangaGenreEntity.builder().name(model.getName()).slug(model.getSlug()).build();
+        if (model.getSlug() != null)
+            entity.setSlug(ASCIIConverter.removeAccent(model.getSlug()));
+        else
+            entity.setSlug(ASCIIConverter.removeAccent(model.getName()));
         genreRepository.saveAndFlush(entity);
         return entity;
     }
