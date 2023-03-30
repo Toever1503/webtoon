@@ -32,4 +32,6 @@ public interface IMangaChapterService {
 	MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles);
 
     List<MangaChapterDto> getAllByVolumeId(Long id);
+
+	MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId);
 }
