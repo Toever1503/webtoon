@@ -30,4 +30,6 @@ public interface IMangaChapterService {
     void createTextChapter(MangaUploadChapterInput input);
 
     void createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles);
+
+    MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId);
 }

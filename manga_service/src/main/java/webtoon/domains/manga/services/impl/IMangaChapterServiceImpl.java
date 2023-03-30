@@ -1,9 +1,10 @@
 package webtoon.domains.manga.services.impl;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.*;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.mappers.MangaChapterMapper;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
 import webtoon.domains.manga.repositories.IMangaChapterImageRepository;
@@ -38,22 +40,34 @@ import java.util.zip.ZipInputStream;
 @Transactional
 public class IMangaChapterServiceImpl implements IMangaChapterService {
 
-    @Autowired
-    private IMangaChapterRepository chapterRepository;
-    @Autowired
-    private IMangaService mangaService;
-    @Autowired
-    private IMangaVolumeRepository mangaVolumeRepository;
-    @Autowired
-    private IMangaChapterImageRepository chapterImageRepository;
+
+    private final IMangaChapterRepository chapterRepository;
+
+    private final IMangaService mangaService;
+
+    private final IMangaVolumeRepository mangaVolumeRepository;
+
+    private final IMangaChapterImageRepository chapterImageRepository;
+
+    private final MangaChapterMapper chapterMapper;
+
+    public IMangaChapterServiceImpl(IMangaChapterRepository chapterRepository, IMangaService mangaService,
+                                    IMangaVolumeRepository mangaVolumeRepository, IMangaChapterImageRepository
+                                            chapterImageRepository, MangaChapterMapper chapterMapper) {
+        this.chapterRepository = chapterRepository;
+        this.mangaService = mangaService;
+        this.mangaVolumeRepository = mangaVolumeRepository;
+        this.chapterImageRepository = chapterImageRepository;
+        this.chapterMapper = chapterMapper;
+    }
 
     @Override
     public MangaChapterDto add(MangaChapterModel model) {
         MangaChapterEntity chapterEntity = MangaChapterEntity.builder().name(model.getName())
-                .mangaVolume(model.getMangaId()).content(model.getContent()).chapterIndex(model.getChapterIndex())
+                .mangaVolume(model.getMangaVolumeId()).content(model.getContent()).chapterIndex(model.getChapterIndex())
                 .requiredVip(model.getRequiredVip()).build();
         this.chapterRepository.saveAndFlush(chapterEntity);
-        return MangaChapterDto.builder().name(chapterEntity.getName()).mangaId(chapterEntity.getMangaVolume())
+        return MangaChapterDto.builder().name(chapterEntity.getName()).mangaVolumeId(chapterEntity.getMangaVolume())
                 .chapterIndex(chapterEntity.getChapterIndex()).content(chapterEntity.getContent())
                 .requiredVip(chapterEntity.getRequiredVip()).build();
     }
@@ -64,12 +78,12 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         MangaChapterEntity entity = this.getById(model.getId());
         entity.setChapterIndex(model.getChapterIndex());
         entity.setContent(model.getContent());
-        entity.setMangaVolume(model.getMangaId());
+        entity.setMangaVolume(model.getMangaVolumeId());
         entity.setName(model.getName());
         entity.setRequiredVip(model.getRequiredVip());
         chapterRepository.saveAndFlush(entity);
         return MangaChapterDto.builder().name(entity.getName()).content(entity.getContent())
-                .chapterIndex(entity.getChapterIndex()).mangaId(entity.getMangaVolume())
+                .chapterIndex(entity.getChapterIndex()).mangaVolumeId(entity.getMangaVolume())
                 .requiredVip(entity.getRequiredVip()).build();
     }
 
@@ -204,6 +218,21 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public MangaChapterImageEntity getImageForChapter(Long chapterId) {
         return null;
+    }
+
+    @Override
+    public MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId){
+        MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
+
+        List<MangaChapterEntity> nextChapters = this.chapterRepository
+                .findNextchapter(chapterID,volumeId,PageRequest.of(0,1));
+        chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
+
+        List<MangaChapterEntity> prevChapters = this.chapterRepository
+                .findPrevchapter(chapterID,volumeId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+        chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
+
+        return chapterDtos;
     }
 
 }

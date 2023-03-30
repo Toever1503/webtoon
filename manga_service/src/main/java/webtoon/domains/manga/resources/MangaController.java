@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
@@ -37,7 +38,9 @@ public class MangaController {
 	}
 
 	@GetMapping("{name}/{id}")
-	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name) {
+	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
+		MangaEntity mangaEntity =this.mangaService.getById(id);
+		model.addAttribute("model",mangaEntity);
 
 		return "trangtruyen";
 	}
@@ -48,9 +51,17 @@ public class MangaController {
 		MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
 		MangaEntity mangaEntity = volumeEntity.getManga();
 
+//		MangaVolumeEntity volumeEntity1 = (MangaVolumeEntity) volumeEntity.getManga().getVolumeEntities();
+
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);
+
+		MangaChapterDto[] prevNextChapter = this.mangaChapterService
+				.findNextPosts(id,chapterEntity.getMangaVolume().getId());
+		model.addAttribute("prevChapter",prevNextChapter[0]);
+		model.addAttribute("nextChapter",prevNextChapter[1]);
+
 		return "read-manga-page";
 	}
 	@PostMapping("/index")

@@ -135,25 +135,22 @@
 
       <div class="flex justify-start mb-2">
         <div class="ml-20">
-          <select
+          <select th:each="item : ${volumeData}"
             data-te-select-init
             data-te-select-size="lg"
             class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
           >
-            <option value="1">Vol.3</option>
-            <option value="2">Vol.2</option>
-            <option value="3">Vol.1</option>
+            <option th:text="${item.name}"></option>
           </select>
         </div>
 
         <div class="ml-5">
-          <select
+          <select th:each="item : ${chapterData}"
             data-te-select-init
             data-te-select-size="lg"
             class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
           >
-            <option value="1">Chapter 6</option>
-            <option value="2">Chapter 5</option>
+            <option th:text="${item.name}"></option>
           </select>
         </div>
       </div>

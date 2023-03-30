@@ -16,7 +16,7 @@ import webtoon.domains.manga.entities.MangaVolumeEntity;
 public class MangaChapterDto {
 	private Long id;
 	
-	private MangaVolumeEntity mangaId;
+	private MangaVolumeEntity mangaVolumeId;
 	
 	private String name;
 	
@@ -31,7 +31,7 @@ public class MangaChapterDto {
 		
 		return MangaChapterDto.builder()
 				.id(mangaEntity.getId())
-				.mangaId(mangaEntity.getMangaVolume())
+				.mangaVolumeId(mangaEntity.getMangaVolume())
 				.name(mangaEntity.getName())
 				.content(mangaEntity.getContent())
 				.chapterIndex(mangaEntity.getChapterIndex())
