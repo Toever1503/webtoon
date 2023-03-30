@@ -31,7 +31,6 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             ...props.mangaInput,
             mangaType: mangaType
         });
-        props.mangaInput.id = '1';
         if (props.mangaInput.id)
             mangaService.setMangaType(props.mangaInput.id, mangaType)
                 .then((res) => {

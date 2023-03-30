@@ -16,7 +16,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name = "tbl_manga_author_relation")
 @Getter
 @Setter
 @Builder

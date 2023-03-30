@@ -73,7 +73,8 @@ public class PostServiceImpl implements IPostService {
     public PostDto[] findNextPrevPosts(Long postID, Long categoryId) {
         PostDto[] postDtos = new PostDto[2];
 
-        List<PostEntity> nextPosts = this.postRepository.findNextPost(postID, categoryId, PageRequest.of(0, 1));
+        List<PostEntity> nextPosts = this.postRepository
+                .findNextPost(postID, categoryId, PageRequest.of(0, 1));
         postDtos[1] = nextPosts.size() == 0 ? null : this.postMapper.toDto(nextPosts.get(0));
 
         List<PostEntity> prevPosts = this.postRepository.findPrevPost(postID, categoryId, PageRequest.of(0, 1, Sort.Direction.DESC, "id"));

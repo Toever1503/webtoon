@@ -18,4 +18,7 @@ public interface IMangaVolumeService {
 
 	Page<MangaVolumeDto> filter(Pageable pageable, Specification<MangaVolumeEntity> specs);
 
+    MangaVolumeEntity getById(Long id);
+
+    MangaVolumeDto findById(Long id);
 }

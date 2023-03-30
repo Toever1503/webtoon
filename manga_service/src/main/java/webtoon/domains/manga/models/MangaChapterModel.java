@@ -13,7 +13,7 @@ import webtoon.domains.manga.entities.MangaVolumeEntity;
 public class MangaChapterModel {
 	private Long id;
 	
-	private MangaVolumeEntity mangaId;
+	private MangaVolumeEntity mangaVolumeId;
 	
 	private String name;
 	

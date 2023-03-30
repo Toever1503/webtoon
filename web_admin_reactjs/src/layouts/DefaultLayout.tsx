@@ -76,8 +76,8 @@ const App: React.FC = () => {
             <Layout style={{ minHeight: '100vh' }}>
 
                 <Sider theme="light" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
-                    <div style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
-                        My APP
+                    <div className='flex items-center justify-center' style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
+                        <span className='font-bold text-2xl'>Admin</span>
                     </div>
                     <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={items} />
                 </Sider>

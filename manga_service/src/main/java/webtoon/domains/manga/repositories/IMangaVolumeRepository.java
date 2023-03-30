@@ -5,11 +5,13 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 
 import java.util.Optional;
 
 
+@Repository
 public interface IMangaVolumeRepository extends JpaRepository<MangaVolumeEntity, Long>, JpaSpecificationExecutor<MangaVolumeEntity>{
 
     @Query(value = "SELECT volume_index FROM `manga_volume_entity` \n" +

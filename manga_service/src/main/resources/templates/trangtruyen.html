@@ -60,144 +60,155 @@ xmlns:th="http://www.thymeleaf.org"
 					<nav class="w-full rounded-md">
 						<ol class="list-reset flex">
 							<li><a href="#"
-								class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600">Home</a>
+								class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700
+								dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600">Manga</a>
 							</li>
 							<li><span
 								class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
 							</li>
 							<li><a href="#"
-								class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600">Library</a>
+								class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600
+								active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500
+								dark:active:text-primary-600">Hành động</a>
 							</li>
 							<li><span
 								class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
 							</li>
-							<li class="text-neutral-500 dark:text-neutral-400">Data</li>
+							<li class="text-neutral-500 dark:text-neutral-400">Truyện 1</li>
 						</ol>
 					</nav>
 				</div>
-				<div class="grid grid-cols-4 gap-4">
-					<div class="bg-slate-100 ml-20 p-8 shadow-lg">
-						<img
-							src="https://tse3.mm.bing.net/th?id=OIP.X5Ug8PKNLo8v56hmTgQB5wHaJh&pid=Api&P=0"
-							alt="" />
-					</div>
-					<div class="bg-slate-100 col-span-3 mr-20 p-8 shadow-lg">
-						<div class="post-content">
-							<div class="post-rating">
-								<div class="post-total-rating allow_vote">
-									<div class="flex justify-between">
-										<div class="order-last">Trạng thái: Đang thực hiện</div>
-										<div class="grid grid-cols-5 gap-4">
-											<div>
-												<svg xmlns="http://www.w3.org/2000/svg" width="16"
-													height="16" fill="currentColor"
-													class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
-                            <path
-														d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                          </svg>
-											</div>
-											<div>
-												<svg xmlns="http://www.w3.org/2000/svg" width="16"
-													height="16" fill="currentColor"
-													class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
-                            <path
-														d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                          </svg>
-											</div>
-											<div>
-												<svg xmlns="http://www.w3.org/2000/svg" width="16"
-													height="16" fill="currentColor"
-													class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
-                            <path
-														d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                          </svg>
-											</div>
-											<div>
-												<svg xmlns="http://www.w3.org/2000/svg" width="16"
-													height="16" fill="currentColor"
-													class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
-                            <path
-														d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
-                          </svg>
-											</div>
-											<div>
-												<svg xmlns="http://www.w3.org/2000/svg" width="16"
-													height="16" fill="currentColor"
-													class="bi bi-star fill-yellow-500" viewBox="0 0 16 16">
-                            <path
-														d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
-                          </svg>
+				
+				
+					<h2 th:if="${model == null}"> Không có dữ liệu!</h2>
+
+					<div th:else class="grid grid-cols-4 gap-4">
+							<div  class="bg-slate-100 ml-20 p-8 shadow-lg" >
+							<p th:each="item : ${model}">
+								<img th:src="@{item.featuredImage}" >
+							</p>
+								
+						</div>
+						<div class="bg-slate-100 col-span-3 mr-20 p-8 shadow-lg">
+							<div class="post-content">
+								<div class="post-rating">
+									<div class="post-total-rating allow_vote">
+										<div class="flex justify-between" >
+											<div class="order-last" style="display: flex;">Trạng thái:&nbsp;
+												 <p th:text="${model.mangaStatus}" ></p></div>
+											<div class="grid grid-cols-5 gap-4">
+												<div>
+													<svg xmlns="http://www.w3.org/2000/svg" width="16"
+														height="16" fill="currentColor"
+														class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
+								<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+							</svg>
+												</div>
+												<div>
+													<svg xmlns="http://www.w3.org/2000/svg" width="16"
+														height="16" fill="currentColor"
+														class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
+								<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+							</svg>
+												</div>
+												<div>
+													<svg xmlns="http://www.w3.org/2000/svg" width="16"
+														height="16" fill="currentColor"
+														class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
+								<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+							</svg>
+												</div>
+												<div>
+													<svg xmlns="http://www.w3.org/2000/svg" width="16"
+														height="16" fill="currentColor"
+														class="bi bi-star-fill fill-yellow-500" viewBox="0 0 16 16">
+								<path
+															d="M3.612 15.443c-.386.198-.824-.149-.746-.592l.83-4.73L.173 6.765c-.329-.314-.158-.888.283-.95l4.898-.696L7.538.792c.197-.39.73-.39.927 0l2.184 4.327 4.898.696c.441.062.612.636.282.95l-3.522 3.356.83 4.73c.078.443-.36.79-.746.592L8 13.187l-4.389 2.256z" />
+							</svg>
+												</div>
+												<div>
+													<svg xmlns="http://www.w3.org/2000/svg" width="16"
+														height="16" fill="currentColor"
+														class="bi bi-star fill-yellow-500" viewBox="0 0 16 16">
+								<path
+															d="M2.866 14.85c-.078.444.36.791.746.593l4.39-2.256 4.389 2.256c.386.198.824-.149.746-.592l-.83-4.73 3.522-3.356c.33-.314.16-.888-.282-.95l-4.898-.696L8.465.792a.513.513 0 0 0-.927 0L5.354 5.12l-4.898.696c-.441.062-.612.636-.283.95l3.523 3.356-.83 4.73zm4.905-2.767-3.686 1.894.694-3.957a.565.565 0 0 0-.163-.505L1.71 6.745l4.052-.576a.525.525 0 0 0 .393-.288L8 2.223l1.847 3.658a.525.525 0 0 0 .393.288l4.052.575-2.906 2.77a.565.565 0 0 0-.163.506l.694 3.957-3.686-1.894a.503.503 0 0 0-.461 0z" />
+							</svg>
+												</div>
 											</div>
 										</div>
 									</div>
-								</div>
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>Xếp hạng</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>Xếp hạng</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>Trung bình 4.2 / 5 trên 24</h5>
+										</div>
 									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>Trung bình 4.2 / 5 trên 24</h5>
-									</div>
-								</div>
 
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>Thứ hạng</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>Thứ hạng</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>Thứ 6, nó có 552 lượt xem hàng tháng</h5>
+										</div>
 									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>Thứ 6, nó có 552 lượt xem hàng tháng</h5>
-									</div>
-								</div>
 
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>Thay thế</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>Thay thế</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>Kyojin no Shingeki</h5>
+										</div>
 									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>Kyojin no Shingeki</h5>
-									</div>
-								</div>
 
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>(Các) tác giả</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>(Các) tác giả</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>JSAYAMA Hajime</h5>
+										</div>
 									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>JSAYAMA Hajime</h5>
-									</div>
-								</div>
 
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>Nghệ sỹ</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>Nghệ sỹ</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>JSAYAMA Hajime</h5>
+										</div>
 									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>JSAYAMA Hajime</h5>
-									</div>
-								</div>
 
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>Thể loại</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>Thể loại</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>Hành động, người lớn, phiêu diêu, anime, hoạt hình,
+												hài</h5>
+										</div>
 									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>Hành động, người lớn, phiêu diêu, anime, hoạt hình,
-											hài</h5>
-									</div>
-								</div>
 
-								<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-									<div class="summary-heading">
-										<h5>Kiểu</h5>
-									</div>
-									<div class="summary-content vote-details col-span-4">
-										<h5>Kinh dị</h5>
+									<div class="post-content_item grid grid-cols-5 gap-4 mt-3">
+										<div class="summary-heading">
+											<h5>Kiểu</h5>
+										</div>
+										<div class="summary-content vote-details col-span-4">
+											<h5>Kinh dị</h5>
+										</div>
 									</div>
 								</div>
 							</div>
 						</div>
 					</div>
-				</div>
+					
+				
 				<div class="mx-20">
 					<h1 class="p-3 font-bold text-2xl">Bản tóm tắt</h1>
 					<hr />
@@ -213,79 +224,37 @@ xmlns:th="http://www.thymeleaf.org"
 						đề cử cho giải thưởng Manga Taishox hàng</h3>
 				</div>
 
-				<div class="mx-20">
+				<div class="mx-20" >
 					<h1 class="p-3 font-bold text-2xl">LATEST MANGA RELEASES</h1>
 					<hr />
 					<!-- Accordion -->
+					<div th:each="item : ${model.volumeEntities}">
+						<button class="accordion mt-4">
+												<p th:text="${item.name}"></p>
+											</button>
+											<div class="panel">
+												<div class="flex flex-col mx-5" th:each="item : ${item.chapterEntities}">
+													<div class="flex justify-between my-4">
+														<div th:text="${item.name}">Chapter 1</div>
 
-					<button class="accordion mt-4">Volume 1</button>
-					<div class="panel">
-						<div class="flex flex-col mx-5">
-							<div class="flex justify-between my-4">
-								<div>Chapter 1</div>
+														<div>October 11, 2017</div>
+													</div>
+													<hr>
+													<!-- <div class="flex justify-between my-4">
+														<div>Chapter 2</div>
 
-								<div>October 11, 2017</div>
-							</div>
-							<hr>
-							<div class="flex justify-between my-4">
-								<div>Chapter 2</div>
+														<div>October 11, 2017</div>
+													</div>
+													<hr>
+													<div class="flex justify-between my-4">
+														<div>Chapter 3</div>
 
-								<div>October 11, 2017</div>
-							</div>
-							<hr>
-							<div class="flex justify-between my-4">
-								<div>Chapter 3</div>
-
-								<div>October 11, 2017</div>
-							</div>
-						</div>
+														<div>October 11, 2017</div>
+													</div> -->
+												</div>
+											</div>
 					</div>
-
-					<button class="accordion">Volume 2</button>
-					<div class="panel">
-						<div class="flex flex-col mx-5">
-							<div class="flex justify-between my-4">
-								<div>Chapter 1</div>
-
-								<div>October 11, 2017</div>
-							</div>
-							<hr>
-							<div class="flex justify-between my-4">
-								<div>Chapter 2</div>
-
-								<div>October 11, 2017</div>
-							</div>
-							<hr>
-							<div class="flex justify-between my-4">
-								<div>Chapter 3</div>
-
-								<div>October 11, 2017</div>
-							</div>
-						</div>
-					</div>
-
-					<button class="accordion">Volume 3</button>
-					<div class="panel">
-						<div class="flex flex-col mx-5">
-							<div class="flex justify-between my-4">
-								<div>Chapter 1</div>
-
-								<div>October 11, 2017</div>
-							</div>
-							<hr>
-							<div class="flex justify-between my-4">
-								<div>Chapter 2</div>
-
-								<div>October 11, 2017</div>
-							</div>
-							<hr>
-							<div class="flex justify-between my-4">
-								<div>Chapter 3</div>
-
-								<div>October 11, 2017</div>
-							</div>
-						</div>
-					</div>
+					
 					<!-- Accordion -->
 					<script>
 						var acc = document.getElementsByClassName("accordion");

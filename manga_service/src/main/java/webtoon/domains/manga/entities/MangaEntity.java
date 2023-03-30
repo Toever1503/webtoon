@@ -1,6 +1,7 @@
 package webtoon.domains.manga.entities;
 
 import java.util.Date;
+import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -9,25 +10,22 @@ import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EMangaStatus;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
 
 @Entity
 @Table(name = "tbl_manga_entity")
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 @Builder
 @Getter
 @Setter
@@ -57,7 +55,7 @@ public class MangaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
-    private EMangaStatus status;
+    private EStatus status;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "manga_status")
@@ -89,5 +87,7 @@ public class MangaEntity {
 //private  created_by;
 //
 //private modified_by;
+    @OneToMany(mappedBy = "manga")
+    private Set<MangaVolumeEntity> volumeEntities;
 
 }
