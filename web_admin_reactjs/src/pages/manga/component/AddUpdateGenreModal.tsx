@@ -2,15 +2,15 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
 import genreService from "../../../services/manga/GenreService";
-import {addGenre, updateGenre} from "../../../stores/features/manga/genreSlice";
-import {showNofification} from "../../../stores/features/notification/notificationSlice";
+import { addGenre, updateGenre } from "../../../stores/features/manga/genreSlice";
+import { showNofification } from "../../../stores/features/notification/notificationSlice";
 
 interface AddUpdateGenreModalProps {
     config: object;
 }
 
 const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | any) => {
-    
+
 
     const dispatch = useDispatch();
     const [form] = Form.useForm();
@@ -26,7 +26,7 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        if(config.type === 'add'){
+        if (config.type === 'add') {
             genreService
                 .addGenre(values)
                 .then((res) => {
@@ -36,18 +36,22 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                     dispatch(showNofification({
                         type: 'success',
                         message: 'Add genre successfully',
-                    }))
+                    }));
                 })
                 .finally(() => {
                     setIsSubmitting(false);
                 });
-        } else{
+        } else {
             genreService
                 .updateGenre({ ...values, id: config.record.id })
                 .then((res) => {
                     console.log('update tag: ', res.data);
                     dispatch(updateGenre(res.data));
                     handleCancel();
+                    dispatch(showNofification({
+                        type: 'success',
+                        message: 'Edit genre successfully',
+                    }));
                 })
                 .finally(() => {
                     setIsSubmitting(false);

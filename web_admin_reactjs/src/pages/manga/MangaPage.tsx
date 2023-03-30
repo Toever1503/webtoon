@@ -1,19 +1,14 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Space, Table, TablePaginationConfig, Tag, Input } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import mangaService, { MangaFilterInput, MangaInput } from '../../services/manga/MangaService';
+import { useNavigate } from 'react-router-dom';
+import { AxiosResponse } from 'axios';
 
-interface DataType {
-    key: string | number;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-    stt: string | number;
-}
 
 const { Search } = Input;
 
-const columns: ColumnsType<DataType> = [
+const columns: ColumnsType<MangaInput> = [
     {
         title: 'STT',
         dataIndex: 'stt',
@@ -21,7 +16,7 @@ const columns: ColumnsType<DataType> = [
     },
     {
         title: 'Name',
-        dataIndex: 'name',
+        dataIndex: 'title',
         key: 'name',
         render: (text) => <a>{text}</a>,
     },
@@ -39,21 +34,6 @@ const columns: ColumnsType<DataType> = [
         title: 'Tags',
         key: 'tags',
         dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
     },
     {
         title: 'Action',
@@ -67,55 +47,85 @@ const columns: ColumnsType<DataType> = [
     },
 ];
 
-const data: DataType[] = [];
-for (let i = 1; i < 100; ++i) {
-    data.push(
-        {
-            stt: i,
-            key: i.toString(),
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
-        },
-    )
-}
 
-const pagination = (page: TablePaginationConfig) => {
-    console.log('page', page);
-}
+
 
 const onSearch = (value: string) => console.log(value);
 
 const MangaPage: React.FC = () => {
-    const [mangaFilter, setMangaFilter] = React.useState<any>([]);
+    const navigate = useNavigate();
+    const [mangaFilter, setMangaFilter] = React.useState<MangaFilterInput>({
+        status: 'ALL',
+    });
+
+    const onChangeTable = (page: TablePaginationConfig) => {
+        console.log('page', page);
+    }
+    const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
+        current: 1,
+        pageSize: 10,
+        total: 0,
+        showSizeChanger: false,
+    });
+    const [mangaData, setMangaData] = React.useState<MangaInput[]>();
+    const [tableLoading, setTableLoading] = React.useState<boolean>(false);
+    const onfilterManga = () => {
+        setTableLoading(true);
+        mangaService.filterManga(mangaFilter, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
+            .then((res: AxiosResponse<{
+                content: MangaInput[],
+                total: number
+            }>) => {
+                console.log('manga data; ', res.data.content);
+                setMangaData(res.data.content.map((e: MangaInput, index: number) => {
+                    // @ts-ignore
+                    e.stt = index + 1;
+                    return e;
+                }));
+            })
+            .finally(() => setTableLoading(false));
+    }
     useEffect(() => {
-
-
-    }, []);
+        onfilterManga();
+    }, [mangaFilter]);
     return (
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
                 <p className="text-[23px] font-[400]">Manga</p>
-                <Button className="font-medium">Add new</Button>
+                <Button className="font-medium" onClick={() => navigate('/mangas/add')}>Add new</Button>
             </div>
             <div className="flex justify-between">
                 <div className="flex space-x-3 items-center">
-                    <div className="flex space-x-[2px]">
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'ALL' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'ALL' })}>
                         <p className="m-0">All</p><p className="m-0">(2)</p>
                     </div>
                     <div>
                         <p className="m-0">|</p>
                     </div>
-                    <div className="flex space-x-[2px]">
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'PUBLISHED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'PUBLISHED' })}>
                         <p className="m-0">Published</p><p className="m-0">(2)</p>
+                    </div>
+
+                    <div>
+                        <p className="m-0">|</p>
+                    </div>
+
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'DRAFTED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'DRAFTED' })}>
+                        <p className="m-0">Drafted</p><p className="m-0">(2)</p>
+                    </div>
+                    <div>
+                        <p className="m-0">|</p>
+                    </div>
+
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'DELETED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'DELETED' })}>
+                        <p className="m-0">Deleted</p><p className="m-0">(2)</p>
                     </div>
                 </div>
                 <div>
                     <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
-            <Table columns={columns} dataSource={data} onChange={pagination} />
+            <Table columns={columns} loading={tableLoading} dataSource={mangaData} onChange={onChangeTable} />
         </div>
 
     )

@@ -7,6 +7,7 @@ import { RootState } from '../../stores';
 import tagService, { TagInput } from '../../services/TagService';
 import { deleteTagById, setTagData, TagModel } from '../../stores/features/manga/tagSlice';
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { showNofification } from '../../stores/features/notification/notificationSlice';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -18,7 +19,7 @@ const TagPage: React.FC = () => {
     const dispatch = useDispatch();
 
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
-        current: tagData.current,
+        current: 1,
         pageSize: tagData.size,
         total: tagData.totalElements,
         showSizeChanger: false,
@@ -109,6 +110,10 @@ const TagPage: React.FC = () => {
                     .then((res) => {
                         console.log('delete tag', res);
                         dispatch(deleteTagById(record.id));
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: 'Delete tag successfully',
+                        }));
                     })
                     .finally(() => {
                         setTblLoading(false);

@@ -22,7 +22,7 @@ export interface MangaInput {
     featureImage: string;
 }
 
-export type MangaStatus = 'PUBLISHED' | 'DELETED' | 'DRAFTED';
+export type MangaStatus = 'ALL' | 'PUBLISHED' | 'DELETED' | 'DRAFTED';
 export type ReleaseStatus = 'COMING' | 'GOING' | 'STOPPED' | 'CANCELLED' | 'COMPLETED';
 export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 
@@ -40,7 +40,7 @@ export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 // for manga
 export type MangaFilterInput = {
     status: MangaStatus;
-    q: string;
+    q?: string;
 }
 
 const filterManga = (input: MangaFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/filter?page=${page}&size=${size}&sort=id,desc`, input);

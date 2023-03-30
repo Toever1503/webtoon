@@ -48,6 +48,10 @@ const AddUpdateAuthorModal: React.FC = ({ config }: AddUpdateAuthorModalProps | 
                 .then((res) => {
                     console.log('update tag: ', res.data);
                     dispatch(updateAuthor(res.data));
+                    dispatch(showNofification({
+                        type: 'success',
+                        message: 'Edit author successfully',
+                    }))
                     handleCancel();
                 })
                 .finally(() => {

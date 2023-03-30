@@ -3,6 +3,7 @@ import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
 import { addTag, updateTag } from "../../../stores/features/manga/tagSlice";
 import tagService from "../../../services/TagService";
+import { showNofification } from "../../../stores/features/notification/notificationSlice";
 
 
 interface AddUpdateGenreModalProps {
@@ -33,6 +34,10 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                 .then((res) => {
                     console.log('add tag: ', res.data);
                     dispatch(addTag(res.data));
+                    dispatch(showNofification({
+                        type: 'success',
+                        message: 'Add tag successfully',
+                    }));
                     handleCancel();
                 })
                 .finally(() => {
@@ -45,6 +50,10 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                 .then((res) => {
                     console.log('update tag: ', res.data);
                     dispatch(updateTag(res.data));
+                    dispatch(showNofification({
+                        type: 'success',
+                        message: 'Edit tag successfully',
+                    }));
                     handleCancel();
                 })
                 .finally(() => {

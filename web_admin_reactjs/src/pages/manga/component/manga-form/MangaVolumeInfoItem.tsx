@@ -7,7 +7,7 @@ import Sortable from "sortablejs";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import ChapterInfoItem from "./ChapterInfoItem";
 import { VolumeForm } from "./MangaAddEditVolumeModal";
-import { MangaVolumeType, VolumeType } from "./MangaChapterInfo";
+import { MangaVolumeType, VolumeType } from "./MangaChapterSetting";
 import MangaUploadChapterModal from "./MangaUploadChapterModal";
 
 

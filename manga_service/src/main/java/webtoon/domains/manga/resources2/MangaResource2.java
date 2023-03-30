@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaFilterInput;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.services.IMangaService;
@@ -28,7 +29,8 @@ public class MangaResource2 {
     public Page<MangaDto> filter(@RequestBody MangaFilterInput input, Pageable page) {
         List<Specification> specs = new ArrayList<>();
         if (input.getStatus() != null)
-            specs.add((root, query, cb) -> cb.equal(root.get("status"), input.getStatus()));
+            if (!input.getStatus().equals(EStatus.ALL))
+                specs.add((root, query, cb) -> cb.equal(root.get("status"), input.getStatus()));
 
         if (input.getQ() != null) {
             String qRegex = "%" + input.getQ() + "%";

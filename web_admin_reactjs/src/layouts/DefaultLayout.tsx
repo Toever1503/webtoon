@@ -44,6 +44,7 @@ const items: MenuItem[] = [
         getItem('All Posts', 'posts'),
         getItem('Add new', 'post-add')
     ]),
+    getItem('Tags', '/tag', <DashboardOutlined />),
     getItem('Comment', 'parent-comments', <TeamOutlined />, [
         getItem('All Comments', 'comments'),
         getItem('Add new', 'comment-add')

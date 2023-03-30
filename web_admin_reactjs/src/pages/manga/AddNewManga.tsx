@@ -24,6 +24,26 @@ interface MangaInputError {
     tags: string;
 }
 
+let isAutoSavingMangaInfo = false;
+export function autoSaveMangaInfo(mangaInput: MangaInput) {
+    if (isAutoSavingMangaInfo) return;
+    console.log('autoSaveMangaInfo: id ', mangaInput.id);
+
+    isAutoSavingMangaInfo = true;
+    mangaService.addMangaInfo(mangaInput)
+        .then((res) => {
+            console.log('auto save manga success', res.data);
+            mangaInput.id = res.data.id;
+        })
+        .catch((err) => {
+            console.log('auto save manga failed');
+            console.log(err);
+        })
+        .finally(() => {
+            isAutoSavingMangaInfo = false;
+        })
+};
+
 const AddNewManga: React.FC = () => {
     const { t, i18n } = useTranslation();
     const dispatch: AppDispatch = useDispatch();
@@ -178,25 +198,7 @@ const AddNewManga: React.FC = () => {
         }
     };
 
-    let [isAutoSavingMangaInfo, setIsAutoSavingMangaInfo] = useState<boolean>(false);
-    const autoSaveMangaInfo = () => {
-        if (isAutoSavingMangaInfo) return;
-        console.log('autoSaveMangaInfo: id ', mangaInput.id);
 
-        isAutoSavingMangaInfo = true;
-        mangaService.addMangaInfo(mangaInput)
-            .then((res) => {
-                console.log('auto save manga success', res.data);
-                mangaInput.id = res.data.id;
-            })
-            .catch((err) => {
-                console.log('auto save manga failed');
-                console.log(err);
-            })
-            .finally(() => {
-                isAutoSavingMangaInfo = false;
-            })
-    };
 
     const [mangaInputError, setMangaInputError] = useState<MangaInputError>({
         title: '',
@@ -211,7 +213,7 @@ const AddNewManga: React.FC = () => {
     useEffect(() => {
         let id: number | undefined;
         id = setInterval(() => {
-            autoSaveMangaInfo();
+            autoSaveMangaInfo(mangaInput);
         }, 15000);
         return () => clearInterval(id);
     }, [mangaInput]);

@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from 'react';
-import {Button, Space, Table, TablePaginationConfig, Tag, Input, ModalProps, Modal} from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Button, Space, Table, TablePaginationConfig, Tag, Input, ModalProps, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores';
-import {AuthorModel, deleteAuthorById, setAuthorData} from '../../stores/features/manga/authorSlice';
-import tagService, {TagInput} from "../../services/TagService";
-import {deleteTagById, setTagData, TagModel} from "../../stores/features/manga/tagSlice";
+import { AuthorModel, deleteAuthorById, setAuthorData } from '../../stores/features/manga/authorSlice';
+import tagService, { TagInput } from "../../services/TagService";
+import { deleteTagById, setTagData, TagModel } from "../../stores/features/manga/tagSlice";
 import authorService from "../../services/manga/AuthorService";
 import AddUpdateAuthorModal from "./component/AddUpdateAuthorModal";
-import {ExclamationCircleFilled} from "@ant-design/icons";
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import { showNofification } from '../../stores/features/notification/notificationSlice';
 
 const { Search } = Input;
 const { confirm } = Modal;
@@ -111,6 +112,10 @@ const MangaAuthorPage: React.FC = () => {
                     .then((res) => {
                         console.log('delete tag', res);
                         dispatch(deleteAuthorById({ id: record.id }));
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: 'Delete author successfully',
+                        }))
                     })
                     .finally(() => {
                         setTblLoading(false);
@@ -128,7 +133,7 @@ const MangaAuthorPage: React.FC = () => {
             .then((res) => {
                 console.log('tag', res.data);
                 dispatch(setAuthorData({
-                    data: res.data.content.map((item: TagInput) => ({ ...item, key: item.id })),
+                    data: res.data.content.map((item: TagInput, index: number) => ({ ...item, key: item.id, stt: index + 1 })),
                     totalElements: res.data.totalElements
                 }));
 

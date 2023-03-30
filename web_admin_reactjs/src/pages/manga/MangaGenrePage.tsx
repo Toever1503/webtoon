@@ -1,13 +1,14 @@
-import React, {useEffect, useState} from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Space, Table, TablePaginationConfig, Tag, Input, ModalProps, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import AddUpdateGenreModal from './component/AddUpdateGenreModal';
 import { GenreModel } from '../../stores/features/manga/genreSlice';
-import {useDispatch, useSelector} from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores';
-import {deleteGenreById, setGenreData} from '../../stores/features/manga/genreSlice';
-import {ExclamationCircleFilled} from "@ant-design/icons";
-import genreService from "../../services/manga/GenreService";
+import { deleteGenreById, setGenreData } from '../../stores/features/manga/genreSlice';
+import { ExclamationCircleFilled } from "@ant-design/icons";
+import genreService, { GenreInput } from "../../services/manga/GenreService";
+import { showNofification } from '../../stores/features/notification/notificationSlice';
 
 
 const { Search } = Input;
@@ -71,7 +72,7 @@ const MangaGenrePage: React.FC = () => {
         },
     ];
 
-    
+
 
 
     const onPageChange = (page: TablePaginationConfig) => {
@@ -99,28 +100,32 @@ const MangaGenrePage: React.FC = () => {
 
     const deleteGenre = (record: GenreModel) => {
         console.log('delete  genre', record);
-            confirm({
-                title: 'Are you sure delete this tag?',
-                icon: <ExclamationCircleFilled />,
-                okText: 'Yes',
-                okType: 'danger',
-                cancelText: 'No',
-                onOk() {
-                    console.log('OK');
-                    setTblLoading(true);
-                    genreService.deleteGenre([record.id])
-                        .then((res) => {
-                            console.log('delete tag', res);
-                            dispatch(deleteGenreById({ id: record.id }));
-                        })
-                        .finally(() => {
-                            setTblLoading(false);
-                        });
-                },
-                onCancel() {
-                    console.log('Cancel');
-                },
-            });
+        confirm({
+            title: 'Are you sure delete this tag?',
+            icon: <ExclamationCircleFilled />,
+            okText: 'Yes',
+            okType: 'danger',
+            cancelText: 'No',
+            onOk() {
+                console.log('OK');
+                setTblLoading(true);
+                genreService.deleteGenre([record.id])
+                    .then((res) => {
+                        console.log('delete tag', res);
+                        dispatch(deleteGenreById({ id: record.id }));
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: 'Delete genre successfully',
+                        }))
+                    })
+                    .finally(() => {
+                        setTblLoading(false);
+                    });
+            },
+            onCancel() {
+                console.log('Cancel');
+            },
+        });
     };
 
     const filterGenre = (s = '', page = 0, size = pageConfig.pageSize, sort = 'id,desc') => {
@@ -129,7 +134,7 @@ const MangaGenrePage: React.FC = () => {
             .then((res) => {
                 console.log('tag', res.data);
                 dispatch(setGenreData({
-                    data: res.data.content.map((item: TagInput) => ({ ...item, key: item.id })),
+                    data: res.data.content.map((item: GenreInput, index: number) => ({ ...item, key: item.id, stt: index + 1 })),
                     totalElements: res.data.totalElements
                 }));
 
