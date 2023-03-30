@@ -15,6 +15,7 @@ public class MangaAuthorDto {
 	private Long id;
 
 	private String name;
+	private Long mangaCount;
 	public static MangaAuthorDto toDto(MangaAuthorEntity mangaEntity) {
 		if(mangaEntity == null) return null;
 		

@@ -14,9 +14,9 @@ public interface IMangaGenreService {
 
 	boolean deleteById(Long id);
 
-	MangaGenreDto update(MangaGenreModel model);
+	MangaGenreEntity update(MangaGenreModel model);
 
-	MangaGenreDto add(MangaGenreModel model);
+	MangaGenreEntity add(MangaGenreModel model);
 
 	Page<MangaGenreDto> filter(Pageable pageable, Specification<MangaGenreEntity> specs);
 

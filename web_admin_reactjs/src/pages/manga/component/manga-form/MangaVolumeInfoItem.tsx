@@ -3,7 +3,7 @@ import { Button, Checkbox, Collapse, Popconfirm } from "antd";
 import { MouseEventHandler, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Sortable from "sortablejs";
-import { MangaInput } from "../../../../services/MangaService";
+import { MangaInput } from "../../../../services/manga/MangaService";
 import { VolumeForm } from "./MangaAddEditVolumeModal";
 import { MangaVolumeType, VolumeType } from "./MangaChapterInfo";
 import MangaUploadChapterModal from "./MangaUploadChapterModal";

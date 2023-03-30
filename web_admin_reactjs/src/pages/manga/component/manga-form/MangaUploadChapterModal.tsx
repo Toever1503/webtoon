@@ -7,7 +7,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import Sortable from "sortablejs";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
-import mangaService, { MangaInput } from "../../../../services/MangaService";
+import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
 
 type MangaUploadChapterModalProps = {

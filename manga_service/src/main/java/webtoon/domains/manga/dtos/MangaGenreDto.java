@@ -17,6 +17,8 @@ public class MangaGenreDto {
 	private String name;
 	
 	private String slug;
+
+	private Long mangaCount;
 	
 	public static MangaGenreDto toDto(MangaGenreEntity entity) {
 		if(entity == null) return null;

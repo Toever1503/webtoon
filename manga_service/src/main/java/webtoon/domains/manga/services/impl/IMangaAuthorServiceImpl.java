@@ -24,18 +24,18 @@ public class IMangaAuthorServiceImpl implements IMangaAuthorService {
     private IMangaAuthorRepository mangaAuthorRepository;
 
     @Override
-    public MangaAuthorDto add(MangaAuthorModel model) {
+    public MangaAuthorEntity add(MangaAuthorModel model) {
         MangaAuthorEntity authorEntity = MangaAuthorEntity.builder().name(model.getName()).build();
         this.mangaAuthorRepository.saveAndFlush(authorEntity);
-        return MangaAuthorDto.builder().id(authorEntity.getId()).name(authorEntity.getName()).build();
+        return authorEntity;
     }
 
     @Override
-    public MangaAuthorDto update(MangaAuthorModel model) {
+    public MangaAuthorEntity update(MangaAuthorModel model) {
         MangaAuthorEntity authorEntity = this.getById(model.getId());
         authorEntity.setName(model.getName());
         mangaAuthorRepository.saveAndFlush(authorEntity);
-        return MangaAuthorDto.builder().id(authorEntity.getId()).name(authorEntity.getName()).build();
+        return authorEntity;
     }
 
     @Override

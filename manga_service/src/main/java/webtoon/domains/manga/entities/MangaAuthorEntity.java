@@ -28,4 +28,7 @@ public class MangaAuthorEntity {
 	
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "manga_count", columnDefinition = "int default 0")
+	private Integer mangaCount;
 }

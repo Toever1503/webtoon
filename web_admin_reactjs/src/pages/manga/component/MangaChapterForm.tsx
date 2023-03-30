@@ -1,7 +1,7 @@
 import { ArrowDownOutlined, DownOutlined } from "@ant-design/icons";
 import { Button, Radio } from "antd";
 import { useState } from "react";
-import mangaService, { MangaInput } from "../../../services/MangaService";
+import mangaService, { MangaInput } from "../../../services/manga/MangaService";
 import MangaChapterInfo from "./manga-form/MangaChapterInfo";
 import MangaUploadChapterModal from "./manga-form/MangaUploadChapterModal";
 import MangaUploadSingleChapter from "./manga-form/MangaUploadSingleChapter";

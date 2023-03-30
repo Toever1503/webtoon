@@ -24,19 +24,19 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
     private IMangaGenreRepository genreRepository;
 
     @Override
-    public MangaGenreDto add(MangaGenreModel model) {
+    public MangaGenreEntity add(MangaGenreModel model) {
         MangaGenreEntity entity = MangaGenreEntity.builder().name(model.getName()).slug(model.getSlug()).build();
         genreRepository.saveAndFlush(entity);
-        return MangaGenreDto.builder().id(entity.getId()).name(entity.getName()).slug(entity.getSlug()).build();
+        return entity;
     }
 
     @Override
-    public MangaGenreDto update(MangaGenreModel model) {
+    public MangaGenreEntity update(MangaGenreModel model) {
         MangaGenreEntity entity = this.getById(model.getId());
         entity.setName(model.getName());
         entity.setSlug(model.getSlug());
         genreRepository.saveAndFlush(entity);
-        return MangaGenreDto.builder().id(entity.getId()).name(entity.getName()).slug(entity.getSlug()).build();
+        return entity;
     }
 
     @Override

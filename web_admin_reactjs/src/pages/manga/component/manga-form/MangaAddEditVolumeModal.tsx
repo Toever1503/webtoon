@@ -1,7 +1,7 @@
 import { Button, Input, message, Modal, Space } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import mangaService, { MangaInput } from "../../../../services/MangaService";
+import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 
 
 type MangaAddEditVolumeModalProps = {

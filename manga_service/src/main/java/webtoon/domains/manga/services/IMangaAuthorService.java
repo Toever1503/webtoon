@@ -17,9 +17,9 @@ public interface IMangaAuthorService {
 
 	MangaAuthorEntity getById(Long id);
 
-	MangaAuthorDto update(MangaAuthorModel model);
+	MangaAuthorEntity update(MangaAuthorModel model);
 
-	MangaAuthorDto add(MangaAuthorModel model);
+	MangaAuthorEntity add(MangaAuthorModel model);
 
 	Page<MangaAuthorDto> filter(Pageable pageable, Specification<MangaAuthorEntity> specs);
 

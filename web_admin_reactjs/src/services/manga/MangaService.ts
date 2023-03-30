@@ -1,6 +1,6 @@
 import { Dayjs } from "dayjs";
-import { VolumeForm } from "../pages/manga/component/manga-form/MangaAddEditVolumeModal";
-import { mangaAxios } from "./config/MangaAxios";
+import { VolumeForm } from "../../pages/manga/component/manga-form/MangaAddEditVolumeModal";
+import { mangaAxios } from "../config/MangaAxios";
 
 const basePath: String = "/manga";
 

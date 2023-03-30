@@ -29,13 +29,13 @@ public class MangaGenreResource2 {
     }
 
     @PostMapping
-    public MangaGenreDto addNew(@RequestBody MangaGenreModel input) {
+    public MangaGenreEntity addNew(@RequestBody MangaGenreModel input) {
         input.setId(null);
         return this.mangaGenreService.add(input);
     }
 
     @PutMapping("{id}")
-    public MangaGenreDto update(@PathVariable Long id, @RequestBody MangaGenreModel input) {
+    public MangaGenreEntity update(@PathVariable Long id, @RequestBody MangaGenreModel input) {
         input.setId(id);
         return this.mangaGenreService.update(input);
     }
