@@ -42,9 +42,15 @@ export default {
             },
             chapter: {
                 'sure-delete': 'Bạn chăc chắn muốn xóa chương này?',
+            },
+            author: {
+            },
+            genre: {
+
             }
         }
     },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
+
 }

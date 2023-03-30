@@ -21,11 +21,11 @@ const addGenre = async (model: GenreInput) => mangaAxios.post(`${basePath}`, mod
 const updateGenre = async (model: GenreInput) => mangaAxios.put(`${basePath}/${model.id}`, model);
 const deleteGenre = async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
-const tagService = {
+const genreService = {
     filterGenre,
     addGenre,
     updateGenre,
     deleteGenre,
 };
 
-export default tagService;
+export default genreService;
