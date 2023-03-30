@@ -51,7 +51,7 @@ public class MangaController {
 		MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
 		MangaEntity mangaEntity = volumeEntity.getManga();
 
-//		MangaVolumeEntity volumeEntity1 = (MangaVolumeEntity) volumeEntity.getManga().getVolumeEntities();
+//		MangaVolumeEntity volumeEntityFilter = this.mangaVolumeService.filterBy()
 
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
@@ -64,11 +64,10 @@ public class MangaController {
 
 		return "read-manga-page";
 	}
-	@PostMapping("/index")
+	@GetMapping("/index/{s}")
 	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
 
 		model.addAttribute("model", mangaService.filterBy(s,pageable));
-//		model.addAttribute("users", userRepository.findAll());
 		return "trangtruyenchu";
 	}
 

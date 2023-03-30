@@ -74,5 +74,11 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 		return MangaVolumeDto.toDto(this.getById(id));
 	}
 
+	@Override
+	public Page<MangaVolumeEntity> filterBy(String s, Pageable page){
+		return this.mangaVolumeRepository.findAll((root, query, cb) -> {
+			return cb.like(root.get("name"),"%" + s + "%");
+		},page);
+	}
 
 }
