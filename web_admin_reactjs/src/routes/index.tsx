@@ -7,6 +7,7 @@ import MangaGenrePage from "../pages/manga/MangaGenrePage";
 import TagPage from "../pages/tag/TagPage";
 import DragPage from "../pages/test/DragPage";
 import UnzipFile from "../pages/test/UnzipFile";
+import MangaAuthorPage from "../pages/manga/MangaAuthorPage";
 
 const router = createBrowserRouter([
     {
@@ -28,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: "/manga/genre",
                 element: <MangaGenrePage />
+            },
+            {
+                path: "/manga/author",
+                element: <MangaAuthorPage />
             },
             {
                 path: "/tag",

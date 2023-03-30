@@ -8,6 +8,7 @@ export const store = configureStore({
   reducer: {
     counter: counterSlice,
     genre: genreSlice,
+    author: genreSlice,
     tag: tagSlice,
     notification: notificationSlice
   },

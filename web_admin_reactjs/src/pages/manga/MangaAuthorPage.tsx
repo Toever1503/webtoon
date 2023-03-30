@@ -1,115 +1,107 @@
-import React from 'react';
-import { Button, Space, Table, TablePaginationConfig, Tag, Input } from 'antd';
+import React, { useState } from 'react';
+import { Button, Space, Table, TablePaginationConfig, Tag, Input, ModalProps } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../stores';
+import { AuthorModel } from '../../stores/features/manga/authorSlice';
 
-interface DataType {
-    key: string | number;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-    stt: string | number;
-}
 
 const { Search } = Input;
 
-const columns: ColumnsType<DataType> = [
-    {
-        title: 'STT',
-        dataIndex: 'stt',
-        key: 'stt',
-    },
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Age',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Address',
-        dataIndex: 'address',
-        key: 'address',
-    },
-    {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, { tags }) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-    },
-    {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <a>Invite {record.name}</a>
-                <a>Delete</a>
-            </Space>
-        ),
-    },
-];
 
-const data: DataType[] = [];
-for (let i = 1; i < 100; ++i) {
-    data.push(
+const MangaAuthorPage: React.FC = () => {
+    const authorData = useSelector((state: RootState) => state.author.data);
+
+    const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
+        current: 1,
+        pageSize: 10,
+        total: 10,
+        showSizeChanger: false,
+    });
+
+    const [addUpdateAuthorModal, setAddUpdateAuthorModal] = useState<object>({
+        title: 'Add new author',
+        visible: false,
+        type: 'add',
+        setVisible: (visible: boolean) => setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible }),
+    });
+
+    const columns: ColumnsType<AuthorModel> = [
         {
-            stt: i,
-            key: i.toString(),
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
+            title: 'STT',
+            dataIndex: 'stt',
+            key: 'stt',
         },
+        {
+            title: 'Name',
+            dataIndex: 'name',
+            key: 'name',
+        },
+        {
+            title: 'Slug',
+            dataIndex: 'slug',
+            key: 'slug',
+        },
+        {
+            title: 'Total Manga',
+            dataIndex: 'mangaCount',
+            key: 'mangaCount',
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <a onClick={() => updateAuthor(record)}>Edit</a>
+                    <a onClick={() => deleteAuthor(record)}>Delete</a>
+                </Space>
+            ),
+            width: 200,
+        },
+    ];
+
+    
+
+
+    const onPageChange = (page: TablePaginationConfig) => {
+        console.log('page', page);
+    }
+
+    const onSearch = (value: string) => console.log(value);
+
+    const addNewAuthor = () => {
+        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Add new author', type: 'add' });
+        console.log('add new author', addUpdateAuthorModal);
+
+    };
+
+    const updateAuthor = (record: AuthorModel) => {
+        console.log('update  author', record)
+    };
+
+    const deleteAuthor = (record: AuthorModel) => {
+        console.log('delete  author', record)
+    };
+
+
+    return (
+        <div className="space-y-3 py-3">
+            <div className='flex justify-between items-center'>
+                <div className="flex space-x-3">
+                    <p className="text-[23px] font-[400]">Author</p>
+                    <Button className="font-medium" onClick={addNewAuthor}>Add new</Button>
+                    {/* @ts-ignore */}
+                    {/* <AddUpdateGenreModal config={addUpdateGenreModal} /> need create new */}
+                </div>
+
+                <div className='search-genre flex justify-end'>
+                    <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
+                </div>
+            </div>
+
+            <Table columns={columns} dataSource={authorData} onChange={onPageChange} pagination={pageConfig} />
+        </div>
     )
 }
-
-const pagination = (page: TablePaginationConfig) => {
-    console.log('page', page);
-}
-
-const onSearch = (value: string) => console.log(value);
-
-const MangaAuthorPage: React.FC = () =>
-    <div className="space-y-3">
-        <div className="flex space-x-3">
-            <p className="text-[23px] font-[400]">Manga</p>
-            <Button className="font-medium">Add new</Button>
-        </div>
-        <div className="flex justify-between">
-            <div className="flex space-x-3 items-center">
-                <div className="flex space-x-[2px]">
-                    <p className="m-0">All</p><p className="m-0">(2)</p>
-                </div>
-                <div>
-                    <p className="m-0">|</p>
-                </div>
-                <div className="flex space-x-[2px]">
-                    <p className="m-0">Published</p><p className="m-0">(2)</p>
-                </div>
-            </div>
-            <div>
-                <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
-            </div>
-        </div>
-        <Table columns={columns} dataSource={data} onChange={pagination} />
-    </div>
 
 export default MangaAuthorPage;
