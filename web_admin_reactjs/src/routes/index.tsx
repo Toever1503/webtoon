@@ -19,19 +19,19 @@ const router = createBrowserRouter([
                 element: <CounterPage/>,
             },
             {
-                path: "/manga",
+                path: "/mangas",
                 element: <MangaPage/>,
             },
             {
-                path: "/manga/add",
+                path: "/mangas/add",
                 element: <AddNewManga/>
             },
             {
-                path: "/manga/genre",
+                path: "/mangas/genres",
                 element: <MangaGenrePage />
             },
             {
-                path: "/manga/author",
+                path: "/mangas/authors",
                 element: <MangaAuthorPage />
             },
             {

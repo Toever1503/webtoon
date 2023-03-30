@@ -1,6 +1,6 @@
-import React from 'react';
-import {Button, Space, Table, TablePaginationConfig, Tag, Input} from 'antd';
-import type {ColumnsType} from 'antd/es/table';
+import React, { useEffect } from 'react';
+import { Button, Space, Table, TablePaginationConfig, Tag, Input } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
 
 interface DataType {
     key: string | number;
@@ -11,7 +11,7 @@ interface DataType {
     stt: string | number;
 }
 
-const {Search} = Input;
+const { Search } = Input;
 
 const columns: ColumnsType<DataType> = [
     {
@@ -39,7 +39,7 @@ const columns: ColumnsType<DataType> = [
         title: 'Tags',
         key: 'tags',
         dataIndex: 'tags',
-        render: (_, {tags}) => (
+        render: (_, { tags }) => (
             <>
                 {tags.map((tag) => {
                     let color = tag.length > 5 ? 'geekblue' : 'green';
@@ -87,29 +87,37 @@ const pagination = (page: TablePaginationConfig) => {
 
 const onSearch = (value: string) => console.log(value);
 
-const MangaPage: React.FC = () =>
-    <div className="space-y-3 py-3">
-        <div className="flex space-x-3">
-            <p className="text-[23px] font-[400]">Manga</p>
-            <Button className="font-medium">Add new</Button>
-        </div>
-        <div className="flex justify-between">
-            <div className="flex space-x-3 items-center">
-                <div className="flex space-x-[2px]">
-                    <p className="m-0">All</p><p className="m-0">(2)</p>
+const MangaPage: React.FC = () => {
+    const [mangaFilter, setMangaFilter] = React.useState<any>([]);
+    useEffect(() => {
+
+
+    }, []);
+    return (
+        <div className="space-y-3 py-3">
+            <div className="flex space-x-3">
+                <p className="text-[23px] font-[400]">Manga</p>
+                <Button className="font-medium">Add new</Button>
+            </div>
+            <div className="flex justify-between">
+                <div className="flex space-x-3 items-center">
+                    <div className="flex space-x-[2px]">
+                        <p className="m-0">All</p><p className="m-0">(2)</p>
+                    </div>
+                    <div>
+                        <p className="m-0">|</p>
+                    </div>
+                    <div className="flex space-x-[2px]">
+                        <p className="m-0">Published</p><p className="m-0">(2)</p>
+                    </div>
                 </div>
                 <div>
-                    <p className="m-0">|</p>
-                </div>
-                <div className="flex space-x-[2px]">
-                    <p className="m-0">Published</p><p className="m-0">(2)</p>
+                    <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
-            <div>
-                <Search placeholder="input search text" onSearch={onSearch} style={{width: 200}}/>
-            </div>
+            <Table columns={columns} dataSource={data} onChange={pagination} />
         </div>
-        <Table columns={columns} dataSource={data} onChange={pagination}/>
-    </div>
 
+    )
+}
 export default MangaPage;

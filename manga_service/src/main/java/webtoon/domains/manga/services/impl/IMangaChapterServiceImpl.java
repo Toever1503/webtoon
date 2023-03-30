@@ -90,7 +90,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public MangaChapterDto createTextChapter(MangaUploadChapterInput input) {
+    public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
         MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
                 .orElse(
@@ -103,19 +103,21 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         this.mangaVolumeRepository.saveAndFlush(volumeEntity);
 
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
+                .id(input.getId())
                 .name(input.getName())
                 .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
                 .mangaVolume(volumeEntity)
                 .content(input.getContent())
                 .requiredVip(input.getIsRequiredVip())
                 .build();
+
         this.chapterRepository.saveAndFlush(mangaChapterEntity);
 
         return MangaChapterDto.toDto(mangaChapterEntity);
     }
 
     @Override
-    public MangaChapterDto createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
+    public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
 
 
         try {
@@ -130,6 +132,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                     );
             this.mangaVolumeRepository.saveAndFlush(volumeEntity);
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
+                    .id(input.getId())
                     .name(input.getName())
                     .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
                     .mangaVolume(volumeEntity)

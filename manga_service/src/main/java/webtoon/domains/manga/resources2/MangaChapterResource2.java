@@ -21,18 +21,18 @@ public class MangaChapterResource2 {
         this.mangaChapterService = mangaChapterService;
     }
 
-    @PostMapping("create-text-chapter")
-    public MangaChapterDto createTextChapter(@RequestBody MangaUploadChapterInput input, @RequestParam Long mangaId) {
+    @PostMapping("save-text-chapter")
+    public MangaChapterDto saveTextChapter(@RequestBody MangaUploadChapterInput input, @RequestParam Long mangaId) {
         input.setMangaID(mangaId);
-        return this.mangaChapterService.createTextChapter(input);
+        return this.mangaChapterService.saveTextChapter(input);
     }
 
-    @PostMapping("create-image-chapter")
-    public MangaChapterDto createImageChapter(MangaUploadChapterInput input, @RequestParam Long mangaId, @RequestPart List<MultipartFile> files) throws IOException {
+    @PostMapping("save-image-chapter")
+    public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, @RequestParam Long mangaId, @RequestPart List<MultipartFile> files) throws IOException {
         if (files.size() == 0)
             throw new RuntimeException("File is required");
         input.setMangaID(mangaId);
-        return this.mangaChapterService.createImageChapter(input, files);
+        return this.mangaChapterService.saveImageChapter(input, files);
     }
 
     @GetMapping("get-all-by-volume/{id}")

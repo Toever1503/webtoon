@@ -1,5 +1,6 @@
 package webtoon.domains.manga.resources2;
 
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.enums.EMangaType;
@@ -16,6 +17,8 @@ public class MangaResource2 {
         this.mangaService = mangaService;
     }
 
+//    @PostMapping("filter")
+//    public Page<MangaDto> filterManga()
     @PostMapping
     public MangaDto createMangaInfo(@RequestBody MangaModel input) {
         return mangaService.add(input);
