@@ -30,7 +30,7 @@ export function autoSaveMangaInfo(mangaInput: MangaInput) {
     console.log('autoSaveMangaInfo: id ', mangaInput.id);
 
     isAutoSavingMangaInfo = true;
-    mangaService.addMangaInfo(mangaInput)
+    return mangaService.addMangaInfo(mangaInput)
         .then((res) => {
             console.log('auto save manga success', res.data);
             mangaInput.id = res.data.id;
@@ -211,11 +211,11 @@ const AddNewManga: React.FC = () => {
 
 
     useEffect(() => {
-        let id: number | undefined;
-        id = setInterval(() => {
-            autoSaveMangaInfo(mangaInput);
-        }, 15000);
-        return () => clearInterval(id);
+        // let id: number | undefined;
+        // id = setInterval(() => {
+        //     autoSaveMangaInfo(mangaInput);
+        // }, 15000);
+        // return () => clearInterval(id);
     }, [mangaInput]);
 
 

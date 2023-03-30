@@ -56,7 +56,7 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
         console.log('e', e.target.className);
         if (e.target.className.indexOf('chapter-item') !== -1) {
             setShowUploadChapterModal(true);
-            setUploadChapterModalTitle(`${t('manga.form.chapter.edit-chapter-btn')} (${t('manga.form.chapter.chapter')} ${(chapter.chapterIndex || 0)+1})`);
+            setUploadChapterModalTitle(`${t('manga.form.chapter.edit-chapter-btn')} (${t('manga.form.chapter.chapter')} ${(chapter.chapterIndex || 0) + 1})`);
             setChapterInput(chapter);
         }
     }
@@ -90,7 +90,7 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
             })
             .catch((err) => { })
 
-        props.mangaInput.mangaType = "TEXT";
+        // props.mangaInput.mangaType = "TEXT";
     }, [])
 
     return <>
@@ -107,14 +107,18 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
                         });
                     }} size='small'>Edit vol</Button>
 
-                    <Button onClick={(e) => {
-                        e.stopPropagation();
-                        setShowUploadChapterModal(true);
-                        setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+{}
+                    {
+                        props.index == 0 &&
+                        <Button onClick={(e) => {
+                            e.stopPropagation();
+                            setShowUploadChapterModal(true);
+                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
 
-                    }} size='small'>
-                        {t('manga.form.chapter.add-chapter-btn')}
-                    </Button>
+                        }} size='small'>
+                            {t('manga.form.chapter.add-chapter-btn')}
+                        </Button>
+                    }
                     {/* 
                             <Button  onClick={(e) => {
                                 e.stopPropagation();

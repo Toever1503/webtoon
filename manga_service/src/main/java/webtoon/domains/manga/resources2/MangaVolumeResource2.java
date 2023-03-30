@@ -40,12 +40,12 @@ public class MangaVolumeResource2 {
             return cb.equal(join.get("id"), id);
         });
         List<MangaVolumeDto> volumeDtoList = this.mangaVolumeService.filter(PageRequest.of(0, 9999), spec).toList();
-        if (volumeDtoList.size() == 0)
-            volumeDtoList = List.of(this.mangaVolumeService.add(MangaVolumeModel.builder()
-                    .mangaId(id)
-                    .name("Volume 1")
-                    .volumeIndex(0)
-                    .build()));
+//        if (volumeDtoList.size() == 0)
+//            volumeDtoList = List.of(this.mangaVolumeService.add(MangaVolumeModel.builder()
+//                    .mangaId(id)
+//                    .name("Volume 1")
+//                    .volumeIndex(0)
+//                    .build()));
         return volumeDtoList;
     }
 }

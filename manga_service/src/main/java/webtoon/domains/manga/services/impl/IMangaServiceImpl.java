@@ -10,10 +10,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.repositories.IMangaRepository;
+import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.utils.ASCIIConverter;
 //import webtoon.utils.exception.CustomHandleException;
@@ -27,6 +29,9 @@ public class IMangaServiceImpl implements IMangaService {
     @Autowired
     private MangaMapper mangaMapper;
 
+    @Autowired
+    private IMangaVolumeRepository mangaVolumeRepository;
+
     @Override
     public MangaDto add(MangaModel model) {
         MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
@@ -37,6 +42,12 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setCommentCount(0);
 
         this.mangaRepository.saveAndFlush(mangaEntity);
+
+        MangaVolumeEntity volumeEntity = MangaVolumeEntity.builder()
+                .manga(mangaEntity)
+                .volumeIndex(0)
+                .name("Vol 1").build();
+        this.mangaVolumeRepository.saveAndFlush(volumeEntity);
         return this.mangaMapper.toDto(mangaEntity);
     }
 
@@ -101,12 +112,11 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
 
-
     @Override
-    public Page<MangaEntity> filterBy(String s, Pageable page){
+    public Page<MangaEntity> filterBy(String s, Pageable page) {
         return this.mangaRepository.findAll((root, query, cb) -> {
-            return cb.like(root.get("title"),"%" + s + "%");
-        },page);
+            return cb.like(root.get("title"), "%" + s + "%");
+        }, page);
     }
 
     @Override
@@ -115,7 +125,7 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public MangaDto findById(Long id){
+    public MangaDto findById(Long id) {
         return MangaDto.toDto(this.getById(id));
     }
 

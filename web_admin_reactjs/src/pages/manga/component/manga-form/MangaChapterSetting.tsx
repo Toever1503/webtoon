@@ -49,7 +49,7 @@ export type VolumeType = {
     volumeIndex: number;
 }
 
-const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterInfoProps) => {
+const MangaChapterSetting: React.FC<MangaChapterInfoProps> = (props: MangaChapterInfoProps) => {
     const { t } = useTranslation();
 
 
@@ -127,7 +127,7 @@ const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterIn
             </Button>
 
             <section id='volume-container' className="py-[20px] px-[10px] max-h-[500px] overflow-auto">
-                {
+                {/* {
                     volumeOptions.length > 0 ?
                         volumeOptions.map((volume: VolumeType, index: number) =>
                         (
@@ -135,10 +135,11 @@ const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterIn
                         ))
                         :
                         <>{t('manga.form.volume.volume-empty')}</>
-                }
+                } */}
+               
             </section>
         </div>)
 };
 
 
-export default MangaChapterInfo;
+export default MangaChapterSetting;
