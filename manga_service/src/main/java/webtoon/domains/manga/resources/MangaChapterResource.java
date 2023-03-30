@@ -52,7 +52,7 @@ public class MangaChapterResource {
 			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getName() + "%"),
 					criteriaBuilder.like(root.get("content"), "%" + filterModel.getContent() + "%"),
 					criteriaBuilder.like(root.get("chapterIndex"), "%" + filterModel.getChapterIndex() + "%"),
-					criteriaBuilder.like(root.get("requiredVip"), "%" + filterModel.getRequiredVip() + "%")
+					criteriaBuilder.like(root.get("requiredVip"), "%" + filterModel.getIsRequiredVip() + "%")
 
 			);
 		};

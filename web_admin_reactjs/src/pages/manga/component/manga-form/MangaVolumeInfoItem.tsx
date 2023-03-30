@@ -1,9 +1,11 @@
 import { DeleteOutlined, DownOutlined } from "@ant-design/icons";
 import { Button, Checkbox, Collapse, Popconfirm } from "antd";
+import { AxiosResponse } from "axios";
 import { MouseEventHandler, ReactEventHandler, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Sortable from "sortablejs";
-import { MangaInput } from "../../../../services/manga/MangaService";
+import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
+import ChapterInfoItem from "./ChapterInfoItem";
 import { VolumeForm } from "./MangaAddEditVolumeModal";
 import { MangaVolumeType, VolumeType } from "./MangaChapterInfo";
 import MangaUploadChapterModal from "./MangaUploadChapterModal";
@@ -17,11 +19,20 @@ type MangaVolumeInfoItemProps = {
     editVolume: (volume: VolumeForm) => void
 }
 export type ChapterType = {
-    id: string | number;
+    id?: string | number;
     name: string;
     chapterIndex?: number;
+    isRequiredVip: boolean;
+    content?: string
+    volumeId?: string | number;
+    chapterImages?: ChapterImageType[];
 }
 
+type ChapterImageType = {
+    id: string | number;
+    image: string;
+    imageIndex: number;
+}
 
 const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVolumeInfoItemProps) => {
     const { t } = useTranslation();
@@ -29,23 +40,30 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
     // begin chapter modal
     const [showUploadChapterModal, setShowUploadChapterModal] = useState<boolean>(false);
     const [uploadChapterModalTitle, setUploadChapterModalTitle] = useState<string>('');
+    const [chapterInput, setChapterInput] = useState<ChapterType>();
+
+    const onAddEditChapterOk = (chapter: ChapterType) => {
+        console.log('on ok chapter modal ', chapter);
+        if (chapterInput)
+            setChapterData(chapterData.map((item) => item.id === chapterInput.id ? chapter : item));
+        else
+            setChapterData([chapter, ...chapterData]);
+        setShowUploadChapterModal(false);
+    }
     // end chapter modal
 
-    const volumeContainerRef = useRef<HTMLDivElement>(null);
-
-
-    const onDeleleChapter = (chapter: ChapterType) => {
-
-    }
-
-    const showEditChapterModal = (e: any) => {
+    const showEditChapterModal = (e: any, chapter: ChapterType) => {
         console.log('e', e.target.className);
         if (e.target.className.indexOf('chapter-item') !== -1) {
-    
             setShowUploadChapterModal(true);
-            setUploadChapterModalTitle('Edit chapter');
+            setUploadChapterModalTitle(`${t('manga.form.chapter.edit-chapter-btn')} (${t('manga.form.chapter.chapter')} ${(chapter.chapterIndex || 0)+1})`);
+            setChapterInput(chapter);
         }
     }
+
+
+    const [chapterData, setChapterData] = useState<ChapterType[]>([]);
+    const volumeContainerRef = useRef<HTMLDivElement>(null);
 
     const [openPanel, setOpenPanel] = useState<boolean>(false);
     let chapterSortable: Sortable;
@@ -62,7 +80,17 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
                     event.newIndex
                 },
             });
-            props.mangaInput.mangaType = "IMAGE"
+
+        console.log('volume', props.volume);
+
+        mangaService.getChapterByVolumeId(props.volume.id)
+            .then((res: AxiosResponse<ChapterType[]>) => {
+                setChapterData(res.data);
+                // console.log('chapter data', res);
+            })
+            .catch((err) => { })
+
+        props.mangaInput.mangaType = "TEXT";
     }, [])
 
     return <>
@@ -82,8 +110,11 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
                     <Button onClick={(e) => {
                         e.stopPropagation();
                         setShowUploadChapterModal(true);
-                        setUploadChapterModalTitle('Upload chapter');
-                    }} size='small'>Add chapter</Button>
+                        setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+
+                    }} size='small'>
+                        {t('manga.form.chapter.add-chapter-btn')}
+                    </Button>
                     {/* 
                             <Button  onClick={(e) => {
                                 e.stopPropagation();
@@ -95,47 +126,27 @@ const MangaVolumeInfoItem: React.FC<MangaVolumeInfoItemProps> = (props: MangaVol
             </div>
 
             <div ref={volumeContainerRef} className={'py-[10px] px-[15px] duration-200 ease-in-out' + (openPanel ? '' : ' hidden')}>
-                <div className="chapter-item flex justify-between items-center rounded cursor-pointer p-[5px] hover:bg-slate-200 ease-in-out duration-150" onClick={showEditChapterModal}>
-                    <div className="chapter-title flex space-x-2 items-center">
-                        <Checkbox />
-                        <span>chap 0</span>
-                    </div>
-                    <Popconfirm
-                        title={t('manga.form.chapter.sure-delete')}
-                        onConfirm={(e) => {
-                            e?.stopPropagation();
-                            onDeleleChapter({} as ChapterType)
-                        }}
-                        okText={t('confirm-yes')}
-                        cancelText={t('confirm-no')}
-                    >
-                        <DeleteOutlined onClick={e => e.stopPropagation()} className="hover:text-red-500" />
-                    </Popconfirm>
-                </div>
 
-                <div className="chapter-item flex justify-between items-center rounded cursor-pointer p-[5px] hover:bg-slate-200 ease-in-out duration-150" onClick={showEditChapterModal}>
-                    <div className="chapter-title flex space-x-2 items-center">
-                        <Checkbox />
-                        <span>chap 0</span>
-                    </div>
-                    <Popconfirm
-                        title={t('manga.form.chapter.sure-delete')}
-                        onConfirm={(e) => {
-                            e?.stopPropagation();
-                            onDeleleChapter({} as ChapterType)
-                        }}
-                        okText={t('confirm-yes')}
-                        cancelText={t('confirm-no')}
-                    >
-                        <DeleteOutlined onClick={e => e.stopPropagation()} className="hover:text-red-500" />
-                    </Popconfirm>
-                </div>
-
+                {
+                    chapterData.length > 0 ? chapterData.map((chapter: ChapterType, index: number) => (
+                        <ChapterInfoItem key={index} mangaInput={props.mangaInput} chapter={chapter} index={index} showEditChapterModal={showEditChapterModal} />
+                    ))
+                        :
+                        <>{t('manga.form.chapter.empty-chapter')}</>
+                }
             </div>
         </div>
 
         {
-            showUploadChapterModal && <MangaUploadChapterModal visible={showUploadChapterModal} onOk={() => { }} onCancel={() => { setShowUploadChapterModal(false) }} title={uploadChapterModalTitle} mangaInput={props.mangaInput} />
+            showUploadChapterModal && <MangaUploadChapterModal
+                visible={showUploadChapterModal}
+                onOk={onAddEditChapterOk}
+                onCancel={() => { setShowUploadChapterModal(false) }}
+                title={uploadChapterModalTitle}
+                mangaInput={props.mangaInput}
+                chapterInput={chapterInput}
+                volumeId={props.volume.id}
+            />
         }
 
     </>

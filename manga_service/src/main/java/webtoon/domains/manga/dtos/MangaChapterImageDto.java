@@ -16,7 +16,7 @@ import webtoon.domains.manga.entities.MangaChapterImageEntity;
 public class MangaChapterImageDto {
 	private Long id;
 	
-	private MangaChapterEntity mangaChapterId;
+	private Long mangaChapterId;
 	
 	private String image;
 	
@@ -27,7 +27,7 @@ public class MangaChapterImageDto {
 		
 		return MangaChapterImageDto.builder()
 				.id(mangaEntity.getId())
-				.mangaChapterId(mangaEntity.getMangaChapter())
+				.mangaChapterId(mangaEntity.getMangaChapter().getId())
 				.image(mangaEntity.getImage())
 				.imageIndex(mangaEntity.getImageIndex())
 				.build();

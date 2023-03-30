@@ -2,6 +2,7 @@ import { DeleteOutlined } from "@ant-design/icons";
 import { RichTextEditorComponent } from "@syncfusion/ej2-react-richtexteditor";
 import { Button, Checkbox, Input, Modal } from "antd";
 import { CheckboxChangeEvent } from "antd/es/checkbox";
+import { AxiosResponse } from "axios";
 import React, { Suspense, useEffect, useRef, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
@@ -9,16 +10,19 @@ import Sortable from "sortablejs";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
+import { ChapterType } from "./MangaVolumeInfoItem";
 
 type MangaUploadChapterModalProps = {
     mangaInput: MangaInput,
     visible: boolean,
-    onOk: Function,
+    onOk: (chapterInput: ChapterType) => void,
     onCancel: Function,
     title: string,
+    chapterInput?: ChapterType,
+    volumeId: string | number,
 }
 
-interface ChapterInput {
+interface ChapterForm {
     volume: number,
     chapterName: string,
     chapterIndex?: number,
@@ -41,7 +45,7 @@ type ImageChapterFileType = {
 type CreateImageHtmlElementProps = {
     file: ImageChapterFileType,
     index: number,
-    removeImage: Function
+    removeImage: Function,
 }
 
 const CreateImageHtmlElement: React.FC<CreateImageHtmlElementProps> = ({ file, index, removeImage }: CreateImageHtmlElementProps) => {
@@ -87,7 +91,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 if (file.size > 100000000) {
                     dispatch(showNofification({
                         type: 'error',
-                        message: t('manga.form.errors.file-size-exceed'),
+                        message: t('manga.form.chapter.errors.file-size-exceed'),
                     }));
                     return;
                 }
@@ -96,13 +100,20 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
                     dispatch(showNofification({
                         type: 'error',
-                        message: t('manga.form.errors.only-text-allowed'),
+                        message: t('manga.form.chapter.errors.only-txt-allowed'),
                     }));
                     return;
                 }
 
                 const reader = new FileReader();
                 reader.onload = (e) => {
+                    if ((reader.result?.toString().length || 0) > 5000) {
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('manga.form.chapter.errors.exceed-character'),
+                        }));
+                        return;
+                    }
                     const content = reader.result;
                     console.log('content', reader);
                     if (content) {
@@ -169,11 +180,14 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     }
 
     // begin chapter input
-    const [chapterInput, setChapterInput] = useState<ChapterInput>({
-        volume: 0,
-        chapterName: '',
+    const [chapterInput, setChapterInput] = useState<ChapterType>({
+        id: '',
+        name: '',
         chapterIndex: 0,
-        chapterContent: '',
+        content: '',
+        chapterImages: [],
+        isRequiredVip: false,
+        volumeId: props.volumeId,
     });
 
     const [chapterInputError, setChapterInputError] = useState<ChapterInputError>({
@@ -184,10 +198,13 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
     const resetChapterInput = () => {
         setChapterInput({
-            volume: 0,
-            chapterName: '',
+            id: '',
+            name: '',
             chapterIndex: 0,
-            chapterContent: '',
+            content: '',
+            chapterImages: [],
+            isRequiredVip: false,
+            volumeId: props.volumeId,
         });
         setChapterInputError({
             chapterName: '',
@@ -204,7 +221,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         console.log('on create chapter', imageChapterFiles);
 
         let errorCount = 0;
-        if (!chapterInput.chapterName) {
+        if (!chapterInput.name) {
             chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
             errorCount++;
         }
@@ -221,7 +238,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             const chapterContent = chapterContentEditorRef?.getHtml() || '';
             setChapterInput({
                 ...chapterInput,
-                chapterContent: chapterContent
+                content: chapterContent
             });
             if (!chapterContent) {
                 chapterInputError.chapterContent = 'manga.form.errors.chapter-content-required';
@@ -232,27 +249,23 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         setChapterInputError({ ...chapterInputError });
 
         if (errorCount === 0) {
+            console.log('adding chapter: ', chapterInput.volumeId);
             setIsCreatingChapter(true);
             if (props.mangaInput.mangaType === 'IMAGE') {
                 console.log('create image chapter');
 
                 const formdata = new FormData();
-                formdata.append('chapterIndex', chapterInput.chapterIndex ? chapterInput.chapterIndex.toString() : '0');
-                formdata.append('chapterName', chapterInput.chapterName);
+                formdata.append('chapterIndex', chapterInput?.chapterIndex?.toString() || '0');
+                formdata.append('chapterName', chapterInput.name);
                 formdata.append('isRequiredVip', isRequireVipChapter.toString());
-                formdata.append('volumeID', chapterInput.volume.toString());
-                formdata.append('mangaID', props.mangaInput.id.toString());
-
-                //  formdata.append('volumeID', '8');
-                // formdata.append('mangaID', '1');
-
+                formdata.append('volumeId', chapterInput?.volumeId?.toString() || '0');
                 document.querySelectorAll('#chapter-images-list > div').forEach((item) => {
                     // @ts-ignore
                     formdata.append('files', item.chapterFile.file);
                 });
 
                 mangaService
-                    .createImageChapter(formdata)
+                    .createImageChapter(formdata, props.mangaInput.id)
                     .then((res) => {
                         console.log('create image chapter success:', res.data);
                         dispatch(showNofification({
@@ -276,19 +289,18 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             else if (props.mangaInput.mangaType === 'TEXT') {
                 mangaService.createTextChapter({
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
-                    chapterName: chapterInput.chapterName,
-                    chapterContent: chapterInput.chapterContent,
+                    name: chapterInput.name,
+                    content: chapterInput.content,
                     isRequiredVip: isRequireVipChapter,
-                    volumeID: chapterInput.volume,
-                    // mangaID: props.mangaInput.id || 1
-                    mangaID: 1
-                })
-                    .then((res) => {
+                    volumeId: chapterInput.volumeId || 0,
+                }, props.mangaInput.id)
+                    .then((res: AxiosResponse<ChapterType>) => {
                         console.log('create text chapter success:', res.data);
                         dispatch(showNofification({
                             type: 'success',
                             message: t('manga.form.success.create-chapter')
                         }));
+                        props.onOk(res.data)
                         resetChapterInput();
                     })
                     .catch((err) => {
@@ -319,7 +331,11 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         let imageChapterContainer: HTMLElement | null = document.getElementById('chapter-images-list');
         if (imageChapterContainer)
             imageChapterSorter = Sortable.create(imageChapterContainer);
-        setMangaTextChapter('');
+
+        if (!props.chapterInput)
+            resetChapterInput();
+        else
+            setChapterInput(props.chapterInput);
 
     }, [props.visible]);
 
@@ -327,95 +343,94 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     return <>
         <Modal width={'60%'} title={<h3 className="text-2xl">{props.title}</h3>}
             open={props.visible}
-            onOk={() => { props.onOk() }}
+            onOk={() => { }}
             onCancel={() => props.onCancel()}
             footer={null}
         >
-        <section className="py-[20px]">
-            <h3 className="text-2xl">Add new chapter{props.title}</h3>
-            <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                <span className='text-red-500'>*</span>
-                <span> Chapter name:</span>
-            </label>
-            <Input placeholder="enter your chapter name" value={chapterInput.chapterName} onChange={val => setChapterInput({ ...chapterInput, chapterName: val.target.value })} />
+            <section className="py-[20px]">
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                    <span className='text-red-500'>*</span>
+                    <span> Chapter name:</span>
+                </label>
+                <Input placeholder="enter your chapter name" value={chapterInput.name} onChange={val => setChapterInput({ ...chapterInput, name: val.target.value })} />
+                {
+                    <p className='text-[12px] text-red-500 px-[5px] m-0'>
+                        {chapterInputError.chapterName && t(chapterInputError.chapterName)}
+                    </p>
+                }
+            </section>
+
+            <section className="flex items-center space-x-3">
+                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                    <span> Require vip:</span>
+                </label>
+                <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.checked)} />
+            </section>
+
+            {/* for text chapter content */}
             {
-                <p className='text-[12px] text-red-500 px-[5px] m-0'>
-                    {chapterInputError.chapterName && t(chapterInputError.chapterName)}
-                </p>
+                props.mangaInput.mangaType === 'TEXT' &&
+                <section >
+                    <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                        <span className='text-red-500'>*</span>
+                        <span> Chapter content:</span>
+                    </label>
+
+                    <a className="mb-[10px] w-fit text-[12px]" onClick={uploadTextChapterByFile}>Upload text file (Support .txt)</a>
+
+                    <div className=''>
+                        <RichtextEditorForm onReady={onReadyMangaContentEditor} toolbarSettings={{}} />
+                    </div>
+
+                    {
+                        <p className='text-[12px] text-red-500 px-[5px]  m-0'>
+                            {chapterInputError.chapterContent && t(chapterInputError.chapterContent)}
+                        </p>
+                    }
+                </section>
             }
-        </section>
 
-        <section className="flex items-center space-x-3">
-            <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
-                <span> Require vip:</span>
-            </label>
-            <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.checked)} />
-        </section>
+            {/* for image chapter content */}
 
-        {/* for text chapter content */}
-        {
-            props.mangaInput.mangaType === 'TEXT' &&
-            <section >
-                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                    <span className='text-red-500'>*</span>
-                    <span> Chapter content:</span>
-                </label>
+            {
+                props.mangaInput.mangaType === 'IMAGE' &&
+                <section >
+                    <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                        <span className='text-red-500'>*</span>
+                        <span> Chapter Image:</span>
+                    </label>
 
-                <a className="mb-[10px] w-fit text-[12px]" onClick={uploadTextChapterByFile}>Upload text file (Support .txt)</a>
+                    <a className="mb-[10px] block text-[12px] underline" onClick={uploadImageChapter}>Upload image (maximum 30files), all files aren't format will be discard</a>
 
-                <div className=''>
-                     <RichtextEditorForm onReady={onReadyMangaContentEditor} toolbarSettings={{}} />
-                </div>
+                    <div id="chapter-images-list" className="flex flex-wrap gap-[5px]">
+                        {imageChapterFiles && imageChapterFiles.length > 0 && (
+                            imageChapterFiles.map((item, index) => (
+                                <CreateImageHtmlElement file={item} index={index} removeImage={deleteImageChapterFile} />
+                                // <li key={index}>
+                                //         <span>{file.name}</span>
+                                //         <DeleteOutlined onClick={() => deleteImageChapterFile(index)} className="px-[5px] hover:text-red-500 cursor-pointer" />
+                                //     </li>
+                            ))
+                        )}
+                    </div>
 
-                {
-                    <p className='text-[12px] text-red-500 px-[5px]  m-0'>
-                        {chapterInputError.chapterContent && t(chapterInputError.chapterContent)}
-                    </p>
-                }
-            </section>
-        }
+                    {
+                        <p className='text-[12px] text-red-500 px-[5px]  m-0'>
+                            {chapterInputError.chapterImages && t(chapterInputError.chapterImages)}
+                        </p>
+                    }
+                </section>
+            }
 
-        {/* for image chapter content */}
+            <div className="flex space-x-2 justify-end">
+                <Button type="primary" className="w-fit mt-[10px]" onClick={resetChapterInput} loading={isCreatingChapter}>
+                    {t('reset')}
+                </Button>
 
-        {
-            props.mangaInput.mangaType === 'IMAGE' &&
-            <section >
-                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                    <span className='text-red-500'>*</span>
-                    <span> Chapter Image:</span>
-                </label>
-
-                <a className="mb-[10px] block text-[12px] underline" onClick={uploadImageChapter}>Upload image (maximum 30files), all files aren't format will be discard</a>
-
-                <div id="chapter-images-list" className="flex flex-wrap gap-[5px]">
-                    {imageChapterFiles && imageChapterFiles.length > 0 && (
-                        imageChapterFiles.map((item, index) => (
-                            <CreateImageHtmlElement file={item} index={index} removeImage={deleteImageChapterFile} />
-                            // <li key={index}>
-                            //         <span>{file.name}</span>
-                            //         <DeleteOutlined onClick={() => deleteImageChapterFile(index)} className="px-[5px] hover:text-red-500 cursor-pointer" />
-                            //     </li>
-                        ))
-                    )}
-                </div>
-
-                {
-                    <p className='text-[12px] text-red-500 px-[5px]  m-0'>
-                        {chapterInputError.chapterImages && t(chapterInputError.chapterImages)}
-                    </p>
-                }
-            </section>
-        }
-
-        <div className="flex space-x-2 justify-end">
-            <Button type="primary" className="w-fit mt-[10px]" onClick={resetChapterInput} loading={isCreatingChapter}>
-                Reset
-            </Button>
-
-            <Button type="primary" className="w-fit mt-[10px]" onClick={onCreateChapter} loading={isCreatingChapter}>
-                Create chapter
-            </Button>
-        </div>
+                <Button type="primary" className="w-fit mt-[10px]" onClick={onCreateChapter} loading={isCreatingChapter}>
+                    {t('manga.form.chapter.save-chapter-btn')}
+                </Button>
+            </div>
 
         </Modal>
     </>

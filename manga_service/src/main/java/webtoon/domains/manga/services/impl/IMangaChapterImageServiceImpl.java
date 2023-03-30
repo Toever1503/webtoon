@@ -24,7 +24,7 @@ public class IMangaChapterImageServiceImpl implements IMangaChapterImageService 
 		MangaChapterImageEntity entity = MangaChapterImageEntity.builder().mangaChapter(model.getMangaChapterId())
 				.image(model.getImage()).imageIndex(model.getImageIndex()).build();
 		this.chapterImageRepository.saveAndFlush(entity);
-		return MangaChapterImageDto.builder().mangaChapterId(entity.getMangaChapter()).image(entity.getImage())
+		return MangaChapterImageDto.builder().mangaChapterId(entity.getMangaChapter().getId()).image(entity.getImage())
 				.imageIndex(entity.getImageIndex()).build();
 	}
 
@@ -37,7 +37,7 @@ public class IMangaChapterImageServiceImpl implements IMangaChapterImageService 
 		chapterImageRepository.saveAndFlush(entity);
 
 		return MangaChapterImageDto.builder().image(entity.getImage()).imageIndex(entity.getImageIndex())
-				.mangaChapterId(entity.getMangaChapter()).build();
+				.mangaChapterId(entity.getMangaChapter().getId()).build();
 	}
 
 	@Override

@@ -78,6 +78,7 @@ const MangaChapterInfo: React.FC<MangaChapterInfoProps> = (props: MangaChapterIn
         setTimeout(() => {
             setShowAddEditVolumModal(false);
         }, 50);
+        setVolumeInput(undefined);
         console.log('modal status: ', showAddEditVolumeModal);
     }
 

@@ -17,7 +17,8 @@ export default {
                 'chapter-images-required': 'Chapter image is required',
                 'chapter-content-required': 'Chapter content is required',
                 'add-failed': 'Thêm thất bại!',
-                'add-success': 'Thêm thành công!'
+                'add-success': 'Thêm thành công!',
+               
             },
             volume: {
                 'volume': 'Tập',
@@ -41,10 +42,23 @@ export default {
                 }
             },
             chapter: {
+                'chapter': 'Chương',
+                'add-chapter': 'Thêm chương mới',
                 'sure-delete': 'Bạn chăc chắn muốn xóa chương này?',
+                'save-chapter-btn': 'Lưu',
+                'add-chapter-btn': 'Thêm chương',
+                'edit-chapter-btn': 'Chỉnh sửa',
+                'empty-chapter': 'Hiện chưa có chương nào!',
+                errors: {
+                    'file-size-exceed': 'Kích thước file không được vượt quá 5MB!',
+                    'exceed-character': 'Số ký tự không được vượt quá 5000 ký tự!',
+                    'only-txt-allowed': 'Chỉ được tải file txt!',
+                }
+
             }
         }
     },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
+    'reset': 'Làm mới'
 }

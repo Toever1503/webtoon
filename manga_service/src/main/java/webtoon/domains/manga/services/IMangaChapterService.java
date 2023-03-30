@@ -22,7 +22,9 @@ public interface IMangaChapterService {
 
 	Page<MangaChapterDto> filter(Pageable pageable, Specification<MangaChapterEntity> specs);
 
-    void createTextChapter(MangaUploadChapterInput input);
+	MangaChapterDto createTextChapter(MangaUploadChapterInput input);
 
-	Long createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles);
+	MangaChapterDto createImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles);
+
+    List<MangaChapterDto> getAllByVolumeId(Long id);
 }

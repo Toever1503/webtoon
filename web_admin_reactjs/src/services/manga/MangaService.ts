@@ -1,5 +1,6 @@
 import { Dayjs } from "dayjs";
 import { VolumeForm } from "../../pages/manga/component/manga-form/MangaAddEditVolumeModal";
+import { ChapterType } from "../../pages/manga/component/manga-form/MangaVolumeInfoItem";
 import { mangaAxios } from "../config/MangaAxios";
 
 const basePath: String = "/manga";
@@ -25,24 +26,24 @@ export type MangaStatus = 'PUBLISHED' | 'DELETED' | 'DRAFTED';
 export type ReleaseStatus = 'COMING' | 'GOING' | 'STOPPED' | 'CANCELLED' | 'COMPLETED';
 export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 
-export type MangaChapterInput = {
-    id?: number | string;
-    mangaID: number | string;
-    volumeID: number | string;
-    chapterName: string;
-    chapterIndex: number;
-    isRequiredVip: boolean;
-    chapterContent?: string;
-    chapterImages?: string[];
-}
+// export type MangaChapterInput = {
+//     id?: number | string;
+//     mangaID: number | string;
+//     volumeID: number | string;
+//     chapterName: string;
+//     chapterIndex: number;
+//     isRequiredVip: boolean;
+//     chapterContent?: string;
+//     chapterImages?: string[];
+// }
 
 const addMangaInfo = async (model: MangaInput) => mangaAxios.post(`${basePath}`, model);
 const updateMangaInfo = async (model: MangaInput) => mangaAxios.put(`${basePath}/${model.id}`, model);
 const setMangaType = async (id: number | string, type: MangaType) => mangaAxios.patch(`${basePath}/set-type/${id}?type=${type}`);
 const deleteMangaInfo = async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
-const createTextChapter = async (model: MangaChapterInput) => mangaAxios.post(`${basePath}/chapter/create-text-chapter`, model);
-const createImageChapter = async (model: FormData) => mangaAxios.post(`${basePath}/chapter/create-image-chapter`, model);
+const createTextChapter = async (model: ChapterType, mangaId: number | string) => mangaAxios.post(`${basePath}/chapter/create-text-chapter?mangaId=${mangaId}`, model);
+const createImageChapter = async (model: FormData, mangaId: number | string) => mangaAxios.post(`${basePath}/chapter/create-image-chapter?mangaId=${mangaId}`, model);
 
 const reIndexChapter = async (chapterId: number | string, index: number) => mangaAxios.patch(`${basePath}/chapter/re-index-chapter/${chapterId}?index=${index}`);
 
@@ -58,6 +59,11 @@ const createNewVolume = async (input: MangaVolumeInput) => mangaAxios.post(`${ba
 const updateVolume = async (id: number | string, input: VolumeForm) => mangaAxios.post(`${basePath}/volume/${id}`, input);
 
 
+// for chapter
+const getChapterByVolumeId = async (volumeId: number | string) => mangaAxios.get(`${basePath}/chapter/get-all-by-volume/${volumeId}`);
+
+
+
 const mangaService = {
     addMangaInfo,
     updateMangaInfo,
@@ -67,7 +73,8 @@ const mangaService = {
     createImageChapter,
     createNewVolume,
     updateVolume,
-    getVolumeForManga
+    getVolumeForManga,
+    getChapterByVolumeId
 };
 
 export default mangaService;
