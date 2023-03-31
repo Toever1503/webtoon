@@ -1,10 +1,15 @@
 package webtoon.domains.manga.resources2;
 
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
+import webtoon.domains.manga.dtos.MangaVolumeDto;
+import webtoon.domains.manga.models.MangaChapterFilterInput;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
+import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.services.IMangaChapterService;
 
 import java.io.IOException;
@@ -40,4 +45,9 @@ public class MangaChapterResource2 {
         return this.mangaChapterService.getAllByVolumeId(id);
     }
 
+    @PostMapping("filter")
+    public Page<MangaChapterDto> getAllVolForManga(@RequestBody MangaChapterFilterInput input, Pageable pageable) {
+        Page<MangaChapterDto> chapter = this.mangaChapterService.filterChapter(pageable, input);
+        return chapter;
+    }
 }

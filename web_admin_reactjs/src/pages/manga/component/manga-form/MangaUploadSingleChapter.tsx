@@ -80,7 +80,7 @@ const MangaUploadSingleChapter: React.FC<MangaUploadSingleChapterProps> = (props
 
     useEffect(() => {
         mangaService
-            .getVolumeForManga(1)
+            .filterVolume(1)
             .then((res: AxiosResponse<MangaVolumeOptionType[]>) => {
                 setVolumeOptions(res.data);
             })

@@ -17,7 +17,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-@Entity
+@Entity(name = "tbl_manga_volume_entity")
 @Table(name = "tbl_manga_volume_entity")
 @Getter
 @Setter

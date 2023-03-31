@@ -8,6 +8,7 @@ import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaChapterImageEntity;
+import webtoon.domains.manga.models.MangaChapterFilterInput;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
 
@@ -34,4 +35,6 @@ public interface IMangaChapterService {
     List<MangaChapterDto> getAllByVolumeId(Long id);
 
 	MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId);
+
+    Page<MangaChapterDto> filterChapter(Pageable pageable, MangaChapterFilterInput input);
 }

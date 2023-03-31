@@ -54,7 +54,14 @@ const createImageChapter = async (model: FormData, mangaId: number | string) => 
 
 const reIndexChapter = async (chapterId: number | string, index: number) => mangaAxios.patch(`${basePath}/chapter/re-index-chapter/${chapterId}?index=${index}`);
 
-const getVolumeForManga = (mangaId: number | string) => mangaAxios.get(`${basePath}/volume/get-all-for-manga/${mangaId}`);
+export interface VolumeFilterInput {
+    mangaId: number | string;
+    q?: string;
+    volumeIndex?: number;
+}
+
+const filterVolume = (input: VolumeFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/volume/filter?page=${page}&size=${size}&sort=id,desc`, input);
+const getLastVolIndex = (mangaId: number | string) => mangaAxios.get(`${basePath}/volume/get-last-vol-index/${mangaId}`);
 
 type MangaVolumeInput = {
     id?: number | string;
@@ -81,8 +88,9 @@ const mangaService = {
     createImageChapter,
     createNewVolume,
     updateVolume,
-    getVolumeForManga,
-    getChapterByVolumeId
+    filterVolume,
+    getChapterByVolumeId,
+    getLastVolIndex
 };
 
 export default mangaService;

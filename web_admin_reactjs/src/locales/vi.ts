@@ -51,7 +51,7 @@ export default {
                 'empty-chapter': 'Hiện chưa có chương nào!',
                 errors: {
                     'file-size-exceed': 'Kích thước file không được vượt quá 5MB!',
-                    'exceed-character': 'Số ký tự không được vượt quá 5000 ký tự!',
+                    'exceed-character': 'Số ký tự không được vượt quá 30000 ký tự!',
                     'only-txt-allowed': 'Chỉ được tải file txt!',
                 }
 

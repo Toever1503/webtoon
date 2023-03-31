@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.models.MangaVolumeModel;
 
 public interface IMangaVolumeService {
@@ -21,4 +22,8 @@ public interface IMangaVolumeService {
     MangaVolumeEntity getById(Long id);
 
     MangaVolumeDto findById(Long id);
+
+    Page<MangaVolumeDto> filterVolume(Pageable pageable, MangaVolumeFilterInput input);
+
+	MangaVolumeDto getLastVolIndex(Long mangaId);
 }

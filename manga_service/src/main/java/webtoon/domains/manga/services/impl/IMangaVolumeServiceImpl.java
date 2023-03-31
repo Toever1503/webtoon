@@ -2,17 +2,23 @@ package webtoon.domains.manga.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.models.MangaVolumeModel;
 import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Transactional
@@ -29,8 +35,11 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
         MangaVolumeEntity entity = MangaVolumeEntity.builder()
                 .manga(mangaService.getById(model.getMangaId()))
                 .name(model.getName()).build();
-        Long volumeIndex = this.mangaVolumeRepository.getLastIndex(model.getMangaId()).orElse(-1L);
-        entity.setVolumeIndex(volumeIndex.intValue() + 1);
+        MangaVolumeDto lastVolume = this.getLastVolIndex(model.getMangaId());
+        if (lastVolume == null)
+            entity.setVolumeIndex(0);
+        else
+            entity.setVolumeIndex(lastVolume.getVolumeIndex() + 1);
         mangaVolumeRepository.saveAndFlush(entity);
         return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(model.getName())
                 .volumeIndex(model.getVolumeIndex()).build();
@@ -62,15 +71,49 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
         return mangaVolumeRepository.findAll(specs, pageable).map(MangaVolumeDto::toDto);
     }
 
-	@Override
-	public MangaVolumeEntity getById(Long id) {
-		return this.mangaVolumeRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
-	}
+    @Override
+    public MangaVolumeEntity getById(Long id) {
+        return this.mangaVolumeRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
+    }
 
-	@Override
-	public MangaVolumeDto findById(Long id){
-		return MangaVolumeDto.toDto(this.getById(id));
-	}
+    @Override
+    public MangaVolumeDto findById(Long id) {
+        return MangaVolumeDto.toDto(this.getById(id));
+    }
+
+    @Override
+    public Page<MangaVolumeDto> filterVolume(Pageable pageable, MangaVolumeFilterInput input) {
+        if (input.getQ() != null)
+            input.setQ("%" + input.getQ() + "%");
+
+        List<Specification> specs = new ArrayList<>();
+
+        if (input.getQ() != null) {
+            specs.add((root, query, cb) -> cb.like(root.get("name"), input.getQ()));
+        }
+        if (input.getMangaId() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get("manga").get("id"), input.getMangaId()));
+        }
+        if (input.getVolumeIndex() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get("volumeIndex"), input.getVolumeIndex()));
+        }
+        Specification<MangaVolumeEntity> finalSpec = null;
+        for (Specification spec : specs) {
+            if (finalSpec == null) {
+                finalSpec = spec;
+            } else {
+                finalSpec = finalSpec.and(spec);
+            }
+        }
+        return this.mangaVolumeRepository.findAll(finalSpec, pageable).map(MangaVolumeDto::toDto);
+    }
+
+    @Override
+    public MangaVolumeDto getLastVolIndex(Long mangaId) {
+        MangaVolumeEntity entity = this.mangaVolumeRepository.getLastIndex(mangaId).orElse(null);
+        if (entity == null) return null;
+        return MangaVolumeDto.toDto(entity);
+    }
 
 
 }

@@ -107,7 +107,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
                 const reader = new FileReader();
                 reader.onload = (e) => {
-                    if ((reader.result?.toString().length || 0) > 5000) {
+                    if ((reader.result?.toString().length || 0) > 30000) {
                         dispatch(showNofification({
                             type: 'error',
                             message: t('manga.form.chapter.errors.exceed-character'),

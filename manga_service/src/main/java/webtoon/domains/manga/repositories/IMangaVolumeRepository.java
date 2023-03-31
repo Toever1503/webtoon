@@ -14,9 +14,9 @@ import java.util.Optional;
 @Repository
 public interface IMangaVolumeRepository extends JpaRepository<MangaVolumeEntity, Long>, JpaSpecificationExecutor<MangaVolumeEntity>{
 
-    @Query(value = "SELECT volume_index FROM `manga_volume_entity` \n" +
+    @Query(value = "SELECT * FROM `manga_volume_entity` \n" +
             "WHERE manga_id = :mangaId\n" +
             "ORDER BY volume_index desc\n" +
             "LIMIT 0,1", nativeQuery = true)
-    Optional<Long> getLastIndex(@Param("mangaId") Long mangaId);
+    Optional<MangaVolumeEntity> getLastIndex(@Param("mangaId") Long mangaId);
 }

@@ -15,11 +15,13 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
+import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.mappers.MangaChapterMapper;
+import webtoon.domains.manga.models.MangaChapterFilterInput;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
 import webtoon.domains.manga.repositories.IMangaChapterImageRepository;
@@ -30,6 +32,7 @@ import webtoon.domains.manga.services.IMangaService;
 import webtoon.storage.domain.dtos.FileDto;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -246,6 +249,33 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
 
         return chapterDtos;
+    }
+
+    @Override
+    public Page<MangaChapterDto> filterChapter(Pageable pageable, MangaChapterFilterInput input) {
+        if (input.getQ() != null)
+            input.setQ("%" + input.getQ() + "%");
+
+        List<Specification> specs = new ArrayList<>();
+
+        if (input.getQ() != null) {
+            specs.add((root, query, cb) -> cb.like(root.get("name"), input.getQ()));
+        }
+        if (input.getVolumeId() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get("mangaVolume").get("id"), input.getVolumeId()));
+        }
+        if (input.getChapterIndex() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get("chapterIndex"), input.getChapterIndex()));
+        }
+        Specification<MangaChapterEntity> finalSpec = null;
+        for (Specification spec : specs) {
+            if (finalSpec == null) {
+                finalSpec = spec;
+            } else {
+                finalSpec = finalSpec.and(spec);
+            }
+        }
+        return this.chapterRepository.findAll(finalSpec, pageable).map(MangaChapterDto::toDto);
     }
 
 }

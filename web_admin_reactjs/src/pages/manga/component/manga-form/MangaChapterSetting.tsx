@@ -101,7 +101,7 @@ const MangaChapterSetting: React.FC<MangaChapterInfoProps> = (props: MangaChapte
 
         // get volumes 
         mangaService
-            .getVolumeForManga(1)
+            .filterVolume(1)
             .then((res: AxiosResponse<VolumeType[]>) => {
                 console.log('res', res.data);
                 setVolumeOptions(res.data.reverse());

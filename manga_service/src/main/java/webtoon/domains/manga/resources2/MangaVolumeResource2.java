@@ -1,16 +1,12 @@
 package webtoon.domains.manga.resources2;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaVolumeDto;
-import webtoon.domains.manga.entities.MangaEntity;
-import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.models.MangaVolumeModel;
 import webtoon.domains.manga.services.IMangaVolumeService;
-
-import javax.persistence.criteria.Join;
-import java.util.List;
 
 @RestController
 @RequestMapping("api/manga/volume")
@@ -33,19 +29,15 @@ public class MangaVolumeResource2 {
     }
 
 
-    @GetMapping("get-all-for-manga/{id}")
-    public List<MangaVolumeDto> getAllVolForManga(@PathVariable Long id) {
-        Specification<MangaVolumeEntity> spec = ((root, query, cb) -> {
-            Join<MangaEntity, MangaVolumeEntity> join = root.join("manga");
-            return cb.equal(join.get("id"), id);
-        });
-        List<MangaVolumeDto> volumeDtoList = this.mangaVolumeService.filter(PageRequest.of(0, 9999), spec).toList();
-//        if (volumeDtoList.size() == 0)
-//            volumeDtoList = List.of(this.mangaVolumeService.add(MangaVolumeModel.builder()
-//                    .mangaId(id)
-//                    .name("Volume 1")
-//                    .volumeIndex(0)
-//                    .build()));
+    @PostMapping("filter")
+    public Page<MangaVolumeDto> getAllVolForManga(@RequestBody MangaVolumeFilterInput input, Pageable pageable) {
+        Page<MangaVolumeDto> volumeDtoList = this.mangaVolumeService.filterVolume(pageable, input);
         return volumeDtoList;
     }
+
+    @GetMapping("get-last-vol-index/{id}")
+    public MangaVolumeDto getLastVolIndex(@PathVariable Long id) {
+        return this.mangaVolumeService.getLastVolIndex(id);
+    }
+
 }

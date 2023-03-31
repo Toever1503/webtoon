@@ -1,7 +1,9 @@
 import { NotificationOutlined } from "@ant-design/icons";
-import { Badge, Button, List, Pagination, Select, Skeleton, Spin, TablePaginationConfig } from "antd";
-import { useState } from "react";
+import { Badge, Button, Input, List, Pagination, Select, Skeleton, Spin, TablePaginationConfig } from "antd";
+import { AxiosResponse } from "axios";
+import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import chapterService from "../../../../services/manga/ChapterService";
 import { MangaInput } from "../../../../services/manga/MangaService";
 import debounce from "../../../../utils/debounce";
 import MangaUploadChapterModal from "../manga-form/MangaUploadChapterModal";
@@ -18,13 +20,11 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
 
     const [lastChapterIndex, setLastChapterIndex] = useState<number>(-1);
     const [chapterData, setChapterData] = useState<ChapterType[]>([]);
+    const [isSearching, setIsSearching] = useState<boolean>(false);
     const [searchChapterVal, setSearchChapterVal] = useState<string>('');
-    const onSearchonSearchChapter = debounce((val: string) => {
-        console.log('search chapter: ', val);
+    const onSearchonSearchChapter = debounce(() => {
+        console.log('search chapter: ', searchChapterVal);
     });
-    const onChangeChapterSelect = (value: string) => { };
-
-
 
 
     // begin chapter modal
@@ -62,37 +62,62 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         pageSize: 10,
         total: 0,
     });
-    return <div className="mt-[20px]">
-        <div className="flex space-x-2 items-center">
-            <label className="w-[100px]">Tìm chương: </label>
-            <Select
-                className="w-[300px]"
-                showSearch
-                value={searchChapterVal}
-                placeholder='Tìm tập'
-                defaultActiveFirstOption={false}
-                showArrow={false}
-                filterOption={false}
-                onSearch={onSearchonSearchChapter}
-                onChange={onChangeChapterSelect}
-                notFoundContent={<span className="inline-block text-center">Hiện chưa có chương nào!</span>}
-                options={(chapterData || []).map((d) => ({
-                    value: d.id,
-                    label: t('manga.form.volume.volume') + ` ${(d.chapterIndex || 0) + 1}` + d.name,
-                }))}
-            />
-            <Button onClick={(e) => {
-                setShowUploadChapterModal(true);
-                setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
 
-            }} >
-                {t('manga.form.chapter.add-chapter-btn')}
-            </Button>
-        </div>
+    const callApiSearchChapter = (page: number, pageSize: number) => { };
+
+    useEffect(() => {
+
+        chapterService.filterChapter({
+            volumeId: props.volumeId,
+        }, 0, 10)
+            .then((res: AxiosResponse<{
+                content: ChapterType[],
+            }>) => {
+                console.log('filter chapter: ', res);
+                setChapterData(res.data.content);
+            });
+    }, []);
+
+    return <div className="mt-[20px]">
+
 
         <div className="rounded mt-[15px]">
             <List
-                header={<div>Danh sách chương:</div>}
+                header={
+                    <div>
+                        <div className="flex space-x-2 items-center justify-between">
+                            <div className="flex space-x-2 items-center">
+                                <label className="mr-[10px]">Danh sách chương: </label>
+                                <Button onClick={(e) => {
+                                    setShowUploadChapterModal(true);
+                                    setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+
+                                }} >
+                                    {t('manga.form.chapter.add-chapter-btn')}
+                                </Button>
+                            </div>
+
+                            <div>
+                                {/* <Select
+                                    className="w-[300px]"
+                                    showSearch
+                                    value={searchChapterVal}
+                                    placeholder="Tìm tập"
+                                    defaultActiveFirstOption={false}
+                                    filterOption={false}
+
+                                   
+                                    notFoundContent={<span className="inline-block text-center">Hiện chưa có chương nào!</span>}
+                                    options={(chapterData || []).map((d) => ({
+                                        value: d.id,
+                                        label: t('manga.form.volume.volume') + ` ${(d.chapterIndex || 0) + 1}` + d.name,
+                                    }))}
+                                /> */}
+
+                                <Input.Search placeholder="Tìm tập" value={searchChapterVal} onChange={e => setSearchChapterVal(e.target.value)} onSearch={onSearchonSearchChapter} />
+                            </div>
+                        </div>
+                    </div>}
                 footer={
                     <>
                         <div className="mx-auto w-fit">
@@ -102,10 +127,11 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                 }
                 // loading={true}
                 bordered
+                loading={isSearching}
                 dataSource={[]}
                 renderItem={(item) => (
                     <div className="p-[10px]">
-                        {/* <ChapterItem chapterInput={chapterInput} mangaInput={props.mangaInput} showEditChapterModal={onShowEditChapterModal} /> */}
+                        <ChapterItem chapterInput={chapterInput} mangaInput={props.mangaInput} showEditChapterModal={onShowEditChapterModal} />
                     </div>
 
                 )}
