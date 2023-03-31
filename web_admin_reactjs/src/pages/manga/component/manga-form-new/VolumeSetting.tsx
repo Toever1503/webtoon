@@ -22,7 +22,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
     const { t } = useTranslation();
 
     const [lastVolIndex, setLastVolIndex] = useState<VolumeType>({
-        volumeIndex: 0,
+        volumeIndex: -1,
         name: '',
         id: ''
     });
@@ -44,7 +44,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             setVolumeInput(volume);
         }
         else
-            setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${lastVolIndex.volumeIndex + 1})`);
+            setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${lastVolIndex.volumeIndex + 2})`);
 
         setShowAddEditVolumModal(true);
     }
@@ -65,6 +65,9 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             }));
         else
             setVolumeData([newVolume, ...volumeData]);
+            console.log('on add: ', newVolume);
+            
+        setLastVolIndex(newVolume);
         closeAddEditVolumeModal();
     }
     // end volume modal
@@ -85,8 +88,8 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
         mangaService.getLastVolIndex(props.mangaInput.id)
             .then((res: AxiosResponse<VolumeType>) => {
                 console.log('last vol index: ', res.data);
-                
-                setLastVolIndex(res.data);
+                if (res.data)
+                    setLastVolIndex(res.data);
             });
 
     }, [])
@@ -139,7 +142,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
 
 
         {
-            selectedVolId && <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} />
+            selectedVolId && <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
         }
 
     </div>

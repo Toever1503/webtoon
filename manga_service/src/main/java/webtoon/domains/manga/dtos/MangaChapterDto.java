@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
 public class MangaChapterDto {
     private Long id;
 
-    private MangaVolumeEntity volumeId;
+    private Long volumeId;
 
     private String name;
 
@@ -37,7 +37,7 @@ public class MangaChapterDto {
 
         return MangaChapterDto.builder()
                 .id(mangaEntity.getId())
-                .volumeId(mangaEntity.getMangaVolume())
+                .volumeId(mangaEntity.getMangaVolume().getId())
                 .name(mangaEntity.getName())
                 .content(mangaEntity.getContent())
                 .chapterIndex(mangaEntity.getChapterIndex())

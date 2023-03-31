@@ -7,7 +7,7 @@ export interface ChapterFilterInput {
     chapterIndex?: number;
 }
 
-const filterChapter = (input: ChapterFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/chapter/filter?page=${page}&size=${size}&sort=id,desc`, input);
+const filterChapter = (input: ChapterFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/chapter/filter/?page=${page}&size=${size}&sort=id,desc`, input);
 
 const chapterService = {
     filterChapter

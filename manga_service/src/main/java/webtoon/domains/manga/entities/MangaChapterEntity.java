@@ -21,14 +21,13 @@ public class MangaChapterEntity {
 	@Column(name = "id")
 	private Long id;
 	
-	@JoinColumn(name = "manga_volume_id")
 	@ManyToOne
 	private MangaVolumeEntity mangaVolume;
 	
 	@Column(name = "name")
 	private String name;
 	
-	@Column(name = "content")
+	@Column(name = "content", columnDefinition = "TEXT")
 	private String content;
 	
 	@Column(name = "chapter_index")

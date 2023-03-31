@@ -3,6 +3,7 @@ import { Badge, Button, Input, List, Pagination, Select, Skeleton, Spin, TablePa
 import { AxiosResponse } from "axios";
 import { ChangeEvent, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { useDispatch } from "react-redux";
 import chapterService from "../../../../services/manga/ChapterService";
 import { MangaInput } from "../../../../services/manga/MangaService";
 import debounce from "../../../../utils/debounce";
@@ -13,10 +14,12 @@ import ChapterItem from "./ChapterItem";
 
 type ChapterSettingProps = {
     mangaInput: MangaInput,
-    volumeId: number | string
+    volumeId: number | string,
+    isShowAddNewChapter: boolean,
 }
 const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProps) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const [lastChapterIndex, setLastChapterIndex] = useState<number>(-1);
     const [chapterData, setChapterData] = useState<ChapterType[]>([]);
@@ -34,20 +37,31 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         id: '',
         name: '',
         chapterIndex: 0,
-        volumeId: '',
+        volumeId: props.volumeId,
         isRequiredVip: false,
     });
 
     const onAddEditChapterOk = (chapter: ChapterType) => {
         console.log('on ok chapter modal ', chapter);
-        if (chapterInput)
+        if (chapterInput.id)
             setChapterData(chapterData.map((item) => item.id === chapterInput.id ? chapter : item));
-        else
-            setChapterData([chapter, ...chapterData]);
+        else {
+            chapterData.unshift(chapter);
+            setChapterData(chapterData);
+        }
+
+        setChapterInput({
+            id: '',
+            name: '',
+            chapterIndex: 0,
+            volumeId: props.volumeId,
+            isRequiredVip: false,
+        })
         setShowUploadChapterModal(false);
     }
     const onShowEditChapterModal = (e: any, chapter: ChapterType) => {
         console.log('e', e.target.className);
+        
         if (e.target.className.indexOf('chapter-item') !== -1) {
             setShowUploadChapterModal(true);
             setUploadChapterModalTitle(`${t('manga.form.chapter.edit-chapter-btn')} (${t('manga.form.chapter.chapter')} ${(chapter.chapterIndex || 0) + 1})`);
@@ -64,6 +78,10 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
     });
 
     const callApiSearchChapter = (page: number, pageSize: number) => { };
+
+    const onChangingPage = () => {
+        console.log('on change page');
+    }
 
     useEffect(() => {
 
@@ -88,13 +106,15 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                         <div className="flex space-x-2 items-center justify-between">
                             <div className="flex space-x-2 items-center">
                                 <label className="mr-[10px]">Danh sách chương: </label>
-                                <Button onClick={(e) => {
-                                    setShowUploadChapterModal(true);
-                                    setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+                                {
+                                    props.isShowAddNewChapter && <Button onClick={(e) => {
+                                        setShowUploadChapterModal(true);
+                                        setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
 
-                                }} >
-                                    {t('manga.form.chapter.add-chapter-btn')}
-                                </Button>
+                                    }} >
+                                        {t('manga.form.chapter.add-chapter-btn')}
+                                    </Button>
+                                }
                             </div>
 
                             <div>
@@ -121,17 +141,17 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                 footer={
                     <>
                         <div className="mx-auto w-fit">
-                            <Pagination current={pageConfig.current} pageSize={pageConfig.pageSize} showSizeChanger={false} total={pageConfig.total} />
+                            <Pagination current={pageConfig.current} pageSize={pageConfig.pageSize} showSizeChanger={false} onChange={onChangingPage} total={pageConfig.total} />
                         </div>
                     </>
                 }
                 // loading={true}
                 bordered
                 loading={isSearching}
-                dataSource={[]}
-                renderItem={(item) => (
+                dataSource={chapterData}
+                renderItem={(item: ChapterType) => (
                     <div className="p-[10px]">
-                        <ChapterItem chapterInput={chapterInput} mangaInput={props.mangaInput} showEditChapterModal={onShowEditChapterModal} />
+                        <ChapterItem chapterInput={item} mangaInput={props.mangaInput} showEditChapterModal={onShowEditChapterModal} />
                     </div>
 
                 )}

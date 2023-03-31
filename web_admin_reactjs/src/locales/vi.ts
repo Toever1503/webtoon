@@ -16,8 +16,10 @@ export default {
                 'chapter-name-required': 'Chapter name is required',
                 'chapter-images-required': 'Chapter image is required',
                 'chapter-content-required': 'Chapter content is required',
-                'add-failed': 'Thêm thất bại!',
-                'add-success': 'Thêm thành công!',
+                'create-failed': 'Thêm thất bại!',
+                'create-success': 'Thêm thành công!',
+                'edit-failed': 'Sửa thất bại!',
+                'edit-success': 'Sửa thành công!',
                
             },
             volume: {

@@ -29,11 +29,11 @@ function getInstance() {
             //     // window.location.href = '/login';
             // }
 
-            if (error.response.data)
-                if (error.response.data.code === "code-4") {
-                    window.location.href =
-                        "/login?redirectTo=" + window.location.pathname;
-                }
+            // if (error.response.data)
+            //     if (error.response.data.code === "code-4") {
+            //         window.location.href =
+            //             "/login?redirectTo=" + window.location.pathname;
+            //     }
             return Promise.reject(error);
         }
     );

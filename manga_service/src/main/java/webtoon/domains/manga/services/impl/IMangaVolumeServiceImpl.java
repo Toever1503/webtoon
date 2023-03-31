@@ -41,8 +41,8 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
         else
             entity.setVolumeIndex(lastVolume.getVolumeIndex() + 1);
         mangaVolumeRepository.saveAndFlush(entity);
-        return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(model.getName())
-                .volumeIndex(model.getVolumeIndex()).build();
+        return MangaVolumeDto.builder().id(entity.getId()).mangaId(entity.getManga().getId()).name(entity.getName())
+                .volumeIndex(entity.getVolumeIndex()).build();
     }
 
     @Override

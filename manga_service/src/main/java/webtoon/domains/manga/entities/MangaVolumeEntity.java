@@ -17,8 +17,8 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-@Entity(name = "tbl_manga_volume_entity")
-@Table(name = "tbl_manga_volume_entity")
+@Entity
+@Table(name = "manga_volume_entity")
 @Getter
 @Setter
 @Builder
@@ -39,7 +39,8 @@ public class MangaVolumeEntity {
 	
 	@Column(name = "volume_index")
 	private Integer volumeIndex;
-	
-	@OneToMany(mappedBy="mangaVolume")
+
+	@JoinColumn(name = "manga_volume_id")
+	@OneToMany
     private Set<MangaChapterEntity> chapterEntities;
 }

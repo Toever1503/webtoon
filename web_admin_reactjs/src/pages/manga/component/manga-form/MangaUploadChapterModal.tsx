@@ -221,6 +221,8 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         console.log('on create chapter', imageChapterFiles);
 
         let errorCount = 0;
+        const chapterContent = chapterContentEditorRef?.getHtml() || '';
+        
         if (!chapterInput.name) {
             chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
             errorCount++;
@@ -235,12 +237,11 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             else chapterInputError.chapterImages = '';
         }
         else if (props.mangaInput.mangaType === 'TEXT') {
-            const chapterContent = chapterContentEditorRef?.getHtml() || '';
             setChapterInput({
                 ...chapterInput,
                 content: chapterContent
             });
-            if (!chapterContent) {
+            if (!chapterContentEditorRef?.getText()) {
                 chapterInputError.chapterContent = 'manga.form.errors.chapter-content-required';
                 errorCount++;
             }
@@ -251,6 +252,8 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         if (errorCount === 0) {
             console.log('adding chapter: ', chapterInput.volumeId);
             setIsCreatingChapter(true);
+            const modalType = chapterInput.id ? 'edit' : 'create';
+
             if (props.mangaInput.mangaType === 'IMAGE') {
                 console.log('create image chapter');
 
@@ -270,7 +273,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                         console.log('create image chapter success:', res.data);
                         dispatch(showNofification({
                             type: 'success',
-                            message: t('manga.form.success.create-chapter')
+                            message: t(`manga.form.errors.${modalType}-success`)
                         }));
                         resetChapterInput();
                     })
@@ -278,7 +281,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                         console.log('create image chapter error:', err);
                         dispatch(showNofification({
                             type: 'error',
-                            message: t('manga.form.errors.create-chapter')
+                            message: t(`manga.form.errors.${modalType}-failed`)
                         }));
                     })
                     .finally(() => {
@@ -287,27 +290,29 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
             }
             else if (props.mangaInput.mangaType === 'TEXT') {
+                
                 mangaService.createTextChapter({
+                    id: chapterInput.id ? chapterInput.id : undefined,
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
                     name: chapterInput.name,
-                    content: chapterInput.content,
+                    content: chapterContent,
                     isRequiredVip: isRequireVipChapter,
                     volumeId: chapterInput.volumeId || 0,
                 }, props.mangaInput.id)
                     .then((res: AxiosResponse<ChapterType>) => {
                         console.log('create text chapter success:', res.data);
+                        props.onOk(res.data);
                         dispatch(showNofification({
                             type: 'success',
-                            message: t('manga.form.success.create-chapter')
+                            message: t(`manga.form.errors.${modalType}-success`)
                         }));
-                        props.onOk(res.data)
                         resetChapterInput();
                     })
                     .catch((err) => {
                         console.log('create text chapter error:', err);
                         dispatch(showNofification({
                             type: 'error',
-                            message: t('manga.form.errors.create-chapter-failed')
+                            message: t(`manga.form.errors.${modalType}-failed`)
                         }))
                     })
                     .finally(() => {

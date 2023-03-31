@@ -70,7 +70,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 .mangaVolume(model.getMangaVolumeId()).content(model.getContent()).chapterIndex(model.getChapterIndex())
                 .requiredVip(model.getRequiredVip()).build();
         this.chapterRepository.saveAndFlush(chapterEntity);
-        return MangaChapterDto.builder().name(chapterEntity.getName()).volumeId(chapterEntity.getMangaVolume())
+        return MangaChapterDto.builder().name(chapterEntity.getName()).volumeId(chapterEntity.getMangaVolume().getId())
                 .chapterIndex(chapterEntity.getChapterIndex()).content(chapterEntity.getContent())
                 .isRequiredVip(chapterEntity.getRequiredVip()).build();
     }
@@ -86,7 +86,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         entity.setRequiredVip(model.getRequiredVip());
         chapterRepository.saveAndFlush(entity);
         return MangaChapterDto.builder().name(entity.getName()).content(entity.getContent())
-                .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume())
+                .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume().getId())
                 .isRequiredVip(entity.getRequiredVip()).build();
     }
 
@@ -109,21 +109,20 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-        MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
-                .orElse(
-                        MangaVolumeEntity.builder()
-                                .name("Volume 1")
-                                .manga(mangaEntity)
-                                .volumeIndex(0)
-                                .build()
-                );
-        this.mangaVolumeRepository.saveAndFlush(volumeEntity);
+//        MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
+//                .orElse(
+//                        MangaVolumeEntity.builder()
+//                                .name("Volume 1")
+//                                .manga(mangaEntity)
+//                                .volumeIndex(0)
+//                                .build()
+//                );
 
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                 .id(input.getId())
                 .name(input.getName())
                 .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
-                .mangaVolume(volumeEntity)
+                .mangaVolume(this.mangaVolumeRepository.getById(input.getVolumeId()))
                 .content(input.getContent())
                 .requiredVip(input.getIsRequiredVip())
                 .build();
@@ -262,7 +261,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
             specs.add((root, query, cb) -> cb.like(root.get("name"), input.getQ()));
         }
         if (input.getVolumeId() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.get("mangaVolume").get("id"), input.getVolumeId()));
+            specs.add((root, query, cb) -> cb.equal(root.join("mangaVolume").get("id"), input.getVolumeId()));
         }
         if (input.getChapterIndex() != null) {
             specs.add((root, query, cb) -> cb.equal(root.get("chapterIndex"), input.getChapterIndex()));
