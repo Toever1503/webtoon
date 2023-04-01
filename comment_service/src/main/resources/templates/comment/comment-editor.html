@@ -4,9 +4,12 @@
 			src="https://i.pravatar.cc/150?img=1">
 	</div>
 	<div class="cmm_editor_right w-full">
+		<form th:action="@{/comment/create}" th:object="${comment}" method="post">
 		<textarea id="comment_value_parent"
 			class="w-full h-[100px] p-2 rounded"
-			style="border: 1px solid gainsboro;" placeholder="Write a comment..."></textarea>
-		<button class="bg-[salmon] text-white m-2 p-[5px] rounded float-right">Post</button>
+			style="border: 1px solid gainsboro;" placeholder="Write a comment..."
+				  th:field="*{content}"></textarea>
+		<button type="submit" class="bg-[salmon] text-white m-2 p-[5px] rounded float-right">Post</button>
+		</form>
 	</div>
 </div>

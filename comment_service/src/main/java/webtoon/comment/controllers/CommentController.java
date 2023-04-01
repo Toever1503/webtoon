@@ -22,6 +22,11 @@ public class CommentController {
             @RequestParam(name = "page", defaultValue = "0") Integer page
     ) {
         model.addAttribute(
+                "comment",
+                new CommentModel()
+        );
+
+        model.addAttribute(
                 "commentPage",
                 this.commentService.findAllById(
                         id,
@@ -39,8 +44,11 @@ public class CommentController {
         return "redirect:/comment/get";
     }
 
-    @PostMapping(value = "edit")
-    public String update(@ModelAttribute CommentModel commentModel) {
+    @PostMapping(value = "edit/{id}")
+    public String update(
+            @PathVariable(name = "id") Long id,
+            @ModelAttribute CommentModel commentModel) {
+        commentModel.setId(id);
         this.commentService.update(commentModel);
 
         return "redirect:/comment/get";

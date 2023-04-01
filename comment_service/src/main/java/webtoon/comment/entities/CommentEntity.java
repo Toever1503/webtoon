@@ -30,6 +30,9 @@ public class CommentEntity {
     @Enumerated(EnumType.STRING)
     private ECommentType commentType;
 
+    @Column(name = "object_id")
+    private Long objectId;
+
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     @CreatedDate
