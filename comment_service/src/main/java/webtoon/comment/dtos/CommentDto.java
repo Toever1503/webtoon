@@ -2,7 +2,6 @@ package webtoon.comment.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
-import webtoon.comment.dtos.UserDto;
 import webtoon.comment.entities.CommentEntity;
 import webtoon.comment.enums.ECommentType;
 
@@ -21,9 +20,9 @@ public class CommentDto {
 
     private final Date modifiedAt;
 
-    private final UserDto createdBy;
+    private final Long createdBy;
 
-    private final UserDto modifiedBy;
+    private final Long modifiedBy;
 
     public static CommentDto toDto(CommentEntity entity) {
         return CommentDto.builder()
@@ -32,12 +31,7 @@ public class CommentDto {
                 .commentType(entity.getCommentType())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
-                .createdBy(
-                        UserDto.toDto(entity.getCreatedBy())
-                )
-                .modifiedBy(
-                        UserDto.toDto(entity.getModifiedBy())
-                )
+
                 .build();
     }
 }

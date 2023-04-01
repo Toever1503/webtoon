@@ -10,7 +10,6 @@ import webtoon.comment.enums.ECommentType;
 import webtoon.comment.models.CommentModel;
 import webtoon.comment.repositories.ICommentRepository;
 import webtoon.comment.services.ICommentService;
-import webtoon.utils.exception.CustomHandleException;
 
 @Service
 @RequiredArgsConstructor
@@ -68,7 +67,7 @@ public class CommentServiceImpl implements ICommentService {
     private CommentEntity getById(Long id) {
         return this.commentRepository.findById(id)
                 .orElseThrow(
-                        () -> new CustomHandleException(0)
+                        () -> new RuntimeException("0")
                 );
     }
 

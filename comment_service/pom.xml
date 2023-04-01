@@ -92,14 +92,11 @@
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>webtoon.utils</groupId>
-			<artifactId>webtoon-utils-service</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>webtoon.account</groupId>
-			<artifactId>webtoon-account-service</artifactId>
-		</dependency>
+
+<!--		<dependency>-->
+<!--			<groupId>webtoon.account</groupId>-->
+<!--			<artifactId>webtoon-account-service</artifactId>-->
+<!--		</dependency>-->
 		<!-- <dependency> <groupId>org.springframework.session</groupId> <artifactId>spring-session-jdbc</artifactId>
 			</dependency> <dependency> <groupId>org.springframework.session</groupId>
 			<artifactId>spring-session-core</artifactId> </dependency> -->

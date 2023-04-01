@@ -43,13 +43,11 @@ public class CommentEntity {
     @LastModifiedDate
     private Date modifiedAt;
 
-    @ManyToOne
     @JoinColumn(name = "created_by")
     @CreatedBy
-    private UserEntity createdBy;
+    private Long createdBy;
 
-    @ManyToOne
     @JoinColumn(name = "modified_by")
     @LastModifiedBy
-    private UserEntity modifiedBy;
+    private Long modifiedBy;
 }
