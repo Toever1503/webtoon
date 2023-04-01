@@ -34,7 +34,7 @@ public class CommentController {
                                 .withPage(page)
                 )
         );
-        return "comment/comment-section";
+        return "comment/comment-item";
     }
 
     @PostMapping(value = "create")

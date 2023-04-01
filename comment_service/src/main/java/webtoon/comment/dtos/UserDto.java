@@ -22,6 +22,14 @@ public class UserDto {
     private Date modifiedAt;
 
     public static UserDto toDto (UserEntity entity){
-        return null;
+        return UserDto.builder()
+                .id(entity.getId())
+                .username(entity.getUsername())
+                .fullName(entity.getFullName())
+                .email(entity.getEmail())
+                .sex(entity.getSex())
+                .createdAt(entity.getCreatedAt())
+                .modifiedAt(entity.getModifiedAt())
+                .build();
     }
 }
