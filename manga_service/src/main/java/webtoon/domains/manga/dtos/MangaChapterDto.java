@@ -35,14 +35,17 @@ public class MangaChapterDto {
     public static MangaChapterDto toDto(MangaChapterEntity mangaEntity) {
         if (mangaEntity == null) return null;
 
-        return MangaChapterDto.builder()
+        MangaChapterDto dto = MangaChapterDto.builder()
                 .id(mangaEntity.getId())
-                .volumeId(mangaEntity.getMangaVolume().getId())
                 .name(mangaEntity.getName())
                 .content(mangaEntity.getContent())
                 .chapterIndex(mangaEntity.getChapterIndex())
                 .isRequiredVip(mangaEntity.getRequiredVip())
                 .chapterImages(mangaEntity.getChapterImages() != null ? mangaEntity.getChapterImages().stream().map(MangaChapterImageDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .build();
+
+        if (mangaEntity.getMangaVolume() != null)
+            dto.setVolumeId(mangaEntity.getMangaVolume().getId());
+        return dto;
     }
 }

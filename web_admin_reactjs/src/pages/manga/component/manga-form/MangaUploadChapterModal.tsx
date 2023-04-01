@@ -10,7 +10,7 @@ import Sortable from "sortablejs";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
-import { ChapterType } from "./MangaVolumeInfoItem";
+import { ChapterImageType, ChapterType } from "./MangaVolumeInfoItem";
 
 type MangaUploadChapterModalProps = {
     mangaInput: MangaInput,
@@ -35,6 +35,7 @@ interface ChapterInputError {
     chapterImages: string,
 }
 type ImageChapterFileType = {
+    id?: number | string,
     index: number,
     file: File | string,
     data: string,
@@ -52,7 +53,7 @@ const CreateImageHtmlElement: React.FC<CreateImageHtmlElementProps> = ({ file, i
     const fileRef = useRef<HTMLInputElement>(null);
 
     useEffect(() => {
-        console.log('fileRef: ',);
+        console.log('fileRef: ', file);
         // @ts-ignore
         fileRef.current.chapterFile = file;
     }, [])
@@ -133,6 +134,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     // begin image chapter
 
     const [imageChapterFiles, setImageChapterFiles] = useState<ImageChapterFileType[]>([]);
+    const [oldImageChapterFiles, setOldImageChapterFiles] = useState<ImageChapterFileType[]>([]);
     const uploadImageChapter = () => {
         if (imageChapterFiles.length >= 30) {
             dispatch(showNofification({
@@ -166,8 +168,9 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                         data: URL.createObjectURL(fileList[i]),
                     });
                 }
-                setImageChapterFiles([...files, ...imageChapterFiles]);
-                console.log('files', files);
+                files.push(...imageChapterFiles);
+                setImageChapterFiles(files);
+                console.log('files add', imageChapterFiles);
 
             }
         };
@@ -177,6 +180,10 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     const deleteImageChapterFile = (index: number) => {
         const newFiles = imageChapterFiles?.filter((file: ImageChapterFileType, i) => i !== index);
         setImageChapterFiles(newFiles);
+    }
+    const deleteOldImageChapterFile = (index: number) => {
+        const newFiles = oldImageChapterFiles?.filter((file: ImageChapterFileType, i) => i !== index);
+        setOldImageChapterFiles(newFiles);
     }
 
     // begin chapter input
@@ -214,6 +221,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         setIsRequireVipChapter(false);
         setMangaTextChapter('');
         setImageChapterFiles([]);
+        setOldImageChapterFiles([]);
     }
 
     const [isCreatingChapter, setIsCreatingChapter] = useState<boolean>(false);
@@ -222,7 +230,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
         let errorCount = 0;
         const chapterContent = chapterContentEditorRef?.getHtml() || '';
-        
+
         if (!chapterInput.name) {
             chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
             errorCount++;
@@ -230,7 +238,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         else chapterInputError.chapterName = '';
 
         if (props.mangaInput.mangaType === 'IMAGE') {
-            if (imageChapterFiles.length === 0) {
+            if (oldImageChapterFiles.length + imageChapterFiles.length === 0) {
                 chapterInputError.chapterImages = 'manga.form.errors.chapter-images-required';
                 errorCount++;
             }
@@ -251,6 +259,8 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
         if (errorCount === 0) {
             console.log('adding chapter: ', chapterInput.volumeId);
+
+
             setIsCreatingChapter(true);
             const modalType = chapterInput.id ? 'edit' : 'create';
 
@@ -258,14 +268,24 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 console.log('create image chapter');
 
                 const formdata = new FormData();
+                if (chapterInput.id)
+                    formdata.append('id', chapterInput.id.toString());
                 formdata.append('chapterIndex', chapterInput?.chapterIndex?.toString() || '0');
                 formdata.append('chapterName', chapterInput.name);
                 formdata.append('isRequiredVip', isRequireVipChapter.toString());
                 formdata.append('volumeId', chapterInput?.volumeId?.toString() || '0');
+
+                const oldImages: [] = [];
                 document.querySelectorAll('#chapter-images-list > div').forEach((item) => {
                     // @ts-ignore
-                    formdata.append('files', item.chapterFile.file);
+                    if (item.chapterFile.id)
+                        // @ts-ignore
+                        formdata.append('files', new Blob(['']), 'id-' + item.chapterFile.id);
+                    else
+                        // @ts-ignore
+                        formdata.append('files', item.chapterFile.file);
                 });
+
 
                 mangaService
                     .createImageChapter(formdata, props.mangaInput.id)
@@ -290,7 +310,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
             }
             else if (props.mangaInput.mangaType === 'TEXT') {
-                
+
                 mangaService.createTextChapter({
                     id: chapterInput.id ? chapterInput.id : undefined,
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
@@ -331,18 +351,28 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     }
 
 
-    let imageChapterSorter: Sortable;
+    let imageSorter: Sortable;
     useEffect(() => {
-        let imageChapterContainer: HTMLElement | null = document.getElementById('chapter-images-list');
-        if (imageChapterContainer)
-            imageChapterSorter = Sortable.create(imageChapterContainer);
 
         if (!props.chapterInput)
             resetChapterInput();
-        else
+        else {
             setChapterInput(props.chapterInput);
+            if (props.chapterInput.chapterImages)
+                setOldImageChapterFiles(props.chapterInput.chapterImages.map((item: ChapterImageType) => (
+                    {
+                        id: item.id,
+                        index: item.imageIndex,
+                        file: '',
+                        data: '',
+                        url: item.image,
+                    }
+                )));
+        }
+        // @ts-ignore
+        imageSorter = Sortable.create(document.getElementById('chapter-images-list'));
 
-    }, [props.visible]);
+    }, [props]);
 
 
     return <>
@@ -409,7 +439,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
                     <div id="chapter-images-list" className="flex flex-wrap gap-[5px]">
                         {imageChapterFiles && imageChapterFiles.length > 0 && (
-                            imageChapterFiles.map((item, index) => (
+                            imageChapterFiles.map((item: ImageChapterFileType, index) => (
                                 <CreateImageHtmlElement file={item} index={index} removeImage={deleteImageChapterFile} />
                                 // <li key={index}>
                                 //         <span>{file.name}</span>
@@ -417,6 +447,15 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                                 //     </li>
                             ))
                         )}
+                        {
+                            oldImageChapterFiles.map((item: ImageChapterFileType, index) => (
+                                <CreateImageHtmlElement file={item} index={index} removeImage={deleteOldImageChapterFile} />
+                                // <li key={index}>
+                                //         <span>{file.name}</span>
+                                //         <DeleteOutlined onClick={() => deleteImageChapterFile(index)} className="px-[5px] hover:text-red-500 cursor-pointer" />
+                                //     </li>
+                            ))
+                        }
                     </div>
 
                     {

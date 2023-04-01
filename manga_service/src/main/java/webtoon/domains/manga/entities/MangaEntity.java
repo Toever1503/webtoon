@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
@@ -67,6 +68,10 @@ public class MangaEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "manga_type")
     private EMangaType mangaType;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "display_type")
+    private EMangaDisplayType displayType;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)

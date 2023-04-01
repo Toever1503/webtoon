@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.models.MangaModel;
 
@@ -20,11 +21,13 @@ public interface IMangaService {
 	MangaDto update(MangaModel model);
 
 
-    void setMangaType(java.lang.Long id, EMangaType type);
+    void setMangaTypeAndDisplayType(java.lang.Long id, EMangaType mangaType, EMangaDisplayType displayType);
 
 	Page<MangaEntity> filterBy(String s, Pageable page);
 
 	Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
 
 	MangaDto findById(Long id);
+
+	void resetMangaType(Long mangaId);
 }

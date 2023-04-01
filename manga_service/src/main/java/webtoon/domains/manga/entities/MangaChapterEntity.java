@@ -14,28 +14,32 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 public class MangaChapterEntity {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(name = "id")
-	private Long id;
-	
-	@ManyToOne
-	private MangaVolumeEntity mangaVolume;
-	
-	@Column(name = "name")
-	private String name;
-	
-	@Column(name = "content", columnDefinition = "TEXT")
-	private String content;
-	
-	@Column(name = "chapter_index")
-	private Integer chapterIndex;
-	
-	@Column(name = "required_vip")
-	private Boolean requiredVip;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
+    private Long id;
 
-	@OneToMany(mappedBy = "mangaChapter")
-	private List<MangaChapterImageEntity> chapterImages;
+    @ManyToOne
+    @JoinColumn(name = "manga_volume_id")
+    private MangaVolumeEntity mangaVolume;
+    @ManyToOne
+    @JoinColumn(name = "manga_id")
+    private MangaEntity manga;
+
+    @Column(name = "name")
+    private String name;
+
+    @Column(name = "content", columnDefinition = "TEXT")
+    private String content;
+
+    @Column(name = "chapter_index")
+    private Integer chapterIndex;
+
+    @Column(name = "required_vip")
+    private Boolean requiredVip;
+
+    @OneToMany(mappedBy = "mangaChapter", cascade = CascadeType.ALL)
+    private List<MangaChapterImageEntity> chapterImages;
 }

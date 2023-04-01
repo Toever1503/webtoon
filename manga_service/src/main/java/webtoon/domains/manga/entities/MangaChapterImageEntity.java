@@ -30,6 +30,9 @@ public class MangaChapterImageEntity {
 	
 	@Column(name = "image")
 	private String image;
+
+	@Column(name = "file_id")
+	private Long fileId;
 	
 	@Column(name = "image_index")
 	private Integer imageIndex;

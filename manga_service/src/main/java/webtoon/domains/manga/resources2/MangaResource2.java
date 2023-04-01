@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaFilterInput;
@@ -50,12 +51,16 @@ public class MangaResource2 {
         return mangaService.add(input);
     }
 
-    @PatchMapping("set-type/{id}")
-    public void setMangaType(@PathVariable Long id, @RequestParam EMangaType type) {
-        if (type.equals(EMangaType.UNSET))
+    @PatchMapping("set-manga-type-and-display-type/{id}")
+    public void setMangaTypeAndDisplayType(@PathVariable Long id, @RequestParam EMangaType mangaType, @RequestParam EMangaDisplayType displayType) {
+        if (mangaType.equals(EMangaType.UNSET))
             throw new RuntimeException("type is not support");
-        this.mangaService.setMangaType(id, type);
+        this.mangaService.setMangaTypeAndDisplayType(id, mangaType, displayType);
     }
 
+    @PatchMapping("reset-manga-type/{id}")
+    public void resetMangaType(@PathVariable Long id){
+        this.mangaService.resetMangaType(id);
+    }
 
 }

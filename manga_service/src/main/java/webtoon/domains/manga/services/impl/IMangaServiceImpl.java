@@ -11,9 +11,12 @@ import org.springframework.transaction.annotation.Transactional;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
+import webtoon.domains.manga.repositories.IMangaChapterImageRepository;
+import webtoon.domains.manga.repositories.IMangaChapterRepository;
 import webtoon.domains.manga.repositories.IMangaRepository;
 import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaService;
@@ -31,6 +34,12 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Autowired
     private IMangaVolumeRepository mangaVolumeRepository;
+
+    @Autowired
+    private IMangaChapterImageRepository mangaChapterImageRepository;
+
+    @Autowired
+    private IMangaChapterRepository mangaChapterRepository;
 
     @Override
     public MangaDto add(MangaModel model) {
@@ -86,11 +95,12 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public void setMangaType(java.lang.Long id, EMangaType type) {
+    public void setMangaTypeAndDisplayType(java.lang.Long id, EMangaType mangaType, EMangaDisplayType displayType) {
         MangaEntity entity = this.getById(id);
         if (!entity.getMangaType().equals(EMangaType.UNSET))
             throw new RuntimeException("Manga has already set type");
-        entity.setMangaType(type);
+        entity.setMangaType(mangaType);
+        entity.setDisplayType(displayType);
         this.mangaRepository.saveAndFlush(entity);
     }
 
@@ -127,6 +137,17 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public MangaDto findById(Long id) {
         return MangaDto.toDto(this.getById(id));
+    }
+
+    @Override
+    public void resetMangaType(Long mangaId) {
+        MangaEntity entity = this.getById(mangaId);
+        entity.setDisplayType(null);
+        entity.setMangaType(EMangaType.UNSET);
+        this.mangaRepository.saveAndFlush(entity);
+        this.mangaVolumeRepository.deleteAllByMangaId(entity.getId());
+
+        // task: call storage service to remove manga's folder
     }
 
 }

@@ -25,23 +25,23 @@ interface MangaInputError {
 }
 
 let isAutoSavingMangaInfo = false;
-export function autoSaveMangaInfo(mangaInput: MangaInput) {
+export async function autoSaveMangaInfo(mangaInput: MangaInput) {
     if (isAutoSavingMangaInfo) return;
     console.log('autoSaveMangaInfo: id ', mangaInput.id);
 
     isAutoSavingMangaInfo = true;
-    return mangaService.addMangaInfo(mangaInput)
-        .then((res) => {
-            console.log('auto save manga success', res.data);
-            mangaInput.id = res.data.id;
-        })
-        .catch((err) => {
-            console.log('auto save manga failed');
-            console.log(err);
-        })
-        .finally(() => {
-            isAutoSavingMangaInfo = false;
-        })
+    try {
+        const res = await mangaService.addMangaInfo(mangaInput);
+        console.log('auto save manga success', res.data);
+        mangaInput.id = res.data.id;
+    }
+    catch (err) {
+        console.log('auto save manga failed');
+        console.log(err);
+    } finally {
+        isAutoSavingMangaInfo = false;
+    }
+
 };
 
 const AddNewManga: React.FC = () => {
@@ -110,6 +110,7 @@ const AddNewManga: React.FC = () => {
         authors: ['lucy'],
         tags: ['lucy'],
         featureImage: 'http://ima.ac',
+        displayType: 'CHAP'
     });
     const [isSavingMangaInfo, setIsSavingMangaInfo] = useState<boolean>(false);
     const [mangaContentEditorRef, setMangaContentEditorRef] = useState<RichTextEditorComponent>();

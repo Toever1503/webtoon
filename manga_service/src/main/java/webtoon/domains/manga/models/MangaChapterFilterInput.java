@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class MangaChapterFilterInput {
     private String q;
     private Long volumeId;
+    private Long mangaId;
 
     private Integer chapterIndex;
 }

@@ -60,12 +60,14 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         setShowUploadChapterModal(false);
     }
     const onShowEditChapterModal = (e: any, chapter: ChapterType) => {
-        console.log('e', e.target.className);
-        
+        // console.log('e', e.target.className);
+
         if (e.target.className.indexOf('chapter-item') !== -1) {
             setShowUploadChapterModal(true);
             setUploadChapterModalTitle(`${t('manga.form.chapter.edit-chapter-btn')} (${t('manga.form.chapter.chapter')} ${(chapter.chapterIndex || 0) + 1})`);
             setChapterInput(chapter);
+            console.log('edit chapter: ', chapter);
+            
         }
     }
     // end chapter modal
@@ -83,17 +85,22 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         console.log('on change page');
     }
 
-    useEffect(() => {
-
+    const onCallApiSearch = (page: number = 0, size: number = 10) => {
+        console.log('on call api search');
         chapterService.filterChapter({
-            volumeId: props.volumeId,
-        }, 0, 10)
+            volumeId: props.mangaInput.displayType === "VOL" ? props.volumeId : null,
+            mangaId: props.mangaInput.displayType === "VOL" ? null : props.mangaInput.id,
+        }, page, size)
             .then((res: AxiosResponse<{
                 content: ChapterType[],
             }>) => {
                 console.log('filter chapter: ', res);
                 setChapterData(res.data.content);
             });
+    }
+    useEffect(() => {
+        props.mangaInput.id = 1;
+        onCallApiSearch();
     }, []);
 
     return <div className="mt-[20px]">
@@ -106,15 +113,26 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                         <div className="flex space-x-2 items-center justify-between">
                             <div className="flex space-x-2 items-center">
                                 <label className="mr-[10px]">Danh sách chương: </label>
-                                {
-                                    props.isShowAddNewChapter && <Button onClick={(e) => {
-                                        setShowUploadChapterModal(true);
-                                        setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
 
-                                    }} >
-                                        {t('manga.form.chapter.add-chapter-btn')}
-                                    </Button>
+                                {
+                                    props.mangaInput.displayType === 'VOL' ?
+                                        props.isShowAddNewChapter && <Button onClick={(e) => {
+                                            setShowUploadChapterModal(true);
+                                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+
+                                        }} >
+                                            {t('manga.form.chapter.add-chapter-btn')}
+                                        </Button>
+                                        :
+                                        <Button onClick={(e) => {
+                                            setShowUploadChapterModal(true);
+                                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+
+                                        }} >
+                                            {t('manga.form.chapter.add-chapter-btn')}
+                                        </Button>
                                 }
+
                             </div>
 
                             <div>

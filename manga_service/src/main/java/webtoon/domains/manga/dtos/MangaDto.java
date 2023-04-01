@@ -8,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
@@ -29,6 +30,7 @@ public class MangaDto {
 	private EMangaSTS mangaStatus;
 	private Integer commentCount;
 	private EMangaType mangaType;
+	private EMangaDisplayType displayType;
 	private Date createdAt;
 	private Date modifiedAt;
 	private Float rating;
@@ -49,6 +51,7 @@ public class MangaDto {
 				.mangaStatus(mangaEntity.getMangaStatus())
 				.commentCount(mangaEntity.getCommentCount())
 				.mangaType(mangaEntity.getMangaType())
+				.displayType(mangaEntity.getDisplayType())
 				.rating(mangaEntity.getRating())
 				.viewCount(mangaEntity.getViewCount())
 				.createdAt(mangaEntity.getCreatedAt())

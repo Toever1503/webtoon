@@ -28,7 +28,7 @@ export type ChapterType = {
     chapterImages?: ChapterImageType[];
 }
 
-type ChapterImageType = {
+export type ChapterImageType = {
     id: string | number;
     image: string;
     imageIndex: number;

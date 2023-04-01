@@ -100,15 +100,15 @@ const MangaChapterSetting: React.FC<MangaChapterInfoProps> = (props: MangaChapte
     useEffect(() => {
 
         // get volumes 
-        mangaService
-            .filterVolume(1)
-            .then((res: AxiosResponse<VolumeType[]>) => {
-                console.log('res', res.data);
-                setVolumeOptions(res.data.reverse());
-            })
-            .catch((err) => {
-                console.log('get volume error:', err);
-            });
+        // mangaService
+        //     .filterVolume(props.mangaInput.id)
+        //     .then((res: AxiosResponse<VolumeType[]>) => {
+        //         console.log('res', res.data);
+        //         setVolumeOptions(res.data.reverse());
+        //     })
+        //     .catch((err) => {
+        //         console.log('get volume error:', err);
+        //     });
 
         if (!volumeSortable)
             // @ts-ignore
@@ -117,7 +117,6 @@ const MangaChapterSetting: React.FC<MangaChapterInfoProps> = (props: MangaChapte
                 ghostClass: 'blue-background-class',
             });
 
-        props.mangaInput.id = 1;
     }, [])
     return (
         <div className="p-[15px]">

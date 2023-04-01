@@ -19,4 +19,5 @@ public class MangaUploadChapterInput {
 
     private String content;
     private List<String> chapterImages;
+    private List<Long> oldImages;
 }

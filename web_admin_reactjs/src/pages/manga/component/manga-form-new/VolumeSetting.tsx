@@ -65,17 +65,14 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             }));
         else
             setVolumeData([newVolume, ...volumeData]);
-            console.log('on add: ', newVolume);
-            
+        console.log('on add: ', newVolume);
+
         setLastVolIndex(newVolume);
         closeAddEditVolumeModal();
     }
     // end volume modal
 
     useEffect(() => {
-        props.mangaInput.id = 1;
-        props.mangaInput.mangaType = 'TEXT';
-
         mangaService.filterVolume({
             mangaId: props.mangaInput.id,
         }, 0, 10)
@@ -91,7 +88,6 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                 if (res.data)
                     setLastVolIndex(res.data);
             });
-
     }, [])
 
     return <div className="p-[10px]">
@@ -99,51 +95,69 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             <Badge dot>
                 <NotificationOutlined style={{ fontSize: 16 }} />
             </Badge>
-            <Badge >
-                {
-                    lastVolIndex.volumeIndex === 0 ? <a>Hiện chưa có tập nào!</a> : <a>Tập mới nhất là {lastVolIndex.volumeIndex + 1}: {lastVolIndex.name}</a>
-                }
-            </Badge>
-        </div>
-        <div className="flex space-x-2 items-center mt-[15px]">
-            <label className="w-[100px]">Chọn tập: </label>
-            <Select
-                className="w-[300px]"
-                showSearch
-                value={selectedVolId}
-                placeholder='Tìm tập'
-                defaultActiveFirstOption={false}
-                filterOption={false}
-                onSearch={onSearchVol}
-                onChange={(val) => {
-                    setSelectedVolId(val);
-                    setVolumeInput(volumeData.find((vol) => vol.id === val));
-                }}
-                notFoundContent={<span className="inline-block text-center">Hiện chưa có tập nào!</span>}
-                options={(volumeData || []).map((d) => ({
-                    value: d.id,
-                    label: t('manga.form.volume.volume') + ` ${d.volumeIndex + 1}: ` + d.name,
-                }))}
-            />
-            <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.add-volume')}`)}>
-                Thêm tập mới
-                <MangaAddEditVolumeModal visible={showAddEditVolumeModal} onOk={onVolumeModalOk} onCancel={closeAddEditVolumeModal} title={addEditVolumTitle} mangaInput={props.mangaInput} volumeInput={volumeInput} />
-            </Button>
-
             {
-                selectedVolId &&
-                <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeInput)}>
-                    Chỉnh sửa tập
-                </Button>
+                props.mangaInput.displayType === 'VOL' ?
+                    <Badge >
+                        {
+                            !lastVolIndex.id ? <a>Hiện chưa có tập nào!</a> : <a>Tập mới nhất là {lastVolIndex.volumeIndex + 1}: {lastVolIndex.name}</a>
+                        }
+                    </Badge>
+                    :
+                    <Badge >
+                        {
+                            !lastVolIndex.id ? <a>Hiện chưa có chương nào!</a> : <a>Chương mới nhất là {lastVolIndex.volumeIndex + 1}: {lastVolIndex.name}</a>
+                        }
+                    </Badge>
             }
 
-
         </div>
 
-
         {
-            selectedVolId && <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
+            props.mangaInput.displayType === 'VOL' ?
+                <>
+                    <div className="flex space-x-2 items-center mt-[15px]">
+                        <label className="w-[100px]">Chọn tập: </label>
+                        <Select
+                            className="w-[300px]"
+                            showSearch
+                            value={selectedVolId}
+                            placeholder='Tìm tập'
+                            defaultActiveFirstOption={false}
+                            filterOption={false}
+                            onSearch={onSearchVol}
+                            onChange={(val) => {
+                                setSelectedVolId(val);
+                                setVolumeInput(volumeData.find((vol) => vol.id === val));
+                            }}
+                            notFoundContent={<span className="inline-block text-center">Hiện chưa có tập nào!</span>}
+                            options={(volumeData || []).map((d) => ({
+                                value: d.id,
+                                label: t('manga.form.volume.volume') + ` ${d.volumeIndex + 1}: ` + d.name,
+                            }))}
+                        />
+                        <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.add-volume')}`)}>
+                            Thêm tập mới
+                            <MangaAddEditVolumeModal visible={showAddEditVolumeModal} onOk={onVolumeModalOk} onCancel={closeAddEditVolumeModal} title={addEditVolumTitle} mangaInput={props.mangaInput} volumeInput={volumeInput} />
+                        </Button>
+
+                        {
+                            selectedVolId &&
+                            <>
+                                <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeInput)}>
+                                    Chỉnh sửa tập
+                                </Button>
+                                <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeInput)}>
+                                    Xóa tập
+                                </Button>
+                            </>
+                        }
+
+                    </div>
+                </>
+                :
+                <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
         }
+
 
     </div>
 }

@@ -2,7 +2,8 @@ import { mangaAxios } from "../config/MangaAxios";
 const basePath: String = "/manga";
 
 export interface ChapterFilterInput {
-    volumeId: number | string;
+    volumeId: number | string | null;
+    mangaId: number | string | null;
     q?: string;
     chapterIndex?: number;
 }

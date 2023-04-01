@@ -97,7 +97,7 @@ public class FileServiceImpl implements IFileService {
             fileEntity.setTitle(f.getOriginalFilename());
             fileEntity.setFileType(f.getOriginalFilename());
             fileEntity
-                    .setFileType("image/" + f.getOriginalFilename().substring(f.getOriginalFilename().lastIndexOf("/") + 1));
+                    .setFileType(f.getContentType());
             return fileEntity;
         }).collect(Collectors.toList());
 

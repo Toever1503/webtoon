@@ -15,11 +15,10 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
-import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.domains.manga.entities.MangaEntity;
-import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.mappers.MangaChapterMapper;
 import webtoon.domains.manga.models.MangaChapterFilterInput;
 import webtoon.domains.manga.models.MangaChapterModel;
@@ -109,26 +108,20 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-//        MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
-//                .orElse(
-//                        MangaVolumeEntity.builder()
-//                                .name("Volume 1")
-//                                .manga(mangaEntity)
-//                                .volumeIndex(0)
-//                                .build()
-//                );
 
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                 .id(input.getId())
                 .name(input.getName())
                 .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
-                .mangaVolume(this.mangaVolumeRepository.getById(input.getVolumeId()))
                 .content(input.getContent())
                 .requiredVip(input.getIsRequiredVip())
                 .build();
 
-        this.chapterRepository.saveAndFlush(mangaChapterEntity);
+        if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL))
+            mangaChapterEntity.setMangaVolume(this.mangaVolumeRepository.getById(input.getVolumeId()));
+        mangaChapterEntity.setManga(mangaEntity);
 
+        this.chapterRepository.saveAndFlush(mangaChapterEntity);
         return MangaChapterDto.toDto(mangaChapterEntity);
     }
 
@@ -138,22 +131,17 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-            MangaVolumeEntity volumeEntity = this.mangaVolumeRepository.findById(input.getVolumeId())
-                    .orElse(
-                            MangaVolumeEntity.builder()
-                                    .name("Volume 1")
-                                    .manga(mangaEntity)
-                                    .volumeIndex(0)
-                                    .build()
-                    );
-            this.mangaVolumeRepository.saveAndFlush(volumeEntity);
+
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
                     .name(input.getName())
                     .chapterIndex(this.chapterRepository.getLastChapterIndex(input.getMangaID()).orElse(-1L).intValue() + 1)
-                    .mangaVolume(volumeEntity)
                     .requiredVip(input.getIsRequiredVip())
                     .build();
+
+            if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL))
+                mangaChapterEntity.setMangaVolume(this.mangaVolumeRepository.getById(input.getVolumeId()));
+            mangaChapterEntity.setManga(mangaEntity);
             this.chapterRepository.saveAndFlush(mangaChapterEntity);
 
             RestTemplate restTemplate = new RestTemplate();
@@ -162,26 +150,44 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
             MultiValueMap<String, Object> body
                     = new LinkedMultiValueMap<>();
-            multipartFiles.forEach(f -> body.add("files", f.getResource()));
+            if (input.getId() == null)
+                multipartFiles.forEach(f -> body.add("files", f.getResource()));
+            else {
+                List<Long> keepingImageIds = new ArrayList<>();
+                multipartFiles.forEach(f -> {
+                    if (f.getOriginalFilename().matches("id-\\d+"))
+                        keepingImageIds.add(new Long(f.getOriginalFilename().split("-")[1]));
+                    else
+                        body.add("files", f.getResource());
+                });
 
-            HttpEntity<MultiValueMap<String, Object>> requestEntity
-                    = new HttpEntity<>(body, headers);
+                List<MangaChapterImageEntity> oldImageEntities = this.chapterImageRepository.findAllByIdNotIn(keepingImageIds);
+                // task: need call storage api to remove
+                System.out.println(oldImageEntities.size());
+                this.chapterImageRepository.deleteAll(oldImageEntities);
+            }
 
-            String serverUrl = "http://localhost:8001/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
-            ResponseEntity<List<FileDto>> response = restTemplate.exchange(
-                    serverUrl,
-                    HttpMethod.POST, requestEntity,
-                    new ParameterizedTypeReference<>() {
-                    });
+            if (body.size() > 0) {
+                HttpEntity<MultiValueMap<String, Object>> requestEntity
+                        = new HttpEntity<>(body, headers);
 
-            List<FileDto> imageList = response.getBody();
-            AtomicInteger imageIndex = new AtomicInteger();
-            List<MangaChapterImageEntity> mangaChapterImages = imageList.stream().map(file -> MangaChapterImageEntity.builder()
-                    .mangaChapter(mangaChapterEntity)
-                    .image(file.getUrl())
-                    .imageIndex(imageIndex.getAndIncrement())
-                    .build()).collect(Collectors.toList());
-            this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
+                String serverUrl = "http://localhost:8001/storage/mutations/upload-image-by-zip-file?folder=manga/1/";
+                ResponseEntity<List<FileDto>> response = restTemplate.exchange(
+                        serverUrl,
+                        HttpMethod.POST, requestEntity,
+                        new ParameterizedTypeReference<>() {
+                        });
+
+                List<FileDto> imageList = response.getBody();
+                AtomicInteger imageIndex = new AtomicInteger();
+                List<MangaChapterImageEntity> mangaChapterImages = imageList.stream().map(file -> MangaChapterImageEntity.builder()
+                        .mangaChapter(mangaChapterEntity)
+                        .image(file.getUrl())
+                        .imageIndex(imageIndex.getAndIncrement())
+                        .fileId(file.getId())
+                        .build()).collect(Collectors.toList());
+                this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
+            }
 
             return MangaChapterDto.toDto(mangaChapterEntity);
         } catch (Exception e) {
@@ -236,15 +242,15 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId){
+    public MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId) {
         MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
 
         List<MangaChapterEntity> nextChapters = this.chapterRepository
-                .findNextchapter(chapterID,volumeId,PageRequest.of(0,1));
+                .findNextchapter(chapterID, volumeId, PageRequest.of(0, 1));
         chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
 
         List<MangaChapterEntity> prevChapters = this.chapterRepository
-                .findPrevchapter(chapterID,volumeId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+                .findPrevchapter(chapterID, volumeId, PageRequest.of(0, 1, Sort.Direction.DESC, "id"));
         chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
 
         return chapterDtos;
@@ -263,6 +269,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         if (input.getVolumeId() != null) {
             specs.add((root, query, cb) -> cb.equal(root.join("mangaVolume").get("id"), input.getVolumeId()));
         }
+        if (input.getMangaId() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.join("manga").get("id"), input.getMangaId()));
+        }
         if (input.getChapterIndex() != null) {
             specs.add((root, query, cb) -> cb.equal(root.get("chapterIndex"), input.getChapterIndex()));
         }
@@ -277,4 +286,8 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         return this.chapterRepository.findAll(finalSpec, pageable).map(MangaChapterDto::toDto);
     }
 
+    public static void main(String[] args) {
+        String test = "id-9140";
+        System.out.println(test.matches("id-\\d+"));
+    }
 }
