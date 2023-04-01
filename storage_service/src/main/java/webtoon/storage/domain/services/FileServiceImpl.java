@@ -19,90 +19,89 @@ import webtoon.storage.domain.entities.FileEntity;
 import webtoon.storage.domain.mappers.FileMapper;
 import webtoon.storage.domain.repositories.IFileRepositoty;
 import webtoon.storage.domain.utils.FileUploadProvider;
+import webtoon.utils.ASCIIConverter;
 
 @Service
 @Transactional
 public class FileServiceImpl implements IFileService {
 
-    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    private final IFileRepositoty fileRepository;
+	private final IFileRepositoty fileRepository;
 
-    private final FileUploadProvider fileUploadProvider;
-    private final FileMapper fileMapper;
+	private final FileUploadProvider fileUploadProvider;
+	private final FileMapper fileMapper;
 
-    public FileServiceImpl(IFileRepositoty fileRepository, FileUploadProvider fileUploadProvider,
-                           FileMapper fileMapper) {
-        super();
-        this.fileRepository = fileRepository;
-        this.fileUploadProvider = fileUploadProvider;
-        this.fileMapper = fileMapper;
-        logger.info("File service created.");
-    }
+	public FileServiceImpl(IFileRepositoty fileRepository, FileUploadProvider fileUploadProvider,
+			FileMapper fileMapper) {
+		super();
+		this.fileRepository = fileRepository;
+		this.fileUploadProvider = fileUploadProvider;
+		this.fileMapper = fileMapper;
+		logger.info("File service created.");
+	}
 
-    @Override
-    public FileDto uploadFile(MultipartFile file, String folder) {
-        // TODO Auto-generated method stub
-        FileEntity entity;
-        if (folder != null)
-            entity = this.fileUploadProvider.uploadFile(file, folder);
-        entity = this.fileUploadProvider.uploadFile(file);
-        this.fileRepository.save(entity);
-        return fileMapper.toDto(entity);
-    }
+	@Override
+	public FileDto uploadFile(MultipartFile file, String folder) {
+		// TODO Auto-generated method stub
+		FileEntity entity;
+		if (folder != null)
+			entity = this.fileUploadProvider.uploadFile(file, folder);
+		entity = this.fileUploadProvider.uploadFile(file);
+		this.fileRepository.save(entity);
+		return fileMapper.toDto(entity);
+	}
 
-    @Override
-    public List<FileDto> uploadBulkFile(List<MultipartFile> files, String folder) {
-        // TODO Auto-generated method stub
-        return files.stream().map(f -> this.uploadFile(f, folder)).collect(Collectors.toList());
-    }
+	@Override
+	public List<FileDto> uploadBulkFile(List<MultipartFile> files, String folder) {
+		// TODO Auto-generated method stub
+		return files.stream().map(f -> this.uploadFile(f, folder)).collect(Collectors.toList());
+	}
 
-    @Override
-    public void deleteFile(List<Long> ids) {
-        // TODO Auto-generated method stub
-        List<FileEntity> fileEntities = this.fileRepository.findAllById(ids);
-        List<String> fileUrls = fileEntities.stream().map(f -> f.getUrl()).collect(Collectors.toList());
-        try {
-            this.fileRepository.deleteAll(fileEntities);
-        } catch (Exception e) {
-            // TODO: handle exception
-            throw e;
-        }
-        fileUrls.forEach(url -> {
-            this.fileUploadProvider.deleteFile(url);
-        });
-    }
+	@Override
+	public void deleteFile(List<Long> ids) {
+		// TODO Auto-generated method stub
+		List<FileEntity> fileEntities = this.fileRepository.findAllById(ids);
+		List<String> fileUrls = fileEntities.stream().map(f -> f.getUrl()).collect(Collectors.toList());
+		try {
+			this.fileRepository.deleteAll(fileEntities);
+		} catch (Exception e) {
+			// TODO: handle exception
+			throw e;
+		}
+		fileUrls.forEach(url -> {
+			this.fileUploadProvider.deleteFile(url);
+		});
+	}
 
-    @Override
-    public Page<FileDto> filterFile(Pageable pageable, Specification<FileEntity> specs) {
-        // TODO Auto-generated method stub
-        return this.fileMapper.toDtoPage(this.fileRepository.findAll(specs, pageable));
-    }
+	@Override
+	public Page<FileDto> filterFile(Pageable pageable, Specification<FileEntity> specs) {
+		// TODO Auto-generated method stub
+		return this.fileMapper.toDtoPage(this.fileRepository.findAll(specs, pageable));
+	}
 
-    @Override
-    public List<FileDto> uploadImageByZipFile(List<MultipartFile> files, String folder) throws IOException {
-        // TODO Auto-generated method stub
+	@Override
+	public List<FileDto> uploadImageByZipFile(List<MultipartFile> files, String folder) throws IOException {
+		// TODO Auto-generated method stub
 
-        List<FileEntity> fileEntities = files.stream().map(f -> {
-            System.out.println("zipEntry.getName(): " + f.getName());
-            FileEntity fileEntity = null;
-            try {
-                fileEntity = this.fileUploadProvider.uploadFile(f.getBytes(), folder,
-                        f.getOriginalFilename());
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            fileEntity.setFileName(f.getOriginalFilename());
-            fileEntity.setAlt(f.getOriginalFilename());
-            fileEntity.setTitle(f.getOriginalFilename());
-            fileEntity.setFileType(f.getOriginalFilename());
-            fileEntity
-                    .setFileType(f.getContentType());
-            return fileEntity;
-        }).collect(Collectors.toList());
+		List<FileEntity> fileEntities = files.stream().map(f -> {
+			System.out.println("zipEntry.getName(): " + f.getName());
+			String fName = ASCIIConverter.removeAccent(f.getOriginalFilename());
+			FileEntity fileEntity = null;
+			try {
+				fileEntity = this.fileUploadProvider.uploadFile(f.getBytes(), folder, fName);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			fileEntity.setFileName(f.getOriginalFilename());
+			fileEntity.setAlt(ASCIIConverter.removeAccent(f.getOriginalFilename()));
+			fileEntity.setTitle(ASCIIConverter.removeAccent(f.getOriginalFilename()));
+			fileEntity.setFileType(f.getContentType());
+			return fileEntity;
+		}).collect(Collectors.toList());
 
-        this.fileRepository.saveAll(fileEntities);
-        return this.fileMapper.toDtoList(fileEntities);
-    }
+		this.fileRepository.saveAll(fileEntities);
+		return this.fileMapper.toDtoList(fileEntities);
+	}
 
 }

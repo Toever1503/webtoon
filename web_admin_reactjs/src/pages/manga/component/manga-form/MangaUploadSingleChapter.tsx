@@ -10,7 +10,7 @@ import Sortable from "sortablejs";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
-import MangaUploadChapterModal from "./MangaUploadChapterModal";
+import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
 
 type MangaUploadSingleChapterProps = {
     mangaInput: MangaInput,

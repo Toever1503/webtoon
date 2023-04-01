@@ -26,6 +26,11 @@ public class MangaChapterResource2 {
         this.mangaChapterService = mangaChapterService;
     }
 
+
+    @GetMapping("{id}")
+    public MangaChapterDto findDetailChapter(@PathVariable Long id){
+        return this.mangaChapterService.findById(id);
+    }
     @PostMapping("save-text-chapter")
     public MangaChapterDto saveTextChapter(@RequestBody MangaUploadChapterInput input, @RequestParam Long mangaId) {
         input.setMangaID(mangaId);
@@ -49,5 +54,15 @@ public class MangaChapterResource2 {
     public Page<MangaChapterDto> getAllVolForManga(@RequestBody MangaChapterFilterInput input, Pageable pageable) {
         Page<MangaChapterDto> chapter = this.mangaChapterService.filterChapter(pageable, input);
         return chapter;
+    }
+
+    @GetMapping("get-last-chapter-index/{mangaId}")
+    public Long getLastChapterIndex(@PathVariable Long mangaId){
+        return this.mangaChapterService.getLastChapterIndex(mangaId);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteById(@PathVariable Long id){
+        this.mangaChapterService.deleteById(id);
     }
 }

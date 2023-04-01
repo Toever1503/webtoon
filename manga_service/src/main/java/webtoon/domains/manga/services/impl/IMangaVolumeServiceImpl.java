@@ -59,6 +59,7 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
     public boolean deleteById(Long id) {
         try {
             mangaVolumeRepository.deleteById(id);
+            // task: need reindex volume
             return true;
         } catch (Exception e) {
             return false;

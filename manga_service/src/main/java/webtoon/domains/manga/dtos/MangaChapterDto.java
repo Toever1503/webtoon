@@ -6,7 +6,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import webtoon.domains.manga.entities.MangaChapterEntity;
-import webtoon.domains.manga.entities.MangaVolumeEntity;
 
 import java.util.Collections;
 import java.util.List;
@@ -22,7 +21,7 @@ public class MangaChapterDto {
 
     private Long volumeId;
 
-    private String name;
+    private String chapterName;
 
     private String content;
 
@@ -37,7 +36,7 @@ public class MangaChapterDto {
 
         MangaChapterDto dto = MangaChapterDto.builder()
                 .id(mangaEntity.getId())
-                .name(mangaEntity.getName())
+                .chapterName(mangaEntity.getName())
                 .content(mangaEntity.getContent())
                 .chapterIndex(mangaEntity.getChapterIndex())
                 .isRequiredVip(mangaEntity.getRequiredVip())

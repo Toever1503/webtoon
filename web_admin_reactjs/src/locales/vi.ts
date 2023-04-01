@@ -33,6 +33,9 @@ export default {
                 'add-volume-btn': 'Thêm tập',
                 'edit-volume-btn': 'Sửa tập',
                 'cancel-volume-btn': 'Hủy',
+                'sure-delete': 'Bạn chăc chắn muốn xóa tập này?',
+                'delete-success': 'Xóa thành công!',
+                'delete-failed': 'Xóa thất bại!',
                 errors: {
                     'check-again': 'Vui lòng kiểm tra lại thông tin!',
                     'volume-name-required': 'Tên tập không được để trống!',
@@ -51,6 +54,8 @@ export default {
                 'add-chapter-btn': 'Thêm chương',
                 'edit-chapter-btn': 'Chỉnh sửa',
                 'empty-chapter': 'Hiện chưa có chương nào!',
+                'delete-success': 'Xóa thành công!',
+                'delete-failed': 'Xóa thất bại!',
                 errors: {
                     'file-size-exceed': 'Kích thước file không được vượt quá 5MB!',
                     'exceed-character': 'Số ký tự không được vượt quá 30000 ký tự!',

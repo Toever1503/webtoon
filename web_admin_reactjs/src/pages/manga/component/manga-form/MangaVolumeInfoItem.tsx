@@ -6,9 +6,9 @@ import { useTranslation } from "react-i18next";
 import Sortable from "sortablejs";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import ChapterInfoItem from "./ChapterInfoItem";
-import { VolumeForm } from "./MangaAddEditVolumeModal";
+import { VolumeForm } from "../modal/MangaAddEditVolumeModal";
 import { MangaVolumeType, VolumeType } from "./MangaChapterSetting";
-import MangaUploadChapterModal from "./MangaUploadChapterModal";
+import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
 
 
 type MangaVolumeInfoItemProps = {
@@ -20,7 +20,7 @@ type MangaVolumeInfoItemProps = {
 }
 export type ChapterType = {
     id?: string | number;
-    name: string;
+    chapterName: string;
     chapterIndex?: number;
     isRequiredVip: boolean;
     content?: string

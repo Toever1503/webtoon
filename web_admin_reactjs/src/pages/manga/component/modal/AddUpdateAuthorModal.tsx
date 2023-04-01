@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
-import authorService from "../../../services/manga/AuthorService";
-import {addAuthor, updateAuthor} from "../../../stores/features/manga/authorSlice";
-import {showNofification} from "../../../stores/features/notification/notificationSlice";
+import authorService from "../../../../services/manga/AuthorService";
+import {addAuthor, updateAuthor} from "../../../../stores/features/manga/authorSlice";
+import {showNofification} from "../../../../stores/features/notification/notificationSlice";
 
 
 interface AddUpdateAuthorModalProps {

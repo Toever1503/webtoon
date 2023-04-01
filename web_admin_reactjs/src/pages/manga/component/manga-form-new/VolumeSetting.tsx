@@ -1,12 +1,15 @@
 import { NotificationOutlined } from "@ant-design/icons";
-import { Badge, Button, Select } from "antd";
+import { Badge, Button, Popconfirm, Select } from "antd";
 import { AxiosResponse } from "axios";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import debounce from "../../../../utils/debounce";
-import MangaAddEditVolumeModal, { VolumeForm } from "../manga-form/MangaAddEditVolumeModal";
+import MangaAddEditVolumeModal, { VolumeForm } from "../modal/MangaAddEditVolumeModal";
 import ChapterSetting from "./ChapterSetting";
+import volumeService from "../../../../services/manga/VolumeService";
+import { useDispatch } from "react-redux";
+import { showNofification } from "../../../../stores/features/notification/notificationSlice";
 
 
 type VolumeType = {
@@ -20,6 +23,7 @@ type VolumeSettingProps = {
 }
 const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
 
     const [lastVolIndex, setLastVolIndex] = useState<VolumeType>({
         volumeIndex: -1,
@@ -33,18 +37,40 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
     })
 
 
+    const onDeleteVolume = () => {
+        console.log('delete vol: ', selectedVolId);
+        volumeService.deleteById(selectedVolId)
+            .then((res: AxiosResponse) => {
+                console.log('delete vol success: ', res.data);
+                setVolumeData(volumeData.filter((vol: VolumeType) => vol.id !== selectedVolId));
+                setSelectedVolId('');
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('manga.form.volume.delete-success'),
+                }));
+            })
+            .catch(err => {
+                console.log('delete vol failed: ', err);
+                dispatch(showNofification({
+                    type: 'error',
+                    message: t('manga.form.volume.delete-failed'),
+                }));
+            });
+
+    }
     // begin volume modal
     const [showAddEditVolumeModal, setShowAddEditVolumModal] = useState<boolean>(false);
     const [addEditVolumTitle, setAddEditVolumTitle] = useState<string>('');
     const [volumeInput, setVolumeInput] = useState<VolumeForm>();
     const openAddEditVolumeModal = (modalTitle: string, volume?: VolumeForm) => {
-
         if (volume) {
             setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${volume.volumeIndex + 1})`);
             setVolumeInput(volume);
         }
-        else
+        else {
+            setVolumeInput(undefined);
             setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${lastVolIndex.volumeIndex + 2})`);
+        }
 
         setShowAddEditVolumModal(true);
     }
@@ -146,13 +172,27 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                                 <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeInput)}>
                                     Chỉnh sửa tập
                                 </Button>
-                                <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeInput)}>
-                                    Xóa tập
-                                </Button>
+
+                                <Popconfirm
+                                    title={t('manga.form.volume.sure-delete')}
+                                    onConfirm={onDeleteVolume}
+                                    okText={t('confirm-yes')}
+                                    cancelText={t('confirm-no')}
+                                >
+                                    <Button >
+                                        Xóa tập
+                                    </Button>
+                                </Popconfirm>
+
+
                             </>
                         }
 
                     </div>
+                    {
+                        selectedVolId &&
+                        <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
+                    }
                 </>
                 :
                 <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />

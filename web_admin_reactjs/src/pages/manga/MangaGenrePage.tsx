@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Space, Table, TablePaginationConfig, Tag, Input, ModalProps, Modal } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import AddUpdateGenreModal from './component/AddUpdateGenreModal';
+import AddUpdateGenreModal from './component/modal/AddUpdateGenreModal';
 import { GenreModel } from '../../stores/features/manga/genreSlice';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../stores';

@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import Sortable from "sortablejs";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
-import MangaAddEditVolumeModal, { VolumeForm } from "./MangaAddEditVolumeModal";
-import MangaUploadChapterModal from "./MangaUploadChapterModal";
+import MangaAddEditVolumeModal, { VolumeForm } from "../modal/MangaAddEditVolumeModal";
+import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
 import MangaVolumeInfoItem from "./MangaVolumeInfoItem";
 
 

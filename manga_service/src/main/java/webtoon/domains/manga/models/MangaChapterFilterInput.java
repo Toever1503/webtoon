@@ -3,6 +3,7 @@ package webtoon.domains.manga.models;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -12,5 +13,6 @@ public class MangaChapterFilterInput {
     private Long volumeId;
     private Long mangaId;
 
+    private EMangaDisplayType displayType;
     private Integer chapterIndex;
 }

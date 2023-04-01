@@ -142,10 +142,16 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public void resetMangaType(Long mangaId) {
         MangaEntity entity = this.getById(mangaId);
+        if (entity.getDisplayType() != null)
+            if (entity.getDisplayType().equals(EMangaDisplayType.CHAP)) {
+                this.mangaChapterRepository.deleteALlByMangaId(entity.getId());
+            } else {
+                this.mangaVolumeRepository.deleteAllByMangaId(entity.getId());
+            }
         entity.setDisplayType(null);
         entity.setMangaType(EMangaType.UNSET);
         this.mangaRepository.saveAndFlush(entity);
-        this.mangaVolumeRepository.deleteAllByMangaId(entity.getId());
+
 
         // task: call storage service to remove manga's folder
     }

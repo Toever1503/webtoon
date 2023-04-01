@@ -24,7 +24,7 @@ const ChapterInfoItem: React.FC<ChapterInfoItemProps> = (props: ChapterInfoItemP
             <div className="chapter-title flex space-x-2 items-center">
                 <Checkbox />
                 <span>
-                    {t('manga.form.chapter.chapter')} {(props.chapter.chapterIndex || 0) + 1}: {props.chapter.name}
+                    {t('manga.form.chapter.chapter')} {(props.chapter.chapterIndex || 0) + 1}: {props.chapter.chapterName}
                 </span>
             </div>
             <Popconfirm

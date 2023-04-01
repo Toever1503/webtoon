@@ -49,7 +49,7 @@ public class MangaChapterResource {
 	@PostMapping("/filter")
 	public ResponseDto filter(@RequestBody MangaChapterDto filterModel, Pageable pageable) {
 		Specification<MangaChapterEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getName() + "%"),
+			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getChapterName() + "%"),
 					criteriaBuilder.like(root.get("content"), "%" + filterModel.getContent() + "%"),
 					criteriaBuilder.like(root.get("chapterIndex"), "%" + filterModel.getChapterIndex() + "%"),
 					criteriaBuilder.like(root.get("requiredVip"), "%" + filterModel.getIsRequiredVip() + "%")

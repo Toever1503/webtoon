@@ -7,7 +7,7 @@ import { useDispatch } from "react-redux";
 import chapterService from "../../../../services/manga/ChapterService";
 import { MangaInput } from "../../../../services/manga/MangaService";
 import debounce from "../../../../utils/debounce";
-import MangaUploadChapterModal from "../manga-form/MangaUploadChapterModal";
+import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
 import { ChapterType } from "../manga-form/MangaVolumeInfoItem";
 import ChapterItem from "./ChapterItem";
 
@@ -27,6 +27,8 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
     const [searchChapterVal, setSearchChapterVal] = useState<string>('');
     const onSearchonSearchChapter = debounce(() => {
         console.log('search chapter: ', searchChapterVal);
+        setIsSearching(true);
+        onCallApiSearch((pageConfig.current || 1) - 1, pageConfig.pageSize);
     });
 
 
@@ -35,7 +37,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
     const [uploadChapterModalTitle, setUploadChapterModalTitle] = useState<string>('');
     const [chapterInput, setChapterInput] = useState<ChapterType>({
         id: '',
-        name: '',
+        chapterName: '',
         chapterIndex: 0,
         volumeId: props.volumeId,
         isRequiredVip: false,
@@ -52,7 +54,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
 
         setChapterInput({
             id: '',
-            name: '',
+            chapterName: '',
             chapterIndex: 0,
             volumeId: props.volumeId,
             isRequiredVip: false,
@@ -67,7 +69,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
             setUploadChapterModalTitle(`${t('manga.form.chapter.edit-chapter-btn')} (${t('manga.form.chapter.chapter')} ${(chapter.chapterIndex || 0) + 1})`);
             setChapterInput(chapter);
             console.log('edit chapter: ', chapter);
-            
+
         }
     }
     // end chapter modal
@@ -90,18 +92,31 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         chapterService.filterChapter({
             volumeId: props.mangaInput.displayType === "VOL" ? props.volumeId : null,
             mangaId: props.mangaInput.displayType === "VOL" ? null : props.mangaInput.id,
+            q: searchChapterVal ? searchChapterVal : undefined,
+            displayType: props.mangaInput.displayType,
         }, page, size)
             .then((res: AxiosResponse<{
+                totalElements: number | undefined;
                 content: ChapterType[],
             }>) => {
                 console.log('filter chapter: ', res);
                 setChapterData(res.data.content);
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements,
+                });
+            })
+            .finally(() => {
+                setIsSearching(false);
             });
     }
     useEffect(() => {
-        props.mangaInput.id = 1;
         onCallApiSearch();
-    }, []);
+        chapterService.getLastChapterIndex(props.mangaInput.id)
+            .then((res: AxiosResponse<number>) => {
+                setLastChapterIndex(res.data);
+            });
+    }, [props]);
 
     return <div className="mt-[20px]">
 
@@ -118,7 +133,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                                     props.mangaInput.displayType === 'VOL' ?
                                         props.isShowAddNewChapter && <Button onClick={(e) => {
                                             setShowUploadChapterModal(true);
-                                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
+                                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${lastChapterIndex + 2})`);
 
                                         }} >
                                             {t('manga.form.chapter.add-chapter-btn')}
@@ -152,7 +167,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                                     }))}
                                 /> */}
 
-                                <Input.Search placeholder="Tìm tập" value={searchChapterVal} onChange={e => setSearchChapterVal(e.target.value)} onSearch={onSearchonSearchChapter} />
+                                <Input.Search placeholder="Tìm chương" value={searchChapterVal} onChange={e => setSearchChapterVal(e.target.value)} onSearch={onSearchonSearchChapter} />
                             </div>
                         </div>
                     </div>}
@@ -169,7 +184,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                 dataSource={chapterData}
                 renderItem={(item: ChapterType) => (
                     <div className="p-[10px]">
-                        <ChapterItem chapterInput={item} mangaInput={props.mangaInput} showEditChapterModal={onShowEditChapterModal} />
+                        <ChapterItem chapterInput={item} mangaInput={props.mangaInput} onDeleteOk={() => setChapterData(chapterData.filter((i: ChapterType) => i.id !== item.id))} showEditChapterModal={onShowEditChapterModal} />
                     </div>
 
                 )}

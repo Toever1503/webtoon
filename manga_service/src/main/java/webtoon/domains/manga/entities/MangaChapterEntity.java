@@ -41,5 +41,6 @@ public class MangaChapterEntity {
     private Boolean requiredVip;
 
     @OneToMany(mappedBy = "mangaChapter", cascade = CascadeType.ALL)
+    @OrderBy("imageIndex asc")
     private List<MangaChapterImageEntity> chapterImages;
 }

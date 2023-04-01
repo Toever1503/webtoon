@@ -39,5 +39,8 @@ public class MangaVolumeResource2 {
     public MangaVolumeDto getLastVolIndex(@PathVariable Long id) {
         return this.mangaVolumeService.getLastVolIndex(id);
     }
-
+    @DeleteMapping("{id}")
+    public void deleteById(@PathVariable Long id){
+        this.mangaVolumeService.deleteById(id);
+    }
 }

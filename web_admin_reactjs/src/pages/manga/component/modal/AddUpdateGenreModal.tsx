@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
-import genreService from "../../../services/manga/GenreService";
-import { addGenre, updateGenre } from "../../../stores/features/manga/genreSlice";
-import { showNofification } from "../../../stores/features/notification/notificationSlice";
+import genreService from "../../../../services/manga/GenreService";
+import { addGenre, updateGenre } from "../../../../stores/features/manga/genreSlice";
+import { showNofification } from "../../../../stores/features/notification/notificationSlice";
 
 interface AddUpdateGenreModalProps {
     config: object;

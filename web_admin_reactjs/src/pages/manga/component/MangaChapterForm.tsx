@@ -8,7 +8,7 @@ import { showNofification } from "../../../stores/features/notification/notifica
 import { autoSaveMangaInfo } from "../AddNewManga";
 import VolumeSetting from "./manga-form-new/VolumeSetting";
 import MangaChapterSetting from "./manga-form/MangaChapterSetting";
-import MangaUploadChapterModal from "./manga-form/MangaUploadChapterModal";
+import MangaUploadChapterModal from "./modal/MangaUploadChapterModal";
 import MangaUploadSingleChapter from "./manga-form/MangaUploadSingleChapter";
 
 
@@ -82,8 +82,8 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
 
     useEffect(() => {
         props.mangaInput.id = 1;
-        props.mangaInput.mangaType = 'IMAGE';
-        props.mangaInput.displayType = 'CHAP';
+        props.mangaInput.mangaType = 'TEXT';
+        props.mangaInput.displayType = 'VOL';
     }, [])
 
     return (

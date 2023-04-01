@@ -10,7 +10,8 @@ import Sortable from "sortablejs";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
-import { ChapterImageType, ChapterType } from "./MangaVolumeInfoItem";
+import { ChapterImageType, ChapterType } from "../manga-form/MangaVolumeInfoItem";
+import chapterService from "../../../../services/manga/ChapterService";
 
 type MangaUploadChapterModalProps = {
     mangaInput: MangaInput,
@@ -189,7 +190,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     // begin chapter input
     const [chapterInput, setChapterInput] = useState<ChapterType>({
         id: '',
-        name: '',
+        chapterName: '',
         chapterIndex: 0,
         content: '',
         chapterImages: [],
@@ -206,7 +207,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
     const resetChapterInput = () => {
         setChapterInput({
             id: '',
-            name: '',
+            chapterName: '',
             chapterIndex: 0,
             content: '',
             chapterImages: [],
@@ -231,7 +232,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         let errorCount = 0;
         const chapterContent = chapterContentEditorRef?.getHtml() || '';
 
-        if (!chapterInput.name) {
+        if (!chapterInput.chapterName) {
             chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
             errorCount++;
         }
@@ -271,7 +272,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 if (chapterInput.id)
                     formdata.append('id', chapterInput.id.toString());
                 formdata.append('chapterIndex', chapterInput?.chapterIndex?.toString() || '0');
-                formdata.append('chapterName', chapterInput.name);
+                formdata.append('chapterName', chapterInput.chapterName);
                 formdata.append('isRequiredVip', isRequireVipChapter.toString());
                 formdata.append('volumeId', chapterInput?.volumeId?.toString() || '0');
 
@@ -291,6 +292,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     .createImageChapter(formdata, props.mangaInput.id)
                     .then((res) => {
                         console.log('create image chapter success:', res.data);
+                        props.onOk(res.data);
                         dispatch(showNofification({
                             type: 'success',
                             message: t(`manga.form.errors.${modalType}-success`)
@@ -314,7 +316,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 mangaService.createTextChapter({
                     id: chapterInput.id ? chapterInput.id : undefined,
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
-                    name: chapterInput.name,
+                    chapterName: chapterInput.chapterName,
                     content: chapterContent,
                     isRequiredVip: isRequireVipChapter,
                     volumeId: chapterInput.volumeId || 0,
@@ -357,20 +359,31 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         if (!props.chapterInput)
             resetChapterInput();
         else {
-            setChapterInput(props.chapterInput);
-            if (props.chapterInput.chapterImages)
-                setOldImageChapterFiles(props.chapterInput.chapterImages.map((item: ChapterImageType) => (
-                    {
-                        id: item.id,
-                        index: item.imageIndex,
-                        file: '',
-                        data: '',
-                        url: item.image,
-                    }
-                )));
+            if (props.chapterInput.id)
+                chapterService.findById(props.chapterInput.id)
+                    .then((res: AxiosResponse<ChapterType>) => {
+                        console.log('get detail chapter: ', res.data);
+
+                        setChapterInput(res.data);
+                        setMangaTextChapter(res.data.content);
+                        if (res.data.chapterImages)
+                            setOldImageChapterFiles(res.data.chapterImages.map((item: ChapterImageType) => (
+                                {
+                                    id: item.id,
+                                    index: item.imageIndex,
+                                    file: '',
+                                    data: '',
+                                    url: item.image,
+                                }
+                            )));
+                    })
+                    .catch(err => {
+                        console.log('get chapter error:', err);
+                    })
         }
-        // @ts-ignore
-        imageSorter = Sortable.create(document.getElementById('chapter-images-list'));
+        if (props.mangaInput.mangaType === 'IMAGE')
+            // @ts-ignore
+            imageSorter = Sortable.create(document.getElementById('chapter-images-list'));
 
     }, [props]);
 
@@ -387,7 +400,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     <span className='text-red-500'>*</span>
                     <span> Chapter name:</span>
                 </label>
-                <Input placeholder="enter your chapter name" value={chapterInput.name} onChange={val => setChapterInput({ ...chapterInput, name: val.target.value })} />
+                <Input placeholder="enter your chapter name" value={chapterInput.chapterName} onChange={val => setChapterInput({ ...chapterInput, chapterName: val.target.value })} />
                 {
                     <p className='text-[12px] text-red-500 px-[5px] m-0'>
                         {chapterInputError.chapterName && t(chapterInputError.chapterName)}

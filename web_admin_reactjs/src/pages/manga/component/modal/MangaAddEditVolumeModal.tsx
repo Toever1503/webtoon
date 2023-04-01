@@ -98,7 +98,7 @@ const MangaAddEditVolumeModal: React.FC<MangaAddEditVolumeModalProps> = (props: 
         }
         else
             setVolumeVal('');
-    }, [props.visible])
+    }, [props])
     return <>
 
         <Modal title={<h3 className="text-2xl">{props.title}</h3>}

@@ -11,7 +11,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MangaUploadChapterInput {
     private Long id;
-    private String name;
+    private String chapterName;
     private Integer chapterIndex;
     private Long volumeId;
     private Long mangaID;

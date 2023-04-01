@@ -7,7 +7,7 @@ import { AuthorModel, deleteAuthorById, setAuthorData } from '../../stores/featu
 import tagService, { TagInput } from "../../services/TagService";
 import { deleteTagById, setTagData, TagModel } from "../../stores/features/manga/tagSlice";
 import authorService from "../../services/manga/AuthorService";
-import AddUpdateAuthorModal from "./component/AddUpdateAuthorModal";
+import AddUpdateAuthorModal from "./component/modal/AddUpdateAuthorModal";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { showNofification } from '../../stores/features/notification/notificationSlice';
 
