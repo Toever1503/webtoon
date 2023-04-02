@@ -1,13 +1,17 @@
 package webtoon.domains.tag.service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import webtoon.domains.tag.entity.ITagRelationRepository;
 import webtoon.domains.tag.entity.ITagRepository;
 import webtoon.domains.tag.entity.TagEntity;
+import webtoon.domains.tag.entity.TagEntityRelation;
+import webtoon.domains.tag.entity.enums.ETagType;
 import webtoon.utils.ASCIIConverter;
 
 @Service
@@ -15,9 +19,12 @@ public class TagServiceImpl implements ITagService {
 
     private final ITagRepository tagRepository;
 
-    public TagServiceImpl(ITagRepository tagRepository) {
+    private final ITagRelationRepository tagRelationRepository;
+
+    public TagServiceImpl(ITagRepository tagRepository, ITagRelationRepository tagRelationRepository) {
         super();
         this.tagRepository = tagRepository;
+        this.tagRelationRepository = tagRelationRepository;
     }
 
     @Override
@@ -28,6 +35,18 @@ public class TagServiceImpl implements ITagService {
         else
             input.setSlug(ASCIIConverter.removeAccent(input.getTagName()));
         return this.tagRepository.saveAndFlush(input);
+    }
+
+    @Override
+    public List<TagEntity> saveTagRelation(Long objectId, List<Long> tagIds, ETagType tagType) {
+        List<TagEntity> tagEntities = this.tagRepository.findAllById(tagIds);
+        this.tagRelationRepository.deleteAllByObjectIDAndTagType(objectId, tagType.name());
+        List<TagEntityRelation> tagEntityRelations = tagEntities.stream().map(t -> TagEntityRelation.builder()
+                .objectID(objectId)
+                .tag(t)
+                .tagType(tagType.name()).build()).collect(Collectors.toList());
+        this.tagRelationRepository.saveAllAndFlush(tagEntityRelations);
+        return tagEntities;
     }
 
     @Override

@@ -1,19 +1,10 @@
 package webtoon.domains.manga.entities;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -22,11 +13,12 @@ import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.tag.entity.TagEntity;
 
 @Entity
 @Table(name = "tbl_manga_entity")
 @AllArgsConstructor
-@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
+@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
 @Builder
 @Getter
 @Setter
@@ -89,10 +81,26 @@ public class MangaEntity {
     @Column(name = "view_count")
     private Integer viewCount;
 
-//private  created_by;
+    //private  created_by;
 //
 //private modified_by;
     @OneToMany(mappedBy = "manga")
     private Set<MangaVolumeEntity> volumeEntities;
 
+    @ManyToMany
+    @JoinTable(name = "tbl_manga_genre",
+            joinColumns = @JoinColumn(name = "manga_id"),
+            inverseJoinColumns = @JoinColumn(name = "genre_id")
+    )
+    private Set<MangaGenreEntity> genres;
+
+    @ManyToMany
+    @JoinTable(name = "tbl_manga_author",
+            joinColumns = @JoinColumn(name = "manga_id"),
+            inverseJoinColumns = @JoinColumn(name = "author_id")
+    )
+    private Set<MangaAuthorEntity> authors;
+
+    @Transient
+    private List<TagEntity> tags;
 }

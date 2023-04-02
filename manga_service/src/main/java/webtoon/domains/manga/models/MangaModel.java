@@ -1,6 +1,7 @@
 package webtoon.domains.manga.models;
 
 import java.util.Date;
+import java.util.List;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,5 +30,9 @@ public class MangaModel {
 	private EMangaType mangaType;
 	private Date createdAt;
 	private Date modifiedAt;
-	
+
+	private List<Long> authors;
+	private List<Long> genres;
+	private List<Long> tags;
+
 }

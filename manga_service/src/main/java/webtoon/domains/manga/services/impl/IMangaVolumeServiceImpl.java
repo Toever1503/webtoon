@@ -13,6 +13,7 @@ import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.models.MangaVolumeModel;
+import webtoon.domains.manga.repositories.IMangaChapterRepository;
 import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
@@ -29,6 +30,9 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 
     @Autowired
     private IMangaService mangaService;
+
+    @Autowired
+    private IMangaChapterRepository mangaChapterRepository;
 
     @Override
     public MangaVolumeDto add(MangaVolumeModel model) {
@@ -58,7 +62,9 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
     @Override
     public boolean deleteById(Long id) {
         try {
-            mangaVolumeRepository.deleteById(id);
+            MangaVolumeEntity entity = this.getById(id);
+            mangaVolumeRepository.delete(entity);
+            this.mangaVolumeRepository.reindexVolumeAfterIndex(entity.getVolumeIndex());
             // task: need reindex volume
             return true;
         } catch (Exception e) {

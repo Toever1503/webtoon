@@ -92,7 +92,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public boolean deleteById(java.lang.Long id) {
         try {
-            this.chapterRepository.deleteById(id);
+            MangaChapterEntity entity = this.chapterRepository.getById(id);
+            this.chapterRepository.delete(entity);
+            this.chapterRepository.reindexChapterAfterIndex(entity.getChapterIndex());
             // task: need reindex chapter
             return true;
         } catch (Exception e) {
@@ -119,7 +121,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
         if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL)) {
             if (input.getId() == null)
-                mangaChapterEntity.setChapterIndex(this.chapterRepository.getLastChapterIndexForVolType(input.getMangaID()).orElse(-1L).intValue() + 1);
+                mangaChapterEntity.setChapterIndex(this.chapterRepository.getLastChapterIndexForVolType(input.getVolumeId()).orElse(-1L).intValue() + 1);
             mangaChapterEntity.setMangaVolume(this.mangaVolumeRepository.getById(input.getVolumeId()));
         } else {
             if (input.getId() == null)
@@ -146,7 +148,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
             if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL)) {
                 if (input.getId() == null)
-                    mangaChapterEntity.setChapterIndex(this.chapterRepository.getLastChapterIndexForVolType(input.getMangaID()).orElse(-1L).intValue() + 1);
+                    mangaChapterEntity.setChapterIndex(this.chapterRepository.getLastChapterIndexForVolType(input.getVolumeId()).orElse(-1L).intValue() + 1);
                 mangaChapterEntity.setMangaVolume(this.mangaVolumeRepository.getById(input.getVolumeId()));
             } else {
                 if (input.getId() == null)
@@ -317,8 +319,13 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public Long getLastChapterIndex(Long mangaId) {
-        return this.chapterRepository.getLastChapterIndexForVolType(mangaId).orElse(-1L);
+    public Long getLastChapterIndexForChapType(Long mangaId) {
+        return this.chapterRepository.getLastChapterIndexForChapType(mangaId).orElse(-1L);
+    }
+
+    @Override
+    public Long getLastChapterIndexForVolType(Long volumeId) {
+        return this.chapterRepository.getLastChapterIndexForVolType(volumeId).orElse(-1L);
     }
 
     public static void main(String[] args) {

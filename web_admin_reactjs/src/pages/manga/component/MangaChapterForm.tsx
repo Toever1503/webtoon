@@ -5,11 +5,9 @@ import { useTranslation } from "react-i18next";
 import { useDispatch } from "react-redux";
 import mangaService, { MangaInput } from "../../../services/manga/MangaService";
 import { showNofification } from "../../../stores/features/notification/notificationSlice";
-import { autoSaveMangaInfo } from "../AddNewManga";
+import { autoSaveMangaInfo } from "../AddEditMangaForm";
 import VolumeSetting from "./manga-form-new/VolumeSetting";
-import MangaChapterSetting from "./manga-form/MangaChapterSetting";
-import MangaUploadChapterModal from "./modal/MangaUploadChapterModal";
-import MangaUploadSingleChapter from "./manga-form/MangaUploadSingleChapter";
+
 
 
 type MangaChapterFormProps = {
@@ -23,35 +21,24 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
     const dispatch = useDispatch();
 
     type ChapterMenuType = 'INFO' | 'UPLOAD_SINGLE';
-    const [currentStep, setCurrentStep] = useState<number>(2);
+    const [currentStep, setCurrentStep] = useState<number>(0);
     const [mangaType, setMangaType] = useState<MangaType>('TEXT');
     const [displayType, setDisplayType] = useState<'VOL' | 'CHAP'>('CHAP');
 
     const confirmMangaType = () => {
         console.log(mangaType);
-        props.setMangaInput({
-            ...props.mangaInput,
-            mangaType: mangaType
-        });
         setCurrentStep(1);
-
     }
 
     const confirmDisplayType = async () => {
+        props.mangaInput.mangaType = mangaType;
         props.mangaInput.displayType = displayType;
+        console.log('manga id: ', props.mangaInput.id);
+        
         if (!props.mangaInput.id) {
-            // autoSaveMangaInfo(props.mangaInput)?.then((res) => {
-            //     console.log('after set type: ', res);
-            //     mangaService.setMangaTypeAndDisplayType(props.mangaInput.id, mangaType, displayType)
-            //         .then((res) => {
-            //             console.log('set manga type success ', res.data);
-            //             setCurrentStep(2);
-            //         })
-            //         .catch(err => {
-            //             console.log('set manga type failed ', err);
-            //         });
-            // });
             await autoSaveMangaInfo(props.mangaInput);
+            console.log('auto save manga info');
+            
         }
         mangaService.setMangaTypeAndDisplayType(props.mangaInput.id, mangaType, displayType)
             .then((res) => {
@@ -80,10 +67,10 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
     }
     const [showChapterSetting, setShowChapterSetting] = useState<boolean>(true);
 
+    // props.mangaInput.id = 1;
+    // props.mangaInput.mangaType = 'TEXT';
+    // props.mangaInput.displayType = 'VOL';
     useEffect(() => {
-        props.mangaInput.id = 1;
-        props.mangaInput.mangaType = 'TEXT';
-        props.mangaInput.displayType = 'VOL';
     }, [])
 
     return (

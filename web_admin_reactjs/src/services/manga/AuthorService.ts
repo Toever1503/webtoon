@@ -10,9 +10,9 @@ interface AuthorFilter {
 }
 
 export interface AuthorInput {
-    id: number | string;
+    id?: number | string;
     name: string;
-    slug: string;
+    slug?: string;
 }
 
 const filterAuthor = async (model: AuthorFilter) => mangaAxios.get(`${basePath}/filter?s=${model.s}&page=${model.page}&size=${model.size}&sort=${model.sort}`);

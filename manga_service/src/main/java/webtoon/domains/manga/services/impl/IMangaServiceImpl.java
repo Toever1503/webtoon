@@ -15,12 +15,15 @@ import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
-import webtoon.domains.manga.repositories.IMangaChapterImageRepository;
-import webtoon.domains.manga.repositories.IMangaChapterRepository;
-import webtoon.domains.manga.repositories.IMangaRepository;
-import webtoon.domains.manga.repositories.IMangaVolumeRepository;
+import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
+import webtoon.domains.tag.entity.enums.ETagType;
+import webtoon.domains.tag.service.ITagService;
 import webtoon.utils.ASCIIConverter;
+
+import java.util.Collection;
+import java.util.Collections;
+import java.util.stream.Collectors;
 //import webtoon.utils.exception.CustomHandleException;
 
 @Service
@@ -40,6 +43,14 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Autowired
     private IMangaChapterRepository mangaChapterRepository;
+    @Autowired
+    private IMangaGenreRepository genreRepository;
+
+    @Autowired
+    private IMangaAuthorRepository authorRepository;
+    @Autowired
+    private ITagService tagService;
+
 
     @Override
     public MangaDto add(MangaModel model) {
@@ -50,13 +61,17 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setViewCount(0);
         mangaEntity.setCommentCount(0);
 
-        this.mangaRepository.saveAndFlush(mangaEntity);
+//        if(model.getId() != null){
+//
+//        }
+        mangaEntity.setGenres(genreRepository.findAllById(model.getGenres()).stream().collect(Collectors.toSet()));
+        mangaEntity.setAuthors(authorRepository.findAllById(model.getAuthors()).stream().collect(Collectors.toSet()));
 
-        MangaVolumeEntity volumeEntity = MangaVolumeEntity.builder()
-                .manga(mangaEntity)
-                .volumeIndex(0)
-                .name("Vol 1").build();
-        this.mangaVolumeRepository.saveAndFlush(volumeEntity);
+        this.mangaRepository.saveAndFlush(mangaEntity);
+        if (model.getTags() != null)
+            mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.POST));
+        else
+            mangaEntity.setTags(Collections.EMPTY_LIST);
         return this.mangaMapper.toDto(mangaEntity);
     }
 
@@ -97,8 +112,6 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public void setMangaTypeAndDisplayType(java.lang.Long id, EMangaType mangaType, EMangaDisplayType displayType) {
         MangaEntity entity = this.getById(id);
-        if (!entity.getMangaType().equals(EMangaType.UNSET))
-            throw new RuntimeException("Manga has already set type");
         entity.setMangaType(mangaType);
         entity.setDisplayType(displayType);
         this.mangaRepository.saveAndFlush(entity);

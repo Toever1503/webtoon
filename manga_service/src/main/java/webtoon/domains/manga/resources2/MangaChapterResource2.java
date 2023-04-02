@@ -6,10 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
-import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.models.MangaChapterFilterInput;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
-import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.services.IMangaChapterService;
 
 import java.io.IOException;
@@ -28,9 +26,10 @@ public class MangaChapterResource2 {
 
 
     @GetMapping("{id}")
-    public MangaChapterDto findDetailChapter(@PathVariable Long id){
+    public MangaChapterDto findDetailChapter(@PathVariable Long id) {
         return this.mangaChapterService.findById(id);
     }
+
     @PostMapping("save-text-chapter")
     public MangaChapterDto saveTextChapter(@RequestBody MangaUploadChapterInput input, @RequestParam Long mangaId) {
         input.setMangaID(mangaId);
@@ -56,13 +55,18 @@ public class MangaChapterResource2 {
         return chapter;
     }
 
-    @GetMapping("get-last-chapter-index/{mangaId}")
-    public Long getLastChapterIndex(@PathVariable Long mangaId){
-        return this.mangaChapterService.getLastChapterIndex(mangaId);
+    @GetMapping("get-last-chapter-index-for-vol-type/{volId}")
+    public Long getLastChapterIndexForVolType(@PathVariable Long volId) {
+        return this.mangaChapterService.getLastChapterIndexForVolType(volId);
+    }
+
+    @GetMapping("get-last-chapter-index-for-chap-type/{mangaId}")
+    public Long getLastChapterIndexForChapType(@PathVariable Long mangaId) {
+        return this.mangaChapterService.getLastChapterIndexForChapType(mangaId);
     }
 
     @DeleteMapping("{id}")
-    public void deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Long id) {
         this.mangaChapterService.deleteById(id);
     }
 }

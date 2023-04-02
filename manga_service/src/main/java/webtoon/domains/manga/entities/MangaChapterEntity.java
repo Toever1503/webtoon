@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor
 public class MangaChapterEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

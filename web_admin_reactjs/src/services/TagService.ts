@@ -10,9 +10,9 @@ interface TagFilter {
 }
 
 export interface TagInput {
-    id: number | string;
-    name: string;
-    slug: string;
+    id?: number | string;
+    tagName: string;
+    slug?: string;
 }
 
 const filterTag = async (model: TagFilter) => mangaAxios.get(`${basePath}/filter?s=${model.s}&page=${model.page}&size=${model.size}&sort=${model.sort}`);

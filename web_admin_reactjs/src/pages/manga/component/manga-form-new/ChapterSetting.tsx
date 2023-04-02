@@ -16,12 +16,13 @@ type ChapterSettingProps = {
     mangaInput: MangaInput,
     volumeId: number | string,
     isShowAddNewChapter: boolean,
+    refreshChapterLatest: Function
 }
 const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProps) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const [lastChapterIndex, setLastChapterIndex] = useState<number>(-1);
+    let lastChapterIndex: number = -1;
     const [chapterData, setChapterData] = useState<ChapterType[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [searchChapterVal, setSearchChapterVal] = useState<string>('');
@@ -50,6 +51,17 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         else {
             chapterData.unshift(chapter);
             setChapterData(chapterData);
+
+            if (chapter.chapterIndex)
+                lastChapterIndex = chapter.chapterIndex;
+            if (props.mangaInput.displayType === 'CHAP')
+                props.refreshChapterLatest({
+                    name: '',
+                    volumeIndex: chapter.chapterIndex,
+                });
+
+            console.log('chapter index-1: ', lastChapterIndex);
+
         }
 
         setChapterInput({
@@ -60,6 +72,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
             isRequiredVip: false,
         })
         setShowUploadChapterModal(false);
+
     }
     const onShowEditChapterModal = (e: any, chapter: ChapterType) => {
         // console.log('e', e.target.className);
@@ -72,6 +85,12 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
 
         }
     }
+    const showAddChapterModal = () => {
+        console.log('last chapter index- ', lastChapterIndex);
+
+        setShowUploadChapterModal(true);
+        setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${lastChapterIndex + 2})`);
+    };
     // end chapter modal
 
 
@@ -81,7 +100,6 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         total: 0,
     });
 
-    const callApiSearchChapter = (page: number, pageSize: number) => { };
 
     const onChangingPage = () => {
         console.log('on change page');
@@ -92,8 +110,9 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         chapterService.filterChapter({
             volumeId: props.mangaInput.displayType === "VOL" ? props.volumeId : null,
             mangaId: props.mangaInput.displayType === "VOL" ? null : props.mangaInput.id,
-            q: searchChapterVal ? searchChapterVal : undefined,
+            q: searchChapterVal ? isNaN(Number(searchChapterVal)) ? searchChapterVal : undefined : undefined,
             displayType: props.mangaInput.displayType,
+            chapterIndex: searchChapterVal ? isNaN(Number(searchChapterVal)) ? null : Number(searchChapterVal) - 1 : null,
         }, page, size)
             .then((res: AxiosResponse<{
                 totalElements: number | undefined;
@@ -112,10 +131,22 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
     }
     useEffect(() => {
         onCallApiSearch();
-        chapterService.getLastChapterIndex(props.mangaInput.id)
-            .then((res: AxiosResponse<number>) => {
-                setLastChapterIndex(res.data);
-            });
+        if (props.mangaInput.displayType === 'CHAP')
+            chapterService.getLastChapterIndexForChapType(props.mangaInput.id)
+                .then((res: AxiosResponse<number>) => {
+                    lastChapterIndex = res.data;
+                    // props.refreshChapterLatest({
+                    //     name: '',
+                    //     volumeIndex: res.data,
+                    // });
+                });
+        else
+            chapterService.getLastChapterIndexForVolType(props.volumeId)
+                .then((res: AxiosResponse<number>) => {
+
+                    lastChapterIndex = res.data;
+                });
+
     }, [props]);
 
     return <div className="mt-[20px]">
@@ -131,42 +162,18 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
 
                                 {
                                     props.mangaInput.displayType === 'VOL' ?
-                                        props.isShowAddNewChapter && <Button onClick={(e) => {
-                                            setShowUploadChapterModal(true);
-                                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${lastChapterIndex + 2})`);
-
-                                        }} >
+                                        props.isShowAddNewChapter && <Button onClick={showAddChapterModal} >
                                             {t('manga.form.chapter.add-chapter-btn')}
                                         </Button>
                                         :
-                                        <Button onClick={(e) => {
-                                            setShowUploadChapterModal(true);
-                                            setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${chapterData.length + 1})`);
-
-                                        }} >
-                                            {t('manga.form.chapter.add-chapter-btn')}
+                                        <Button onClick={showAddChapterModal}>
+                                            {t('manga.form.chapter.add-chapter-btn')} -1
                                         </Button>
                                 }
 
                             </div>
 
                             <div>
-                                {/* <Select
-                                    className="w-[300px]"
-                                    showSearch
-                                    value={searchChapterVal}
-                                    placeholder="Tìm tập"
-                                    defaultActiveFirstOption={false}
-                                    filterOption={false}
-
-                                   
-                                    notFoundContent={<span className="inline-block text-center">Hiện chưa có chương nào!</span>}
-                                    options={(chapterData || []).map((d) => ({
-                                        value: d.id,
-                                        label: t('manga.form.volume.volume') + ` ${(d.chapterIndex || 0) + 1}` + d.name,
-                                    }))}
-                                /> */}
-
                                 <Input.Search placeholder="Tìm chương" value={searchChapterVal} onChange={e => setSearchChapterVal(e.target.value)} onSearch={onSearchonSearchChapter} />
                             </div>
                         </div>
@@ -184,7 +191,15 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                 dataSource={chapterData}
                 renderItem={(item: ChapterType) => (
                     <div className="p-[10px]">
-                        <ChapterItem chapterInput={item} mangaInput={props.mangaInput} onDeleteOk={() => setChapterData(chapterData.filter((i: ChapterType) => i.id !== item.id))} showEditChapterModal={onShowEditChapterModal} />
+                        <ChapterItem chapterInput={item} mangaInput={props.mangaInput} onDeleteOk={() => {
+                            setChapterData(chapterData.filter((i: ChapterType) => i.id !== item.id).map((i: ChapterType) => {
+                                if (i?.chapterIndex)
+                                    // @ts-ignore
+                                    if (i.chapterIndex > item.chapterIndex)
+                                        i.chapterIndex--;
+                                return i;
+                            }));
+                        }} showEditChapterModal={onShowEditChapterModal} />
                     </div>
 
                 )}

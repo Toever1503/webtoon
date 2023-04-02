@@ -59,7 +59,7 @@ const reIndexChapter = async (chapterId: number | string, index: number) => mang
 export interface VolumeFilterInput {
     mangaId: number | string;
     q?: string;
-    volumeIndex?: number;
+    volumeIndex?: number | null;
 }
 
 const filterVolume = (input: VolumeFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/volume/filter?page=${page}&size=${size}&sort=id,desc`, input);

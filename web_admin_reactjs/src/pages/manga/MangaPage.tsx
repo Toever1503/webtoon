@@ -60,11 +60,13 @@ const MangaPage: React.FC = () => {
 
     const onChangeTable = (page: TablePaginationConfig) => {
         console.log('page', page);
+        pageConfig.current = page.current || 1;
+        onfilterManga();
     }
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: 10,
-        total: 0,
+        total: 100,
         showSizeChanger: false,
     });
     const [mangaData, setMangaData] = React.useState<MangaInput[]>();
@@ -73,6 +75,7 @@ const MangaPage: React.FC = () => {
         setTableLoading(true);
         mangaService.filterManga(mangaFilter, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
             .then((res: AxiosResponse<{
+                totalElements: number | undefined;
                 content: MangaInput[],
                 total: number
             }>) => {
@@ -82,6 +85,10 @@ const MangaPage: React.FC = () => {
                     e.stt = index + 1;
                     return e;
                 }));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements
+                });
             })
             .finally(() => setTableLoading(false));
     }
@@ -125,7 +132,7 @@ const MangaPage: React.FC = () => {
                     <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
-            <Table columns={columns} loading={tableLoading} dataSource={mangaData} onChange={onChangeTable} />
+            <Table columns={columns} loading={tableLoading} pagination={pageConfig} dataSource={mangaData} onChange={onChangeTable} />
         </div>
 
     )

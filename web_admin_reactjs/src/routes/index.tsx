@@ -2,7 +2,7 @@ import {createBrowserRouter} from "react-router-dom";
 import DefaultLayout from "../layouts/DefaultLayout";
 import CounterPage from "../pages/counter/CounterPage";
 import MangaPage from "../pages/manga/MangaPage";
-import AddNewManga from "../pages/manga/AddNewManga";
+import AddEditMangaForm from "../pages/manga/AddEditMangaForm";
 import MangaGenrePage from "../pages/manga/MangaGenrePage";
 import TagPage from "../pages/tag/TagPage";
 import DragPage from "../pages/test/DragPage";
@@ -24,7 +24,11 @@ const router = createBrowserRouter([
             },
             {
                 path: "/mangas/add",
-                element: <AddNewManga/>
+                element: <AddEditMangaForm type={"ADD"}/>
+            },
+            {
+                path: "/mangas/edit/{id}",
+                element: <AddEditMangaForm type={"EDIT"}/>
             },
             {
                 path: "/mangas/genres",

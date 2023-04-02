@@ -13,13 +13,19 @@ import java.util.Optional;
 
 
 @Repository
-public interface IMangaVolumeRepository extends JpaRepository<MangaVolumeEntity, Long>, JpaSpecificationExecutor<MangaVolumeEntity>{
+public interface IMangaVolumeRepository extends JpaRepository<MangaVolumeEntity, Long>, JpaSpecificationExecutor<MangaVolumeEntity> {
 
     @Query(value = "SELECT * FROM `manga_volume_entity` \n" +
             "WHERE manga_id = :mangaId\n" +
             "ORDER BY volume_index desc\n" +
             "LIMIT 0,1", nativeQuery = true)
     Optional<MangaVolumeEntity> getLastIndex(@Param("mangaId") Long mangaId);
+
+
+
+    @Modifying
+    @Query("UPDATE FROM MangaVolumeEntity v set v.volumeIndex = v.volumeIndex-1 where v.volumeIndex > ?1")
+    void reindexVolumeAfterIndex(Integer index);
 
     @Modifying
 //    @Query("DELETE FROM MangaVolumeEntity v where v.manga.id = ?1")

@@ -3,16 +3,16 @@ import { mangaAxios } from "../config/MangaAxios";
 const basePath: String = "/genre";
 
 interface GenreFilter {
-    s: string;
+    s: string | null;
     page: number;
     size?: number;
     sort: string;
 }
 
 export interface GenreInput {
-    id: number | string;
+    id?: number | string;
     name: string;
-    slug: string;
+    slug?: string;
 }
 
 const filterGenre = async (model: GenreFilter) => mangaAxios.get(`${basePath}/filter?s=${model.s}&page=${model.page}&size=${model.size}&sort=${model.sort}`);
