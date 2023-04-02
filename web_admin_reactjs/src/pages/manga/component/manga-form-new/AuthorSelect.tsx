@@ -77,6 +77,8 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
 
     useEffect(() => {
         onCallApiSearch();
+        // @ts-ignore
+        setSelectOptions(mangaInput.originalAuthors);
     }, []);
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
@@ -90,7 +92,6 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                 placeholder="chọn tác giả"
                 // @ts-ignore
                 onSearch={onSearch}
-                labelInValue
                 showSearch
                 allowClear
                 filterOption={false}
@@ -116,7 +117,7 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                     setSelectedOptions(val);
                     mangaInput.authors = val.map((item: any) => item.value);
                 }}
-                options={selectOptions.map((item: AuthorInput) => ({ label: item.name, value: item.id }))}
+                options={selectOptions ? selectOptions.map((item: AuthorInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />
 
             {

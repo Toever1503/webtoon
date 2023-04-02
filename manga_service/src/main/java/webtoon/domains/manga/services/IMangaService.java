@@ -7,7 +7,9 @@ import org.springframework.data.jpa.domain.Specification;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
+import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaModel;
 
 public interface IMangaService {
@@ -30,4 +32,8 @@ public interface IMangaService {
 	MangaDto findById(Long id);
 
 	void resetMangaType(Long mangaId);
+
+    void changeReleaseStatus(Long id, EMangaSTS mangaSTS);
+
+	void changeStatus(Long id, EStatus status);
 }

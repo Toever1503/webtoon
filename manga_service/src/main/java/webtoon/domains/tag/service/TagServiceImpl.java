@@ -50,6 +50,12 @@ public class TagServiceImpl implements ITagService {
     }
 
     @Override
+    public List<TagEntity> findAllByObjectIdAndType(Long objectId, ETagType tagType) {
+        return this.tagRelationRepository.findAllByObjectIDAndTagType(objectId, tagType.name())
+                .stream().map(TagEntityRelation::getTag).collect(Collectors.toList());
+    }
+
+    @Override
     public void deleteTagByIds(List<Long> ids) {
         // TODO Auto-generated method stub
         this.tagRepository.deleteAllById(ids);

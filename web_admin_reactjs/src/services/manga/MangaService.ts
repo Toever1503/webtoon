@@ -43,18 +43,19 @@ export type MangaFilterInput = {
     status: MangaStatus;
     q?: string;
 }
+const findById = async (id: number | string) => mangaAxios.get(`${basePath}/${id}`);
 
 const filterManga = (input: MangaFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/filter?page=${page}&size=${size}&sort=id,desc`, input);
 const addMangaInfo = async (model: MangaInput) => mangaAxios.post(`${basePath}`, model);
 const updateMangaInfo = async (model: MangaInput) => mangaAxios.put(`${basePath}/${model.id}`, model);
 const setMangaTypeAndDisplayType = async (id: number | string, mangaTye: MangaType,  displayType: 'VOL' | 'CHAP') => mangaAxios.patch(`${basePath}/set-manga-type-and-display-type/${id}?mangaType=${mangaTye}&displayType=${displayType}`);
 const resetMangaType = async (id: number | string) => mangaAxios.patch(`${basePath}/reset-manga-type/${id}`);
+const deleteById = async (id: number | string) => mangaAxios.del(`${basePath}/${id}`);
 const deleteMangaInfo = async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
 const createTextChapter = async (model: ChapterType, mangaId: number | string) => mangaAxios.post(`${basePath}/chapter/save-text-chapter?mangaId=${mangaId}`, model);
 const createImageChapter = async (model: FormData, mangaId: number | string) => mangaAxios.post(`${basePath}/chapter/save-image-chapter?mangaId=${mangaId}`, model);
 
-const reIndexChapter = async (chapterId: number | string, index: number) => mangaAxios.patch(`${basePath}/chapter/re-index-chapter/${chapterId}?index=${index}`);
 
 export interface VolumeFilterInput {
     mangaId: number | string;
@@ -93,7 +94,9 @@ const mangaService = {
     updateVolume,
     filterVolume,
     getChapterByVolumeId,
-    getLastVolIndex
+    getLastVolIndex,
+    findById,
+    deleteById
 };
 
 export default mangaService;

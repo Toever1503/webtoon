@@ -72,9 +72,10 @@ public class PostEntity {
     @ManyToOne
     private CategoryEntity category;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "object_id")
-    @Where(clause = "tag_type =  '" + TagRelationTypeConstant.POST + "'")
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @JoinColumn(name = "object_id")
+//    @Where(clause = "tag_type =  '" + TagRelationTypeConstant.POST + "'")
+    @Transient
     private List<TagEntityRelation> tagRelations;
 
     @Override

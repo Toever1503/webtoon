@@ -355,10 +355,9 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
     let imageSorter: Sortable;
     useEffect(() => {
-
-        if (!props.chapterInput)
+        if (!props.visible)
             resetChapterInput();
-        else {
+        if (props.chapterInput) {
             if (props.chapterInput.id)
                 chapterService.findById(props.chapterInput.id)
                     .then((res: AxiosResponse<ChapterType>) => {

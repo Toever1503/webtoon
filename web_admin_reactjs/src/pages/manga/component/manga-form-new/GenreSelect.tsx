@@ -23,7 +23,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
     const dispatch = useDispatch();
 
     // begin tag search
-    const [genreOptions, setGenreOptions] = useState<GenreInput[]>([]);
+    const [selectOptions, setSelectOptions] = useState<GenreInput[]>([]);
     const [selectedGenres, setSelectedGenres] = useState<string[]>(mangaInput.genres);
     const [genreSearchVal, setGenreSearchVal] = useState('');
     const [isAddingNewGenre, setIsAddingNewGenre] = useState<boolean>(false);
@@ -40,7 +40,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
         })
             .then((res) => {
                 console.log('seach genre res', res.data.content);
-                setGenreOptions(res.data.content);
+                setSelectOptions(res.data.content);
             })
     };
 
@@ -53,7 +53,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
             })
                 .then((res: AxiosResponse<GenreInput>) => {
                     console.log('add ok: ', res.data);
-                    setGenreOptions([res.data, ...genreOptions]);
+                    setSelectOptions([res.data, ...selectOptions]);
                     dispatch(showNofification({
                         type: 'success',
                         message: 'Add genre success',
@@ -80,7 +80,8 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
         // }, 15000);
         // return () => clearInterval(id);
         onCallApiSearchGenre();
-
+        // @ts-ignore
+        setSelectOptions(mangaInput.originalGenres);
     }, []);
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
@@ -94,7 +95,6 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                 placeholder="chọn thể loại"
                 // @ts-ignore
                 onSearch={onSearchGenre}
-                labelInValue
                 showSearch
                 allowClear
                 filterOption={false}
@@ -120,7 +120,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                     setSelectedGenres(val);
                     mangaInput.genres = val.map((item: any) => item.value);
                 }}
-                options={genreOptions.map((item: GenreInput) => ({ label: item.name, value: item.id }))}
+                options={selectOptions ? selectOptions.map((item: GenreInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />
 
             {

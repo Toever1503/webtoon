@@ -76,6 +76,8 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
 
     useEffect(() => {
         onCallApiSearch();
+         // @ts-ignore
+         setSelectOptions(mangaInput.tags);
     }, []);
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
@@ -115,7 +117,7 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
                     setSelectedOptions(val);
                     mangaInput.tags = val.map((item: any) => item.value);
                 }}
-                options={selectOptions.map((item: TagInput) => ({ label: item.tagName, value: item.id }))}
+                options={selectOptions ? selectOptions.map((item: TagInput) => ({ label: item.tagName, value: item.id?.toString() })) : []}
             />
 
             {

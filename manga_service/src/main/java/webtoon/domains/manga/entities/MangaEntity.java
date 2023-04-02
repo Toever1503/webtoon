@@ -84,21 +84,22 @@ public class MangaEntity {
     //private  created_by;
 //
 //private modified_by;
-    @OneToMany(mappedBy = "manga")
+    @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL)
     private Set<MangaVolumeEntity> volumeEntities;
 
     @ManyToMany
-    @JoinTable(name = "tbl_manga_genre",
+    @JoinTable(name = "tbl_manga_genre_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private Set<MangaGenreEntity> genres;
 
     @ManyToMany
-    @JoinTable(name = "tbl_manga_author",
+    @JoinTable(name = "tbl_manga_author_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
+
     private Set<MangaAuthorEntity> authors;
 
     @Transient

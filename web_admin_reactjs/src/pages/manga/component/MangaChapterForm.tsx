@@ -12,7 +12,8 @@ import VolumeSetting from "./manga-form-new/VolumeSetting";
 
 type MangaChapterFormProps = {
     setMangaInput: Function,
-    mangaInput: MangaInput
+    mangaInput: MangaInput,
+    formType: 'ADD' | 'EDIT',
 };
 export type MangaType = 'TEXT' | 'IMAGE';
 
@@ -21,7 +22,7 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
     const dispatch = useDispatch();
 
     type ChapterMenuType = 'INFO' | 'UPLOAD_SINGLE';
-    const [currentStep, setCurrentStep] = useState<number>(0);
+    const [currentStep, setCurrentStep] = useState<number>((props.formType === 'ADD' || !props.mangaInput.displayType) ? 0 : 2);
     const [mangaType, setMangaType] = useState<MangaType>('TEXT');
     const [displayType, setDisplayType] = useState<'VOL' | 'CHAP'>('CHAP');
 
@@ -34,11 +35,11 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
         props.mangaInput.mangaType = mangaType;
         props.mangaInput.displayType = displayType;
         console.log('manga id: ', props.mangaInput.id);
-        
+
         if (!props.mangaInput.id) {
             await autoSaveMangaInfo(props.mangaInput);
             console.log('auto save manga info');
-            
+
         }
         mangaService.setMangaTypeAndDisplayType(props.mangaInput.id, mangaType, displayType)
             .then((res) => {
@@ -71,6 +72,8 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
     // props.mangaInput.mangaType = 'TEXT';
     // props.mangaInput.displayType = 'VOL';
     useEffect(() => {
+        if (!props.mangaInput.displayType)
+            confirmChooseMangaTypeAgain();
     }, [])
 
     return (
@@ -78,8 +81,9 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             <div style={{ borderBottom: '1px solid #c3c4c7' }} className='flex justify-between items-center p-[10px]'>
                 <div className="flex space-x-3">
                     <p className='text-[16px] font-bold m-0'>Chapter Setting</p>
+
                     {
-                        currentStep === 2 &&
+                        props.formType === 'ADD' && currentStep === 2 &&
                         <Popconfirm
                             title="Bạn sẽ phải nhập lại tất cả thông tin của truyện. Bạn có chắc chắn?"
                             onConfirm={confirmChooseMangaTypeAgain}

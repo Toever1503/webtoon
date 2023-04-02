@@ -3,6 +3,7 @@ export default {
     manga: {
         form:
         {
+            'sure-delete': 'Bạn chăc chắn muốn xóa manga này?',
             errors: {
                 'check-again': 'Vui lòng kiểm tra lại thông tin!',
                 'title-required': 'Tiêu đề không được để trống!',
@@ -20,7 +21,8 @@ export default {
                 'create-success': 'Thêm thành công!',
                 'edit-failed': 'Sửa thất bại!',
                 'edit-success': 'Sửa thành công!',
-               
+                'delete-success': 'Xóa thành công!',
+                'delete-failed': 'Xóa thất bại!',
             },
             volume: {
                 'volume': 'Tập',

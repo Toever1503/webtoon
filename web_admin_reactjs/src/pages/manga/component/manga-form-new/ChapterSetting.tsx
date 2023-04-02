@@ -16,13 +16,13 @@ type ChapterSettingProps = {
     mangaInput: MangaInput,
     volumeId: number | string,
     isShowAddNewChapter: boolean,
-    refreshChapterLatest: Function
+    refreshChapterLatest?: Function
 }
 const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProps) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    let lastChapterIndex: number = -1;
+    const [lastChapterIndex, setLastChapterIndex] = useState<number>(-1);
     const [chapterData, setChapterData] = useState<ChapterType[]>([]);
     const [isSearching, setIsSearching] = useState<boolean>(false);
     const [searchChapterVal, setSearchChapterVal] = useState<string>('');
@@ -52,13 +52,14 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
             chapterData.unshift(chapter);
             setChapterData(chapterData);
 
-            if (chapter.chapterIndex)
-                lastChapterIndex = chapter.chapterIndex;
             if (props.mangaInput.displayType === 'CHAP')
-                props.refreshChapterLatest({
-                    name: '',
-                    volumeIndex: chapter.chapterIndex,
-                });
+                if (props.refreshChapterLatest)
+                    props.refreshChapterLatest({
+                        name: '',
+                        volumeIndex: chapter.chapterIndex,
+                    });
+
+            setLastChapterIndex(lastChapterIndex + 1);
 
             console.log('chapter index-1: ', lastChapterIndex);
 
@@ -101,8 +102,10 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
     });
 
 
-    const onChangingPage = () => {
+    const onChangingPage = (page: number) => {
         console.log('on change page');
+        pageConfig.current = page;
+        onCallApiSearch(page - 1, pageConfig.pageSize);
     }
 
     const onCallApiSearch = (page: number = 0, size: number = 10) => {
@@ -130,22 +133,23 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
             });
     }
     useEffect(() => {
-        onCallApiSearch();
-        if (props.mangaInput.displayType === 'CHAP')
-            chapterService.getLastChapterIndexForChapType(props.mangaInput.id)
-                .then((res: AxiosResponse<number>) => {
-                    lastChapterIndex = res.data;
-                    // props.refreshChapterLatest({
-                    //     name: '',
-                    //     volumeIndex: res.data,
-                    // });
-                });
-        else
-            chapterService.getLastChapterIndexForVolType(props.volumeId)
-                .then((res: AxiosResponse<number>) => {
-
-                    lastChapterIndex = res.data;
-                });
+        if (props.mangaInput.id) {
+            onCallApiSearch();
+            if (props.mangaInput.displayType === 'CHAP')
+                chapterService.getLastChapterIndexForChapType(props.mangaInput.id)
+                    .then((res: AxiosResponse<number>) => {
+                        setLastChapterIndex(res.data);
+                        // props.refreshChapterLatest({
+                        //     name: '',
+                        //     volumeIndex: res.data,
+                        // });
+                    });
+            else
+                chapterService.getLastChapterIndexForVolType(props.volumeId)
+                    .then((res: AxiosResponse<number>) => {
+                        setLastChapterIndex(res.data);
+                    });
+        }
 
     }, [props]);
 
@@ -167,7 +171,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                                         </Button>
                                         :
                                         <Button onClick={showAddChapterModal}>
-                                            {t('manga.form.chapter.add-chapter-btn')} -1
+                                            {t('manga.form.chapter.add-chapter-btn')}
                                         </Button>
                                 }
 
@@ -185,7 +189,6 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                         </div>
                     </>
                 }
-                // loading={true}
                 bordered
                 loading={isSearching}
                 dataSource={chapterData}

@@ -10,13 +10,14 @@ import dayjs from 'dayjs';
 import mangaService, { MangaInput, MangaStatus, ReleaseStatus } from '../../services/manga/MangaService';
 import { useDispatch } from 'react-redux';
 import { showNofification } from '../../stores/features/notification/notificationSlice';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { NavigateFunction, useNavigate, useParams } from 'react-router-dom';
 import { AppDispatch } from '../../stores';
 import tagService from '../../services/TagService';
 import genreService, { GenreInput } from '../../services/manga/GenreService';
 import GenreSelect from './component/manga-form-new/GenreSelect';
 import AuthorSelect from './component/manga-form-new/AuthorSelect';
 import TagSelect from './component/manga-form-new/TagSelect';
+import { AuthorInput } from '../../services/manga/AuthorService';
 
 
 
@@ -54,25 +55,9 @@ interface AddEditMangaFormProps {
 }
 
 const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFormProps) => {
-    const { t, i18n } = useTranslation();
+    const { t } = useTranslation();
     const dispatch: AppDispatch = useDispatch();
     const navigate: NavigateFunction = useNavigate();
-
-    // begin tag search
-    const [tagOptions, setTagOptions] = useState(['jack', 'lucy']);
-    const [tagSearchVal, setTagSearchVal] = useState('');
-    const tagSearchRef = useRef<InputRef>(null);
-    const [isAddingNewTag, setIsAddingNewTag] = useState<boolean>(false);
-    const onSearchTag = debounce((val: string) => {
-        setTagSearchVal(val);
-        console.log('search tag: ', val);
-    });
-
-    const addTag = (e: React.MouseEvent<HTMLButtonElement | HTMLAnchorElement>) => {
-        console.log('add tag:', e.target);
-    }
-    // end tag search
-
 
 
     // manga info
@@ -193,130 +178,168 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         tags: '',
     });
 
-
+    let { id } = useParams();
+    const [isFetchingMangaInfo, setIsFetchingMangaInfo] = useState<boolean>(true);
     useEffect(() => {
         // let id: number | undefined;
         // id = setInterval(() => {
         //     autoSaveMangaInfo(mangaInput);
         // }, 15000);
         // return () => clearInterval(id);
-    }, [mangaInput]);
+        if (props.type === 'EDIT') {
+            if (id) {
+                mangaService.findById(id)
+                    .then((res) => {
+                        console.log('get manga success', res.data);
+
+                        setMangaInput({
+                            ...res.data,
+                            originalAuthors: res.data.authors,
+                            originalGenres: res.data.genres,
+                            originalTags: res.data.tags,
+                            authors: res.data.authors.map((author: AuthorInput) => author.id),
+                            genres: res.data.genres.map((genre: GenreInput) => genre.id),
+                            tags: res.data.tags.map((tag: GenreInput) => tag.id),
+                        });
+                    })
+                    .catch((err) => {
+                        console.log('get manga failed', err);
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: 'Có lỗi xảy ra, vui lòng thử lại!',
+                        }));
+                    })
+                    .finally(() => setIsFetchingMangaInfo(false));
+            }
+        }
+        else setIsFetchingMangaInfo(false);
+    }, []);
 
 
     return (
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
-                <p className="text-[23px] font-[600]">Add New Manga</p>
+                <p className="text-[23px] font-[600]">
+                    {
+                        props.type === 'ADD' ?
+                            'Add New Manga'
+                            :
+                            'Edit Manga'
+                    }
+                </p>
                 <Button type="primary" loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Save</Button>
             </div>
 
-            <div className='flex gap-[15px]'>
-                <div className=''>
-                    <section className='border max-w-[1000px] h-fit'>
-                        <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                            <span className='text-red-500'>*</span>
-                            <span> Title:</span>
-                        </label>
-                        <Input className='' value={mangaInput.title} onChange={(val: any) => setMangaInput({ ...mangaInput, title: val.target.value })} placeholder="Title" />
-                        {
-                            <p className='text-[12px] text-red-500 px-[5px]'>
-                                {mangaInputError.title && t(mangaInputError.title)}
-                            </p>
-                        }
-
-                        <div className=''>
-                            <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
+            {
+                !isFetchingMangaInfo &&
+                <div className='flex gap-[15px]'>
+                    <div className=''>
+                        <section className='border max-w-[1000px] h-fit'>
+                            <label htmlFor="mangaTitle" className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                                 <span className='text-red-500'>*</span>
-                                <span>Content:</span>
+                                <span> Title:</span>
                             </label>
-                            <RichtextEditorForm onReady={onReadyMangaContentEditor} toolbarSettings={{}} />
+                            <Input id="mangaTitle" className='' value={mangaInput.title} onChange={(val: any) => setMangaInput({ ...mangaInput, title: val.target.value })} placeholder="Title" />
                             {
                                 <p className='text-[12px] text-red-500 px-[5px]'>
-                                    {mangaInputError.description && t(mangaInputError.description)}
+                                    {mangaInputError.title && t(mangaInputError.title)}
                                 </p>
                             }
-                        </div>
-                    </section>
 
-                    <MangaChapterForm mangaInput={mangaInput}  setMangaInput={setMangaInput} />
-                </div>
+                            <div className=''>
+                                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                                    <span className='text-red-500'>*</span>
+                                    <span>Content:</span>
+                                </label>
+                                <RichtextEditorForm onReady={onReadyMangaContentEditor} toolbarSettings={{}} />
+                                {
+                                    <p className='text-[12px] text-red-500 px-[5px]'>
+                                        {mangaInputError.description && t(mangaInputError.description)}
+                                    </p>
+                                }
+                            </div>
+                        </section>
 
-                <div className='manga-form-sidebar w-[280px] grid gap-y-[15px]' >
-                    <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
-                        <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>More Info</p>
+                        <MangaChapterForm mangaInput={mangaInput} formType={props.type} setMangaInput={setMangaInput} />
+                    </div>
 
-                        <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
-                            <span className='text-[14px] font-bold'>Alternative Title:</span>
-                            <Input value={mangaInput.alternativeTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setMangaInput({ ...mangaInput, alternativeTitle: e.target.value })} placeholder='alternate title' />
-                        </div>
+                    <div className='manga-form-sidebar w-[280px] grid gap-y-[15px]' >
+                        <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
+                            <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>More Info</p>
 
-
-                        <div className='flex justify-between items-center px-[10px]'>
-                            <span className='text-[14px] font-bold'>Manga Status:</span>
-                            <Select
-                                className='min-w-[150px]'
-                                value={mangaInput.status}
-                                onChange={(val: MangaStatus) => { setMangaInput({ ...mangaInput, status: val }) }}
-                                options={[
-                                    { value: 'PUBLISHED', label: 'PUBLISHED' },
-                                    { value: 'DRAFTED', label: 'DRAFTED' },
-                                ]}
-                            />
-                        </div>
-
-                        <div className='flex justify-between items-center px-[10px]'>
-                            <span className='text-[14px] font-bold'>Release status:</span>
-                            <Select
-                                className='min-w-[150px]'
-                                defaultValue="COMING"
-                                onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
-                                options={[
-                                    { value: 'COMING', label: 'COMING' },
-                                    { value: 'GOING', label: 'GOING' },
-                                    { value: 'STOPPED', label: 'STOPED' },
-                                    { value: 'CANCELLED', label: 'CANCELED' },
-                                    { value: 'COMPLETED', label: 'COMPLETED' },
-                                ]}
-                            />
-                        </div>
-
-                        <div className='flex justify-between items-center px-[10px]'>
-                            <span className='text-[14px] font-bold'>Release year:</span>
-                            <DatePicker allowClear={false} mode='year' onChange={(val: any) => setMangaInput({ ...mangaInput, releaseYear: val })} value={mangaInput.releaseYear} placement='bottomRight' picker="year" />
-                        </div>
-
-                        <GenreSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
-                        <AuthorSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
-                        <TagSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
+                            <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
+                                <span className='text-[14px] font-bold'>Alternative Title:</span>
+                                <Input value={mangaInput.alternativeTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setMangaInput({ ...mangaInput, alternativeTitle: e.target.value })} placeholder='alternate title' />
+                            </div>
 
 
-                    </section>
+                            <div className='flex justify-between items-center px-[10px]'>
+                                <span className='text-[14px] font-bold'>Manga Status:</span>
+                                <Select
+                                    className='min-w-[150px]'
+                                    value={mangaInput.status}
+                                    onChange={(val: MangaStatus) => { setMangaInput({ ...mangaInput, status: val }) }}
+                                    options={[
+                                        { value: 'PUBLISHED', label: 'Đăng ngay' },
+                                        { value: 'DRAFTED', label: 'Đăng sau' },
+                                    ]}
+                                />
+                            </div>
 
-                    <section className='bg-white gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
+                            <div className='flex justify-between items-center px-[10px]'>
+                                <span className='text-[14px] font-bold'>Release status:</span>
+                                <Select
+                                    className='min-w-[150px]'
+                                    defaultValue="COMING"
+                                    onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
+                                    options={[
+                                        { value: 'COMING', label: 'Sắp ra mắt' },
+                                        { value: 'GOING', label: 'Đang ra' },
+                                        { value: 'STOPPED', label: 'Đã tạm dừng' },
+                                        { value: 'CANCELLED', label: 'Đã hủy' },
+                                        { value: 'COMPLETED', label: 'Đã hoàn thành' },
+                                    ]}
+                                />
+                            </div>
 
-                        <div className='p-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>
-                            <span className='text-red-500 text-base'>*</span>
-                            <span className='text-[16px] font-bold'> Featured image:</span>
-                        </div>
+                            <div className='flex justify-between items-center px-[10px]'>
+                                <span className='text-[14px] font-bold'>Release year:</span>
+                                <DatePicker allowClear={false} mode='year' onChange={(val: any) => setMangaInput({ ...mangaInput, releaseYear: val })} value={mangaInput.releaseYear} placement='bottomRight' picker="year" />
+                            </div>
+
+                            <GenreSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
+                            <AuthorSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
+                            <TagSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
 
 
-                        <div className='flex justify-between p-[10px]'>
-                            <a className='text-[13px]'>Choose image</a>
+                        </section>
 
+                        <section className='bg-white gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
+
+                            <div className='p-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>
+                                <span className='text-red-500 text-base'>*</span>
+                                <span className='text-[16px] font-bold'> Featured image:</span>
+                            </div>
+
+
+                            <div className='flex justify-between p-[10px]'>
+                                <a className='text-[13px]'>Choose image</a>
+
+                                {
+                                    mangaInput.featureImage &&
+                                    <img className='h-[120px] w-[120px]' src='https://s.pstatic.net/static/newsstand/2023/0322/article_img/new_main/9044/121821_001.jpg' />
+                                }
+                            </div>
                             {
-                                mangaInput.featureImage &&
-                                <img className='h-[120px] w-[120px]' src='https://s.pstatic.net/static/newsstand/2023/0322/article_img/new_main/9044/121821_001.jpg' />
+                                !mangaInputError.featureImage &&
+                                <p className='text-[12px] text-red-500 px-[5px]'>
+                                    {t(mangaInputError.featureImage)}
+                                </p>
                             }
-                        </div>
-                        {
-                            !mangaInputError.featureImage &&
-                            <p className='text-[12px] text-red-500 px-[5px]'>
-                                {t(mangaInputError.featureImage)}
-                            </p>
-                        }
-                    </section>
+                        </section>
+                    </div>
                 </div>
-            </div>
+            }
         </div>
     );
 }

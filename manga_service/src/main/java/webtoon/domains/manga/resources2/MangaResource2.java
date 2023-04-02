@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.enums.EMangaDisplayType;
+import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaFilterInput;
@@ -25,6 +26,11 @@ public class MangaResource2 {
         this.mangaService = mangaService;
     }
 
+
+    @GetMapping("{id}")
+    public MangaDto findById(@PathVariable Long id) {
+        return this.mangaService.findById(id);
+    }
 
     @PostMapping("filter")
     public Page<MangaDto> filter(@RequestBody MangaFilterInput input, Pageable page) {
@@ -59,8 +65,22 @@ public class MangaResource2 {
     }
 
     @PatchMapping("reset-manga-type/{id}")
-    public void resetMangaType(@PathVariable Long id){
+    public void resetMangaType(@PathVariable Long id) {
         this.mangaService.resetMangaType(id);
     }
 
+    @PatchMapping("change-status/{id}")
+    public void changeStatus(@PathVariable Long id, @RequestParam EStatus mangaSTS) {
+        this.mangaService.changeStatus(id, mangaSTS);
+    }
+
+    @PatchMapping("change-release-status/{id}")
+    public void changeReleaseStatus(@PathVariable Long id, @RequestParam EMangaSTS status) {
+        this.mangaService.changeReleaseStatus(id, status);
+    }
+
+    @DeleteMapping("{id}")
+    public void deleteById(@PathVariable Long id) {
+        this.mangaService.deleteById(id);
+    }
 }

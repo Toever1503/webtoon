@@ -12,7 +12,9 @@ import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
+import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.repositories.*;
@@ -119,7 +121,10 @@ public class IMangaServiceImpl implements IMangaService {
 
 
     public MangaEntity getById(java.lang.Long id) {
-        return this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
+        MangaEntity entity = this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
+
+        entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
+        return entity;
     }
 
 
@@ -127,6 +132,13 @@ public class IMangaServiceImpl implements IMangaService {
     public boolean deleteById(java.lang.Long id) {
         try {
             this.mangaRepository.deleteById(id);
+            /*
+             task:
+               1.need remove image on storage service
+               2. need remove chapter and volume
+               3. need remove tag relation
+             */
+
             return true;
         } catch (Exception e) {
             // TODO: handle exception
@@ -144,7 +156,10 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
-        return mangaRepository.findAll(specs, pageable).map(MangaDto::toDto);
+        return mangaRepository.findAll(specs, pageable).map(entity -> {
+            entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
+            return MangaDto.toDto(entity);
+        });
     }
 
     @Override
@@ -167,6 +182,20 @@ public class IMangaServiceImpl implements IMangaService {
 
 
         // task: call storage service to remove manga's folder
+    }
+
+    @Override
+    public void changeReleaseStatus(Long id, EMangaSTS mangaSTS) {
+        MangaEntity entity = this.getById(id);
+        entity.setMangaStatus(mangaSTS);
+        this.mangaRepository.saveAndFlush(entity);
+    }
+
+    @Override
+    public void changeStatus(Long id, EStatus status) {
+        MangaEntity entity = this.getById(id);
+        entity.setStatus(status);
+        this.mangaRepository.saveAndFlush(entity);
     }
 
 }

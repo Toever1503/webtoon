@@ -131,10 +131,12 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             });
     }
     useEffect(() => {
-        onCallApiFilterVolume('');
-        if (props.mangaInput.displayType === 'VOL')
-            onCallApiLastVolIndex();
-    }, [])
+        if (props.mangaInput.id) {
+            onCallApiFilterVolume('');
+            if (props.mangaInput.displayType === 'VOL')
+                onCallApiLastVolIndex();
+        }
+    }, [props.mangaInput])
 
     return <div className="p-[10px]">
         <div className="flex space-x-2">
@@ -151,7 +153,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                     :
                     <Badge >
                         {
-                            !lastVolIndex.id ? <a>Hiện chưa có chương nào!</a> : <a>Chương mới nhất là {lastVolIndex.volumeIndex + 1}: {lastVolIndex.name}</a>
+                            lastVolIndex.volumeIndex < 0 ? <a>Hiện chưa có chương nào!</a> : <a>Chương mới nhất là {lastVolIndex.volumeIndex + 1}</a>
                         }
                     </Badge>
             }
@@ -211,7 +213,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                     </div>
                     {
                         selectedVolId &&
-                        <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} refreshChapterLatest={() =>{}} />
+                        <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
                     }
                 </>
                 :
