@@ -3,7 +3,9 @@ package webtoon.domains.manga.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -198,4 +200,35 @@ public class IMangaServiceImpl implements IMangaService {
         this.mangaRepository.saveAndFlush(entity);
     }
 
+    @Override
+    public List<MangaEntity> findAllOrder(){
+        Pageable  pageable = PageRequest.of(0,10).withSort(Sort.Direction.DESC,"id");
+        return this.mangaRepository.findAll(pageable)
+                .stream().map(mangaEntity -> {
+                    return MangaEntity.builder()
+                        .id(mangaEntity.getId())
+                        .title(mangaEntity.getTitle())
+                        .alternativeTitle(mangaEntity.getAlternativeTitle())
+                        .excerpt(mangaEntity.getExcerpt())
+                        .description(mangaEntity.getDescription())
+                        .mangaName(mangaEntity.getMangaName())
+                        .featuredImage(mangaEntity.getFeaturedImage())
+                        .status(mangaEntity.getStatus())
+                        .mangaStatus(mangaEntity.getMangaStatus())
+                        .commentCount(mangaEntity.getCommentCount())
+                        .mangaType(mangaEntity.getMangaType())
+                        .rating(mangaEntity.getRating())
+                        .viewCount(mangaEntity.getViewCount())
+                        .createdAt(mangaEntity.getCreatedAt())
+                        .modifiedAt(mangaEntity.getModifiedAt())
+                        .volumeEntities(mangaEntity.getVolumeEntities())
+                        .build();
+                }).collect(Collectors.toList());
+    }
+
+    @Override
+    public Page<MangaDto> findAllById(Long id) {
+       Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
+        return  mangaRepository.findAllById(id,pageable);
+    }
 }

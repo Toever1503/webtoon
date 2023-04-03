@@ -12,6 +12,8 @@ import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaModel;
 
+import java.util.List;
+
 public interface IMangaService {
 
 	MangaDto add(MangaModel model);
@@ -36,4 +38,8 @@ public interface IMangaService {
     void changeReleaseStatus(Long id, EMangaSTS mangaSTS);
 
 	void changeStatus(Long id, EStatus status);
+
+    List<MangaEntity> findAllOrder();
+
+	Page<MangaDto> findAllById(Long id);
 }

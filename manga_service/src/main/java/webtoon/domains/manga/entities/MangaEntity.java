@@ -18,7 +18,7 @@ import webtoon.domains.tag.entity.TagEntity;
 @Entity
 @Table(name = "tbl_manga_entity")
 @AllArgsConstructor
-@NoArgsConstructor(access = AccessLevel.PRIVATE, force = true)
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 @Builder
 @Getter
 @Setter
@@ -81,7 +81,7 @@ public class MangaEntity {
     @Column(name = "view_count")
     private Integer viewCount;
 
-    //private  created_by;
+//private  created_by;
 //
 //private modified_by;
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL)

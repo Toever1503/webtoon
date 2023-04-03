@@ -23,4 +23,6 @@ public interface IMangaGenreService {
     Page<MangaGenreEntity> filterGenre(Specification spec, Pageable page);
 
 	void deleteGenreByIds(List<Long> ids);
+
+    List<MangaGenreEntity> findAllGenre();
 }

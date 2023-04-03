@@ -26,7 +26,7 @@ public class MangaChapterMapper {
         return MangaChapterDto.builder()
                 .id(entity.getId())
                 .volumeId(entity.getMangaVolume().getId())
-                .chapterName(entity.getName())
+                .name(entity.getName())
                 .content(entity.getContent())
                 .chapterIndex(entity.getChapterIndex())
                 .isRequiredVip(entity.getRequiredVip())

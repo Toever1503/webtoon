@@ -12,10 +12,10 @@ import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaGenreModel;
 import webtoon.domains.manga.repositories.IMangaGenreRepository;
 import webtoon.domains.manga.services.IMangaGenreService;
-import webtoon.domains.tag.entity.TagEntity;
 import webtoon.utils.ASCIIConverter;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -78,4 +78,18 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
     public MangaGenreEntity getById(Long id) {
         return this.genreRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }
+
+    @Override
+    public List<MangaGenreEntity> findAllGenre(){
+        return this.genreRepository.findAll()
+                .stream().map(mangaGenreEntity -> {
+                    return MangaGenreEntity.builder()
+                            .id(mangaGenreEntity.getId())
+                            .name(mangaGenreEntity.getName())
+                            .slug(mangaGenreEntity.getSlug())
+                            .mangaCount(mangaGenreEntity.getMangaCount())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
 }

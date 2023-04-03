@@ -20,9 +20,9 @@
 					<h1 class="font-bold m-5 text-2xl font-mono">Có gì mới?</h1>
 					<hr />
 				</div>
-				<div class="grid grid-cols-3 gap-4 mt-5 mx-10" th:switch="${model}">
-					<h2 th:case="null">Không có dữ liệu!</h2>
-					<div th:case="*" >
+				<div class="grid grid-cols-3 gap-4 mt-5 mx-10" >
+					<h2 th:if="model == null">Không có dữ liệu!</h2>
+					<div th:else >
 						<div class="max-w-sm rounded overflow-hidden shadow-lg" th:each="model : ${model}" >
 							<!-- <img
 								src="https://tse2.mm.bing.net/th?id=OIP.G94-T54M47AK4Wfn1MpP5wHaHa&pid=Api&P=0"

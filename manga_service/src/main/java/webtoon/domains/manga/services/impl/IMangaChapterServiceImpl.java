@@ -273,11 +273,11 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
 
         List<MangaChapterEntity> nextChapters = this.chapterRepository
-                .findNextchapter(chapterID, volumeId, PageRequest.of(0, 1));
+                .findNextchapter(chapterID,volumeId,PageRequest.of(0,1));
         chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
 
         List<MangaChapterEntity> prevChapters = this.chapterRepository
-                .findPrevchapter(chapterID, volumeId, PageRequest.of(0, 1, Sort.Direction.DESC, "id"));
+                .findPrevchapter(chapterID,volumeId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
         chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
 
         return chapterDtos;
@@ -332,4 +332,25 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         String test = "id-9140";
         System.out.println(test.matches("id-\\d+"));
     }
+    @Override
+    public List<MangaChapterEntity> findByVolume(Long volume){
+        return chapterRepository.findByVolumeId(volume);
+    }
+
+    @Override
+    public List<MangaChapterEntity> findAll() {
+        return chapterRepository.findAll();
+    }
+
+    @Override
+    public List<MangaChapterDto> findAllByVolume(Long volId) {
+        return chapterRepository.findByVolumeId(volId).stream().map(MangaChapterDto::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MangaChapterDto> findAllById(Long id) {
+        Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
+        return  chapterRepository.findAllById(id,pageable);
+    }
+
 }

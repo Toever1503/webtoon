@@ -41,9 +41,10 @@ public class MangaController {
 	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
 		MangaEntity mangaEntity =this.mangaService.getById(id);
 		model.addAttribute("model",mangaEntity);
-
-		return "trangtruyen";
+			return "trangtruyen";
 	}
+
+
 
 	@GetMapping("{name}/chapter/{id}")
 	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
@@ -51,7 +52,8 @@ public class MangaController {
 		MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
 		MangaEntity mangaEntity = volumeEntity.getManga();
 
-//		MangaVolumeEntity volumeEntity1 = (MangaVolumeEntity) volumeEntity.getManga().getVolumeEntities();
+		model.addAttribute("volumeEntity1", mangaVolumeService.findByManga(mangaEntity.getId()));
+		model.addAttribute("chapterData1",mangaChapterService.findByVolume(volumeEntity.getId()));
 
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
@@ -62,14 +64,16 @@ public class MangaController {
 		model.addAttribute("prevChapter",prevNextChapter[0]);
 		model.addAttribute("nextChapter",prevNextChapter[1]);
 
+
+
 		return "read-manga-page";
 	}
-	@PostMapping("/index")
+	@GetMapping("/index")
 	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
 
 		model.addAttribute("model", mangaService.filterBy(s,pageable));
-//		model.addAttribute("users", userRepository.findAll());
 		return "trangtruyenchu";
 	}
+
 
 }
