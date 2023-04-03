@@ -9,24 +9,25 @@ import { deleteGenreById, setGenreData } from '../../stores/features/manga/genre
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import genreService, { GenreInput } from "../../services/manga/GenreService";
 import { showNofification } from '../../stores/features/notification/notificationSlice';
+import { reIndexTbl } from '../../utils/indexData';
 
 
 const { Search } = Input;
 const { confirm } = Modal;
 
 const MangaGenrePage: React.FC = () => {
-    const genreData = useSelector((state: RootState) => state.genre.data);
-    const genreDataContent = useSelector((state: RootState) => state.tag.data);
+    const genreData = useSelector((state: RootState) => state.genre);
 
     const dispatch = useDispatch();
 
+    const [dataSource, setDataSource] = useState<GenreModel[]>([]);
     const [tblLoading, setTblLoading] = useState<boolean>(false);
     const [searchVal, setSearchVal] = useState<string>('');
 
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
-        current: genreData.current,
-        pageSize: genreData.size,
-        total: genreData.totalElements,
+        current: 1,
+        pageSize: 10,
+        total: 0,
         showSizeChanger: false,
     });
 
@@ -41,8 +42,8 @@ const MangaGenrePage: React.FC = () => {
     const columns: ColumnsType<GenreModel> = [
         {
             title: 'STT',
-            dataIndex: 'stt',
-            key: 'stt',
+            dataIndex: 'index',
+            key: 'index',
         },
         {
             title: 'Name',
@@ -78,6 +79,7 @@ const MangaGenrePage: React.FC = () => {
     const onPageChange = (page: TablePaginationConfig) => {
         console.log('page', page);
         const currentPage = pageConfig.current ? pageConfig.current - 1 : 0;
+        pageConfig.current = page.current;
         filterGenre(searchVal, currentPage);
     }
 
@@ -138,7 +140,7 @@ const MangaGenrePage: React.FC = () => {
                     totalElements: res.data.totalElements
                 }));
 
-                setPageConfig({ ...pageConfig, current: page + 1, pageSize: size, total: res.data.totalElements });
+                setPageConfig({ ...pageConfig, total: res.data.totalElements });
             })
             .finally(() => {
                 setTblLoading(false);
@@ -151,9 +153,10 @@ const MangaGenrePage: React.FC = () => {
             filterGenre();
             setHasInitial(true);
         }
-        else
-            setPageConfig({ ...pageConfig, total: genreData.totalElements });
 
+        console.log('change data: ', genreData);
+
+        setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, genreData.data));
     }, [genreData]);
 
 
@@ -172,7 +175,7 @@ const MangaGenrePage: React.FC = () => {
                 </div>
             </div>
 
-            <Table columns={columns} dataSource={genreData} loading={tblLoading} onChange={onPageChange} pagination={pageConfig} />
+            <Table columns={columns} dataSource={dataSource} loading={tblLoading} onChange={onPageChange} pagination={pageConfig} />
         </div>
     )
 }

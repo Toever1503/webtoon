@@ -10,7 +10,7 @@ interface AddUpdateAuthorModalProps {
     config: object;
 }
 
-const AddUpdateAuthorModal: React.FC = ({ config }: AddUpdateAuthorModalProps | any) => {
+const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: AddUpdateAuthorModalProps | any) => {
 
 
     const dispatch = useDispatch();

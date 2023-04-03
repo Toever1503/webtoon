@@ -11,6 +11,8 @@ import MangaAuthorPage from "../pages/manga/MangaAuthorPage";
 import ErrorPage from "../pages/ErrorPage";
 import Dashboard from "../pages/dashboard/Dashboard";
 import CategoryPage from "../pages/post/CategoryPage";
+import OrderPage from "../pages/order/OrderPage";
+import StatisticsPage from "../pages/stats/StatisticsPage";
 
 const router = createBrowserRouter([
     {
@@ -22,8 +24,8 @@ const router = createBrowserRouter([
                 element: <Dashboard />,
             },
             {
-                path: "/contacts",
-                element: <CounterPage />,
+                path: "/orders",
+                element: <OrderPage />,
             },
             {
                 path: "/mangas",
@@ -52,6 +54,10 @@ const router = createBrowserRouter([
             {
                 path: "/categories",
                 element: <CategoryPage />
+            },
+            {
+                path: "/stats",
+                element: <StatisticsPage />
             },
             {
                 path: '/ERROR',

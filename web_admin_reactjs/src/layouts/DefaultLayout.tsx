@@ -29,26 +29,27 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('Dashboard', '/', <DashboardOutlined />),
-    getItem('User', 'parent-users', <UserOutlined />, [
-        getItem('All Users', 'users'),
-        getItem('Add new', 'user-add'),
-        getItem('My Profile', 'user-profile'),
-    ]),
+    getItem('Bảng điều khiển', '/', <DashboardOutlined />),
+    getItem('Đơn hàng', '/orders', <DashboardOutlined />),
     getItem('Manga', 'parent-mangas', <TeamOutlined />, [
         getItem('All mangas', '/mangas'),
         getItem('Manga genres', '/mangas/genres'),
         getItem('Manga authors', '/mangas/authors')
     ]),
-    getItem('Post', 'parent-posts', <TeamOutlined />, [
+    getItem('Tin tức', 'parent-posts', <TeamOutlined />, [
         getItem('All Posts', 'posts'),
         getItem('Categories', 'categories')
     ]),
-    getItem('Tags', '/tag', <DashboardOutlined />),
-    getItem('Comment', 'parent-comments', <TeamOutlined />, [
+    getItem('Thẻ', '/tag', <DashboardOutlined />),
+    getItem('Bình luận', 'parent-comments', <TeamOutlined />, [
         getItem('All Comments', 'comments'),
         getItem('Add new', 'comment-add')
     ]),
+    getItem('Người dùng', 'parent-users', <UserOutlined />, [
+        getItem('All Users', 'users'),
+        getItem('My Profile', 'user-profile'),
+    ]),
+    getItem('Thống kê', '/stats', <DashboardOutlined />),
 ];
 
 

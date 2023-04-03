@@ -5,7 +5,7 @@ export interface AuthorModel {
     id: string | number;
     name: string;
     slug: string;
-    stt: string | number;
+    index: string | number;
 }
 
 export interface AuthorState {
@@ -16,13 +16,6 @@ export interface AuthorState {
 
 const initialState: AuthorState = {
     data: [
-        {
-            id:1,
-            key: 1,
-            stt: 1,
-            name: 'John Brown',
-            slug: 'New York No. 1 Lake Park',
-        },
     ],
     totalElements: 1,
     size: 10,

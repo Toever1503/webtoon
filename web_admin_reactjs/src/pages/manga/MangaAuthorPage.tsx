@@ -10,22 +10,25 @@ import authorService from "../../services/manga/AuthorService";
 import AddUpdateAuthorModal from "./component/modal/AddUpdateAuthorModal";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { showNofification } from '../../stores/features/notification/notificationSlice';
+import { reIndexTbl } from '../../utils/indexData';
 
 const { Search } = Input;
 const { confirm } = Modal;
 
 const MangaAuthorPage: React.FC = () => {
     const authorData = useSelector((state: RootState) => state.author);
-    const authorDataContent = useSelector((state: RootState) => state.author.data);
+
     const dispatch = useDispatch();
     const [searchVal, setSearchVal] = useState<string>('');
 
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
-        current: authorData.current,
+        current: 1,
         pageSize: authorData.size,
         total: authorData.totalElements,
         showSizeChanger: false,
     });
+
+    const [dataSource, setDataSource] = useState<AuthorModel[]>(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, authorData.data));
 
     const [addUpdateAuthorModal, setAddUpdateAuthorModal] = useState<object>({
         title: 'Add new author',
@@ -73,8 +76,10 @@ const MangaAuthorPage: React.FC = () => {
 
     const [tblLoading, setTblLoading] = useState<boolean>(false);
     const onPageChange = (page: TablePaginationConfig) => {
-        console.log('page', page);
+        console.log('page', pageConfig);
         const currentPage = page.current ? page.current - 1 : 0;
+        pageConfig.current = page.current;
+        setPageConfig({ ...pageConfig });
         filterAuthor(searchVal, currentPage);
     }
 
@@ -136,22 +141,21 @@ const MangaAuthorPage: React.FC = () => {
                     data: res.data.content.map((item: TagInput, index: number) => ({ ...item, key: item.id, stt: index + 1 })),
                     totalElements: res.data.totalElements
                 }));
+                setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, authorData.data));
 
-                setPageConfig({ ...pageConfig, current: page + 1, pageSize: size, total: res.data.totalElements });
+                setPageConfig({ ...pageConfig, total: res.data.totalElements });
             })
             .finally(() => {
                 setTblLoading(false);
             });
     };
 
-    const [hasInitial, setHasInitial] = useState<boolean>(false);
+    const [hasInitialized, setHasInitialized] = useState<boolean>(false);
     useEffect(() => {
-        if (!hasInitial) {
+        if (!hasInitialized) {
             filterAuthor();
-            setHasInitial(true);
+            setHasInitialized(true);
         }
-        else
-            setPageConfig({ ...pageConfig, total: authorData.totalElements });
 
     }, [authorData]);
 
@@ -172,7 +176,7 @@ const MangaAuthorPage: React.FC = () => {
                 </div>
             </div>
 
-            <Table columns={columns} dataSource={authorDataContent} onChange={onPageChange} loading={tblLoading} pagination={pageConfig} />
+            <Table columns={columns} dataSource={dataSource} onChange={onPageChange} loading={tblLoading} pagination={pageConfig} />
         </div>
     )
 }
