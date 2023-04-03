@@ -36,7 +36,7 @@ public class MangaChapterDto {
 
         MangaChapterDto dto = MangaChapterDto.builder()
                 .id(mangaEntity.getId())
-                .chapterName(mangaEntity.getName())
+                .chapterName(mangaEntity.getChapterName())
                 .content(mangaEntity.getContent())
                 .chapterIndex(mangaEntity.getChapterIndex())
                 .isRequiredVip(mangaEntity.getRequiredVip())

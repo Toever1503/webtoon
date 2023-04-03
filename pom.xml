@@ -114,12 +114,13 @@
                 <version>3.2.0</version>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-jpamodelgen -->
+            <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-jpamodelgen -->
             <dependency>
-                <groupId>org.hibernate.orm</groupId>
+                <groupId>org.hibernate</groupId>
                 <artifactId>hibernate-jpamodelgen</artifactId>
-                <version>6.0.0.Final</version>
+                <version>5.6.6.Final</version>
             </dependency>
+
 
             <!-- end for springboot -->
 
@@ -603,6 +604,26 @@
                         <Adebug>true</Adebug>
                     </compilerArguments>
                     <outputDirectory>${project.build.directory}/generated-sources/meta-model</outputDirectory>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                        <path>
+                            <groupId>org.hibernate</groupId>
+                            <artifactId>hibernate-jpamodelgen</artifactId>
+                            <version>5.6.6.Final</version>
+                        </path>
+                    </annotationProcessorPaths>
+
                 </configuration>
             </plugin>
         </plugins>

@@ -44,15 +44,4 @@ public class MangaChapterImageResource {
 	public void delete(@PathVariable long id) {
 		this.chapterImageService.deleteById(id);
 	}
-
-	@PostMapping("/filter")
-	public ResponseDto filter(@RequestBody MangaChapterImageDto filterModel, Pageable pageable) {
-		Specification<MangaChapterImageEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("image"), "%" + filterModel.getImage() + "%"),
-					criteriaBuilder.like(root.get("imageIndex"), "%" + filterModel.getImageIndex() + "%")
-
-			);
-		};
-		return ResponseDto.of(this.chapterImageService.filter(pageable, Specification.where(specification)));
-	}
 }

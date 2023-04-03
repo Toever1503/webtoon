@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.dtos.ResponseDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
+import webtoon.domains.manga.entities.MangaChapterEntity_;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.services.IMangaChapterService;
 
@@ -45,10 +46,10 @@ public class MangaChapterResource {
 	@PostMapping("/filter")
 	public ResponseDto filter(@RequestBody MangaChapterDto filterModel, Pageable pageable) {
 		Specification<MangaChapterEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getChapterName() + "%"),
-					criteriaBuilder.like(root.get("content"), "%" + filterModel.getContent() + "%"),
-					criteriaBuilder.like(root.get("chapterIndex"), "%" + filterModel.getChapterIndex() + "%"),
-					criteriaBuilder.like(root.get("requiredVip"), "%" + filterModel.getIsRequiredVip() + "%")
+			return criteriaBuilder.or(criteriaBuilder.like(root.get(MangaChapterEntity_.CHAPTER_NAME), "%" + filterModel.getChapterName() + "%"),
+					criteriaBuilder.like(root.get(MangaChapterEntity_.CONTENT), "%" + filterModel.getContent() + "%"),
+					criteriaBuilder.like(root.get(MangaChapterEntity_.CHAPTER_INDEX), "%" + filterModel.getChapterIndex() + "%"),
+					criteriaBuilder.like(root.get(MangaChapterEntity_.REQUIRED_VIP), "%" + filterModel.getIsRequiredVip() + "%")
 
 			);
 		};

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import webtoon.domains.manga.dtos.ResponseDto;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.entities.MangaVolumeEntity_;
 import webtoon.domains.manga.filters.MangaVolumeFilter;
 import webtoon.domains.manga.models.MangaVolumeModel;
 import webtoon.domains.manga.services.IMangaVolumeService;
@@ -47,8 +48,8 @@ public class MangaVolumeResource {
 	@PostMapping("/filter")
 	public ResponseDto filter(@RequestBody MangaVolumeFilter filterModel, Pageable pageable) {
 		Specification<MangaVolumeEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getName() + "%"),
-					criteriaBuilder.like(root.get("volumeIndex"), "%" + filterModel.getVolumeIndex() + "%")
+			return criteriaBuilder.or(criteriaBuilder.like(root.get(MangaVolumeEntity_.NAME), "%" + filterModel.getName() + "%"),
+					criteriaBuilder.like(root.get(MangaVolumeEntity_.VOLUME_INDEX), "%" + filterModel.getVolumeIndex() + "%")
 
 			);
 		};

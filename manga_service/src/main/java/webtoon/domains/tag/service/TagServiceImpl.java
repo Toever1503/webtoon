@@ -7,10 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import webtoon.domains.tag.entity.ITagRelationRepository;
-import webtoon.domains.tag.entity.ITagRepository;
-import webtoon.domains.tag.entity.TagEntity;
-import webtoon.domains.tag.entity.TagEntityRelation;
+import webtoon.domains.tag.entity.*;
 import webtoon.domains.tag.entity.enums.ETagType;
 import webtoon.utils.ASCIIConverter;
 
@@ -65,7 +62,7 @@ public class TagServiceImpl implements ITagService {
     public Page<TagEntity> filterTag(String s, Pageable page) {
         // TODO Auto-generated method stub
         return this.tagRepository.findAll((root, query, cb) -> {
-            return cb.like(root.get("tagName"), "%" + s + "%");
+            return cb.like(root.get(TagEntity_.TAG_NAME), "%" + s + "%");
         }, page);
     }
 

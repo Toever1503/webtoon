@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import webtoon.domains.manga.dtos.ResponseDto;
 import webtoon.domains.manga.entities.MangaGenreEntity;
+import webtoon.domains.manga.entities.MangaGenreEntity_;
 import webtoon.domains.manga.filters.MangaGenreFilter;
 import webtoon.domains.manga.models.MangaGenreModel;
 import webtoon.domains.manga.services.IMangaGenreService;
@@ -48,8 +49,8 @@ public class MangaGenreResource {
 	@PostMapping("filter")
 	public ResponseDto filter(@RequestBody MangaGenreFilter filterModel, Pageable pageable) {
 		Specification<MangaGenreEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getName() + "%"),
-					criteriaBuilder.like(root.get("slug"), "%" + filterModel.getSlug() + "%")
+			return criteriaBuilder.or(criteriaBuilder.like(root.get(MangaGenreEntity_.NAME), "%" + filterModel.getName() + "%"),
+					criteriaBuilder.like(root.get(MangaGenreEntity_.SLUG), "%" + filterModel.getSlug() + "%")
 
 			);
 		};

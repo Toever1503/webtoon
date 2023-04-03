@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
+import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
@@ -29,6 +30,7 @@ public class MangaResource2 {
 
     @GetMapping("{id}")
     public MangaDto findById(@PathVariable Long id) {
+//        MangaEntity_
         return this.mangaService.findById(id);
     }
 
@@ -37,11 +39,11 @@ public class MangaResource2 {
         List<Specification> specs = new ArrayList<>();
         if (input.getStatus() != null)
             if (!input.getStatus().equals(EStatus.ALL))
-                specs.add((root, query, cb) -> cb.equal(root.get("status"), input.getStatus()));
+                specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), input.getStatus()));
 
         if (input.getQ() != null) {
             String qRegex = "%" + input.getQ() + "%";
-            specs.add((root, query, cb) -> cb.like(root.get("title"), qRegex));
+            specs.add((root, query, cb) -> cb.like(root.get(MangaEntity_.TITLE), qRegex));
         }
         Specification finalSpec = null;
         for (Specification s : specs) {

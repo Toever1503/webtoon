@@ -16,6 +16,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
+import webtoon.domains.manga.entities.MangaChapterEntity_;
 import webtoon.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
@@ -65,11 +66,11 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
     @Override
     public MangaChapterDto add(MangaChapterModel model) {
-        MangaChapterEntity chapterEntity = MangaChapterEntity.builder().name(model.getName())
+        MangaChapterEntity chapterEntity = MangaChapterEntity.builder().chapterName(model.getName())
                 .mangaVolume(model.getMangaVolumeId()).content(model.getContent()).chapterIndex(model.getChapterIndex())
                 .requiredVip(model.getRequiredVip()).build();
         this.chapterRepository.saveAndFlush(chapterEntity);
-        return MangaChapterDto.builder().chapterName(chapterEntity.getName()).volumeId(chapterEntity.getMangaVolume().getId())
+        return MangaChapterDto.builder().chapterName(chapterEntity.getChapterName()).volumeId(chapterEntity.getMangaVolume().getId())
                 .chapterIndex(chapterEntity.getChapterIndex()).content(chapterEntity.getContent())
                 .isRequiredVip(chapterEntity.getRequiredVip()).build();
     }
@@ -81,10 +82,10 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         entity.setChapterIndex(model.getChapterIndex());
         entity.setContent(model.getContent());
         entity.setMangaVolume(model.getMangaVolumeId());
-        entity.setName(model.getName());
+        entity.setChapterName(model.getName());
         entity.setRequiredVip(model.getRequiredVip());
         chapterRepository.saveAndFlush(entity);
-        return MangaChapterDto.builder().chapterName(entity.getName()).content(entity.getContent())
+        return MangaChapterDto.builder().chapterName(entity.getChapterName()).content(entity.getContent())
                 .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume().getId())
                 .isRequiredVip(entity.getRequiredVip()).build();
     }
@@ -114,7 +115,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                 .id(input.getId())
-                .name(input.getChapterName())
+                .chapterName(input.getChapterName())
                 .content(input.getContent())
                 .requiredVip(input.getIsRequiredVip())
                 .build();
@@ -142,7 +143,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
-                    .name(input.getChapterName())
+                    .chapterName(input.getChapterName())
                     .requiredVip(input.getIsRequiredVip())
                     .build();
 
@@ -291,16 +292,16 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         List<Specification> specs = new ArrayList<>();
 
         if (input.getQ() != null) {
-            specs.add((root, query, cb) -> cb.like(root.get("name"), input.getQ()));
+            specs.add((root, query, cb) -> cb.like(root.get(MangaChapterEntity_.CHAPTER_NAME), input.getQ()));
         }
         if (input.getVolumeId() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.join("mangaVolume").get("id"), input.getVolumeId()));
+            specs.add((root, query, cb) -> cb.equal(root.join(MangaChapterEntity_.MANGA_VOLUME).get("id"), input.getVolumeId()));
         }
         if (input.getMangaId() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.join("manga").get("id"), input.getMangaId()));
+            specs.add((root, query, cb) -> cb.equal(root.join(MangaChapterEntity_.MANGA).get("id"), input.getMangaId()));
         }
         if (input.getChapterIndex() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.get("chapterIndex"), input.getChapterIndex()));
+            specs.add((root, query, cb) -> cb.equal(root.get(MangaChapterEntity_.CHAPTER_INDEX), input.getChapterIndex()));
         }
         Specification<MangaChapterEntity> finalSpec = null;
         for (Specification spec : specs) {

@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaAuthorDto;
 import webtoon.domains.manga.dtos.MangaGenreDto;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
+import webtoon.domains.manga.entities.MangaAuthorEntity_;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaAuthorModel;
 import webtoon.domains.manga.models.MangaGenreModel;
@@ -27,7 +28,7 @@ public class MangaAuthorResource2 {
     @GetMapping("filter")
     public Page<MangaAuthorEntity> filter(@RequestParam String s, Pageable page) {
         Specification<MangaAuthorEntity> spec = (root, query, cb) ->
-                cb.like(root.get("name"), "%" + s + "%");
+                cb.like(root.get(MangaAuthorEntity_.NAME), "%" + s + "%");
         return this.mangaAuthorService.filterAuthor(spec, page);
     }
 

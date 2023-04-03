@@ -1,7 +1,5 @@
 package webtoon.domains.manga.entities;
 
-import java.util.Set;
-
 import javax.persistence.*;
 
 import lombok.*;
@@ -28,8 +26,8 @@ public class MangaChapterEntity {
     @JoinColumn(name = "manga_id")
     private MangaEntity manga;
 
-    @Column(name = "name")
-    private String name;
+    @Column(name = "chapter_name")
+    private String chapterName;
 
     @Column(name = "content", columnDefinition = "TEXT")
     private String content;

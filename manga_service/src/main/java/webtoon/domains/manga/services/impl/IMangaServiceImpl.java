@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
@@ -27,6 +28,7 @@ import webtoon.utils.ASCIIConverter;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
 import java.util.stream.Collectors;
 //import webtoon.utils.exception.CustomHandleException;
 
@@ -152,7 +154,7 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public Page<MangaEntity> filterBy(String s, Pageable page) {
         return this.mangaRepository.findAll((root, query, cb) -> {
-            return cb.like(root.get("title"), "%" + s + "%");
+            return cb.like(root.get(MangaEntity_.TITLE), "%" + s + "%");
         }, page);
     }
 

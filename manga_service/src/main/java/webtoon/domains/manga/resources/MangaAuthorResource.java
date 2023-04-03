@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import webtoon.domains.manga.dtos.MangaAuthorDto;
 import webtoon.domains.manga.dtos.ResponseDto;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
+import webtoon.domains.manga.entities.MangaAuthorEntity_;
 import webtoon.domains.manga.models.MangaAuthorModel;
 import webtoon.domains.manga.services.IMangaAuthorService;
 
@@ -47,7 +48,7 @@ public class MangaAuthorResource {
 	@PostMapping("/filter")
 	public ResponseDto filter(@RequestBody MangaAuthorDto filterModel, Pageable pageable) {
 		Specification<MangaAuthorEntity> specification = (root, query, criteriaBuilder) -> {
-			return criteriaBuilder.or(criteriaBuilder.like(root.get("name"), "%" + filterModel.getName() + "%")
+			return criteriaBuilder.or(criteriaBuilder.like(root.get(MangaAuthorEntity_.NAME), "%" + filterModel.getName() + "%")
 
 			);
 		};

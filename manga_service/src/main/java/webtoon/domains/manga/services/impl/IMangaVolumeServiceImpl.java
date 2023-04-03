@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.entities.MangaVolumeEntity_;
 import webtoon.domains.manga.models.MangaVolumeFilterInput;
 import webtoon.domains.manga.models.MangaVolumeModel;
 import webtoon.domains.manga.repositories.IMangaChapterRepository;
@@ -95,11 +96,6 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
     }
 
     @Override
-	public MangaVolumeDto findById(Long id){
-		return MangaVolumeDto.toDto(this.getById(id));
-	}
-
-    @Override
     public Page<MangaVolumeDto> filterVolume(Pageable pageable, MangaVolumeFilterInput input) {
         if (input.getQ() != null)
             input.setQ("%" + input.getQ() + "%");
@@ -107,13 +103,13 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
         List<Specification> specs = new ArrayList<>();
 
         if (input.getQ() != null) {
-            specs.add((root, query, cb) -> cb.like(root.get("name"), input.getQ()));
+            specs.add((root, query, cb) -> cb.like(root.get(MangaVolumeEntity_.NAME), input.getQ()));
         }
         if (input.getMangaId() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.get("manga").get("id"), input.getMangaId()));
+            specs.add((root, query, cb) -> cb.equal(root.get(MangaVolumeEntity_.MANGA).get("id"), input.getMangaId()));
         }
         if (input.getVolumeIndex() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.get("volumeIndex"), input.getVolumeIndex()));
+            specs.add((root, query, cb) -> cb.equal(root.get(MangaVolumeEntity_.VOLUME_INDEX), input.getVolumeIndex()));
         }
         Specification<MangaVolumeEntity> finalSpec = null;
         for (Specification spec : specs) {
@@ -136,7 +132,7 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 	@Override
 	public Page<MangaVolumeEntity> filterBy(String s, Pageable page){
 		return this.mangaVolumeRepository.findAll((root, query, cb) -> {
-			return cb.like(root.get("name"),"%" + s + "%");
+			return cb.like(root.get(MangaVolumeEntity_.NAME),"%" + s + "%");
 		},page);
 	}
 
