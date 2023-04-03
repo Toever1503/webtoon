@@ -9,6 +9,8 @@ import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.models.MangaModel;
 
+import java.util.List;
+
 public interface IMangaService {
 
 	MangaDto add(MangaModel model);
@@ -27,4 +29,8 @@ public interface IMangaService {
 	Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
 
 	MangaDto findById(Long id);
+
+    List<MangaEntity> findAllOrder();
+
+	Page<MangaDto> findAllById(Long id);
 }

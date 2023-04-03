@@ -1,6 +1,8 @@
 package webtoon.domains.manga.dtos;
 
 import java.util.Date;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,6 +35,7 @@ public class MangaDto {
 	private Date modifiedAt;
 	private Float rating;
 	private Integer viewCount;
+	private Set<MangaVolumeDto> mangaVolumeDtos;
 
 	public static MangaDto toDto(MangaEntity mangaEntity) {
 		if(mangaEntity == null) return null;

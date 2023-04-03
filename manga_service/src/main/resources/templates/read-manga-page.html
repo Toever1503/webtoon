@@ -1,224 +1,278 @@
 <!DOCTYPE html>
 <html
-  lang="en"
-  xmlns:th="http://www.thymeleaf.org"
-  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-  layout:decorate="~{layout.html}"
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}"
 >
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Document</title>
-    <link href="../static/main.css" rel="stylesheet" />
-  </head>
+    <link href="../static/main.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
 
-  <body>
-    <div class="container mx-auto" layout:fragment="content">
-      <div class="mt-20 mb-10 mx-20">
+<body>
+<div class="container mx-auto" layout:fragment="content">
+    <div class="mt-20 mb-10 mx-20">
         <h1 class="font-bold text-2xl">Manga Text Chapter - Chapter 6</h1>
-      </div>
+    </div>
 
-      <div class="mx-20 mb-8">
+    <div class="mx-20 mb-8">
         <div class="flex justify-between">
-          <div>
-            <nav class="w-full rounded-md">
-              <ol class="list-reset flex">
-                <li>
-                  <a
-                    href="#"
-                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                    >Home</a
-                  >
-                </li>
-                <li>
+            <div>
+                <nav class="w-full rounded-md">
+                    <ol class="list-reset flex">
+                        <li>
+                            <a
+                                    href="#"
+                                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                            >Home</a
+                            >
+                        </li>
+                        <li>
                   <span class="mx-2 text-neutral-500 dark:text-neutral-400"
-                    >/</span
+                  >/</span
                   >
-                </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                    >Library</a
-                  >
-                </li>
-                <li>
+                        </li>
+                        <li>
+                            <a
+                                    href="#"
+                                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                            >Library</a
+                            >
+                        </li>
+                        <li>
                   <span class="mx-2 text-neutral-500 dark:text-neutral-400"
-                    >/</span
+                  >/</span
                   >
-                </li>
-                <li class="text-neutral-500 dark:text-neutral-400">Data</li>
-              </ol>
-            </nav>
-          </div>
-
-          <div class="mr-20">
-            <div class="grid grid-cols-4 gap-4">
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-plus-circle fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
-                    <path
-                      d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-dash-circle fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
-                    />
-                    <path
-                      d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-bookmark-fill fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"
-                    />
-                  </svg>
-                </button>
-              </div>
-
-              <div>
-                <button>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    fill="currentColor"
-                    class="bi bi-circle-half fill-red-500 scale-150"
-                    viewBox="0 0 16 16"
-                  >
-                    <path
-                      d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"
-                    />
-                  </svg>
-                </button>
-              </div>
+                        </li>
+                        <li class="text-neutral-500 dark:text-neutral-400">Data</li>
+                    </ol>
+                </nav>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div class="flex justify-start mb-2">
+            <div class="mr-20">
+                <div class="grid grid-cols-4 gap-4">
+                    <div>
+                        <button>
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-plus-circle fill-red-500 scale-150"
+                                    viewBox="0 0 16 16"
+                            >
+                                <path
+                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                                />
+                                <path
+                                        d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button>
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-dash-circle fill-red-500 scale-150"
+                                    viewBox="0 0 16 16"
+                            >
+                                <path
+                                        d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"
+                                />
+                                <path
+                                        d="M4 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 4 8z"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button>
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-bookmark-fill fill-red-500 scale-150"
+                                    viewBox="0 0 16 16"
+                            >
+                                <path
+                                        d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+
+                    <div>
+                        <button>
+                            <svg
+                                    xmlns="http://www.w3.org/2000/svg"
+                                    width="16"
+                                    height="16"
+                                    fill="currentColor"
+                                    class="bi bi-circle-half fill-red-500 scale-150"
+                                    viewBox="0 0 16 16"
+                            >
+                                <path
+                                        d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"
+                                />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="flex justify-start mb-2">
         <div class="ml-20">
-          <select th:each="item : ${volumeData}"
-            data-te-select-init
-            data-te-select-size="lg"
-            class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
-          >
-            <option th:text="${item.name}"></option>
-          </select>
+            <select
+                    id="volume"
+                    data-te-select-init
+                    data-te-select-size="lg"
+                    class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
+            >
+                <option
+                        th:each="item : ${volumeEntity1}"
+                        th:value="${item.id}"
+                        th:text="${'Tập ' + (item.volumeIndex + 1) +': '+item.name}"
+
+                ></option>
+            </select>
         </div>
 
         <div class="ml-5">
-          <select th:each="item : ${chapterData}"
-            data-te-select-init
-            data-te-select-size="lg"
-            class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
-          >
-            <option th:text="${item.name}"></option>
-          </select>
+            <select
+                    id="chapter"
+                    value=""
+                    data-te-select-init
+                    data-te-select-size="lg"
+                    class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
+            >
+                <option value="">Chọn chương</option>
+                <option
+                        th:each="item : ${chapterData1}"
+                        th:value="${item.id}"
+                        th:text="${'Chương ' + (item.chapterIndex + 1) +': '+item.name}"
+                ></option>
+            </select>
         </div>
-      </div>
 
-      <div class="mx-20 mb-10">
+        <!-- Sự kiện onchange -->
+        <script>
+            // Lấy đối tượng select box 1
+            const selectBox = document.getElementById("volume");
+
+            // Lấy đối tượng select box 2
+            const selectBox1 = document.getElementById("chapter");
+
+            // Thêm sự kiện onchange cho select box
+
+            selectBox.addEventListener("change", function (e) {
+                // console.log('on choose vol: ', e.target.value)
+                const x = selectBox;
+
+                selectBox1.querySelectorAll('option').forEach((opt, i) => i !== 0 && opt.remove());
+                selectBox1.value = "";
+                let listChapter = [];
+                // call api de set vao listchapter
+                fetch('http://localhost:8000/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
+                    method: 'GET'
+                })
+                    .then(res => res.json())
+                    .then(res => {
+                        // console.log('chapter dât: ', res);
+                        listChapter = res;
+                        listChapter.forEach(item => {
+                            //  item la chapter item
+                            let optEl = document.createElement('option');
+                            optEl.innerText = `${'Chương ' + (item.chapterIndex + 1) + ': ' + item.name}`; // e.name
+                            optEl.value = item.id; // e.value
+
+                            // add option to select
+                            selectBox1.append(optEl);
+                        })
+                    })
+                    .catch(err => {
+                        console.log('error', err)
+                    })
+
+
+                // Lấy giá trị đã chọn
+                const selectedValue = selectBox.value;
+
+                // selectBox1.onchange(selectedValue);
+
+            });
+            // Thêm sự kiện onchange cho select box2
+            selectBox1.addEventListener("change", function () {
+                // Lấy giá trị đã chọn từ select box2
+                const selectedValue2 = selectBox1.value;
+                console.log(selectedText + " tên chapter");
+                var selectedText = selectBox1.text;
+                // Thực hiện các hành động mong muốn khi giá trị đã chọn từ select box2 thay đổi
+                window.location.href = "http://localhost:8000/manga/" + selectedText + "/chapter/" + selectedValue2
+            });
+        </script>
+        <!-- Kết thúc sự kiện onechange -->
+    </div>
+
+    <div class="mx-20 mb-10">
         <div class="flex justify-end mx-20">
-          <div class="bg-slate-400">
-            <button
-              class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-              style="display: flex; align-items: center"
-            >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-left-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"
-                />
-              </svg>
-              Prev
-            </button>
-          </div>
+            <div th:if="${prevChapter != null}" class="bg-slate-400">
+                <a th:href="@{'/manga/'+${mangaData.title}+'/chapter/'+${prevChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                        style="display: flex; align-items: center" >
+                    <svg    xmlns="http://www.w3.org/2000/svg"
+                            width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                        <path   fill-rule="evenodd"
+                                d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 
+                                1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                    </svg>
+                    Prev
+                </a>
+            </div>
 
-          <div class="bg-indigo-400 ml-5">
-            <button
-              class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-              style="display: flex; align-items: center"
-            >
-              Next
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="16"
-                height="16"
-                fill="currentColor"
-                class="bi bi-arrow-right-short"
-                viewBox="0 0 16 16"
-              >
-                <path
-                  fill-rule="evenodd"
-                  d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"
-                />
-              </svg>
-            </button>
-          </div>
+            <div  th:if="${nextChapter != null}" class="bg-indigo-400 ml-5">
+                <a th:href="@{'/manga/'+ ${mangaData.title}+'/chapter/'+${nextChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                        style="display: flex; align-items: center" >
+                    Next
+                    <svg    xmlns="http://www.w3.org/2000/svg"
+                            width="16" height="16" fill="currentColor"
+                            class="bi bi-arrow-right-short" viewBox="0 0 16 16" >
+                        <path   fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1 
+                        .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                    </svg>
+                </a>
+            </div>
         </div>
-      </div>
-      <div class="mx-20 mb-10" >
+    </div>
+    <div class="mx-20 mb-10">
         <h2 th:if="${chapterData == null}">Không có dữ liệu!</h2>
         <div th:else class="text-left mt-4 mx-7">
             <div th:if="${mangaType} == 'TEXT'">
-              <h1 th:text="${chapterData.name}"></h1>
-              <h3 th:text="${chapterData.content}"></h3>
+                <h1 th:text="${chapterData.name}"></h1>
+                <h3 th:text="${chapterData.content}"></h3>
             </div>
 
             <div th:else="${mangaType} == 'IMAGE'">
-              <h1 th:text="${chapterData.name}"></h1>
-              <p th:each="image : ${chapterData.chapterImageEntities}">
-                <img th:src="${image.image}">
-              </p>
-              <!-- <h3 th:text="${item.chapterEntities.chapterImageEntities}"></h3> -->
+                <h1 th:text="${chapterData.name}"></h1>
+                <p th:each="image : ${chapterData.chapterImages}">
+                    <img th:src="${image.image}"/>
+                </p>
+                <!-- <h3 th:text="${item.chapterEntities.chapterImageEntities}"></h3> -->
             </div>
         </div>
-      </div>
     </div>
-  </body>
+</div>
+</body>
 </html>

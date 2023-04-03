@@ -67,7 +67,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 .mangaVolume(model.getMangaVolumeId()).content(model.getContent()).chapterIndex(model.getChapterIndex())
                 .requiredVip(model.getRequiredVip()).build();
         this.chapterRepository.saveAndFlush(chapterEntity);
-        return MangaChapterDto.builder().name(chapterEntity.getName()).volumeId(chapterEntity.getMangaVolume())
+        return MangaChapterDto.builder().name(chapterEntity.getName()).volumeId(chapterEntity.getMangaVolume().getId())
                 .chapterIndex(chapterEntity.getChapterIndex()).content(chapterEntity.getContent())
                 .isRequiredVip(chapterEntity.getRequiredVip()).build();
     }
@@ -83,7 +83,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         entity.setRequiredVip(model.getRequiredVip());
         chapterRepository.saveAndFlush(entity);
         return MangaChapterDto.builder().name(entity.getName()).content(entity.getContent())
-                .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume())
+                .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume().getId())
                 .isRequiredVip(entity.getRequiredVip()).build();
     }
 
@@ -246,6 +246,27 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
 
         return chapterDtos;
+    }
+
+    @Override
+    public List<MangaChapterEntity> findByVolume(Long volume){
+        return chapterRepository.findByVolumeId(volume);
+    }
+
+    @Override
+    public List<MangaChapterEntity> findAll() {
+        return chapterRepository.findAll();
+    }
+
+    @Override
+    public List<MangaChapterDto> findAllByVolume(Long volId) {
+        return chapterRepository.findByVolumeId(volId).stream().map(MangaChapterDto::toDto).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<MangaChapterDto> findAllById(Long id) {
+        Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
+        return  chapterRepository.findAllById(id,pageable);
     }
 
 }

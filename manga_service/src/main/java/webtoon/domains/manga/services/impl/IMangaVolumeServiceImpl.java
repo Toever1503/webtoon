@@ -14,6 +14,8 @@ import webtoon.domains.manga.repositories.IMangaVolumeRepository;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
 
+import java.util.List;
+
 @Service
 @Transactional
 public class IMangaVolumeServiceImpl implements IMangaVolumeService {
@@ -67,7 +69,12 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 		return this.mangaVolumeRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 	}
 
-	@Override
+    @Override
+    public List<MangaVolumeEntity> findAll() {
+        return mangaVolumeRepository.findAll();
+    }
+
+    @Override
 	public MangaVolumeDto findById(Long id){
 		return MangaVolumeDto.toDto(this.getById(id));
 	}
@@ -78,5 +85,11 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
 			return cb.like(root.get("name"),"%" + s + "%");
 		},page);
 	}
+
+    @Override
+    public List<MangaVolumeEntity> findByManga(Long manga){
+
+        return mangaVolumeRepository.findByMangaId(manga);
+    }
 
 }

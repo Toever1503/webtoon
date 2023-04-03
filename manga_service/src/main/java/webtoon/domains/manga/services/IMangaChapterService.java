@@ -34,4 +34,12 @@ public interface IMangaChapterService {
     List<MangaChapterDto> getAllByVolumeId(Long id);
 
 	MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId);
+
+    List<MangaChapterEntity> findByVolume(Long volume);
+
+    List<MangaChapterEntity> findAll();
+
+	List<MangaChapterDto> findAllByVolume(Long volId);
+
+    List<MangaChapterDto> findAllById(Long id);
 }

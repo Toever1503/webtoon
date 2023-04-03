@@ -25,7 +25,7 @@ public class MangaChapterMapper {
         this.logger.info("MangaChapterMapper`s converting entity id: {} to dto.", entity.getId());
         return MangaChapterDto.builder()
                 .id(entity.getId())
-                .volumeId(entity.getMangaVolume())
+                .volumeId(entity.getMangaVolume().getId())
                 .name(entity.getName())
                 .content(entity.getContent())
                 .chapterIndex(entity.getChapterIndex())

@@ -18,6 +18,7 @@ import javax.persistence.TemporalType;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
@@ -29,7 +30,8 @@ import webtoon.domains.manga.enums.EMangaType;
 @Builder
 @Getter
 @Setter
-public class MangaEntity {
+public class
+MangaEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -89,5 +91,7 @@ public class MangaEntity {
 //private modified_by;
     @OneToMany(mappedBy = "manga")
     private Set<MangaVolumeEntity> volumeEntities;
+
+
 
 }
