@@ -254,18 +254,8 @@
           <div class="mx-20">
             <h1 class="p-3 font-bold text-2xl">Bản tóm tắt</h1>
             <hr />
-            <h3>
-              Trong một thế giới hoàn toàn do người khổng lồ cai trị, loài
-              người, vốn đã trở thành thức ăn của chúng, đã bao quanh các khu
-              dân cư của mình bằng những bức tường bao la, vừa ngăn cản sự tự do
-              của họ bên ngoài bức tường vừa bảo vệ họ khỏi các cuộc xâm lược.
-              Tuy nhiên, do sự xuất hiện của những người siêu khổng lồ vượt qua
-              bức tường, một cuộc đấu tranh tuyệt vọng bắt đầu và những anh hùng
-              trẻ tuổi, mất cha mẹ, chiến đấu với người khổng lồ như một quân
-              đoàn huấn luyện, nhằm giành lại tự do của họ. Lưu ý: Giành giải
-              thưởng Manga Kodansha ở hạng mục shōnen năm 2011, được đề cử cho
-              giải thưởng Manga Taishox hàng
-            </h3>
+            <div th:utext="${model.description}">
+            </div>
           </div>
 
           <div class="mx-20">
@@ -283,7 +273,6 @@
                 >
                   <div class="flex justify-between my-4">
                     <div th:text="${item.chapterName}">Chapter 1</div>
-
                     <div>October 11, 2017</div>
                   </div>
                   <hr />
