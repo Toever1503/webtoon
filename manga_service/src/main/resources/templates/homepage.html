@@ -154,7 +154,7 @@
                                     <ul class="latest-chapters grid mt-[10px] gap-[5px]" th:each="volume : ${manga.volumeEntities}"  >
                                         <li class="gap-[5px] flex" th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}"
                                             >
-                                            <a href="#" th:text="${chapter.name}"
+                                            <a href="#" th:text="${chapter.chapterName}"
                                                 class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
                                             </a>
 
