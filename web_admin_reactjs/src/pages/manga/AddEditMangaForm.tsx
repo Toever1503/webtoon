@@ -26,7 +26,7 @@ export interface MangaInputError {
     description: string;
     genres: string;
     authors: string;
-    featureImage: string;
+    featuredImage: string;
     tags: string;
 }
 
@@ -69,12 +69,12 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         mangaName: '',
         status: 'DRAFTED',
         mangaStatus: 'COMING',
-        releaseYear: dayjs(),
+        releaseYear: dayjs().format('YYYY'),
         mangaType: 'UNSET',
         genres: [],
         authors: [],
         tags: [],
-        featureImage: 'http://ima.ac',
+        featuredImage: 'http://ima.ac',
         displayType: 'CHAP'
     });
     const [isSavingMangaInfo, setIsSavingMangaInfo] = useState<boolean>(false);
@@ -126,11 +126,11 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
             mangaInputError.tags = 'manga.form.errors.tags-required';
         }
 
-        if (!mangaInput.featureImage) {
+        if (!mangaInput.featuredImage) {
             errorCount++;
-            mangaInputError.featureImage = 'manga.form.errors.feature-image-required';
+            mangaInputError.featuredImage = 'manga.form.errors.feature-image-required';
         }
-        else mangaInputError.featureImage = '';
+        else mangaInputError.featuredImage = '';
         setMangaInputError({ ...mangaInputError });
 
         if (errorCount === 0) {
@@ -140,18 +140,32 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
             mangaService.addMangaInfo(mangaInput)
                 .then((res) => {
                     console.log('add manga success', res.data);
-                    dispatch(showNofification({
-                        type: 'success',
-                        message: t('manga.form.errors.add-success'),
-                    }));
+
+                    if (props.type === 'ADD')
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: t('manga.form.errors.add-success'),
+                        }));
+                    else
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: t('manga.form.errors.edit-success'),
+                        }));
                     navigate(`/mangas`);
                 })
                 .catch((err) => {
                     console.log(err);
-                    dispatch(showNofification({
-                        type: 'error',
-                        message: t('manga.form.errors.add-failed'),
-                    }));
+                    if (props.type === 'ADD')
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: t('manga.form.errors.add-failed'),
+                        }));
+                    else
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: t('manga.form.errors.edit-failed'),
+                        }));
+
                 })
                 .finally(() => {
                     setIsSavingMangaInfo(false);
@@ -174,7 +188,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         description: '',
         genres: '',
         authors: '',
-        featureImage: '',
+        featuredImage: '',
         tags: '',
     });
 
@@ -222,12 +236,12 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                 <p className="text-[23px] font-[600]">
                     {
                         props.type === 'ADD' ?
-                            'Add New Manga'
+                            'Thêm mới truyện'
                             :
-                            'Edit Manga'
+                            'Cập nhật truyện'
                     }
                 </p>
-                <Button type="primary" loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Save</Button>
+                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Save</Button>
             </div>
 
             {
@@ -304,7 +318,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                             <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Release year:</span>
-                                <DatePicker allowClear={false} mode='year' onChange={(val: any) => setMangaInput({ ...mangaInput, releaseYear: val })} value={mangaInput.releaseYear} placement='bottomRight' picker="year" />
+                                <DatePicker allowClear={false} mode='year' onChange={(val) => setMangaInput({ ...mangaInput, releaseYear: val?.format('YYYY') })} 
+                                value={dayjs(`${mangaInput.releaseYear}-01-01`)} placement='bottomRight' picker="year" />
                             </div>
 
                             <GenreSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
@@ -326,14 +341,14 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                 <a className='text-[13px]'>Choose image</a>
 
                                 {
-                                    mangaInput.featureImage &&
-                                    <img className='h-[120px] w-[120px]' src='https://s.pstatic.net/static/newsstand/2023/0322/article_img/new_main/9044/121821_001.jpg' />
+                                    mangaInput.featuredImage &&
+                                    <img className='h-[120px] w-[120px]' src={mangaInput.featuredImage} />
                                 }
                             </div>
                             {
-                                !mangaInputError.featureImage &&
+                                !mangaInputError.featuredImage &&
                                 <p className='text-[12px] text-red-500 px-[5px]'>
-                                    {t(mangaInputError.featureImage)}
+                                    {t(mangaInputError.featuredImage)}
                                 </p>
                             }
                         </section>

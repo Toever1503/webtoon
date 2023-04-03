@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 
@@ -15,4 +16,8 @@ public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaS
 
 
     Page<MangaDto> findAllById(Long id, Pageable pageable);
+
+    @Query(value = "SELECT status, COUNT(id) as total FROM `tbl_manga_entity` \n" +
+            "GROUP BY status", nativeQuery = true)
+    List<Object[]> calculateTotalMangaEachStatus(@Param(value = "q") String q);
 }

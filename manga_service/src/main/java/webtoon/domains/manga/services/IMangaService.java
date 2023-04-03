@@ -16,30 +16,40 @@ import java.util.List;
 
 public interface IMangaService {
 
-	MangaDto add(MangaModel model);
-	MangaEntity getById(java.lang.Long id);
+    MangaDto add(MangaModel model);
+
+    MangaEntity getById(java.lang.Long id);
 
 
-	boolean deleteById(java.lang.Long id);
+    boolean deleteById(java.lang.Long id);
 
-	MangaDto update(MangaModel model);
+    MangaDto update(MangaModel model);
 
 
     void setMangaTypeAndDisplayType(java.lang.Long id, EMangaType mangaType, EMangaDisplayType displayType);
 
-	Page<MangaEntity> filterBy(String s, Pageable page);
+    Page<MangaEntity> filterBy(String s, Pageable page);
 
-	Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
+    Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
 
-	MangaDto findById(Long id);
+    MangaDto findById(Long id);
 
-	void resetMangaType(Long mangaId);
+    void resetMangaType(Long mangaId);
 
     void changeReleaseStatus(Long id, EMangaSTS mangaSTS);
 
-	void changeStatus(Long id, EStatus status);
+    void changeStatus(Long id, EStatus status);
 
     List<MangaEntity> findAllOrder();
 
-	Page<MangaDto> findAllById(Long id);
+    Page<MangaDto> findAllById(Long id);
+
+    /*
+    calculating total manga each status
+    ex:
+    total manga: 100
+        drafted: 10
+        published: 90
+     */
+    List<Object[]> calculateTotalMangaEachStatus(String q);
 }

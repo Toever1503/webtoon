@@ -36,8 +36,9 @@ public class TagServiceImpl implements ITagService {
 
     @Override
     public List<TagEntity> saveTagRelation(Long objectId, List<Long> tagIds, ETagType tagType) {
-        List<TagEntity> tagEntities = this.tagRepository.findAllById(tagIds);
         this.tagRelationRepository.deleteAllByObjectIDAndTagType(objectId, tagType.name());
+
+        List<TagEntity> tagEntities = this.tagRepository.findAllById(tagIds);
         List<TagEntityRelation> tagEntityRelations = tagEntities.stream().map(t -> TagEntityRelation.builder()
                 .objectID(objectId)
                 .tag(t)

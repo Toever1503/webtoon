@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
@@ -28,6 +29,8 @@ public class MangaModel {
 	private EStatus status;
 	private EMangaSTS mangaStatus;
 	private EMangaType mangaType;
+	private Integer releaseYear;
+	private EMangaDisplayType displayType;
 	private Date createdAt;
 	private Date modifiedAt;
 

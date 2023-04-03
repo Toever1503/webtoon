@@ -17,6 +17,8 @@ import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.tag.entity.TagEntity;
 
+import javax.persistence.Column;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
@@ -33,6 +35,7 @@ public class MangaDto {
     private EStatus status;
     private EMangaSTS mangaStatus;
     private Integer commentCount;
+    private Integer releaseYear;
     private EMangaType mangaType;
     private EMangaDisplayType displayType;
     private Date createdAt;
@@ -58,6 +61,7 @@ public class MangaDto {
                 .status(mangaEntity.getStatus())
                 .mangaStatus(mangaEntity.getMangaStatus())
                 .commentCount(mangaEntity.getCommentCount())
+                .releaseYear(mangaEntity.getReleaseYear())
                 .mangaType(mangaEntity.getMangaType())
                 .displayType(mangaEntity.getDisplayType())
                 .rating(mangaEntity.getRating())

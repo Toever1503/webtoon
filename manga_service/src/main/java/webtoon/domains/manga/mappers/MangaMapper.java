@@ -42,7 +42,9 @@ public class MangaMapper {
                 .featuredImage(input.getFeaturedImage())
                 .status(input.getStatus()) // enum status
                 .mangaStatus(input.getMangaStatus())
+                .releaseYear(input.getReleaseYear())
                 .mangaType(input.getMangaType())
+                .displayType(input.getDisplayType())
                 .createdAt(input.getCreatedAt())
                 .modifiedAt(input.getModifiedAt())
                 .build();

@@ -14,12 +14,12 @@ export interface MangaInput {
     mangaName: string;
     status: MangaStatus;
     mangaStatus: ReleaseStatus;
-    releaseYear: Dayjs;
+    releaseYear: string | undefined;
     mangaType: MangaType;
     genres: string[];
     authors: string[];
     tags: string[];
-    featureImage: string;
+    featuredImage: string;
     displayType: 'VOL' | 'CHAP';
 }
 
@@ -50,6 +50,10 @@ const addMangaInfo = async (model: MangaInput) => mangaAxios.post(`${basePath}`,
 const updateMangaInfo = async (model: MangaInput) => mangaAxios.put(`${basePath}/${model.id}`, model);
 const setMangaTypeAndDisplayType = async (id: number | string, mangaTye: MangaType,  displayType: 'VOL' | 'CHAP') => mangaAxios.patch(`${basePath}/set-manga-type-and-display-type/${id}?mangaType=${mangaTye}&displayType=${displayType}`);
 const resetMangaType = async (id: number | string) => mangaAxios.patch(`${basePath}/reset-manga-type/${id}`);
+const changeStatus = async (id: number | string, status: MangaStatus) => mangaAxios.patch(`${basePath}/change-status/${id}?status=${status}`);
+const changeReleaseStatus = async (id: number | string, status: ReleaseStatus) => mangaAxios.patch(`${basePath}/change-release-status/${id}?mangaSTS=${status}`);
+const calculateTotalMangaEachStatus = async () => mangaAxios.get(`${basePath}/calc-total-manga-each-status`);
+
 const deleteById = async (id: number | string) => mangaAxios.del(`${basePath}/${id}`);
 const deleteMangaInfo = async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
@@ -96,7 +100,11 @@ const mangaService = {
     getChapterByVolumeId,
     getLastVolIndex,
     findById,
-    deleteById
+    deleteById,
+    changeStatus,
+    changeReleaseStatus,
+    calculateTotalMangaEachStatus,
+
 };
 
 export default mangaService;

@@ -24,8 +24,9 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
     const dispatch = useDispatch();
 
     // begin tag search
-    const [selectOptions, setSelectOptions] = useState<AuthorInput[]>([]);
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(mangaInput.authors);
+    // @ts-ignore
+    const [selectOptions, setSelectOptions] = useState<AuthorInput[]>(mangaInput.originalAuthors ? mangaInput.originalAuthors : []);
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [inputVal, setInputVal] = useState('');
     const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
     const onSearch = debounce((val: string) => {
@@ -78,7 +79,7 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
     useEffect(() => {
         onCallApiSearch();
         // @ts-ignore
-        setSelectOptions(mangaInput.originalAuthors);
+        setSelectedOptions(mangaInput.originalAuthors ? mangaInput.originalAuthors.map((item: AuthorInput) => item.id?.toString()) : []);
     }, []);
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
@@ -115,7 +116,7 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                 onChange={(val) => {
                     console.log('change: ', val);
                     setSelectedOptions(val);
-                    mangaInput.authors = val.map((item: any) => item.value);
+                    mangaInput.authors = val.map((item: any) => item);
                 }}
                 options={selectOptions ? selectOptions.map((item: AuthorInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />

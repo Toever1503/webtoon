@@ -57,6 +57,9 @@ public class MangaEntity {
     @Column(name = "comment_count")
     private Integer commentCount;
 
+    @Column(name = "release_year")
+    private Integer releaseYear;
+
     @Enumerated(EnumType.STRING)
     @Column(name = "manga_type")
     private EMangaType mangaType;
@@ -87,14 +90,14 @@ public class MangaEntity {
     @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL)
     private Set<MangaVolumeEntity> volumeEntities;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "tbl_manga_genre_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
     private Set<MangaGenreEntity> genres;
 
-    @ManyToMany
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "tbl_manga_author_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")

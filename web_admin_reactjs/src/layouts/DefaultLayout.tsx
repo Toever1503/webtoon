@@ -29,7 +29,7 @@ function getItem(
 }
 
 const items: MenuItem[] = [
-    getItem('Dashboard', 'dashboard', <DashboardOutlined />),
+    getItem('Dashboard', '/', <DashboardOutlined />),
     getItem('User', 'parent-users', <UserOutlined />, [
         getItem('All Users', 'users'),
         getItem('Add new', 'user-add'),
@@ -42,7 +42,7 @@ const items: MenuItem[] = [
     ]),
     getItem('Post', 'parent-posts', <TeamOutlined />, [
         getItem('All Posts', 'posts'),
-        getItem('Add new', 'post-add')
+        getItem('Categories', 'categories')
     ]),
     getItem('Tags', '/tag', <DashboardOutlined />),
     getItem('Comment', 'parent-comments', <TeamOutlined />, [

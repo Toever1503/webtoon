@@ -23,8 +23,10 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
     const dispatch = useDispatch();
 
     // begin tag search
-    const [selectOptions, setSelectOptions] = useState<TagInput[]>([]);
-    const [selectedOptions, setSelectedOptions] = useState<string[]>(mangaInput.tags);
+    // @ts-ignore
+    const [selectOptions, setSelectOptions] = useState<TagInput[]>(mangaInput.originalTags ? mangaInput.originalTags : []);
+
+    const [selectedOptions, setSelectedOptions] = useState<string[]>([]);
     const [inputVal, setInputVal] = useState('');
     const [isAddingNew, setIsAddingNew] = useState<boolean>(false);
     const onSearch = debounce((val: string) => {
@@ -76,8 +78,8 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
 
     useEffect(() => {
         onCallApiSearch();
-         // @ts-ignore
-         setSelectOptions(mangaInput.tags);
+        // @ts-ignore
+        setSelectedOptions(mangaInput.originalTags ? mangaInput.originalTags.map((item: any) => item.id?.toString()) : []);
     }, []);
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
@@ -112,10 +114,13 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
                     </>
                 )}
                 value={selectedOptions}
-                onChange={(val: string[]) => {
+                onChange={(val: any) => {
                     console.log('change: ', val);
                     setSelectedOptions(val);
-                    mangaInput.tags = val.map((item: any) => item.value);
+                    if (typeof val === 'object')
+                        mangaInput.tags = val.map((item: any) => item.value);
+                    else
+                        mangaInput.tags = val.map((item: any) => item);
                 }}
                 options={selectOptions ? selectOptions.map((item: TagInput) => ({ label: item.tagName, value: item.id?.toString() })) : []}
             />

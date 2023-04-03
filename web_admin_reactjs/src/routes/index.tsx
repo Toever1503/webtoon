@@ -9,12 +9,18 @@ import DragPage from "../pages/test/DragPage";
 import UnzipFile from "../pages/test/UnzipFile";
 import MangaAuthorPage from "../pages/manga/MangaAuthorPage";
 import ErrorPage from "../pages/ErrorPage";
+import Dashboard from "../pages/dashboard/Dashboard";
+import CategoryPage from "../pages/post/CategoryPage";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <DefaultLayout />,
         children: [
+            {
+                path: "/",
+                element: <Dashboard />,
+            },
             {
                 path: "/contacts",
                 element: <CounterPage />,
@@ -42,6 +48,10 @@ const router = createBrowserRouter([
             {
                 path: "/tag",
                 element: <TagPage />
+            },
+            {
+                path: "/categories",
+                element: <CategoryPage />
             },
             {
                 path: '/ERROR',

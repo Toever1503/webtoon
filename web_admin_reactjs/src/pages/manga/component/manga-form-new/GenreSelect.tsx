@@ -23,8 +23,9 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
     const dispatch = useDispatch();
 
     // begin tag search
-    const [selectOptions, setSelectOptions] = useState<GenreInput[]>([]);
-    const [selectedGenres, setSelectedGenres] = useState<string[]>(mangaInput.genres);
+    // @ts-ignore
+    const [selectOptions, setSelectOptions] = useState<GenreInput[]>(mangaInput.originalGenres ? mangaInput.originalGenres : []);
+    const [selectedGenres, setSelectedGenres] = useState<string[]>([]);
     const [genreSearchVal, setGenreSearchVal] = useState('');
     const [isAddingNewGenre, setIsAddingNewGenre] = useState<boolean>(false);
     const onSearchGenre = debounce((val: string) => {
@@ -81,7 +82,8 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
         // return () => clearInterval(id);
         onCallApiSearchGenre();
         // @ts-ignore
-        setSelectOptions(mangaInput.originalGenres);
+        setSelectedGenres(mangaInput.originalGenres ? mangaInput.originalGenres.map((item: any) => item.id?.toString()) : []);
+
     }, []);
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
@@ -118,7 +120,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                 onChange={(val: string[]) => {
                     console.log('change: ', val);
                     setSelectedGenres(val);
-                    mangaInput.genres = val.map((item: any) => item.value);
+                    mangaInput.genres = val.map((item: any) => item);
                 }}
                 options={selectOptions ? selectOptions.map((item: GenreInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />

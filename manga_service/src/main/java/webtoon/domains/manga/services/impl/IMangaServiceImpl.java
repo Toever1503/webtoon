@@ -168,7 +168,8 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public MangaDto findById(Long id) {
-        return MangaDto.toDto(this.getById(id));
+        MangaEntity entity = this.getById(id);
+        return MangaDto.toDto(entity);
     }
 
     @Override
@@ -232,5 +233,10 @@ public class IMangaServiceImpl implements IMangaService {
     public Page<MangaDto> findAllById(Long id) {
        Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
         return  mangaRepository.findAllById(id,pageable);
+    }
+
+    @Override
+    public List<Object[]> calculateTotalMangaEachStatus(String q) {
+        return this.mangaRepository.calculateTotalMangaEachStatus(q);
     }
 }

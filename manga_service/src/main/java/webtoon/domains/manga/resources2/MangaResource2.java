@@ -72,17 +72,22 @@ public class MangaResource2 {
     }
 
     @PatchMapping("change-status/{id}")
-    public void changeStatus(@PathVariable Long id, @RequestParam EStatus mangaSTS) {
-        this.mangaService.changeStatus(id, mangaSTS);
+    public void changeStatus(@PathVariable Long id, @RequestParam EStatus status) {
+        this.mangaService.changeStatus(id, status);
     }
 
     @PatchMapping("change-release-status/{id}")
-    public void changeReleaseStatus(@PathVariable Long id, @RequestParam EMangaSTS status) {
-        this.mangaService.changeReleaseStatus(id, status);
+    public void changeReleaseStatus(@PathVariable Long id, @RequestParam EMangaSTS mangaSTS) {
+        this.mangaService.changeReleaseStatus(id, mangaSTS);
     }
 
     @DeleteMapping("{id}")
     public void deleteById(@PathVariable Long id) {
         this.mangaService.deleteById(id);
+    }
+
+    @GetMapping("calc-total-manga-each-status")
+    public List<Object[]> calculateTotalMangaEachStatus(@RequestParam(required = false) String q) {
+        return this.mangaService.calculateTotalMangaEachStatus(q);
     }
 }
