@@ -2,11 +2,14 @@ package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.dtos.PaymentDto;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.models.PaymentModel;
 import webtoon.payment.repositories.IPaymentRepository;
 import webtoon.payment.services.IPaymentService;
+
+import java.util.List;
 
 @Service
 public class PaymentServiceImpl implements IPaymentService {
@@ -53,7 +56,6 @@ public class PaymentServiceImpl implements IPaymentService {
 
         return PaymentDto.builder()
                 .orderId(paymentEntity.getOrderId())
-                .transId(paymentEntity.getTransId())
                 .transTrackNumber(paymentEntity.getTransTrackNumber())
                 .payMoney(paymentEntity.getPayMoney())
                 .bank(paymentEntity.getBank())
@@ -61,6 +63,11 @@ public class PaymentServiceImpl implements IPaymentService {
                 .payUrl(paymentEntity.getPayUrl())
                 .expired_date(paymentEntity.getExpired_date())
                 .build();
+    }
+
+    @Override
+    public List<PaymentEntity> getAll() {
+        return this.paymentRepository.findAll();
     }
 
     public PaymentEntity getById(Long id){

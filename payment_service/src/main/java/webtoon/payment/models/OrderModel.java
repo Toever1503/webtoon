@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import webtoon.payment.entities.PaymentEntity;
+import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.enums.EOrderType;
 
 import java.util.Date;
@@ -15,13 +17,12 @@ import java.util.Date;
 @Builder
 public class OrderModel {
     private Long id;
-    private Double totalPrice;
-    private Double discountPrice;
-    private Double finalDiscountPrice;
-    private Double finalPrice;
-    private String paymentMethod;
-    private EOrderType orderType;
-    private String note;
     private Date created_at;
-    private Date modified_at;
+    private Date gioLap;
+    private Double finalPrice;
+    private int status;
+    private String content;
+    private String ipAddr;
+    private String maDonHang;
+    private SubscriptionPackEntity subs_pack_id;
 }

@@ -7,6 +7,9 @@ import webtoon.payment.entities.PaymentStatusEntity;
 import webtoon.payment.models.PaymentStatusModel;
 import webtoon.payment.repositories.IPaymentStatusRepository;
 import webtoon.payment.services.IPaymentStatusService;
+
+import java.util.List;
+
 @Service
 public class PaymentStatusServiceImpl implements IPaymentStatusService {
     @Autowired
@@ -42,6 +45,11 @@ public class PaymentStatusServiceImpl implements IPaymentStatusService {
                 .created_at(paymentStatusEntity.getCreated_at())
                 .modified_at(paymentStatusEntity.getModified_at())
                 .build();
+    }
+
+    @Override
+    public List<PaymentStatusEntity> getAll() {
+        return this.paymentStatusRepository.findAll();
     }
 
     public PaymentStatusEntity getById(Long id) {

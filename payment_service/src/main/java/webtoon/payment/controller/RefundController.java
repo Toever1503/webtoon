@@ -1,34 +1,40 @@
 package webtoon.payment.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLDecoder;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.models.OrderModel;
+import webtoon.payment.services.IOrderService;
+import webtoon.payment.services.IPaymentService;
+import webtoon.payment.services.ISubscriptionPackService;
 
 @Controller
 @RequestMapping("payment/refund")
 public class RefundController {
+	@Autowired
+	private IPaymentService paymentService;
+	@Autowired
+	private IOrderService orderService;
+
+	@Autowired
+	private ISubscriptionPackService subscriptionPackService;
 
 	@PostMapping
 	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam int amount,
@@ -90,8 +96,12 @@ public class RefundController {
 	}
 
 	@GetMapping("/ket-qua")
-	public String ketQua(HttpServletRequest request, HttpServletResponse resp, Model model) throws ServletException, IOException {
+	public String ketQua(HttpServletRequest request, HttpServletResponse resp, Model model) throws ServletException, IOException, ParseException {
 		Map fields = new HashMap();
+		String vnp_IpAddr = VnPayConfig.getIpAddress(request);
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
+		Calendar cld = Calendar.getInstance(TimeZone.getTimeZone("Etc/GMT+7"));
+		String vnp_ExpireDate = formatter.format(cld.getTime());
 		for (Enumeration params = request.getParameterNames(); params.hasMoreElements();) {
 			String fieldName = (String) params.nextElement();
 			String fieldValue = request.getParameter(fieldName);
@@ -100,6 +110,14 @@ public class RefundController {
 			}
 		}
 
+		StringBuilder query = new StringBuilder();
+		StringBuilder hashData = new StringBuilder();
+		String queryUrl = query.toString();
+		String vnp_SecureHash1 = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
+		System.out.println("hash: " + vnp_SecureHash1);
+		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash1;
+		String paymentUrl = VnPayConfig.vnp_RefundUrl + "?" + queryUrl;
+
 		String vnp_SecureHash = request.getParameter("vnp_SecureHash");
 		if (fields.containsKey("vnp_SecureHashType")) {
 			fields.remove("vnp_SecureHashType");
@@ -107,17 +125,23 @@ public class RefundController {
 		if (fields.containsKey("vnp_SecureHash")) {
 			fields.remove("vnp_SecureHash");
 		}
+
 		String signValue = VnPayConfig.hashAllFields(fields);
 		String maDonHang = request.getParameter("vnp_TxnRef");
 		String amount = request.getParameter("vnp_Amount");
+		SubscriptionPackEntity subscriptionPack = subscriptionPackService.getByPrice(Double.parseDouble(amount)/100);
 		String noiDungTT = request.getParameter("vnp_OrderInfo");
 		String maPhanHoi = request.getParameter("vnp_ResponseCode");
 		String maGD = request.getParameter("vnp_TransactionNo");
 		String maNganHang = request.getParameter("vnp_BankCode");
 		String thoiGianTT = request.getParameter("vnp_PayDate");
 		String ketQua = "";
+		amount = amount.substring(0, amount.length() - 2);
+
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
+			orderService.add(new OrderModel(Long.parseLong(maDonHang), formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), 0,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack ));
+//			paymentService.add(new PaymentModel(Long.parseLong(maDonHang), , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 		}else {
 			ketQua = "Giao dịch không thành thành công";
 //			veServiceImpl.deleteVeByHD(Integer.parseInt(maDonHang));

@@ -2,6 +2,7 @@ package webtoon.payment.entities;
 
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.springframework.format.annotation.DateTimeFormat;
 import webtoon.payment.enums.EOrderType;
 
 import javax.persistence.*;
@@ -20,35 +21,32 @@ public class OrderEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name="total_price")
-    private Double totalPrice;
-
-    @Column(name="discount_price")
-    private Double discountPrice;
-
-    @Column(name="final_discount_price")
-    private Double finalDiscountPrice;
-
-    @Column(name="final_price")
-    private Double finalPrice;
-
-    @Column(name="payment_method")
-    private String paymentMethod;
-
-    @Enumerated(EnumType.STRING)
-    @Column(name="order_type")
-    private EOrderType orderType;
-
-    @Column(name="note")
-    private String note;
-
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date created_at;
 
     @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    private Date modified_at;
+    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
+    private Date gioLap;
+
+    @Column
+    private Double finalPrice;
+
+    @Column
+    private int status;
+
+    @Column
+    private String content;
+
+    @Column
+    private String ipAddr;
+
+    @Column
+    private String maDonHang;
+
+    @JoinColumn(name ="subs_pack_id")
+    @OneToOne
+    private SubscriptionPackEntity subs_pack_id;
 }

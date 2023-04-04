@@ -11,7 +11,7 @@
 
   </head>
 
-  <body>
+  <body ng-app="paymentApp" ng-controller="paymentController">
     <div class="w-[1100px] m-auto">
       <div class="flex 2xl:justify-start py-4 md:py-8 flex-wrap">
         <div class="max-w-full autofill: ml-56 mt-10">
@@ -31,28 +31,27 @@
     </ul>
         </div>
       </div>
+      
       <div
-        class="grid justify-center 2xl:grid-cols-3 md:justify-center md:grid-cols-3 xl:grid-cols-3 gap-4 max-w-full xl:ml-16 ml-16"
+        class="grid justify-center 2xl:grid-cols-3 md:justify-center md:grid-cols-3 xl:grid-cols-3 gap-4 max-w-full xl:ml-16 ml-16" th:each="item : ${items}"
       >
         <div>
-          <button
-            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=20000' |"
+          <button 
+            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=${item.price.intValue()}'|"
             class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
           >
           <ul>
-            <li >
-                Gói 1 tháng  
+            <li th:text=" ${item.name}" >
                 </li>
-                <li>
-                    20k/1 tháng
+                <li th:text="${item.price.intValue()}">
                 </li>
             </ul>
           
           </button>
         </div>
-        <div>
+       <!--  <div>
           <button
-            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=51000' |"
+            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=5100000' |"
             class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
           >
           <ul>
@@ -70,7 +69,7 @@
         </div>
         <div>
           <button
-            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=180000' |"
+            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=18000000' |"
             class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
           >
           <ul>
@@ -85,9 +84,10 @@
                 </li>
             </ul>
           </button>
-        </div>
-      </div>
+        </div> 
+      </div>-->
 
+    </div>
     </div>
   </body>
 </html>

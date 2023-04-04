@@ -23,8 +23,11 @@ public class PaymentStatusResource {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updatePaymentStatus(@PathVariable Long id, @RequestBody PaymentStatusModel paymentStatusModel){
-        paymentStatusModel.setId(id);
+    public ResponseEntity<?> updatePaymentStatus(@RequestBody PaymentStatusModel paymentStatusModel){
         return ResponseEntity.ok(paymentStatusService.update(paymentStatusModel));
+    }
+    @GetMapping("/getAll")
+    public ResponseEntity<?> getAllPaymentStatus(){
+        return ResponseEntity.ok(paymentStatusService.getAll());
     }
 }
