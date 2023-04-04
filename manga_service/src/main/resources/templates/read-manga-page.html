@@ -55,9 +55,9 @@
             </div>
 
             <div class="mx-20 mb-10">
-                <div class="flex justify-end mx-20" th:if="${mangaData.displayType.name} == 'VOL'">
+                <div class="flex justify-end mx-20" >
                     <div th:if="${prevChapter != null}" class="bg-slate-400">
-                        <a th:href="@{'/manga/'+${mangaData.title}+'/chapter/'+${prevChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                        <a th:href="@{'/manga/'+${chapterData.chapterName}+'/chapter/'+${prevChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
                            style="display: flex; align-items: center" >
                             <svg    xmlns="http://www.w3.org/2000/svg"
                                     width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
@@ -70,36 +70,7 @@
                     </div>
 
                     <div  th:if="${nextChapter != null}" class="bg-indigo-400 ml-5">
-                        <a th:href="@{'/manga/'+ ${mangaData.title}+'/chapter/'+${nextChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-                           style="display: flex; align-items: center" >
-                            Next
-                            <svg    xmlns="http://www.w3.org/2000/svg"
-                                    width="16" height="16" fill="currentColor"
-                                    class="bi bi-arrow-right-short" viewBox="0 0 16 16" >
-                                <path   fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1
-                        .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-
-
-                <div class="flex justify-end mx-20" th:if="${mangaData.displayType.name} == 'CHAP'">
-                    <div th:if="${prevChapter != null}" class="bg-slate-400">
-                        <a th:href="@{'/manga/'+${mangaData.title}+'/chapter/'+${prevChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-                           style="display: flex; align-items: center" >
-                            <svg    xmlns="http://www.w3.org/2000/svg"
-                                    width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                                <path   fill-rule="evenodd"
-                                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0
-                                1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
-                            </svg>
-                            Prev
-                        </a>
-                    </div>
-
-                    <div  th:if="${nextChapter != null}" class="bg-indigo-400 ml-5">
-                        <a th:href="@{'/manga/'+ ${mangaData.title}+'/chapter/'+${nextChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                        <a th:href="@{'/manga/'+ ${chapterData.chapterName}+'/chapter/'+${nextChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
                            style="display: flex; align-items: center" >
                             Next
                             <svg    xmlns="http://www.w3.org/2000/svg"
@@ -133,18 +104,19 @@
         </div>
 
         <div class="ml-5">
-            <select
+            <select 
                     id="chapter"
-                    value=""
-                    data-te-select-init
-                    data-te-select-size="lg"
+                    th:value="${chapterData.id}"
+                    
                     class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
             >
                 <option value="">Chọn chương</option>
-                <option
-                        th:each="item : ${chapterData1}"
-                        th:value="${item.id}"
-                        th:text="${'Chương ' + (item.chapterIndex + 1) +': '+item.chapterName}"
+                <option 
+                        th:each="itemchapter : ${chapterData1}"
+                        th:value="${itemchapter.id}"
+                        th:text="${'Chương ' + (itemchapter.chapterIndex + 1) +': '+itemchapter.chapterName}"
+                        
+                        th:selected = "${chapterData.id == itemchapter.id}" 
                 ></option>
             </select>
         </div>
@@ -152,25 +124,26 @@
         <!-- Sự kiện onchange -->
         <script>
             // Lấy đối tượng select box 1
-            const selectBox = document.getElementById("volume");
+            const selectVolume = document.getElementById("volume");
 
             // Lấy đối tượng select box 2
-            const selectBox1 = document.getElementById("chapter");
+            const selectChapter = document.getElementById("chapter");
 
             // Thêm sự kiện onchange cho select box
 
-            selectBox.addEventListener("change", function (e) {
+            selectVolume.addEventListener("change", function (e) {
                 // console.log('on choose vol: ', e.target.value)
-                const x = selectBox;
+                const x = selectVolume;
 
-                selectBox1.querySelectorAll('option').forEach((opt, i) => i !== 0 && opt.remove());
-                selectBox1.value = "";
+                selectChapter.querySelectorAll('option').forEach((opt, i) => i !== 0 && opt.remove());
+                selectChapter.value = "";
                 let listChapter = [];
                 // call api de set vao listchapter
                 fetch('http://localhost:8000/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
                     method: 'GET'
                 })
                     .then(res => res.json())
+
                     .then(res => {
                         // console.log('chapter dât: ', res);
                         listChapter = res;
@@ -181,7 +154,7 @@
                             optEl.value = item.id; // e.value
 
                             // add option to select
-                            selectBox1.append(optEl);
+                            selectChapter.append(optEl);
                         })
                     })
                     .catch(err => {
@@ -196,13 +169,13 @@
 
             });
             // Thêm sự kiện onchange cho select box2
-            selectBox1.addEventListener("change", function () {
+            selectChapter.addEventListener("change", function () {
                 // Lấy giá trị đã chọn từ select box2
-                const selectedValue2 = selectBox1.value;
-                console.log(selectedText + " tên chapter");
-                var selectedText = selectBox1.text;
+
+                const selectedValue2 = selectChapter.value;
+                var selectedText = selectChapter.text;
                 // Thực hiện các hành động mong muốn khi giá trị đã chọn từ select box2 thay đổi
-                window.location.href = "http://localhost:8000/manga/" + selectedText + "/chapter/" + selectedValue2
+                window.location.href = 'http://localhost:8000/manga/' + selectedText + '/chapter/' + selectedValue2
             });
         </script>
         <!-- Kết thúc sự kiện onechange -->
