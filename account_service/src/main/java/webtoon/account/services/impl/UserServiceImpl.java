@@ -7,14 +7,15 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.UserEntity;
-import webtoon.account.enums.EnumAccountType;
-import webtoon.account.enums.EnumSex;
+import webtoon.account.enums.EAccountType;
+import webtoon.account.enums.ESex;
 import webtoon.account.models.CreateUserModel;
 import webtoon.account.models.UpdateUserModel;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.UserService;
 import webtoon.utils.exception.CustomHandleException;
 
+import javax.transaction.Transactional;
 import java.util.Objects;
 
 
@@ -31,6 +32,7 @@ public class UserServiceImpl implements UserService {
                 .map(UserDto::toDto);
     }
 
+    @Override
     public UserDto findById(Long id) {
         UserEntity entity = this.userRepository.findById(id)
                 .orElseThrow(
@@ -39,6 +41,7 @@ public class UserServiceImpl implements UserService {
         return UserDto.toDto(entity);
     }
 
+    @Transactional
     @Override
     public UserDto add(CreateUserModel model) {
         if (!Objects.equals(model.getPassword(), model.getRePassword())) {
@@ -57,7 +60,7 @@ public class UserServiceImpl implements UserService {
                                 .password(this.passwordEncoder.encode(model.getPassword()))
                                 .fullName(model.getFullName())
                                 .email(model.getEmail())
-                                .accountType(EnumAccountType.DATABASE)
+                                .accountType(EAccountType.DATABASE)
                                 .sex(model.getSex())
 //                                .status(EnumStatus.NOT_ACTIVE)
                                 .build()
@@ -65,6 +68,7 @@ public class UserServiceImpl implements UserService {
         );
     }
 
+    @Transactional
     @Override
     public UserDto update(UpdateUserModel model) {
         UserEntity entity = this.userRepository.findById(model.getId())
@@ -78,7 +82,7 @@ public class UserServiceImpl implements UserService {
 
         entity.setEmail(model.getEmail());
         entity.setFullName(model.getFullName());
-        entity.setSex(EnumSex.valueOf(model.getSex()));
+        entity.setSex(ESex.valueOf(model.getSex()));
 
         return UserDto.toDto(this.userRepository.saveAndFlush(entity));
     }
@@ -88,6 +92,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository.deleteById(id);
     }
 
+    @Transactional
     @Override
     public void changeStatus(Long id) {
         UserEntity entity = this.userRepository.findById(id)
@@ -100,6 +105,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository.saveAndFlush(entity);
     }
 
+    @Transactional
     @Override
     public void checkHasBlockedAndUpdateNumberOfFailedSignInAndUpdateHasBlockedByNumberOfFailedSignIn(String username) {
         UserEntity entity = this.findByUsername(username);
@@ -114,6 +120,7 @@ public class UserServiceImpl implements UserService {
         this.userRepository.saveAndFlush(entity);
     }
 
+    @Transactional
     @Override
     public void unHasBlockedByNumberOfFailedSignInAndResetNumberOfFailedSignIn(String username) {
         UserEntity entity = this.findByUsername(username);
@@ -126,7 +133,7 @@ public class UserServiceImpl implements UserService {
 
     private UserEntity findByUsername(String username) {
         return this.userRepository.findByAccountTypeAndUsername(
-                        EnumAccountType.DATABASE,
+                        EAccountType.DATABASE,
                         username
                 )
                 .orElseThrow(

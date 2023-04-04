@@ -89,7 +89,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             if (file) {
                 console.log('file', file.type);
 
-                const allowType = ['text/plain', 'application/haansoftdocx', 'application/haansoftdoc'];
+                const allowType = ['text/plain'];
                 if (file.size > 100000000) {
                     dispatch(showNofification({
                         type: 'error',

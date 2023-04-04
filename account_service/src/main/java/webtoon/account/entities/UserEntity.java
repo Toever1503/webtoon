@@ -3,9 +3,9 @@ package webtoon.account.entities;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
-import webtoon.account.enums.EnumAccountType;
-import webtoon.account.enums.EnumSex;
-import webtoon.account.enums.EnumStatus;
+import webtoon.account.enums.EAccountType;
+import webtoon.account.enums.ESex;
+import webtoon.account.enums.EStatus;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -37,18 +37,18 @@ public class UserEntity {
 
     @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
-    private EnumAccountType accountType;
+    private EAccountType accountType;
 
     @Column(name = "password")
     private String password;
 
     @Column(name = "sex")
     @Enumerated(EnumType.STRING)
-    private EnumSex sex;
+    private ESex sex;
 
     @Column(name = "status")
     @Enumerated(EnumType.STRING)
-    private EnumStatus status;
+    private EStatus status;
 
     @Column(name = "has_blocked")
     private Boolean hasBlocked;

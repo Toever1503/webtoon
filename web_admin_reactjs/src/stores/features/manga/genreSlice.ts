@@ -5,13 +5,12 @@ export interface GenreModel {
     id: string | number;
     name: string;
     slug: string;
-    stt: string | number;
+    index: string | number;
 }
 
 export interface GenreState {
     data: Array<GenreModel>,
-    totalElements: number,
-    size: number,
+    pageSize: number,
 }
 
 const initialState: GenreState = {
@@ -19,13 +18,12 @@ const initialState: GenreState = {
         {
             key: 1,
             id: 1,
-            stt: 1,
+            index: 1,
             name: 'John Brown',
             slug: 'New York No. 1 Lake Park',
         },
     ],
-    totalElements: 1,
-    size: 10,
+    pageSize: 10,
 }
 
 export const genreSlice = createSlice({
@@ -41,13 +39,12 @@ export const genreSlice = createSlice({
             // state.data.push(payload);
             if (!payload.key)
                 payload.key = payload.id;
-
-            if (state.data.length === state.size)
+                
+            if(state.data.length >= state.pageSize)
                 state.data.pop();
-            state.data.unshift(payload);
+            state.data = [payload, ...state.data]
 
-            state.totalElements = state.totalElements + 1;
-            console.log('addTag', payload)
+            console.log('addGenre', payload)
         },
         updateGenre: (state, { payload }) => {
             state.data = state.data.map((item) => {
@@ -57,14 +54,12 @@ export const genreSlice = createSlice({
                 return item;
             });
         },
-        deleteGenreById: (state,{payload}) => {
+        deleteGenreById: (state, { payload }) => {
             state.data = state.data.filter((item) => item.id !== payload.id);
-            console.log('deleteTagById', state.data);
-            state.totalElements = state.totalElements - 1;
+            console.log('deleteGenreById', state.data);
         },
         setGenreData: (state, { payload }) => {
             state.data = payload.data;
-            state.totalElements = payload.totalElements;
         }
 
     },

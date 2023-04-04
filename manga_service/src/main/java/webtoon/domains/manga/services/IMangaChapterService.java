@@ -36,6 +36,8 @@ public interface IMangaChapterService {
 
 	MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId);
 
+    MangaChapterDto[] findNextPostsManga(Long chapterID, Long mangaId);
+
     Page<MangaChapterDto> filterChapter(Pageable pageable, MangaChapterFilterInput input);
 
     MangaChapterDto findById(Long id);
@@ -50,4 +52,6 @@ public interface IMangaChapterService {
 	List<MangaChapterDto> findAllByVolume(Long volId);
 
     List<MangaChapterDto> findAllById(Long id);
+
+    List<MangaChapterEntity> findAllByMangaId(Long id);
 }

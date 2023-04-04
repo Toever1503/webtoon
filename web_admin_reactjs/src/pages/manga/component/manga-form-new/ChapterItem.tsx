@@ -5,10 +5,10 @@ import { Checkbox, Popconfirm, TablePaginationConfig } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MangaInput } from "../../../../services/manga/MangaService";
-import { ChapterType } from "../manga-form/MangaVolumeInfoItem";
 import chapterService from "../../../../services/manga/ChapterService";
 import { useDispatch } from "react-redux";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
+import { ChapterType } from "./ChapterSetting";
 
 
 type ChapterItemProps = {

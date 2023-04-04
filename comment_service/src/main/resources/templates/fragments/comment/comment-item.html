@@ -1,0 +1,59 @@
+<li class="comment_parent flex gap-[10px] relative"
+    th:fragment="comment-item">
+    <div th:if="${commentPage.content.size() > 0}" th:each="comment : ${commentPage.content}">
+        <div class="comment_author_action absolute top-0 right-0 z-[10]">
+            <!-- write action delete, delete -->
+            <p
+                    class="cmm_action_menu cursor-pointer px-[5px] hover:text-gray-500 flex justify-end">
+                <img style="height: 15px;"
+                     src="/static/images/post/dot-menu-vertical.png">
+            </p>
+
+            <div
+                    class="cmm_action_list grid rounded px-[5px] py-[10px] bg-gray-200 text-sm hidden">
+			<span
+                    class="ease-in-out duration-300 hover:text-red-500 cursor-pointer"><a
+                    th:href="'@{/comment/update/'+${comment.getId()}">Edit</a></span>
+                <span
+                        class="ease-in-out duration-300 hover:text-red-500 cursor-pointer"><a
+                        th:href="'@{/comment/delete/'+${comment.getId()}">Delete</a></span>
+            </div>
+        </div>
+
+        <div class="comment_avatar">
+            <img height="50px" width="50px" class="rounded-full"
+                 src="https://i.pravatar.cc/150?img=1">
+        </div>
+
+        <div class="comment_content w-full text-base">
+            <div class="comment_author font-bold">John Doe</div>
+            <div class="comment_content_top" th:text="${comment.getContent()}">
+            </div>
+
+            <div class="comment_content_bottom text-sm text-neutral-500">
+                <span class="comment_date" th:text="${comment.getCreatedAt()}"></span> <span
+                    class="text-neutral-400">|</span> <span
+                    class="comment_reply text-blue-400 hover:text-blue-500 cursor-pointer">Reply</span>
+            </div>
+
+            <!-- begin comment child  -->
+            <ul th:if="${comment.childComments.size()}" class="comment_childs mt-[10px] grid gap-[10px]">
+                <li th:replace="fragments/comment/comment-item"/>
+            </ul>
+            <!-- end comment child  -->
+
+        </div>
+    </div>
+
+</li>
+
+<script>
+    [...document.getElementsByClassName('cmm_action_menu')].forEach(e => {
+        e.addEventListener('click', function () {
+            document.getElementsByClassName('cmm_action_list')[0].classList.toggle('hidden');
+        })
+    });
+
+
+
+</script>

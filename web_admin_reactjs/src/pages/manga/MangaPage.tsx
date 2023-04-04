@@ -50,8 +50,8 @@ const MangaPage: React.FC = () => {
     const columns: ColumnsType<MangaInput> = [
         {
             title: 'STT',
-            dataIndex: 'stt',
-            key: 'stt',
+            dataIndex: 'index',
+            key: 'index',
         },
         {
             title: 'Name',
@@ -152,7 +152,6 @@ const MangaPage: React.FC = () => {
                         </span>
                     </a>
                 </Dropdown>
-
             </>,
         },
         {
@@ -207,7 +206,7 @@ const MangaPage: React.FC = () => {
                 console.log('manga data; ', res.data.content);
                 setMangaData(res.data.content.map((e: MangaInput, index: number) => {
                     // @ts-ignore
-                    e.stt = index + 1;
+                    e.index = index + 1;
                     // @ts-ignore
                     e.key = e.id;
                     return e;

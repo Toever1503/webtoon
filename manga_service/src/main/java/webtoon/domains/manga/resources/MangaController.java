@@ -13,10 +13,13 @@ import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.filters.MangaFilterModel;
 import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
+
+import java.util.List;
 
 @Controller
 @RequestMapping("manga")
@@ -40,6 +43,10 @@ public class MangaController {
 	@GetMapping("{name}/{id}")
 	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
 		MangaEntity mangaEntity =this.mangaService.getById(id);
+
+		List<MangaChapterEntity> mangaChapter = this.mangaChapterService.findAllByMangaId(id);
+
+		model.addAttribute("modelchapter",mangaChapter);
 		model.addAttribute("model",mangaEntity);
 			return "trangtruyen";
 	}
@@ -49,21 +56,40 @@ public class MangaController {
 	@GetMapping("{name}/chapter/{id}")
 	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
 		MangaChapterEntity chapterEntity = this.mangaChapterService.getById(id);
-		MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
-		MangaEntity mangaEntity = volumeEntity.getManga();
 
-		model.addAttribute("volumeEntity1", mangaVolumeService.findByManga(mangaEntity.getId()));
-		model.addAttribute("chapterData1",mangaChapterService.findByVolume(volumeEntity.getId()));
+
+		MangaEntity mangaEntity = null;
+		if(chapterEntity.getManga() != null){ // display type chap
+			mangaEntity = chapterEntity.getManga();
+		}
+		else { // display type vol
+			MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
+			mangaEntity = volumeEntity.getManga();
+
+			model.addAttribute("currentVol", volumeEntity);
+
+			model.addAttribute("volumeEntity1", mangaVolumeService.findByManga(mangaEntity.getId()));
+			model.addAttribute("chapterData1",mangaChapterService.findByVolume(volumeEntity.getId()));
+		}
 
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);
 
+
+//		next prev displayType == 'VOL'
 		MangaChapterDto[] prevNextChapter = this.mangaChapterService
 				.findNextPosts(id,chapterEntity.getMangaVolume().getId());
 		model.addAttribute("prevChapter",prevNextChapter[0]);
 		model.addAttribute("nextChapter",prevNextChapter[1]);
+//      next prev displayType == 'CHAP'
+		MangaChapterDto[] prevNextChaptermanga = this.mangaChapterService
+				.findNextPostsManga(id,chapterEntity.getManga().getId());
 
+
+		
+		model.addAttribute("prevChapter",prevNextChapter[0]);
+		model.addAttribute("nextChapter",prevNextChapter[1]);
 
 
 		return "read-manga-page";
@@ -72,6 +98,8 @@ public class MangaController {
 	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
 
 		model.addAttribute("model", mangaService.filterBy(s,pageable));
+
+
 		return "trangtruyenchu";
 	}
 

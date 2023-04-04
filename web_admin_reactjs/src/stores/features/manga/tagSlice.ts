@@ -5,7 +5,7 @@ export interface TagModel {
     id: string | number;
     tagName: string;
     slug: string;
-    stt: string | number;
+    index: string | number;
 }
 
 export interface TagState {
@@ -20,7 +20,7 @@ const initialState = (): TagState => {
             {
                 id: 1,
                 key: 1,
-                stt: 1,
+                index: 1,
                 tagName: 'John Brown',
                 slug: 'New York No. 1 Lake Park',
             },
