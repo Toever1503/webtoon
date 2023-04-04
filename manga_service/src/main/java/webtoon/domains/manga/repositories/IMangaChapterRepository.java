@@ -26,7 +26,7 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     Optional<Long> getLastChapterIndexForVolType(Long mangaId);
 
 
-    @Query("SELECT MAX(chapterIndex) FROM MangaChapterEntity c WHERE manga.id = ?1")
+    @Query("SELECT MAX(c.chapterIndex) FROM MangaChapterEntity c WHERE c.manga.id = ?1")
     Optional<Long> getLastChapterIndexForChapType(Long mangaId);
 
     void deleteALlByMangaId(Long id);
@@ -37,12 +37,23 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     @Query("select p from MangaChapterEntity p where p.id < ?1 and p.mangaVolume.id = ?2")
     List<MangaChapterEntity> findPrevchapter(Long chapterID, Long volumeId, Pageable page);
 
+
+
+    @Query("select p from MangaChapterEntity p where p.id > ?1 and p.manga.id = ?2")
+    List<MangaChapterEntity> findNextchaptermanga(Long chapterID, Long mangaId, Pageable page);
+
+    @Query("select p from MangaChapterEntity p where p.id < ?1 and p.manga.id = ?2")
+    List<MangaChapterEntity> findPrevchaptermanga(Long chapterID, Long mangaId, Pageable page);
+
     @Modifying
-    @Query("UPDATE FROM MangaChapterEntity c set c.chapterIndex = c.chapterIndex-1 where c.chapterIndex > ?1")
+    @Query("UPDATE  FROM MangaChapterEntity c set c.chapterIndex = c.chapterIndex-1 where c.chapterIndex > ?1")
     void reindexChapterAfterIndex(Integer index);
 
     @Query("select p from MangaChapterEntity  p where  p.mangaVolume.id = ?1")
     List<MangaChapterEntity> findByVolumeId(@Param("id") Long id);
 
     List<MangaChapterDto> findAllById(Long id, Pageable pageable);
+
+    @Query("select p from MangaChapterEntity p where p.manga.id = ?1")
+    List<MangaChapterEntity> findByMangaId(@Param("id") Long id);
 }
