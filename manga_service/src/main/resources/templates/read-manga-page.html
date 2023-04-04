@@ -17,7 +17,13 @@
 <body>
 <div class="container mx-auto" layout:fragment="content">
     <div class="mt-20 mb-10 mx-20">
-        <h1 class="font-bold text-2xl">Manga Text Chapter - Chapter 6</h1>
+        <h1 class="font-bold text-2xl">
+            <span th:text="${mangaData.title}"></span>
+            -
+            <span th:if="${mangaData.displayType == 'VOL'}" th:text="${'Tập ' + (currentVol.volumeIndex + 1) + ': ' + currentVol.name + ' -'}"></span>
+
+            <span th:text="${'Chương ' + (chapterData.chapterIndex + 1) + ': ' + chapterData.chapterName }"></span>
+        </h1>
     </div>
 
     <div class="mx-20 mb-8">

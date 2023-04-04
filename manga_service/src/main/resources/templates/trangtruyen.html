@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link href="../static/main.css" rel="stylesheet" />
-	
+
     <style>
       .accordion {
         background-color: #eee;
@@ -53,18 +53,30 @@
   </head>
 
   <body>
-    <div class="container mx-auto" layout:fragment="content">
+    <div class="container mx-auto" layout:fragment="content" th:each="model : ${model}">
       <div class="flex">
         <!-- <div class="flex-none w-14 h-14 ...">
         01
       </div> -->
-        <div class="grow h-14">
+        <div class="grow h-14" >
           <div class="m-10 ml-20">
             <nav class="w-full rounded-md">
-              <ol class="list-reset flex">
+              <ol class="list-reset flex" >
                 <li>
                   <a
-                    href="#"
+                    href="/index"
+                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                    >Home</a
+                  >
+                </li>
+                <li>
+                  <span class="mx-2 text-neutral-500 dark:text-neutral-400"
+                    >/</span
+                  >
+                </li>
+                <li>
+                  <a
+                    href=""
                     class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                     >Manga</a
                   >
@@ -74,30 +86,21 @@
                     >/</span
                   >
                 </li>
-                <li>
-                  <a
-                    href="#"
-                    class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                    >Hành động</a
-                  >
-                </li>
-                <li>
-                  <span class="mx-2 text-neutral-500 dark:text-neutral-400"
-                    >/</span
-                  >
-                </li>
-                <li class="text-neutral-500 dark:text-neutral-400">Truyện 1</li>
+                <li class="text-neutral-500 dark:text-neutral-400">
+                  <a th:href="@{'/manga/' + ${model.mangaName} + '/' + ${model.id}}" th:text="${'Truyện ' + model.mangaName}"></a>
+
+                  </li>
               </ol>
             </nav>
           </div>
 
           <h2 th:if="${model == null}">Không có dữ liệu!</h2>
 
-          <div th:else class="grid grid-cols-4 gap-4">
+          <div th:else  class="grid grid-cols-4 gap-4">
             <div class="bg-slate-100 ml-20 p-8 shadow-lg">
-              <p th:each="item : ${model}">
-                <img th:src="${item.featuredImage}" />
-              </p>
+
+                <img th:src="${model.featuredImage}" />
+
             </div>
             <div class="bg-slate-100 col-span-3 mr-20 p-8 shadow-lg">
               <div class="post-content">
@@ -202,10 +205,10 @@
 
                   <div class="post-content_item grid grid-cols-5 gap-4 mt-3">
                     <div class="summary-heading">
-                      <h5>Thay thế</h5>
+                      <h5>Tên khác</h5>
                     </div>
                     <div class="summary-content vote-details col-span-4">
-                      <h5>Kyojin no Shingeki</h5>
+                      <h5 th:text="${model.alternativeTitle}"></h5>
                     </div>
                   </div>
 
@@ -214,16 +217,10 @@
                       <h5>(Các) tác giả</h5>
                     </div>
                     <div class="summary-content vote-details col-span-4">
-                      <h5>JSAYAMA Hajime</h5>
-                    </div>
-                  </div>
-
-                  <div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-                    <div class="summary-heading">
-                      <h5>Nghệ sỹ</h5>
-                    </div>
-                    <div class="summary-content vote-details col-span-4">
-                      <h5>JSAYAMA Hajime</h5>
+                     <span th:each="item,iter : ${model.authors}">
+                          <span th:text="${item.name}"></span>
+                          <span th:if="${!iter.last}" th:text="','"></span>
+                        </span>
                     </div>
                   </div>
 
@@ -232,53 +229,75 @@
                       <h5>Thể loại</h5>
                     </div>
                     <div class="summary-content vote-details col-span-4">
-                      <h5>
-                        Hành động, người lớn, phiêu diêu, anime, hoạt hình, hài
-                      </h5>
+<!--                       <span th:inline="text">-->
+<!--                        <span th:each="itemgenre,iter : ${model.genres}"
+th:text="${itemgenre.name + ', '}"></span>-->
+<!--                      </span> -->
+
+                      <span th:inline="text">
+                        <span th:each="itemgenre,iter : ${model.genres}">
+                          <span th:text="${itemgenre.name}"></span>
+                          <span th:if="${!iter.last}" th:text="','"></span>
+                        </span>
+                      </span>
+
                     </div>
                   </div>
 
-                  <div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-                    <div class="summary-heading">
-                      <h5>Kiểu</h5>
-                    </div>
-                    <div class="summary-content vote-details col-span-4">
-                      <h5>Kinh dị</h5>
-                    </div>
-                  </div>
+
                 </div>
               </div>
             </div>
           </div>
 
           <div class="mx-20">
-            <h1 class="p-3 font-bold text-2xl">Bản tóm tắt</h1>
+            <h1 class="p-3 font-bold text-2xl">Mô tả</h1>
             <hr />
             <div th:utext="${model.description}">
             </div>
           </div>
 
           <div class="mx-20">
-            <h1 class="p-3 font-bold text-2xl">LATEST MANGA RELEASES</h1>
+            <h1 class="p-3 font-bold text-2xl">Danh sách chương mới nhất</h1>
             <hr />
             <!-- Accordion -->
-            <div th:each="item : ${model.volumeEntities}">
-              <button class="accordion mt-4">
-                <p th:text="${item.name}"></p>
-              </button>
+            <div th:if="${model.displayType.name} == 'VOL'" th:each="itemvolume : ${model.volumeEntities}">
+              <span class="accordion mt-2">
+                <p th:text="${'Tập ' + (itemvolume.volumeIndex + 1) + ': ' + itemvolume.name}"></p>
+              </span>
               <div class="panel">
                 <div
                   class="flex flex-col mx-5"
-                  th:each="item : ${item.chapterEntities}"
+                  th:each="itemchapter : ${itemvolume.chapterEntities}"
                 >
-                  <div class="flex justify-between my-4">
-                    <div th:text="${item.chapterName}">Chapter 1</div>
+                  <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${itemchapter.id}}" class="flex justify-between my-4">
+                    <div th:text="${'Chương ' + (itemchapter.chapterIndex + 1) +': ' + itemchapter.chapterName}"></div>
+
                     <div>October 11, 2017</div>
-                  </div>
+                  </a>
                   <hr />
                 </div>
               </div>
             </div>
+
+           <div th:if="${model.displayType.name} == 'CHAP'" th:each="itemchapter : ${modelchapter}">
+             <a  th:href="@{'/manga/'+${model.title}+'/chapter/'+${itemchapter.id}}" class="accordion mt-2">
+               <p th:text="${'Chương ' + (itemchapter.chapterIndex + 1) + ': ' + itemchapter.chapterName}"></p>
+             </a>
+             <!-- <div class="panel">
+               <div
+               class="flex flex-col mx-5"
+                 th:each="itemchapter : ${itemvolume.chapterEntities}"
+               >
+                 <div class="flex justify-between my-4">
+                   <div th:text="${'Chương: ' + itemchapter.chapterName}"></div>
+
+                   <div>October 11, 2017</div>
+                 </div>
+                 <hr />
+               </div>
+             </div>  -->
+           </div>
 
             <!-- Accordion -->
             <script>
