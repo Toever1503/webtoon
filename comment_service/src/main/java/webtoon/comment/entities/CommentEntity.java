@@ -56,6 +56,7 @@ public class CommentEntity {
     @JoinColumn(name = "parent_id")
     private CommentEntity parentComment;
 
-    @OneToMany
+    @Transient
     private List<CommentEntity> childComments;
+
 }

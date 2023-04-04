@@ -1,6 +1,7 @@
 package webtoon.comment.inputs;
 
 import lombok.*;
+import webtoon.comment.enums.ECommentType;
 
 @Getter
 @Setter
@@ -10,5 +11,7 @@ import lombok.*;
 public class CommentInput {
     private Long id;
     private String content;
-    private String commentType;
+    private ECommentType commentType;
+
+    private Long parentId;
 }

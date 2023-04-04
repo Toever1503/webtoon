@@ -1,8 +1,8 @@
 
-<div class="post_comment mt-[20px]" th:fragment="comment-section">
+<div class="comment-list mx-[10px]" th:fragment="comment-section">
 	<!-- comment_top -->
 	<div
-		class="post_comment_top flex justify-between bg-[salmon] px-2 py-4 ">
+		class="comment-list_top flex justify-between bg-[salmon] px-2 py-4 ">
 		<span class="text-white">Total 1254 comments</span>
 		<div>
 			<span class="text-white"> Sort: </span> <select class="rounded"
@@ -16,7 +16,7 @@
 
 	<hr class="my-[20px]" />
 
-	<div class="post_comment_body">
+	<div class="comment-list_body">
 
 		<!-- begin comment-editor -->
 		<div th:replace="fragments/comment/comment-editor :: comment-editor" />

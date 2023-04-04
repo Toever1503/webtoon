@@ -4,7 +4,7 @@
 			src="https://i.pravatar.cc/150?img=1">
 	</div>
 	<div class="cmm_editor_right w-full">
-		<form th:action="@{/comment/create}" th:object="${comment}" method="post">
+		<form th:action="@{/comment/create}" th:object="${commentInput}" method="post">
 		<textarea id="comment_value_parent"
 			class="w-full h-[100px] p-2 rounded"
 			style="border: 1px solid gainsboro;" placeholder="Write a comment..."

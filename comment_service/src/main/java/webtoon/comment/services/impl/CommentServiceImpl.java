@@ -32,10 +32,7 @@ public class CommentServiceImpl implements ICommentService {
                 this.commentRepository.saveAndFlush(
                         CommentEntity.builder()
                                 .content(model.getContent())
-                                .commentType(
-                                        ECommentType.valueOf(
-                                                model.getCommentType().toUpperCase())
-                                )
+                                .commentType(model.getCommentType())
                                 .build()
                 )
         );
@@ -45,10 +42,7 @@ public class CommentServiceImpl implements ICommentService {
     public CommentDto update(CommentInput model) {
         CommentEntity entity = this.getById(model.getId());
         entity.setContent(model.getContent());
-        entity.setCommentType(
-                ECommentType.valueOf(
-                        model.getCommentType().toUpperCase())
-        );
+        entity.setCommentType(model.getCommentType());
 
         return CommentDto.toDto(
                 this.commentRepository.saveAndFlush(entity)
