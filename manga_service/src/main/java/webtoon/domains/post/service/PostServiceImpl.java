@@ -1,7 +1,6 @@
 package webtoon.domains.post.service;
 
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import webtoon.domains.post.entities.IPostRepository;
@@ -17,6 +16,7 @@ import webtoon.domains.tag.entity.enums.TagRelationTypeConstant;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PostServiceImpl implements IPostService {
@@ -73,7 +73,8 @@ public class PostServiceImpl implements IPostService {
     public PostDto[] findNextPrevPosts(Long postID, Long categoryId) {
         PostDto[] postDtos = new PostDto[2];
 
-        List<PostEntity> nextPosts = this.postRepository.findNextPost(postID, categoryId, PageRequest.of(0, 1));
+        List<PostEntity> nextPosts = this.postRepository
+                .findNextPost(postID, categoryId, PageRequest.of(0, 1));
         postDtos[1] = nextPosts.size() == 0 ? null : this.postMapper.toDto(nextPosts.get(0));
 
         List<PostEntity> prevPosts = this.postRepository.findPrevPost(postID, categoryId, PageRequest.of(0, 1, Sort.Direction.DESC, "id"));
@@ -81,4 +82,28 @@ public class PostServiceImpl implements IPostService {
 
         return postDtos;
     }
+
+    @Override
+    public List<PostEntity> findAllPost(){
+        return this.postRepository.findAll()
+                .stream().map(postEntity -> {
+                    return PostEntity.builder()
+                            .id(postEntity.getId())
+                            .title(postEntity.getTitle())
+                            .excerpt(postEntity.getExcerpt())
+                            .content(postEntity.getContent())
+                            .featuredImage(postEntity.getFeaturedImage())
+                            .commentCount(postEntity.getCommentCount())
+                            .viewCount(postEntity.getViewCount())
+                            .status(postEntity.getStatus())
+                            .createdBy(postEntity.getCreatedBy())
+                            .modifiedBy(postEntity.getModifiedBy())
+                            .postName(postEntity.getPostName())
+                            .createdDate(postEntity.getCreatedDate())
+                            .modifiedDate(postEntity.getModifiedDate())
+                            .category(postEntity.getCategory())
+                            .build();
+                }).collect(Collectors.toList());
+    }
+
 }

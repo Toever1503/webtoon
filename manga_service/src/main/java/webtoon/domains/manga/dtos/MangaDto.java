@@ -1,6 +1,9 @@
 package webtoon.domains.manga.dtos;
 
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -8,9 +11,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EMangaStatus;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.tag.entity.TagEntity;
+
+import javax.persistence.Column;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -18,42 +25,52 @@ import webtoon.domains.manga.enums.EMangaType;
 @Setter
 @Builder
 public class MangaDto {
-	private Long id;
-	private String title;
-	private String alternativeTitle;
-	private String concerpt;
-	private String description;
-	private String mangaName;
-	private String featuredImage ;
-	private EMangaStatus status;
-	private EMangaSTS mangaSts;
-	private Integer commentCount;
-	private EMangaType mangaType;
-	private Date created_at;
-	private Date modifed_at;
-	private Integer rating;
-	private Integer view_Count;
-	private Date published_date;
-	
-	public static MangaDto toDto(MangaEntity mangaEntity) {
-		if(mangaEntity == null) return null;
-		
-		return MangaDto.builder()
-				.id(mangaEntity.getId())
-				.title(mangaEntity.getTitle())
-				.alternativeTitle(mangaEntity.getAlternativeTitle())
-				.concerpt(mangaEntity.getConcerpt())
-				.description(mangaEntity.getDescription())
-				.mangaName(mangaEntity.getMangaName())
-				.featuredImage(mangaEntity.getFeaturedImage())
-//				.status(null)
-//				.mangaSts(null)
-				.commentCount(mangaEntity.getCommentCount())
-//				.mangaType(null)
-				.rating(mangaEntity.getRating())
-				.view_Count(mangaEntity.getView_Count())
-				.created_at(mangaEntity.getCreated_at())
-				.modifed_at(mangaEntity.getModifed_at())
-				.build();
-	}
+    private java.lang.Long id;
+    private String title;
+    private String alternativeTitle;
+    private String excerpt;
+    private String description;
+    String mangaName;
+    private String featuredImage;
+    private EStatus status;
+    private EMangaSTS mangaStatus;
+    private Integer commentCount;
+    private Integer releaseYear;
+    private EMangaType mangaType;
+    private EMangaDisplayType displayType;
+    private Date createdAt;
+    private Date modifiedAt;
+    private Float rating;
+    private Integer viewCount;
+
+    private List<MangaAuthorDto> authors;
+    private List<MangaGenreDto> genres;
+    private List<TagEntity> tags;
+
+    public static MangaDto toDto(MangaEntity mangaEntity) {
+        if (mangaEntity == null) return null;
+
+        return MangaDto.builder()
+                .id(mangaEntity.getId())
+                .title(mangaEntity.getTitle())
+                .alternativeTitle(mangaEntity.getAlternativeTitle())
+                .excerpt(mangaEntity.getExcerpt())
+                .description(mangaEntity.getDescription())
+                .mangaName(mangaEntity.getMangaName())
+                .featuredImage(mangaEntity.getFeaturedImage())
+                .status(mangaEntity.getStatus())
+                .mangaStatus(mangaEntity.getMangaStatus())
+                .commentCount(mangaEntity.getCommentCount())
+                .releaseYear(mangaEntity.getReleaseYear())
+                .mangaType(mangaEntity.getMangaType())
+                .displayType(mangaEntity.getDisplayType())
+                .rating(mangaEntity.getRating())
+                .viewCount(mangaEntity.getViewCount())
+                .createdAt(mangaEntity.getCreatedAt())
+                .modifiedAt(mangaEntity.getModifiedAt())
+                .genres(mangaEntity.getGenres() != null ? mangaEntity.getGenres().stream().map(MangaGenreDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
+                .authors(mangaEntity.getAuthors() != null ? mangaEntity.getAuthors().stream().map(MangaAuthorDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
+                .tags(mangaEntity.getTags())
+                .build();
+    }
 }

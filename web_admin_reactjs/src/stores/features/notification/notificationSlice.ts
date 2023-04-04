@@ -3,8 +3,9 @@ import type { PayloadAction } from '@reduxjs/toolkit'
 
 
 export type NotificationType = 'success' | 'info' | 'warning' | 'error';
+
 export interface NotificationState {
-  isShow: boolean,
+  isShow?: boolean,
   type: NotificationType,
   message: string
 }
@@ -19,7 +20,7 @@ export const notificationSlice = createSlice({
   name: 'counter',
   initialState,
   reducers: {
-    showNofification: (state, { payload }) => {
+    showNofification: (state,  { payload } : PayloadAction<NotificationState>) => {
       // Redux Toolkit allows us to write "mutating" logic in reducers. It
       // doesn't actually mutate the state because it uses the Immer library,
       // which detects changes to a "draft state" and produces a brand new

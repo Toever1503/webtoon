@@ -1,5 +1,6 @@
 package webtoon.storage.domain.services;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
@@ -18,4 +19,7 @@ public interface IFileService {
 	Page<FileDto> filterFile(Pageable pageable, Specification<FileEntity> specs);
 	
 	void deleteFile(List<Long> ids);
+
+
+	List<FileDto> uploadImageByZipFile(List<MultipartFile> files, String folder)  throws IOException;
 }

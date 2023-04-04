@@ -1,115 +1,364 @@
-import React from 'react';
-import {Button, Space, Table, TablePaginationConfig, Tag, Input} from 'antd';
-import type {ColumnsType} from 'antd/es/table';
+import React, { useEffect, useState } from 'react';
+import { Button, Space, Table, TablePaginationConfig, Tag, Input, Dropdown, MenuProps, Popconfirm, Tooltip } from 'antd';
+import type { ColumnsType } from 'antd/es/table';
+import mangaService, { MangaFilterInput, MangaInput, MangaStatus, ReleaseStatus } from '../../services/manga/MangaService';
+import { Link, useNavigate } from 'react-router-dom';
+import { AxiosResponse } from 'axios';
+import { TagInput } from '../../services/TagService';
+import { AuthorInput } from '../../services/manga/AuthorService';
+import { GenreInput } from '../../services/manga/GenreService';
+import { DeleteOutlined, DownOutlined } from '@ant-design/icons';
+import debounce from '../../utils/debounce';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
+import { showNofification } from '../../stores/features/notification/notificationSlice';
 
-interface DataType {
-    key: string | number;
-    name: string;
-    age: number;
-    address: string;
-    tags: string[];
-    stt: string | number;
-}
 
-const {Search} = Input;
+const { Search } = Input;
 
-const columns: ColumnsType<DataType> = [
-    {
-        title: 'STT',
-        dataIndex: 'stt',
-        key: 'stt',
-    },
-    {
-        title: 'Name',
-        dataIndex: 'name',
-        key: 'name',
-        render: (text) => <a>{text}</a>,
-    },
-    {
-        title: 'Genres',
-        dataIndex: 'age',
-        key: 'age',
-    },
-    {
-        title: 'Authors',
-        dataIndex: 'address',
-        key: 'address',
-    },
-    {
-        title: 'Tags',
-        key: 'tags',
-        dataIndex: 'tags',
-        render: (_, {tags}) => (
-            <>
-                {tags.map((tag) => {
-                    let color = tag.length > 5 ? 'geekblue' : 'green';
-                    if (tag === 'loser') {
-                        color = 'volcano';
-                    }
-                    return (
-                        <Tag color={color} key={tag}>
-                            {tag.toUpperCase()}
-                        </Tag>
-                    );
-                })}
-            </>
-        ),
-    },
-    {
-        title: 'Action',
-        key: 'action',
-        render: (_, record) => (
-            <Space size="middle">
-                <a>Edit</a>
-                <a>Delete</a>
-            </Space>
-        ),
-    },
+
+const mangaStatus: MangaStatus[] = [
+    'PUBLISHED', 'DRAFTED', 'DELETED'
 ];
 
-const data: DataType[] = [];
-for (let i = 1; i < 100; ++i) {
-    data.push(
+const releaseStatus: ReleaseStatus[] = [
+    'COMING', 'GOING', 'STOPPED', 'CANCELLED', 'COMPLETED'
+];
+
+
+
+
+
+
+const MangaPage: React.FC = () => {
+    const { t } = useTranslation();
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
+
+    const [mangaStatusCalc, setMangaStatusCalc] = React.useState<{
+        'PUBLISHED': number,
+        'DRAFTED': number,
+        'DELETED': number,
+        'ALL': number | undefined
+    }>({
+        'PUBLISHED': 0,
+        'DRAFTED': 0,
+        'DELETED': 0,
+        'ALL': 0
+    });
+
+    const columns: ColumnsType<MangaInput> = [
         {
-            stt: i,
-            key: i.toString(),
-            name: 'John Brown',
-            age: 32,
-            address: 'New York No. 1 Lake Park',
-            tags: ['nice', 'developer'],
+            title: 'STT',
+            dataIndex: 'index',
+            key: 'index',
         },
-    )
-}
+        {
+            title: 'Name',
+            dataIndex: 'title',
+            key: 'name',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: 'Manga Type',
+            dataIndex: 'mangaType',
+            key: 'mangaType',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: 'Release status',
+            dataIndex: 'mangaStatus',
+            key: 'mangaStatus',
+            render: (text, record) => <>
+                <Dropdown menu={getReleaseStatus(text, record)} trigger={['click']}>
+                    <a onClick={(e) => e.preventDefault()} className='text-[12px]'>
+                        <span className='text-[12px] flex gap-x-[5px] items-center'>
+                            <Tooltip title="Thay đổi trạng thái">
+                                {text}
+                            </Tooltip>
+                            <DownOutlined />
+                        </span>
+                    </a>
+                </Dropdown>
 
-const pagination = (page: TablePaginationConfig) => {
-    console.log('page', page);
-}
+            </>,
+        },
+        {
+            title: 'Genres',
+            dataIndex: 'genres',
+            key: 'genres',
+            render: (_, record) => (
+                <>
+                    {
+                        record?.genres.length > 0 ?
+                            // @ts-ignore
+                            record.genres.map((genre: GenreInput) => {
+                                return <Tag key={genre.id}>{genre.name}</Tag>
+                            })
+                            : '-'
+                    }
+                </>
+            ),
+            width: 200,
+        },
+        {
+            title: 'Authors',
+            dataIndex: 'authors',
+            key: 'authors',
+            render: (_, record) => (
+                <>
+                    {
+                        record?.authors.length > 0 ?
+                            // @ts-ignore
+                            record.authors.map((author: AuthorInput) => {
+                                return <Tag key={author.id}>{author.name}</Tag>
+                            })
+                            : '-'
+                    }
+                </>
+            ),
+            width: 200,
+        },
+        {
+            title: 'Tags',
+            key: 'tags',
+            dataIndex: 'tags',
+            render: (_, record) => (
+                <>
+                    {
+                        record?.tags.length > 0 ?
+                            // @ts-ignore
+                            record.tags.map((tag: TagInput) => {
+                                return <Tag key={tag.id}>{tag.tagName}</Tag>
+                            })
+                            : '-'
+                    }
+                </>
+            ),
+            width: 200,
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'status',
+            key: 'status',
+            render: (text, record) => <>
+                <Dropdown menu={getStatusItems(text, record)} trigger={['click']}>
+                    <a onClick={(e) => e.preventDefault()} className='text-[12px]'>
+                        <span className='text-[12px] flex gap-x-[5px] items-center'>
+                            <Tooltip title="Thay đổi trạng thái">
+                                {text}
+                            </Tooltip>
+                            <DownOutlined />
+                        </span>
+                    </a>
+                </Dropdown>
+            </>,
+        },
+        {
+            title: 'Action',
+            key: 'action',
+            render: (_, record) => (
+                <Space size="middle">
+                    <Link to={`/mangas/edit/${record.id}`}>Edit</Link>
+                    <Popconfirm
+                        title={t('manga.form.sure-delete')}
+                        onConfirm={(e) => {
+                            e?.stopPropagation();
+                            onDeleleManga(record.id);
+                        }}
+                        okText={t('confirm-yes')}
+                        cancelText={t('confirm-no')}
+                    >
+                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">Delete</a>
+                    </Popconfirm>
 
-const onSearch = (value: string) => console.log(value);
+                </Space>
+            ),
+        },
+    ];
 
-const MangaPage: React.FC = () =>
-    <div className="space-y-3 py-3">
-        <div className="flex space-x-3">
-            <p className="text-[23px] font-[400]">Manga</p>
-            <Button className="font-medium">Add new</Button>
-        </div>
-        <div className="flex justify-between">
-            <div className="flex space-x-3 items-center">
-                <div className="flex space-x-[2px]">
-                    <p className="m-0">All</p><p className="m-0">(2)</p>
+    const [mangaFilter, setMangaFilter] = React.useState<MangaFilterInput>({
+        status: 'ALL',
+        q: ''
+    });
+
+    const onChangeTable = (page: TablePaginationConfig) => {
+        console.log('page', page);
+        pageConfig.current = page.current || 1;
+        onfilterManga();
+    }
+    const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
+        current: 1,
+        pageSize: 10,
+        total: 100,
+        showSizeChanger: false,
+    });
+    const [mangaData, setMangaData] = React.useState<MangaInput[]>([]);
+    const [tableLoading, setTableLoading] = React.useState<boolean>(false);
+    const onfilterManga = () => {
+        setTableLoading(true);
+        mangaService.filterManga(mangaFilter, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
+            .then((res: AxiosResponse<{
+                totalElements: number | undefined;
+                content: MangaInput[],
+                total: number
+            }>) => {
+                console.log('manga data; ', res.data.content);
+                setMangaData(res.data.content.map((e: MangaInput, index: number) => {
+                    // @ts-ignore
+                    e.index = index + 1;
+                    // @ts-ignore
+                    e.key = e.id;
+                    return e;
+                }));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements
+                });
+                mangaStatusCalc.ALL = res.data.totalElements;
+                setMangaStatusCalc(mangaStatusCalc)
+            })
+            .finally(() => setTableLoading(false));
+    }
+
+
+    const getStatusItems = (status: MangaStatus, record: MangaInput): MenuProps => {
+        return {
+            items: mangaStatus.filter((e: MangaStatus) => e !== status).map((e: MangaStatus) => {
+                return {
+                    key: e,
+                    label: e,
+                    onClick: () => {
+                        console.log('e', e);
+                        setTableLoading(true);
+                        mangaService.changeStatus(record.id, e)
+                            .then(() => {
+                                dispatch(showNofification({
+                                    type: 'success',
+                                    message: 'Thay đổi trạng thái thành công!'
+                                }));
+                                setMangaData(mangaData.map((item: MangaInput) => {
+                                    if (item.id === record.id) {
+                                        item.status = e;
+                                    }
+                                    return item;
+                                }));
+                            })
+                            .catch(err => {
+                                console.log('err', err);
+                                dispatch(showNofification({
+                                    type: 'error',
+                                    message: 'Thay đổi trạng thái thất bại!'
+                                }));
+                            })
+                            .finally(() => setTableLoading(false));
+                    }
+                }
+            })
+        }
+    };
+    const getReleaseStatus = (status: ReleaseStatus, record: MangaInput): MenuProps => {
+        return {
+            items: releaseStatus.filter((e: ReleaseStatus) => e !== status).map((e: ReleaseStatus) => {
+                return {
+                    key: e,
+                    label: e,
+                    onClick: () => {
+                        console.log('e', e);
+                        console.log('e', e);
+                        setTableLoading(true);
+                        mangaService.changeReleaseStatus(record.id, e)
+                            .then(() => {
+                                dispatch(showNofification({
+                                    type: 'success',
+                                    message: 'Thay đổi trạng thái thành công!'
+                                }));
+                                setMangaData(mangaData.map((item: MangaInput) => {
+                                    if (item.id === record.id) {
+                                        item.mangaStatus = e;
+                                    }
+                                    return item;
+                                }));
+                            })
+                            .catch(err => {
+                                console.log('err', err);
+                                dispatch(showNofification({
+                                    type: 'error',
+                                    message: 'Thay đổi trạng thái thất bại!'
+                                }));
+                            })
+                            .finally(() => setTableLoading(false))
+                    }
+                }
+            })
+        }
+    }
+    const onSearch = () => {
+        onfilterManga();
+    }
+
+    const onDeleleManga = (id: number | string) => {
+        mangaService.deleteById(id)
+            .then(() => {
+
+                setMangaData(mangaData?.filter((e: MangaInput) => e.id !== id));
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('manga.form.errors.delete-success')
+                }));
+            })
+            .catch((err) => {
+                console.log('delete manga error', err);
+                dispatch(showNofification({
+                    type: 'error',
+                    message: t('manga.form.errors.delete-failed')
+                }));
+            });
+    }
+
+    useEffect(() => {
+        onfilterManga();
+    }, [mangaFilter.status]);
+    return (
+        <div className="space-y-3 py-3">
+            <div className="flex space-x-3">
+                <p className="text-[23px] font-[400]">Manga</p>
+                <Button className="font-medium" onClick={() => navigate('/mangas/add')}>Add new</Button>
+            </div>
+            <div className="flex justify-between">
+                <div className="flex space-x-3 items-center">
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'ALL' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'ALL' })}>
+                        <p className="m-0">All</p><p className="m-0">({mangaStatusCalc.ALL})</p>
+                    </div>
+                    <div>
+                        <p className="m-0">|</p>
+                    </div>
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'PUBLISHED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'PUBLISHED' })}>
+                        <p className="m-0">Published</p><p className="m-0">({mangaStatusCalc.PUBLISHED})</p>
+                    </div>
+
+                    <div>
+                        <p className="m-0">|</p>
+                    </div>
+
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'DRAFTED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'DRAFTED' })}>
+                        <p className="m-0">Drafted</p><p className="m-0">({mangaStatusCalc.DRAFTED})</p>
+                    </div>
+                    <div>
+                        <p className="m-0">|</p>
+                    </div>
+
+                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'DELETED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'DELETED' })}>
+                        <p className="m-0">Deleted</p><p className="m-0">({mangaStatusCalc.DELETED})</p>
+                    </div>
                 </div>
                 <div>
-                    <p className="m-0">|</p>
-                </div>
-                <div className="flex space-x-[2px]">
-                    <p className="m-0">Published</p><p className="m-0">(2)</p>
+                    <Search placeholder="input search text" value={mangaFilter.q} onChange={e => setMangaFilter({ ...mangaFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
-            <div>
-                <Search placeholder="input search text" onSearch={onSearch} style={{width: 200}}/>
-            </div>
+            <Table columns={columns} loading={tableLoading} pagination={pageConfig} dataSource={mangaData} onChange={onChangeTable} />
         </div>
-        <Table columns={columns} dataSource={data} onChange={pagination}/>
-    </div>
 
+    )
+}
 export default MangaPage;

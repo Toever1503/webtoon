@@ -6,15 +6,8 @@
     <div layout:fragment="content">
         <section
             class="manga-genres w-[1100px] h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-between items-center">
-            <div class="flex gap-[20px]">
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
+            <div class="flex gap-[20px]" >
+                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer" th:each="item : ${cateList}"  th:text="${item.categoryName}"></a>
                 <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer view-detail-genes">MORE
                     <i class="fas fa-chevron-right text-[14px] font-bold"></i>
                 </a>
@@ -27,24 +20,12 @@
                     class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Signup</a>
             </div>
 
-            <ul class="detail-genres-list hidden absolute w-full bg-[#f3f3f3] top-[55px] z-[1000] left-0 px-[15px] py-[10px] border-t-[1px] border-t-[#ebebeb] border-[#eb3349] border-b-[2px] flex-wrap gap-[20px] ease-in-out duration-300"
+            <ul class="detail-genres-list hidden absolute w-full bg-[#f3f3f3] top-[55px] z-[1000] left-0 px-[15px]
+             py-[10px] border-t-[1px] border-t-[#ebebeb] border-[#eb3349] border-b-[2px] flex-wrap gap-[20px]
+             ease-in-out duration-300" 
                 style="border-right: 1px solid #ebebeb; border-left: 1px solid #ebebeb">
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSK saf asf sf FAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
-                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer">FSKFAM</a>
+                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer" th:each="item : ${genreList}" th:text="${item.name}"></a>
+                
             </ul>
 
             <style>
@@ -155,189 +136,28 @@
                     <h3 class="font-bold text-2xl">
                         Popular manga updates
                     </h3>
+                    
+                    <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
 
-                    <ul class="manga-list flex flex-wrap items-center gap-[20px] mt-[20px]">
+                    <ul th:else  class="manga-list flex flex-wrap items-center gap-[20px] mt-[20px]" >
 
-                        <li class="border bg-white h-fit flex">
-                            <a href="fsaf14">
+                        <li class="border bg-white h-fit flex" th:each="manga : ${mangalist}">
+                            <a th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}">
                                 <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
-                                    src="https://i.ytimg.com/vi/YlY2CJaErdE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDLnD4WO0R_9RDO9PhMzomyGYciMg"
-                                    alt="">
-
-                                <div class="manga-info block m-0 h-full p-[10px]">
+                                    th:src="${manga.featuredImage}"/>
+                                <div   class="manga-info block m-0 h-full p-[10px]" >
                                     <h4 class="font-bold text-[18px] leading-0 m-0">
-                                        <a href="" class="hover:text-[#eb3349]">Hello world</a>
-                                        <span class="manga-meta block text-[10px] text-neutral-400">2021-1-2</span>
+                                        <a th:text="${manga.mangaName}" th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}" class="hover:text-[#eb3349]"></a>
+                                        <span class="manga-meta block text-[10px] text-neutral-400" th:text="${manga.createdAt}"></span>
                                     </h4>
 
-                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]">
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
+                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]" th:each="volume : ${manga.volumeEntities}"  >
+                                        <li class="gap-[5px] flex" th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}"
+                                            >
+                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}" th:text="${chapter.chapterName}"
                                                 class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
                                             </a>
 
-                                        </li>
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="border bg-white h-fit flex">
-                            <a href="fsaf14">
-                                <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
-                                    src="https://i.ytimg.com/vi/YlY2CJaErdE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDLnD4WO0R_9RDO9PhMzomyGYciMg"
-                                    alt="">
-
-                                <div class="manga-info block m-0 h-full p-[10px]">
-                                    <h4 class="font-bold text-[18px] leading-0 m-0">
-                                        <a href="" class="hover:text-[#eb3349]">Hello world</a>
-                                        <span class="manga-meta block text-[10px] text-neutral-400">2021-1-2</span>
-                                    </h4>
-
-                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]">
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-
-                                        </li>
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="border bg-white h-fit flex">
-                            <a href="fsaf14">
-                                <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
-                                    src="https://i.ytimg.com/vi/YlY2CJaErdE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDLnD4WO0R_9RDO9PhMzomyGYciMg"
-                                    alt="">
-
-                                <div class="manga-info block m-0 h-full p-[10px]">
-                                    <h4 class="font-bold text-[18px] leading-0 m-0">
-                                        <a href="" class="hover:text-[#eb3349]">Hello world</a>
-                                        <span class="manga-meta block text-[10px] text-neutral-400">2021-1-2</span>
-                                    </h4>
-
-                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]">
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-
-                                        </li>
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="border bg-white h-fit flex">
-                            <a href="fsaf14">
-                                <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
-                                    src="https://i.ytimg.com/vi/YlY2CJaErdE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDLnD4WO0R_9RDO9PhMzomyGYciMg"
-                                    alt="">
-
-                                <div class="manga-info block m-0 h-full p-[10px]">
-                                    <h4 class="font-bold text-[18px] leading-0 m-0">
-                                        <a href="" class="hover:text-[#eb3349]">Hello world</a>
-                                        <span class="manga-meta block text-[10px] text-neutral-400">2021-1-2</span>
-                                    </h4>
-
-                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]">
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-
-                                        </li>
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="border bg-white h-fit flex">
-                            <a href="fsaf14">
-                                <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
-                                    src="https://i.ytimg.com/vi/YlY2CJaErdE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDLnD4WO0R_9RDO9PhMzomyGYciMg"
-                                    alt="">
-
-                                <div class="manga-info block m-0 h-full p-[10px]">
-                                    <h4 class="font-bold text-[18px] leading-0 m-0">
-                                        <a href="" class="hover:text-[#eb3349]">Hello world</a>
-                                        <span class="manga-meta block text-[10px] text-neutral-400">2021-1-2</span>
-                                    </h4>
-
-                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]">
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-
-                                        </li>
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </a>
-                        </li>
-
-                        <li class="border bg-white h-fit flex">
-                            <a href="fsaf14">
-                                <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
-                                    src="https://i.ytimg.com/vi/YlY2CJaErdE/hqdefault.jpg?sqp=-oaymwEbCKgBEF5IVfKriqkDDggBFQAAiEIYAXABwAEG&rs=AOn4CLDLnD4WO0R_9RDO9PhMzomyGYciMg"
-                                    alt="">
-
-                                <div class="manga-info block m-0 h-full p-[10px]">
-                                    <h4 class="font-bold text-[18px] leading-0 m-0">
-                                        <a href="" class="hover:text-[#eb3349]">Hello world</a>
-                                        <span class="manga-meta block text-[10px] text-neutral-400">2021-1-2</span>
-                                    </h4>
-
-                                    <ul class="latest-chapters grid mt-[10px] gap-[5px]">
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
-
-                                        </li>
-                                        <li class="gap-[5px] flex">
-                                            <a href="#"
-                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                Chapter 12
-                                            </a>
                                         </li>
                                     </ul>
                                 </div>
@@ -349,28 +169,28 @@
 
                 <div class="w-[300px] border mx-auto mt-2 divide-y">
 
-                    <div class="sidebar-section px-[10px] py-[10px]">
+                    <div class="sidebar-section px-[10px] py-[10px]" th:if="${postList != null}">
                         <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
                             Latest Posts
                         </h3>
 
-                        <ul class="sidebar-posts divide-y mt-[10px]">
+                        <ul class="sidebar-posts divide-y mt-[10px]" th:each="item : ${postList}">
                             <li>
                                 <a class="w-full h-full flex gap-x-[5px] py-3">
                                     <div class="w-[90px] h-[100px] post_feature_image">
                                         <img class="w-[90px] h-[100px]"
-                                            src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
+                                            th:src="${item.featuredImage}">
                                     </div>
                                     <div class="post-infor w-[200px]">
-                                        <h2
+                                        <h2 th:text="${item.postName}"
                                             class="post-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
-                                            Lorem ipsum dolor sit amet consectetur adipisicing elit.
+                                            
                                         </h2>
 
                                         <div class="post-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
-                                            <span>
+                                            <span th:text="${item.createdDate}">
                                                 <i class="far fa-calendar-alt"></i>
-                                                2021-09-01
+                                               
                                             </span>
 
                                             <span>|</span>

@@ -7,16 +7,19 @@ import { RootState } from '../../stores';
 import tagService, { TagInput } from '../../services/TagService';
 import { deleteTagById, setTagData, TagModel } from '../../stores/features/manga/tagSlice';
 import { ExclamationCircleFilled } from '@ant-design/icons';
+import { showNofification } from '../../stores/features/notification/notificationSlice';
+import { reIndexTbl } from '../../utils/indexData';
 
 const { Search } = Input;
 const { confirm } = Modal;
 
 const TagPage: React.FC = () => {
     const tagData = useSelector((state: RootState) => state.tag);
-    const tagDataContent = useSelector((state: RootState) => state.tag.data);
+
 
     const dispatch = useDispatch();
 
+    const [dataSource, setDataSource] = useState<TagModel[]>([]);
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
         current: 1,
         pageSize: tagData.size,
@@ -36,8 +39,8 @@ const TagPage: React.FC = () => {
     const columns: ColumnsType<TagModel> = [
         {
             title: 'STT',
-            dataIndex: 'stt',
-            key: 'stt',
+            dataIndex: 'index',
+            key: 'index',
         },
         {
             title: 'Name',
@@ -73,6 +76,7 @@ const TagPage: React.FC = () => {
     const onPageChange = (page: TablePaginationConfig) => {
         console.log('page', page);
         const currentPage = page.current ? page.current - 1 : 0;
+        pageConfig.current = currentPage + 1;
         filterTag(searchVal, currentPage);
     }
 
@@ -109,6 +113,10 @@ const TagPage: React.FC = () => {
                     .then((res) => {
                         console.log('delete tag', res);
                         dispatch(deleteTagById(record.id));
+                        dispatch(showNofification({
+                            type: 'success',
+                            message: 'Delete tag successfully',
+                        }));
                     })
                     .finally(() => {
                         setTblLoading(false);
@@ -137,15 +145,17 @@ const TagPage: React.FC = () => {
             });
     };
 
-    const [hasInitial, setHasInitial] = useState<boolean>(false);
+    const [hasInitialized, setHasInitialized] = useState<boolean>(false);
     useEffect(() => {
-        if (!hasInitial) {
+        if (!hasInitialized) {
             filterTag();
-            setHasInitial(true);
+            setHasInitialized(true);
         }
         else
             setPageConfig({ ...pageConfig, total: tagData.totalElements });
 
+        setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 0, tagData.data));
+    
     }, [tagData]);
     return (
         <div className="space-y-3 py-3">
@@ -162,7 +172,7 @@ const TagPage: React.FC = () => {
                 </div>
             </div>
 
-            <Table columns={columns} dataSource={tagDataContent} loading={tblLoading} onChange={onPageChange} pagination={pageConfig} />
+            <Table columns={columns} dataSource={dataSource} loading={tblLoading} onChange={onPageChange} pagination={pageConfig} />
         </div>
     )
 }

@@ -3,11 +3,13 @@ import counterSlice from './features/counter/counterSlice'
 import notificationSlice from './features/notification/notificationSlice';
 import genreSlice from './features/manga/genreSlice';
 import tagSlice from './features/manga/tagSlice';
+import authorSlice from './features/manga/authorSlice';
 
 export const store = configureStore({
   reducer: {
     counter: counterSlice,
     genre: genreSlice,
+    author: authorSlice,
     tag: tagSlice,
     notification: notificationSlice
   },

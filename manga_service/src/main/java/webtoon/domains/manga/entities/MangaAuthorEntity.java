@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 @Entity
-@Table
+@Table(name = "tbl_manga_author")
 @Getter
 @Setter
 @Builder
@@ -28,4 +28,10 @@ public class MangaAuthorEntity {
 	
 	@Column(name = "name")
 	private String name;
+
+	@Column(name = "slug")
+	private String slug;
+
+	@Column(name = "manga_count", columnDefinition = "int default 0")
+	private Integer mangaCount;
 }

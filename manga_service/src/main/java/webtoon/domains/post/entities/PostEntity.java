@@ -60,21 +60,22 @@ public class PostEntity {
     private Long modifiedBy;
 
     @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    @Column(nullable = false)
+    @UpdateTimestamp
+    @Column(nullable = false,name = "created_date")
     private Date createdDate;
 
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
-    @Column(nullable = false)
+    @Column(nullable = false,name = "modified_date")
     private Date modifiedDate;
 
     @ManyToOne
     private CategoryEntity category;
 
-    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
-    @JoinColumn(name = "object_id")
-    @Where(clause = "tag_type =  '" + TagRelationTypeConstant.POST + "'")
+//    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE, CascadeType.REFRESH})
+//    @JoinColumn(name = "object_id")
+//    @Where(clause = "tag_type =  '" + TagRelationTypeConstant.POST + "'")
+    @Transient
     private List<TagEntityRelation> tagRelations;
 
     @Override

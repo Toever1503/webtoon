@@ -18,10 +18,10 @@ public class TagEntity {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name = "id")
 	private Long id;
-	@Column(name = "tag_name", length = 255, nullable = false)
+	@Column(name = "tag_name", nullable = false)
 	private String tagName;
 
-	@Column(name = "slug", length = 255, nullable = false, unique = true)
+	@Column(name = "slug", nullable = false, unique = true)
 	private String slug;
 
 }

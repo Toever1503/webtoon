@@ -6,10 +6,15 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import webtoon.domains.tag.entity.TagEntity;
+import webtoon.domains.tag.entity.enums.ETagType;
 
 public interface ITagService {
 	
 	TagEntity saveTag(TagEntity input);
+
+	List<TagEntity> saveTagRelation(Long objectId, List<Long> tagIds, ETagType tagType);
+
+	List<TagEntity> findAllByObjectIdAndType(Long objectId, ETagType tagType);
 	
 	void deleteTagByIds(List<Long> ids);
 

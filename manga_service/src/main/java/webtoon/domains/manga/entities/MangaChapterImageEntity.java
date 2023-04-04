@@ -9,19 +9,15 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Table
+@Table(name = "tbl_manga_chapter_image_entity")
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
+@NoArgsConstructor(access= AccessLevel.PRIVATE, force=true)
 public class MangaChapterImageEntity {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,10 +26,13 @@ public class MangaChapterImageEntity {
 	
 	@JoinColumn(name = "manga_chapter_id")
 	@ManyToOne
-	private MangaChapterEntity mangaChapterId;
+	private MangaChapterEntity mangaChapter;
 	
 	@Column(name = "image")
 	private String image;
+
+	@Column(name = "file_id")
+	private Long fileId;
 	
 	@Column(name = "image_index")
 	private Integer imageIndex;

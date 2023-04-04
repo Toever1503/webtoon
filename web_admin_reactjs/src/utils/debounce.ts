@@ -1,4 +1,4 @@
-export default function debounce(func: Function, delay: number = 500): Function {
+const debounce = (func: Function, delay: number = 500) => {
     let debounceTimer: number;
     return function (): void {
         // @ts-ignore
@@ -8,3 +8,5 @@ export default function debounce(func: Function, delay: number = 500): Function 
         debounceTimer = setTimeout(() => func.apply(context, args), delay)
     };
 };
+
+export default debounce;
