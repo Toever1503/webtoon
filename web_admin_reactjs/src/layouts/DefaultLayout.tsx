@@ -6,7 +6,7 @@ import {
 import { MenuProps, notification } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { DashboardOutlined } from '@ant-design/icons/lib/icons';
+import { AppstoreOutlined, AreaChartOutlined, CommentOutlined, DashboardOutlined, FormOutlined, ShoppingCartOutlined, TagsOutlined } from '@ant-design/icons/lib/icons';
 import NotificationComponent from '../components/NotificationComponent';
 
 const { Header, Content, Footer, Sider } = Layout;
@@ -30,26 +30,24 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
-    getItem('Đơn hàng', '/orders', <DashboardOutlined />),
-    getItem('Manga', 'parent-mangas', <TeamOutlined />, [
+    getItem('Đơn hàng', '/orders', <ShoppingCartOutlined />),
+    getItem('Thống kê', '/stats', <AreaChartOutlined />),
+    getItem('Gói đọc', '/subscription-pack', <AppstoreOutlined />),
+    getItem('Manga', 'parent-mangas',<FormOutlined />, [
         getItem('All mangas', '/mangas'),
         getItem('Manga genres', '/mangas/genres'),
         getItem('Manga authors', '/mangas/authors')
     ]),
-    getItem('Tin tức', 'parent-posts', <TeamOutlined />, [
+    getItem('Tin tức', 'parent-posts', <FormOutlined />, [
         getItem('All Posts', 'posts'),
         getItem('Categories', 'categories')
     ]),
-    getItem('Thẻ', '/tag', <DashboardOutlined />),
-    getItem('Bình luận', 'parent-comments', <TeamOutlined />, [
-        getItem('All Comments', 'comments'),
-        getItem('Add new', 'comment-add')
-    ]),
+    getItem('Thẻ', '/tag', <TagsOutlined />),
+    getItem('Bình luận', 'comments', <CommentOutlined />),
     getItem('Người dùng', 'parent-users', <UserOutlined />, [
         getItem('All Users', 'users'),
         getItem('My Profile', 'user-profile'),
     ]),
-    getItem('Thống kê', '/stats', <DashboardOutlined />),
 ];
 
 

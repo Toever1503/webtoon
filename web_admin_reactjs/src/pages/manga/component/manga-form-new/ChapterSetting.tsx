@@ -8,9 +8,23 @@ import chapterService from "../../../../services/manga/ChapterService";
 import { MangaInput } from "../../../../services/manga/MangaService";
 import debounce from "../../../../utils/debounce";
 import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
-import { ChapterType } from "../manga-form/MangaVolumeInfoItem";
 import ChapterItem from "./ChapterItem";
 
+ 
+export type ChapterType = {
+    id?: string | number;
+    chapterName: string;
+    chapterIndex?: number;
+    isRequiredVip: boolean;
+    content?: string
+    volumeId?: string | number;
+    chapterImages?: ChapterImageType[];
+}
+type ChapterImageType = {
+    id: string | number;
+    image: string;
+    imageIndex: number;
+}
 
 type ChapterSettingProps = {
     mangaInput: MangaInput,

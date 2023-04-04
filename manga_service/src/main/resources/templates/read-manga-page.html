@@ -214,7 +214,7 @@
         <div th:else class="text-left mt-4 mx-7">
             <div th:if="${mangaType} == 'TEXT'">
                 <h1 th:text="${chapterData.chapterName}"></h1>
-                <h3 th:text="${chapterData.content}"></h3>
+                <h3 th:utext="${chapterData.content}"></h3>
             </div>
 
             <div th:else="${mangaType} == 'IMAGE'">

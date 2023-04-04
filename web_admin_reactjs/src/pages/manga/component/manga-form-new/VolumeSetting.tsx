@@ -10,7 +10,7 @@ import ChapterSetting from "./ChapterSetting";
 import volumeService from "../../../../services/manga/VolumeService";
 import { useDispatch } from "react-redux";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
-import { ChapterType } from "../manga-form/MangaVolumeInfoItem";
+
 
 
 type VolumeType = {

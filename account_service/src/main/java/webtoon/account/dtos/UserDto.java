@@ -3,7 +3,7 @@ package webtoon.account.dtos;
 import lombok.Builder;
 import lombok.Getter;
 import webtoon.account.entities.UserEntity;
-import webtoon.account.enums.EnumSex;
+import webtoon.account.enums.ESex;
 
 import java.util.Date;
 
@@ -14,7 +14,7 @@ public class UserDto {
     private String username;
     private String fullName;
     private String email;
-    private EnumSex sex;
+    private ESex sex;
     private Boolean status;
     private Boolean hasBlocked;
     private Integer numberOfFailedSignIn;

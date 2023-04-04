@@ -155,7 +155,6 @@ const MangaGenrePage: React.FC = () => {
         }
 
         console.log('change data: ', genreData);
-
         setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, genreData.data));
     }, [genreData]);
 

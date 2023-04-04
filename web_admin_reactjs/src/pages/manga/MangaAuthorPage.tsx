@@ -6,7 +6,7 @@ import { RootState } from '../../stores';
 import { AuthorModel, deleteAuthorById, setAuthorData } from '../../stores/features/manga/authorSlice';
 import tagService, { TagInput } from "../../services/TagService";
 import { deleteTagById, setTagData, TagModel } from "../../stores/features/manga/tagSlice";
-import authorService from "../../services/manga/AuthorService";
+import authorService, { AuthorInput } from "../../services/manga/AuthorService";
 import AddUpdateAuthorModal from "./component/modal/AddUpdateAuthorModal";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { showNofification } from '../../stores/features/notification/notificationSlice';
@@ -23,8 +23,8 @@ const MangaAuthorPage: React.FC = () => {
 
     const [pageConfig, setPageConfig] = useState<TablePaginationConfig>({
         current: 1,
-        pageSize: authorData.size,
-        total: authorData.totalElements,
+        pageSize: authorData.pageSize,
+        total: 0,
         showSizeChanger: false,
     });
 
@@ -136,12 +136,12 @@ const MangaAuthorPage: React.FC = () => {
         setTblLoading(true);
         authorService.filterAuthor({ s, page, size, sort })
             .then((res) => {
-                console.log('tag', res.data);
+                console.log('author', res.data);
+          
                 dispatch(setAuthorData({
-                    data: res.data.content.map((item: TagInput, index: number) => ({ ...item, key: item.id, stt: index + 1 })),
+                    data: res.data.content.map((item: AuthorModel) => ({ ...item, key: item.id })),
                     totalElements: res.data.totalElements
                 }));
-                setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, authorData.data));
 
                 setPageConfig({ ...pageConfig, total: res.data.totalElements });
             })
@@ -156,6 +156,8 @@ const MangaAuthorPage: React.FC = () => {
             filterAuthor();
             setHasInitialized(true);
         }
+
+        setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, authorData.data));
 
     }, [authorData]);
 

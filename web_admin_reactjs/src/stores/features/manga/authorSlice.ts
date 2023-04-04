@@ -10,15 +10,13 @@ export interface AuthorModel {
 
 export interface AuthorState {
     data: Array<AuthorModel>,
-    totalElements: number,
-    size: number,
+    pageSize: number,
 }
 
 const initialState: AuthorState = {
     data: [
     ],
-    totalElements: 1,
-    size: 10,
+    pageSize: 10,
 }
 
 export const authorSlice = createSlice({
@@ -30,16 +28,14 @@ export const authorSlice = createSlice({
             // doesn't actually mutate the state because it uses the Immer library,
             // which detects changes to a "draft state" and produces a brand new
             // immutable state based off those changes
+
             if (!payload.key)
                 payload.key = payload.id;
 
-            if (state.data.length === state.size)
+            if (state.data.length >= state.pageSize)
                 state.data.pop();
-            state.data.unshift(payload);
-
-            state.totalElements = state.totalElements + 1;
-            console.log('addTag', payload)
-            // state.data.push(payload);
+            state.data = [payload, ...state.data]
+            console.log('addAuthor', payload)
         },
         updateAuthor: (state, { payload }) => {
             state.data = state.data.map((item) => {
@@ -49,14 +45,13 @@ export const authorSlice = createSlice({
                 return item;
             });
         },
-        deleteAuthorById: (state,{payload}) => {
+        deleteAuthorById: (state, { payload }) => {
             state.data = state.data.filter((item) => item.id !== payload.id);
-            console.log('deleteTagById', state.data);
-            state.totalElements = state.totalElements - 1;
+            console.log('deleteGenreById', state.data);
         },
         setAuthorData: (state, { payload }) => {
             state.data = payload.data;
-            state.totalElements = payload.totalElements;
+            console.log('setAuthorData', payload.data);
         }
 
     },

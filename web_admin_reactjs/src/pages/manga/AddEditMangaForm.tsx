@@ -74,7 +74,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         genres: [],
         authors: [],
         tags: [],
-        featuredImage: 'http://ima.ac',
+        featuredImage: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAVSp94.img?w=768&h=1024&m=6&x=257&y=190&s=273&d=273',
         displayType: 'CHAP'
     });
     const [isSavingMangaInfo, setIsSavingMangaInfo] = useState<boolean>(false);

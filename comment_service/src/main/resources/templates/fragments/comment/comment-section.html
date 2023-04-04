@@ -1,0 +1,37 @@
+
+<div class="comment-list mx-[10px]" th:fragment="comment-section">
+	<!-- comment_top -->
+	<div
+		class="comment-list_top flex justify-between bg-[salmon] px-2 py-4 ">
+		<span class="text-white">Total 1254 comments</span>
+		<div>
+			<span class="text-white"> Sort: </span> <select class="rounded"
+				value="newest">
+				<option class="newest">Oldest</option>
+				<option>Newest</option>
+			</select>
+		</div>
+	</div>
+	<!-- end comment_top -->
+
+	<hr class="my-[20px]" />
+
+	<div class="comment-list_body">
+
+		<!-- begin comment-editor -->
+		<div th:replace="fragments/comment/comment-editor :: comment-editor" />
+		<!-- end comment-editor -->
+
+		<!-- begin comment list -->
+		<ul class="comment_list grid gap-y-[20px]">
+			<!-- begin comment-item  -->
+			<div th:replace="fragments/comment/comment-item :: comment-item" />
+			<!-- end comment-item  -->
+		</ul>
+		<!-- end comment list -->
+	</div>
+
+	<!-- begin comment page -->
+	<div th:replace="fragments/page-component :: page-component" />
+	<!-- end comment page -->
+</div>

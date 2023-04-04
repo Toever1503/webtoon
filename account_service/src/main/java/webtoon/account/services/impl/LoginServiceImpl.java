@@ -10,12 +10,14 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 import webtoon.account.entities.UserEntity;
-import webtoon.account.enums.EnumAccountType;
-import webtoon.account.enums.EnumStatus;
+import webtoon.account.enums.EAccountType;
+import webtoon.account.enums.EStatus;
 import webtoon.account.models.LoginModel;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.LoginService;
 import webtoon.utils.exception.CustomHandleException;
+
+import javax.transaction.Transactional;
 
 
 @Service
@@ -30,7 +32,7 @@ public class LoginServiceImpl implements LoginService {
     public void loginForm(LoginModel model) {
         UserEntity userEntity = this.userRepository
                 .findByAccountTypeAndUsername(
-                        EnumAccountType.DATABASE,
+                        EAccountType.DATABASE,
                         model.getUsername()
                 )
                 .orElseThrow(
@@ -49,9 +51,10 @@ public class LoginServiceImpl implements LoginService {
         );
     }
 
+    @Transactional
     @Override
     public void loginFormOAuth2(OAuth2AuthenticationToken token) {
-        EnumAccountType type = EnumAccountType.valueOf(token.getAuthorizedClientRegistrationId().toUpperCase());
+        EAccountType type = EAccountType.valueOf(token.getAuthorizedClientRegistrationId().toUpperCase());
 
         OAuth2User oAuth2User = token.getPrincipal();
 
@@ -67,7 +70,7 @@ public class LoginServiceImpl implements LoginService {
                                         .avatar(oAuth2User.getAttribute("picture"))
                                         .email(oAuth2User.getAttribute("email"))
                                         .accountType(type)
-                                        .status(EnumStatus.ENABLED)
+                                        .status(EStatus.ENABLED)
                                         .build()
                         )
                 );
