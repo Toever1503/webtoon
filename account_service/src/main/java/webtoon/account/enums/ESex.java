@@ -3,7 +3,7 @@ package webtoon.account.enums;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum EnumSex {
+public enum ESex {
 
     Male("Male"),
     Female("Female"),

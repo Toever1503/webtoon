@@ -3,7 +3,7 @@ package webtoon.account.enums;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public enum EnumStatus {
+public enum EStatus {
 
     NOT_ENABLED("Not Enabled"),
     ENABLED("Enabled"),

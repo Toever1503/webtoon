@@ -1,7 +1,7 @@
 package webtoon.account.models;
 
 import lombok.*;
-import webtoon.account.enums.EnumSex;
+import webtoon.account.enums.ESex;
 
 @Getter
 @Setter
@@ -18,6 +18,6 @@ public class CreateUserModel {
 
     private String rePassword;
 
-    private EnumSex sex;
+    private ESex sex;
 
 }
