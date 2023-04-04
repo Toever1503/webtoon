@@ -2,10 +2,8 @@ package webtoon.comment.enums;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public enum ECommentType {
-    MANGA("Manga"),
-    POST("Post");
+    MANGA,
+    POST
 
-    private final String value;
 }

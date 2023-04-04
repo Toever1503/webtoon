@@ -5,7 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import webtoon.comment.models.CommentModel;
+import webtoon.comment.enums.ECommentType;
+import webtoon.comment.inputs.CommentInput;
 import webtoon.comment.services.ICommentService;
 
 @Controller
@@ -15,30 +16,18 @@ public class CommentController {
 
     private final ICommentService commentService;
 
-    @GetMapping(value = "get")
-    public String get(
-            Model model,
-            @RequestParam(name = "id") Long id,
-            @RequestParam(name = "page", defaultValue = "0") Integer page
-    ) {
-        model.addAttribute(
-                "comment",
-                new CommentModel()
-        );
+    @GetMapping
+    public String listComment(Model model,
+                              @RequestParam(name = "objectId") Long id,
+                              @RequestParam(name = "commentType") ECommentType commentType,
+                              Pageable page) {
+        model.addAttribute("commentPage", null );
 
-        model.addAttribute(
-                "commentPage",
-                this.commentService.findAllById(
-                        id,
-                        Pageable.ofSize(10)
-                                .withPage(page)
-                )
-        );
         return "comment/comment-item";
     }
 
     @PostMapping(value = "create")
-    public String create(@ModelAttribute CommentModel commentModel) {
+    public String create(@ModelAttribute CommentInput commentModel) {
         this.commentService.add(commentModel);
 
         return "redirect:/comment/get";
@@ -47,7 +36,7 @@ public class CommentController {
     @PostMapping(value = "edit/{id}")
     public String update(
             @PathVariable(name = "id") Long id,
-            @ModelAttribute CommentModel commentModel) {
+            @ModelAttribute CommentInput commentModel) {
         commentModel.setId(id);
         this.commentService.update(commentModel);
 

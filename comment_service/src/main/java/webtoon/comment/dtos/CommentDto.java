@@ -24,6 +24,8 @@ public class CommentDto {
 
     private final Long modifiedBy;
 
+    private Long commentParent;
+
     public static CommentDto toDto(CommentEntity entity) {
         return CommentDto.builder()
                 .id(entity.getId())
@@ -31,7 +33,7 @@ public class CommentDto {
                 .commentType(entity.getCommentType())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
-
+                .commentParent(entity.getParentComment() != null ? entity.getId() : null)
                 .build();
     }
 }

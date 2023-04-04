@@ -11,6 +11,7 @@ import webtoon.comment.enums.ECommentType;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Table(name = "tbl_comment")
@@ -50,4 +51,11 @@ public class CommentEntity {
     @JoinColumn(name = "modified_by")
     @LastModifiedBy
     private Long modifiedBy;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private CommentEntity parentComment;
+
+    @OneToMany
+    private List<CommentEntity> childComments;
 }

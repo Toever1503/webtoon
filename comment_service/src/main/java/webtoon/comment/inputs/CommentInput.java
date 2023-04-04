@@ -1,4 +1,4 @@
-package webtoon.comment.models;
+package webtoon.comment.inputs;
 
 import lombok.*;
 
@@ -7,7 +7,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CommentModel {
+public class CommentInput {
     private Long id;
     private String content;
     private String commentType;

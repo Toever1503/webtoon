@@ -2,17 +2,19 @@ package webtoon.comment.services;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import webtoon.comment.dtos.CommentDto;
-import webtoon.comment.models.CommentModel;
+import webtoon.comment.entities.CommentEntity;
+import webtoon.comment.inputs.CommentInput;
 
 public interface ICommentService {
     CommentDto findById(Long id);
 
-    Page<CommentDto> findAllById(Long id, Pageable pageable);
+    CommentDto add(CommentInput model);
 
-    CommentDto add(CommentModel model);
+    CommentDto update(CommentInput model);
 
-    CommentDto update(CommentModel model);
+    Page<CommentDto> findAll(Pageable pageable, Specification<CommentEntity> spec);
 
     void delete(Long id);
 }
