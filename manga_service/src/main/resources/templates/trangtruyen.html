@@ -11,7 +11,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
     <link href="../static/main.css" rel="stylesheet" />
-	
+
     <style>
       .accordion {
         background-color: #eee;
@@ -88,7 +88,7 @@
                 </li>
                 <li class="text-neutral-500 dark:text-neutral-400">
                   <a th:href="@{'/manga/' + ${model.mangaName} + '/' + ${model.id}}" th:text="${'Truyện ' + model.mangaName}"></a>
-                  
+
                   </li>
               </ol>
             </nav>
@@ -205,7 +205,7 @@
 
                   <div class="post-content_item grid grid-cols-5 gap-4 mt-3">
                     <div class="summary-heading">
-                      <h5>Thay thế</h5>
+                      <h5>Tên khác</h5>
                     </div>
                     <div class="summary-content vote-details col-span-4">
                       <h5 th:text="${model.alternativeTitle}"></h5>
@@ -217,16 +217,10 @@
                       <h5>(Các) tác giả</h5>
                     </div>
                     <div class="summary-content vote-details col-span-4">
-                      <h5>JSAYAMA Hajime</h5>
-                    </div>
-                  </div>
-
-                  <div class="post-content_item grid grid-cols-5 gap-4 mt-3">
-                    <div class="summary-heading">
-                      <h5>Nghệ sỹ</h5>
-                    </div>
-                    <div class="summary-content vote-details col-span-4">
-                      <h5>JSAYAMA Hajime</h5>
+                     <span th:each="item,iter : ${model.authors}">
+                          <span th:text="${item.name}"></span>
+                          <span th:if="${!iter.last}" th:text="','"></span>
+                        </span>
                     </div>
                   </div>
 
@@ -250,46 +244,46 @@ th:text="${itemgenre.name + ', '}"></span>-->
                     </div>
                   </div>
 
-                  
+
                 </div>
               </div>
             </div>
           </div>
 
           <div class="mx-20">
-            <h1 class="p-3 font-bold text-2xl">Bản tóm tắt</h1>
+            <h1 class="p-3 font-bold text-2xl">Mô tả</h1>
             <hr />
             <div th:utext="${model.description}">
             </div>
           </div>
 
           <div class="mx-20">
-            <h1 class="p-3 font-bold text-2xl">LATEST MANGA RELEASES</h1>
+            <h1 class="p-3 font-bold text-2xl">Danh sách chương mới nhất</h1>
             <hr />
             <!-- Accordion -->
             <div th:if="${model.displayType.name} == 'VOL'" th:each="itemvolume : ${model.volumeEntities}">
-              <button class="accordion mt-4">
-                <p th:text="${'Tập: ' + itemvolume.name}"></p>
-              </button>
+              <span class="accordion mt-2">
+                <p th:text="${'Tập ' + (itemvolume.volumeIndex + 1) + ': ' + itemvolume.name}"></p>
+              </span>
               <div class="panel">
                 <div
                   class="flex flex-col mx-5"
                   th:each="itemchapter : ${itemvolume.chapterEntities}"
                 >
-                  <div class="flex justify-between my-4">
-                    <div th:text="${'Chương: ' + itemchapter.chapterName}"></div>
+                  <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${itemchapter.id}}" class="flex justify-between my-4">
+                    <div th:text="${'Chương ' + (itemchapter.chapterIndex + 1) +': ' + itemchapter.chapterName}"></div>
 
                     <div>October 11, 2017</div>
-                  </div>
+                  </a>
                   <hr />
                 </div>
               </div>
             </div>
 
            <div th:if="${model.displayType.name} == 'CHAP'" th:each="itemchapter : ${modelchapter}">
-             <button class="accordion mt-4">
-               <p th:text="${'Chương : ' + itemchapter.chapterName}"></p>
-             </button>
+             <a  th:href="@{'/manga/'+${model.title}+'/chapter/'+${itemchapter.id}}" class="accordion mt-2">
+               <p th:text="${'Chương ' + (itemchapter.chapterIndex + 1) + ': ' + itemchapter.chapterName}"></p>
+             </a>
              <!-- <div class="panel">
                <div
                class="flex flex-col mx-5"

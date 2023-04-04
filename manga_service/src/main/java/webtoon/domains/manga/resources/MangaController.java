@@ -13,6 +13,7 @@ import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
+import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.filters.MangaFilterModel;
 import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
@@ -55,11 +56,21 @@ public class MangaController {
 	@GetMapping("{name}/chapter/{id}")
 	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
 		MangaChapterEntity chapterEntity = this.mangaChapterService.getById(id);
-		MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
-		MangaEntity mangaEntity = volumeEntity.getManga();
 
-		model.addAttribute("volumeEntity1", mangaVolumeService.findByManga(mangaEntity.getId()));
-		model.addAttribute("chapterData1",mangaChapterService.findByVolume(volumeEntity.getId()));
+
+		MangaEntity mangaEntity = null;
+		if(chapterEntity.getManga() != null){ // display type chap
+			mangaEntity = chapterEntity.getManga();
+		}
+		else { // display type vol
+			MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
+			mangaEntity = volumeEntity.getManga();
+
+			model.addAttribute("currentVol", volumeEntity);
+
+			model.addAttribute("volumeEntity1", mangaVolumeService.findByManga(mangaEntity.getId()));
+			model.addAttribute("chapterData1",mangaChapterService.findByVolume(volumeEntity.getId()));
+		}
 
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
