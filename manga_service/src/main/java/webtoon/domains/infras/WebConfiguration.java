@@ -32,8 +32,8 @@ public class WebConfiguration implements WebMvcConfigurer {
 
 	@Override
 	public void addViewControllers(ViewControllerRegistry registry) {
-//		registry.addViewController("/").setViewName("homepage");
-//		WebMvcConfigurer.super.addViewControllers(registry); error
+		registry.addViewController("/")
+				.setViewName("forward:/index");
 	}
 	
 	@Bean
