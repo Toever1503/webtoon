@@ -4,7 +4,7 @@
         <div class="comment_author_action absolute top-0 right-0 z-[10]">
             <!-- write action delete, delete -->
             <p
-                    class="cmm_action_menu cursor-pointer px-[5px] hover:text-gray-500 flex justify-end">
+                    class="cmm_action_menu cursor-pointer px-[5px] hover:text-gray-500 flex justify-end" onclick="handlerListComment()">
                 <img style="height: 15px;"
                      src="/static/images/post/dot-menu-vertical.png">
             </p>
@@ -48,12 +48,32 @@
 </li>
 
 <script>
-    [...document.getElementsByClassName('cmm_action_menu')].forEach(e => {
-        e.addEventListener('click', function () {
-            document.getElementsByClassName('cmm_action_list')[0].classList.toggle('hidden');
-        })
-    });
 
+    function handlerListComment(){
+        console.log("111")
+    }
 
+    // [...document.querySelectorAll(".cmm_action_menu")].forEach(e => {
+    //     e.addEventListener('click', function () {
+    //         console.log("111")
+    //         document.getElementsByClassName('cmm_action_list')[0].classList.toggle('hidden');
+    //     })
+    // });
+
+    // document.querySelectorAll(".cmm_action_menu").forEach(e => {
+    //     e.addEventListener('click', function () {
+    //         console.log("111")
+    //         document.getElementsByClassName('cmm_action_list')[0].classList.toggle('hidden');
+    //     })
+    // });
+
+    // document.addEventListener("DOMContentLoaded", () => {
+    //     [...document.querySelectorAll(".cmm_action_menu")].forEach(e => {
+    //         e.addEventListener('click', function () {
+    //             console.log("1111")
+    //             document.getElementsByClassName('cmm_action_list')[0].classList.toggle('hidden');
+    //         })
+    //     });
+    // })
 
 </script>
