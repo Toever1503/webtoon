@@ -67,6 +67,49 @@ export default {
             }
         }
     },
+    comment: {
+        'page-title': 'Danh sách bình luận',
+        'comment-type-title': 'Loại bình luận:',
+        table: {
+            'user': 'Người bình luận',
+            'content': 'Nội dung',
+            'createdAt': 'Ngày tạo',
+            'action': 'Hành động'
+        }
+    },
+    user: {
+        'page-title': 'Danh sách người dùng',
+        table: {
+            'fullName': 'Họ và tên',
+            'username': 'Tên đăng nhập',
+            'email': 'Email',
+            'phone': 'Số điện thoại',
+            'sex': 'Giới tính',
+            'avatar': 'Ảnh đại diện',
+            'status': 'Trạng thái',
+            'createdAt': 'Ngày tạo',
+            'accountType': 'Loại tài khoản',
+            'action': 'Hành động'
+        }
+    },
+    order: {
+        'page-title': 'Danh sách đơn hàng',
+    },
+    'subscription-pack': {
+        'page-title': 'Danh sách gói đọc',
+        table: {
+            'name': 'Tên gói',
+            'desc': 'Mô tả',
+            'price': 'Giá',
+            'limitedDayCount': 'Số ngày đọc',
+            'createdAt': 'Ngày tạo',
+            'modifiedAt': 'Ngày sửa',
+            'createdBy': 'Người tạo',
+            'modifiedBy': 'Người sửa',
+            'action': 'Hành động'
+
+        }
+    },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
     'reset': 'Làm mới'

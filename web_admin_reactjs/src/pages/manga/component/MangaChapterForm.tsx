@@ -138,7 +138,6 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             {
                 currentStep === 2 &&
                 <section className="chapter-setting">
-                    {/* <MangaChapterSetting mangaInput={props.mangaInput} /> */}
                     <VolumeSetting mangaInput={props.mangaInput} />
                 </section>
             }

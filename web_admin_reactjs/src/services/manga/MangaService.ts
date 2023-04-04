@@ -1,7 +1,7 @@
 import { Dayjs } from "dayjs";
 import { VolumeForm } from "../../pages/manga/component/modal/MangaAddEditVolumeModal";
-import { ChapterType } from "../../pages/manga/component/manga-form/MangaVolumeInfoItem";
 import { mangaAxios } from "../config/MangaAxios";
+import { ChapterType } from "../../pages/manga/component/manga-form-new/ChapterSetting";
 
 const basePath: String = "/manga";
 

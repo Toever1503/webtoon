@@ -13,6 +13,9 @@ import Dashboard from "../pages/dashboard/Dashboard";
 import CategoryPage from "../pages/post/CategoryPage";
 import OrderPage from "../pages/order/OrderPage";
 import StatisticsPage from "../pages/stats/StatisticsPage";
+import CommentPage from "../pages/comment/CommentPage";
+import UserPage from "../pages/user/UserPage";
+import SubscriptionPackPage from "../pages/subscription-pack/SubscriptionPackPage";
 
 const router = createBrowserRouter([
     {
@@ -26,6 +29,10 @@ const router = createBrowserRouter([
             {
                 path: "/orders",
                 element: <OrderPage />,
+            },
+            {
+                path: "/subscription-pack",
+                element: <SubscriptionPackPage />,
             },
             {
                 path: "/mangas",
@@ -56,8 +63,16 @@ const router = createBrowserRouter([
                 element: <CategoryPage />
             },
             {
+                path: "/comments",
+                element: <CommentPage />
+            },
+            {
                 path: "/stats",
                 element: <StatisticsPage />
+            },
+            {
+                path: "/users",
+                element: <UserPage />
             },
             {
                 path: '/ERROR',

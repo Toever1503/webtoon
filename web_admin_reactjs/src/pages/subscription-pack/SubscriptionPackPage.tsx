@@ -3,8 +3,9 @@ import { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import ISubscriptionPackType from "./types/ISubscriptionPackType";
 
-const OrderPage: React.FC = () => {
+const SubscriptionPackPage: React.FC = () => {
     const { t } = useTranslation();
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
@@ -13,27 +14,63 @@ const OrderPage: React.FC = () => {
         current: 1,
         pageSize: 10,
         total: 0,
-        showSizeChanger: false,
+        showSizeChanger: false
     });
-    const columns: ColumnsType<any> = [
+
+    const columns: ColumnsType<ISubscriptionPackType> = [
         {
             title: 'STT',
             dataIndex: 'index',
             key: 'index',
         },
         {
-            title: 'Name',
-            dataIndex: 'title',
+            title: t('subscription-pack.table.name'),
+            dataIndex: 'name',
             key: 'name',
             render: (text) => <>{text}</>,
         },
         {
-            title: 'Manga Type',
-            dataIndex: 'mangaType',
-            key: 'mangaType',
+            title: t('subscription-pack.table.desc'),
+            dataIndex: 'desc',
+            key: 'desc',
             render: (text) => <>{text}</>,
         },
-        
+        {
+            title: t('subscription-pack.table.price'),
+            dataIndex: 'price',
+            key: 'price',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: t('subscription-pack.table.limitedDayCount'),
+            dataIndex: 'dayCount',
+            key: 'dayCount',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: t('subscription-pack.table.createdAt'),
+            dataIndex: 'createdAt',
+            key: 'createdAt',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: t('subscription-pack.table.modifiedAt'),
+            dataIndex: 'modifiedAt',
+            key: 'modifiedAt',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: t('subscription-pack.table.createdBy'),
+            dataIndex: 'createdBy',
+            key: 'createdBy',
+            render: (text) => <>{text}</>,
+        },
+        {
+            title: t('subscription-pack.table.modifiedBy'),
+            dataIndex: 'modifiedBy',
+            key: 'modifiedBy',
+            render: (text) => <>{text}</>,
+        },
         {
             title: 'Action',
             key: 'action',
@@ -56,12 +93,11 @@ const OrderPage: React.FC = () => {
         },
     ];
 
-
     return (<>
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
                 <h1 className="text-[23px] font-[400] m-0">
-                    {t('order.page-title')}
+                    {t('subscription-pack.page-title')}
                 </h1>
             </div>
             <div className="flex justify-end items-center">
@@ -73,5 +109,4 @@ const OrderPage: React.FC = () => {
     </>)
 };
 
-
-export default OrderPage;
+export default SubscriptionPackPage;
