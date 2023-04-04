@@ -285,6 +285,22 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
+    public MangaChapterDto[] findNextPostsManga(Long chapterID, Long mangaId) {
+        MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
+
+        List<MangaChapterEntity> nextChapters = this.chapterRepository
+                .findNextchaptermanga(chapterID,mangaId,PageRequest.of(0,1));
+        chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
+
+        List<MangaChapterEntity> prevChapters = this.chapterRepository
+                .findPrevchaptermanga(chapterID,mangaId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+        chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
+
+        return chapterDtos;
+    }
+
+
+    @Override
     public Page<MangaChapterDto> filterChapter(Pageable pageable, MangaChapterFilterInput input) {
         if (input.getQ() != null)
             input.setQ("%" + input.getQ() + "%");
@@ -353,5 +369,22 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
         return  chapterRepository.findAllById(id,pageable);
     }
+
+    @Override
+    public List<MangaChapterEntity> findAllByMangaId(Long id){
+        return chapterRepository.findByMangaId(id).stream().map(entity -> {
+            return MangaChapterEntity.builder()
+                    .id(entity.getId())
+                    .mangaVolume(entity.getMangaVolume())
+                    .chapterImages(entity.getChapterImages())
+                    .manga(entity.getManga())
+                    .content(entity.getContent())
+                    .chapterIndex(entity.getChapterIndex())
+                    .chapterName(entity.getChapterName())
+                    .requiredVip(entity.getRequiredVip())
+                    .build();
+        }).collect(Collectors.toList());
+    }
+
 
 }

@@ -18,6 +18,8 @@ import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("manga")
 public class MangaController {
@@ -40,6 +42,10 @@ public class MangaController {
 	@GetMapping("{name}/{id}")
 	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
 		MangaEntity mangaEntity =this.mangaService.getById(id);
+
+		List<MangaChapterEntity> mangaChapter = this.mangaChapterService.findAllByMangaId(id);
+
+		model.addAttribute("modelchapter",mangaChapter);
 		model.addAttribute("model",mangaEntity);
 			return "trangtruyen";
 	}
@@ -59,11 +65,20 @@ public class MangaController {
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);
 
+
+//		next prev displayType == 'VOL'
 		MangaChapterDto[] prevNextChapter = this.mangaChapterService
 				.findNextPosts(id,chapterEntity.getMangaVolume().getId());
 		model.addAttribute("prevChapter",prevNextChapter[0]);
 		model.addAttribute("nextChapter",prevNextChapter[1]);
+//      next prev displayType == 'CHAP'
+		MangaChapterDto[] prevNextChaptermanga = this.mangaChapterService
+				.findNextPostsManga(id,chapterEntity.getManga().getId());
 
+
+		
+		model.addAttribute("prevChapter",prevNextChapter[0]);
+		model.addAttribute("nextChapter",prevNextChapter[1]);
 
 
 		return "read-manga-page";
@@ -72,6 +87,8 @@ public class MangaController {
 	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
 
 		model.addAttribute("model", mangaService.filterBy(s,pageable));
+
+
 		return "trangtruyenchu";
 	}
 
