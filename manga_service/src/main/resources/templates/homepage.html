@@ -170,9 +170,9 @@
 
                                 <!--  for display chapter by vol-->
 
-                                <ul th:if="${manga.volumeEntities.size() > 0}"
+                                <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
                                     class="latest-chapters grid mt-[10px] gap-[5px]"
-                                    th:each="volume : ${manga.volumeEntities}">
+                                    th:each="volume,volI : ${manga.volumeEntities}" >
                                     <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
                                         <div class="gap-[5px] flex items-center">
