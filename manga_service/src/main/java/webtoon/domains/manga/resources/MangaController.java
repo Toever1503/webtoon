@@ -95,8 +95,9 @@ public class MangaController {
 		return "read-manga-page";
 	}
 	@GetMapping("/index")
-	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
+	public String showMangaList(Model model,Pageable pageable, @RequestParam String s, @RequestParam(name = "",required = false) String loginType ) {
 
+		System.out.println("login type: " + loginType);
 		model.addAttribute("model", mangaService.filterBy(s,pageable));
 
 
