@@ -270,31 +270,31 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId) {
+    public MangaChapterDto[] findNextPrevChapterForDisplayVolType(Long chapterID, Long mangaId) {
         MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
 
         List<MangaChapterEntity> nextChapters = this.chapterRepository
-                .findNextchapter(chapterID,volumeId,PageRequest.of(0,1));
+                .findNextChapterForDisplayVolType(chapterID, mangaId,PageRequest.of(0,1));
         chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
 
         List<MangaChapterEntity> prevChapters = this.chapterRepository
-                .findPrevchapter(chapterID,volumeId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+                .findPrevChapterForDisplayVolType(chapterID, mangaId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
         chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
 
         return chapterDtos;
     }
 
     @Override
-    public MangaChapterDto[] findNextPostsManga(Long chapterID, Long mangaId) {
+    public MangaChapterDto[] findNextPrevChapterForDisplayChapType(Long chapterID, Long mangaId) {
         MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
 
         List<MangaChapterEntity> nextChapters = this.chapterRepository
-                .findNextchaptermanga(chapterID,mangaId,PageRequest.of(0,1));
-        chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
+                .findNextChapterForDisplayChapType(chapterID,mangaId,PageRequest.of(0,1));
+        chapterDtos[1] = nextChapters.size() == 0 ? null : MangaChapterDto.toDto(nextChapters.get(0));
 
         List<MangaChapterEntity> prevChapters = this.chapterRepository
-                .findPrevchaptermanga(chapterID,mangaId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
-        chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
+                .findPrevChapterForDisplayChapType(chapterID,mangaId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+        chapterDtos[0] = prevChapters.size() == 0 ? null : MangaChapterDto.toDto(prevChapters.get(0));
 
         return chapterDtos;
     }

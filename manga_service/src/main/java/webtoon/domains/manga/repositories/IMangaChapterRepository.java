@@ -1,6 +1,5 @@
 package webtoon.domains.manga.repositories;
 
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -10,12 +9,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
-import webtoon.domains.manga.entities.MangaVolumeEntity;
 
 import java.util.List;
 import java.util.Optional;
-
-import java.util.List;
 
 
 public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntity, Long>, JpaSpecificationExecutor<MangaChapterEntity> {
@@ -32,18 +28,18 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     void deleteALlByMangaId(Long id);
 
     @Query("select p from MangaChapterEntity p where p.id > ?1 and p.mangaVolume.manga.id = ?2")
-    List<MangaChapterEntity> findNextchapter(Long chapterID, Long volumeId, Pageable page);
+    List<MangaChapterEntity> findNextChapterForDisplayVolType(Long chapterID, Long mangaId, Pageable page);
 
     @Query("select p from MangaChapterEntity p where p.id < ?1 and p.mangaVolume.manga.id = ?2")
-    List<MangaChapterEntity> findPrevchapter(Long chapterID, Long volumeId, Pageable page);
+    List<MangaChapterEntity> findPrevChapterForDisplayVolType(Long chapterID, Long mangaId, Pageable page);
 
 
 
     @Query("select p from MangaChapterEntity p where p.id > ?1 and p.manga.id = ?2")
-    List<MangaChapterEntity> findNextchaptermanga(Long chapterID, Long mangaId, Pageable page);
+    List<MangaChapterEntity> findNextChapterForDisplayChapType(Long chapterID, Long mangaId, Pageable page);
 
     @Query("select p from MangaChapterEntity p where p.id < ?1 and p.manga.id = ?2")
-    List<MangaChapterEntity> findPrevchaptermanga(Long chapterID, Long mangaId, Pageable page);
+    List<MangaChapterEntity> findPrevChapterForDisplayChapType(Long chapterID, Long mangaId, Pageable page);
 
     @Modifying
     @Query("UPDATE  FROM MangaChapterEntity c set c.chapterIndex = c.chapterIndex-1 where c.chapterIndex > ?1")

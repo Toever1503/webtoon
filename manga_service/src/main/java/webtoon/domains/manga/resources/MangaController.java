@@ -2,19 +2,14 @@ package webtoon.domains.manga.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import webtoon.domains.manga.dtos.MangaChapterDto;
-import webtoon.domains.manga.dtos.MangaDto;
-import webtoon.domains.manga.dtos.MangaVolumeDto;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
-import webtoon.domains.manga.enums.EMangaDisplayType;
-import webtoon.domains.manga.filters.MangaFilterModel;
 import webtoon.domains.manga.services.IMangaChapterService;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.manga.services.IMangaVolumeService;
@@ -59,10 +54,16 @@ public class MangaController {
 
 
 		MangaEntity mangaEntity = null;
-		if(chapterEntity.getManga() != null){ // display type chap
+		if(chapterEntity.getMangaVolume() == null){ // display type chap
 			mangaEntity = chapterEntity.getManga();
 
+			MangaChapterDto[] prevNextChapters = this.mangaChapterService
+					.findNextPrevChapterForDisplayChapType(id,chapterEntity.getManga().getId());
 
+			model.addAttribute("chapterData1", mangaEntity.getChapters());
+
+			model.addAttribute("prevChapter",prevNextChapters[0]);
+			model.addAttribute("nextChapter",prevNextChapters[1]);
 		}
 		else { // display type vol
 			MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
@@ -72,6 +73,11 @@ public class MangaController {
 
 			model.addAttribute("volumeEntity1", mangaVolumeService.findByManga(mangaEntity.getId()));
 			model.addAttribute("chapterData1",mangaChapterService.findByVolume(volumeEntity.getId()));
+
+			MangaChapterDto[] prevNextChapter = this.mangaChapterService
+					.findNextPrevChapterForDisplayVolType(id,chapterEntity.getMangaVolume().getManga().getId());
+			model.addAttribute("prevChapter",prevNextChapter[0]);
+			model.addAttribute("nextChapter",prevNextChapter[1]);
 		}
 
 		model.addAttribute("mangaData",mangaEntity);
@@ -79,23 +85,12 @@ public class MangaController {
 		model.addAttribute("chapterData",chapterEntity);
 
 
-//		next prev displayType == 'VOL'
-		MangaChapterDto[] prevNextChapter = this.mangaChapterService
-				.findNextPosts(id,chapterEntity.getMangaVolume().getId());
-		model.addAttribute("prevChapter",prevNextChapter[0]);
-		model.addAttribute("nextChapter",prevNextChapter[1]);
-//      next prev displayType == 'CHAP'
-		MangaChapterDto[] prevNextChaptermanga = this.mangaChapterService
-				.findNextPostsManga(id,chapterEntity.getManga().getId());
-		model.addAttribute("prevChapter",prevNextChapter[0]);
-		model.addAttribute("nextChapter",prevNextChapter[1]);
 
 
 		return "read-manga-page";
 	}
 	@GetMapping("/index")
 	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
-
 		model.addAttribute("model", mangaService.filterBy(s,pageable));
 
 

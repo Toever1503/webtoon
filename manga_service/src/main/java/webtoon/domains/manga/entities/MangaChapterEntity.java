@@ -3,7 +3,9 @@ package webtoon.domains.manga.entities;
 import javax.persistence.*;
 
 import lombok.*;
+import org.hibernate.annotations.UpdateTimestamp;
 
+import java.util.Date;
 import java.util.List;
 
 @Entity
@@ -41,4 +43,14 @@ public class MangaChapterEntity {
     @OneToMany(mappedBy = "mangaChapter", cascade = CascadeType.ALL)
     @OrderBy("imageIndex asc")
     private List<MangaChapterImageEntity> chapterImages;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date createdAt;
+
+    @Column(name = "modified_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date modifiedAt;
 }

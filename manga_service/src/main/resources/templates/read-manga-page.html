@@ -20,7 +20,8 @@
         <h1 class="font-bold text-2xl">
             <span th:text="${mangaData.title}"></span>
             -
-            <span th:if="${mangaData.displayType == 'VOL'}" th:text="${'Tập ' + (currentVol.volumeIndex + 1) + ': ' + currentVol.name + ' -'}"></span>
+            <span th:if="${mangaData.displayType == 'VOL'}"
+                  th:text="${'Tập ' + (currentVol.volumeIndex + 1) + ': ' + currentVol.name + ' -'}"></span>
 
             <span th:text="${'Chương ' + (chapterData.chapterIndex + 1) + ': ' + chapterData.chapterName }"></span>
         </h1>
@@ -33,7 +34,7 @@
                     <ol class="list-reset flex">
                         <li>
                             <a
-                                    href="#"
+                                    href="/"
                                     class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
                             >Home</a
                             >
@@ -47,7 +48,7 @@
                             <a
                                     href="#"
                                     class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
-                            >Library</a
+                            >Manga</a
                             >
                         </li>
                         <li>
@@ -55,34 +56,52 @@
                   >/</span
                   >
                         </li>
-                        <li class="text-neutral-500 dark:text-neutral-400">Data</li>
+                        <li class="text-neutral-500 dark:text-neutral-400" th:text="${mangaData.title}"></li>
+
+
+                        <li>
+                          <span class="mx-2 text-neutral-500 dark:text-neutral-400"
+                          >/</span>
+                        </li>
+
+                        <li th:if="${mangaData.displayType.name == 'VOL'}"  class="text-neutral-500 dark:text-neutral-400" th:text="${'Tập ' + (currentVol.volumeIndex + 1)}"></li>
+
+                        <li th:if="${mangaData.displayType.name == 'VOL'}">
+                          <span class="mx-2 text-neutral-500 dark:text-neutral-400"
+                          >/</span>
+                        </li>
+
+                        <li class="text-neutral-500 dark:text-neutral-400" th:text="${'Chương ' + (chapterData.chapterIndex + 1)}"></li>
                     </ol>
                 </nav>
             </div>
 
             <div class="mx-20 mb-10">
-                <div class="flex justify-end mx-20" >
+                <div class="flex justify-end mx-20">
                     <div th:if="${prevChapter != null}" class="bg-slate-400">
-                        <a th:href="@{'/manga/'+${chapterData.chapterName}+'/chapter/'+${prevChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-                           style="display: flex; align-items: center" >
-                            <svg    xmlns="http://www.w3.org/2000/svg"
-                                    width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short" viewBox="0 0 16 16">
-                                <path   fill-rule="evenodd"
-                                        d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0
+                        <a th:href="@{'/manga/'+${chapterData.chapterName}+'/chapter/'+${prevChapter.id}}"
+                           class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                           style="display: flex; align-items: center">
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short"
+                                 viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0
                                 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
                             </svg>
-                            Prev
+                            Chương trước
                         </a>
                     </div>
 
-                    <div  th:if="${nextChapter != null}" class="bg-indigo-400 ml-5">
-                        <a th:href="@{'/manga/'+ ${chapterData.chapterName}+'/chapter/'+${nextChapter.id}}" class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
-                           style="display: flex; align-items: center" >
-                            Next
-                            <svg    xmlns="http://www.w3.org/2000/svg"
-                                    width="16" height="16" fill="currentColor"
-                                    class="bi bi-arrow-right-short" viewBox="0 0 16 16" >
-                                <path   fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1
+                    <div th:if="${nextChapter != null}" class="bg-indigo-400 ml-5">
+                        <a th:href="@{'/manga/'+ ${chapterData.chapterName}+'/chapter/'+${nextChapter.id}}"
+                           class="bg-red-500 hover:bg-slate-900 text-white font-bold py-2 px-4 rounded"
+                           style="display: flex; align-items: center">
+                            Chương tiếp
+                            <svg xmlns="http://www.w3.org/2000/svg"
+                                 width="16" height="16" fill="currentColor"
+                                 class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1
                         .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
                             </svg>
                         </a>
@@ -95,6 +114,7 @@
     <div class="flex justify-start mb-2">
         <div class="ml-20">
             <select
+                    th:if="${mangaData.displayType.name == 'VOL'}"
                     id="volume"
                     data-te-select-init
                     data-te-select-size="lg"
@@ -104,25 +124,23 @@
                         th:each="item : ${volumeEntity1}"
                         th:value="${item.id}"
                         th:text="${'Tập ' + (item.volumeIndex + 1) +': '+item.name}"
-
+                        th:selected="${currentVol.id == item.id}"
                 ></option>
             </select>
         </div>
 
         <div class="ml-5">
-            <select 
+            <select
                     id="chapter"
                     th:value="${chapterData.id}"
-                    
                     class="bg-indigo-100 border-8 border-indigo-100 shadow-md"
             >
                 <option value="">Chọn chương</option>
-                <option 
+                <option
                         th:each="itemchapter : ${chapterData1}"
                         th:value="${itemchapter.id}"
                         th:text="${'Chương ' + (itemchapter.chapterIndex + 1) +': '+itemchapter.chapterName}"
-                        
-                        th:selected = "${chapterData.id == itemchapter.id}" 
+                        th:selected="${chapterData.id == itemchapter.id}"
                 ></option>
             </select>
         </div>
@@ -183,6 +201,7 @@
                 // Thực hiện các hành động mong muốn khi giá trị đã chọn từ select box2 thay đổi
                 window.location.href = 'http://localhost:8000/manga/' + selectedText + '/chapter/' + selectedValue2
             });
+
         </script>
         <!-- Kết thúc sự kiện onechange -->
     </div>
