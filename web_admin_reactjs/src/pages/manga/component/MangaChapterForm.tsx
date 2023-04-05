@@ -80,7 +80,7 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
         <div className="bg-white w-full h-fit" style={{ border: '1px solid #c3c4c7' }}>
             <div style={{ borderBottom: '1px solid #c3c4c7' }} className='flex justify-between items-center p-[10px]'>
                 <div className="flex space-x-3">
-                    <p className='text-[16px] font-bold m-0'>Chapter Setting</p>
+                    <p className='text-[16px] font-bold m-0'>Nội dung truyện</p>
 
                     {
                         props.formType === 'ADD' && currentStep === 2 &&
@@ -100,18 +100,18 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             {
                 currentStep === 0 &&
                 <section className='manga-type-choice px-[10px] text-center py-[15px] h-full pt-[50px]'>
-                    <p className='text-[16px] font-bold mb-1'>Manga type:</p>
+                    <p className='text-[16px] font-bold mb-1'>Loại truyện:</p>
                     <span className="text-[12px] text-neutral-500">
-                        This setting cannot be changed after choosen.
+                        Bạn sẽ không thể thay đổi sau khi chọn.
                     </span>
                     <br />
                     <Radio.Group className="my-[20px]" value={mangaType} onChange={e => setMangaType(e.target.value)} >
-                        <Radio value={'TEXT'} className="text-[15px]">Text</Radio>
-                        <Radio value={'IMAGE'} className="text-[15px]">Image</Radio>
+                        <Radio value={'TEXT'} className="text-[15px]">Chữ</Radio>
+                        <Radio value={'IMAGE'} className="text-[15px]">Ảnh</Radio>
                     </Radio.Group>
 
                     <br />
-                    <Button size="small" type="primary" onClick={confirmMangaType}>Next</Button>
+                    <Button size="small" type="primary" onClick={confirmMangaType}>Tiếp theo</Button>
                 </section>
             }
 
@@ -120,7 +120,7 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
                 <section className='manga-type-choice px-[10px] text-center py-[15px] h-full pt-[30px]'>
                     <p className='text-[16px] font-bold mb-1'>Chọn loại hiển thị truyện:</p>
                     <span className="text-[12px] text-neutral-500">
-                        This setting cannot be changed after choosen.
+                        Bạn sẽ không thể thay đổi sau khi chọn.
                     </span>
                     <br />
                     <Radio.Group className="my-[20px]" value={displayType} onChange={val => setDisplayType(val.target.value)}>
@@ -129,7 +129,6 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
                     </Radio.Group>
 
                     <div className="flex space-x-2 w-fit mx-auto">
-                        {/* <Button size="small" type="primary" onClick={confirmDisplayType}>Quay lại</Button> */}
                         <Button size="small" type="primary" onClick={confirmDisplayType}>Tiếp theo</Button>
                     </div>
                 </section>

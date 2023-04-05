@@ -5,6 +5,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
 import webtoon.domains.tag.entity.*;
@@ -61,6 +62,8 @@ public class TagServiceImpl implements ITagService {
 
     @Override
     public Page<TagEntity> filterTag(String s, Pageable page) {
+        Specification spec = null;
+//        if(s)
         // TODO Auto-generated method stub
         return this.tagRepository.findAll((root, query, cb) -> {
             return cb.like(root.get(TagEntity_.TAG_NAME), "%" + s + "%");

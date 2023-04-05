@@ -155,9 +155,9 @@
 
                 <ul th:else class="manga-list flex flex-wrap items-center gap-[20px] mt-[20px]">
 
-                    <li class="border bg-white h-fit flex" th:each="manga : ${mangalist}">
+                    <li class="w-[250px] border bg-white min-h-[135px] flex" th:each="manga : ${mangalist}">
                         <a th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}">
-                            <img class="h-[140px] w-[120px] hover:scale-[1.05] ease-in-out duration-200"
+                            <img class="h-full w-[80px] hover:scale-[1.05] ease-in-out duration-200"
                                  th:src="${manga.featuredImage}"/>
                             <div class="manga-info block m-0 h-full p-[10px]">
                                 <h4 class="font-bold text-[18px] leading-0 m-0">
@@ -181,7 +181,7 @@
                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
                                             </a>
                                             <span class="text-[12px] text-[#666666]"
-                                                  th:text="${'Tập ' + volume.volumeIndex}">
+                                                  th:text="${'Tập ' + (volume.volumeIndex + 1)}">
                                         </span>
                                         </div>
 
@@ -213,18 +213,18 @@
 
                 <div class="sidebar-section px-[10px] py-[10px]" th:if="${postList != null}">
                     <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
-                        Latest Posts
+                        Bài viết mới nhất
                     </h3>
 
                     <ul class="sidebar-posts divide-y mt-[10px]" th:each="item : ${postList}">
                         <li>
-                            <a class="w-full h-full flex gap-x-[5px] py-3">
+                            <a th:href="@{'/post/' + item.title + '/' + item.id}" class="w-full h-full flex gap-x-[5px] py-3">
                                 <div class="w-[90px] h-[100px] post_feature_image">
                                     <img class="w-[90px] h-[100px]"
                                          th:src="${item.featuredImage}">
                                 </div>
                                 <div class="post-infor w-[200px]">
-                                    <h2 th:text="${item.postName}"
+                                    <h2 th:text="${item.title}"
                                         class="post-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
 
                                     </h2>
@@ -232,7 +232,6 @@
                                     <div class="post-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
                                             <span th:text="${item.createdDate}">
                                                 <i class="far fa-calendar-alt"></i>
-                                               
                                             </span>
 
                                         <span>|</span>

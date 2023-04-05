@@ -30,6 +30,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
     const [isAddingNewGenre, setIsAddingNewGenre] = useState<boolean>(false);
     const onSearchGenre = debounce((val: string) => {
         console.log('search tag: ', val);
+        setGenreSearchVal(val);
         onCallApiSearchGenre(val, 'name,asc');
     });
     const onCallApiSearchGenre = (s: string = '', sort: string = 'id,desc') => {
@@ -47,8 +48,8 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
 
     const addGenre = () => {
         if (isAddingNewGenre) return;
-        setIsAddingNewGenre(true);
-        if (genreSearchVal)
+        if (genreSearchVal) {
+            setIsAddingNewGenre(true);
             genreService.addGenre({
                 name: genreSearchVal,
             })
@@ -71,6 +72,13 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                 .finally(() => {
                     setIsAddingNewGenre(false);
                 });
+        }
+        else {
+            dispatch(showNofification({
+                type: 'error',
+                message: 'Vui lòng nhập tên thể loại bạn muốn thêm!',
+            }));
+        }
     }
     // end tag search
 
@@ -88,8 +96,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
             <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                <span className='text-red-500'>*</span>
-                <span> Genres:</span>
+                <span> Thể loại:</span>
             </label>
             <Select
                 className='w-full'
@@ -106,6 +113,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                         <Divider style={{ margin: '8px 0' }} />
                         <Space style={{ padding: '0 8px 4px' }}>
                             <Input
+                            className=''
                                 placeholder="nhập tên"
                                 value={genreSearchVal}
                                 onChange={val => setGenreSearchVal(val.target.value)}
@@ -125,12 +133,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                 options={selectOptions ? selectOptions.map((item: GenreInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />
 
-            {
-                mangaInputError.genres &&
-                <p className='text-[12px] text-red-500 px-[5px]'>
-                    {t(mangaInputError.genres)}
-                </p>
-            }
+
         </div>
     )
 };
