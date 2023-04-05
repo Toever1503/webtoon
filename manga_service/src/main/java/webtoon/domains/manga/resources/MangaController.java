@@ -61,6 +61,8 @@ public class MangaController {
 		MangaEntity mangaEntity = null;
 		if(chapterEntity.getManga() != null){ // display type chap
 			mangaEntity = chapterEntity.getManga();
+
+
 		}
 		else { // display type vol
 			MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
@@ -85,9 +87,6 @@ public class MangaController {
 //      next prev displayType == 'CHAP'
 		MangaChapterDto[] prevNextChaptermanga = this.mangaChapterService
 				.findNextPostsManga(id,chapterEntity.getManga().getId());
-
-
-		
 		model.addAttribute("prevChapter",prevNextChapter[0]);
 		model.addAttribute("nextChapter",prevNextChapter[1]);
 

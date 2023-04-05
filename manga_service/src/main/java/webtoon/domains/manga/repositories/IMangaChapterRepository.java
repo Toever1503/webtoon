@@ -31,10 +31,10 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
 
     void deleteALlByMangaId(Long id);
 
-    @Query("select p from MangaChapterEntity p where p.id > ?1 and p.mangaVolume.id = ?2")
+    @Query("select p from MangaChapterEntity p where p.id > ?1 and p.mangaVolume.manga.id = ?2")
     List<MangaChapterEntity> findNextchapter(Long chapterID, Long volumeId, Pageable page);
 
-    @Query("select p from MangaChapterEntity p where p.id < ?1 and p.mangaVolume.id = ?2")
+    @Query("select p from MangaChapterEntity p where p.id < ?1 and p.mangaVolume.manga.id = ?2")
     List<MangaChapterEntity> findPrevchapter(Long chapterID, Long volumeId, Pageable page);
 
 
