@@ -21,7 +21,7 @@ public class PaymentResource {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<?> addPayment(@RequestBody PaymentModel paymentModel) {
+    public ResponseEntity<?> addPayment(@RequestBody PaymentEntity paymentModel) {
         return ResponseEntity.ok(paymentService.add(paymentModel));
     }
 

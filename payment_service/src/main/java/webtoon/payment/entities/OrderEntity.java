@@ -8,8 +8,8 @@ import webtoon.payment.enums.EOrderType;
 import javax.persistence.*;
 import java.util.Date;
 
-@Entity
-@Table(name = "tbl_order")
+@Entity(name = "tbl_order")
+@Table
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder

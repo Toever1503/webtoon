@@ -85,4 +85,10 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.findById(id).get();
     }
 
+    @Override
+    public OrderEntity getMaDonHang(String maDonHang) {
+        return this.orderRepository.getByMaDonHang(maDonHang);
+    }
+
+
 }

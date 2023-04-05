@@ -8,7 +8,7 @@ import webtoon.payment.models.PaymentModel;
 import java.util.List;
 
 public interface IPaymentService {
-    PaymentDto add(PaymentModel paymentModel);
+    PaymentEntity add(PaymentEntity paymentModel);
     PaymentDto update(PaymentModel paymentModel);
     List<PaymentEntity> getAll();
 }

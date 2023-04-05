@@ -19,8 +19,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import webtoon.payment.entities.OrderEntity;
+import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.OrderModel;
+import webtoon.payment.models.PaymentModel;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
 import webtoon.payment.services.ISubscriptionPackService;
@@ -141,7 +144,8 @@ public class RefundController {
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
 			orderService.add(new OrderModel(Long.parseLong(maDonHang), formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), 0,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack ));
-//			paymentService.add(new PaymentModel(Long.parseLong(maDonHang), , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
+			OrderEntity order = orderService.getMaDonHang(maDonHang);
+			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 		}else {
 			ketQua = "Giao dịch không thành thành công";
 //			veServiceImpl.deleteVeByHD(Integer.parseInt(maDonHang));

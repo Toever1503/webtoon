@@ -4,8 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.dtos.PaymentDto;
+import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.models.PaymentModel;
+import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.repositories.IPaymentRepository;
 import webtoon.payment.services.IPaymentService;
 
@@ -17,7 +19,7 @@ public class PaymentServiceImpl implements IPaymentService {
     private IPaymentRepository paymentRepository;
 
     @Override
-    public PaymentDto add(PaymentModel paymentModel) {
+    public PaymentEntity add(PaymentEntity paymentModel) {
         PaymentEntity paymentEntity = PaymentEntity.builder()
                 .orderId(paymentModel.getOrderId())
                 .transId(paymentModel.getTransId())
@@ -28,17 +30,7 @@ public class PaymentServiceImpl implements IPaymentService {
                 .payUrl(paymentModel.getPayUrl())
                 .expired_date(paymentModel.getExpired_date())
                 .build();
-        this.paymentRepository.saveAndFlush(paymentEntity);
-        return PaymentDto.builder()
-                .orderId(paymentEntity.getOrderId())
-                .transId(paymentEntity.getTransId())
-                .transTrackNumber(paymentEntity.getTransTrackNumber())
-                .payMoney(paymentEntity.getPayMoney())
-                .bank(paymentEntity.getBank())
-                .paymentContent(paymentEntity.getPaymentContent())
-                .payUrl(paymentEntity.getPayUrl())
-                .expired_date(paymentEntity.getExpired_date())
-                .build();
+        return this.paymentRepository.saveAndFlush(paymentEntity);
     }
 
     @Override
