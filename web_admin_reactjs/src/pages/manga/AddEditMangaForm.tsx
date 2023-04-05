@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, EventHandler, useEffect, useRef, useState } from 'react';
-import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef } from 'antd';
+import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef, Tooltip } from 'antd';
 import MangaChapterForm from './component/MangaChapterForm';
-import { PlusOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import debounce from '../../utils/debounce';
 import RichtextEditorForm from '../../components/RichtextEditorForm';
 import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
@@ -232,8 +232,11 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
     return (
         <div className="space-y-3 py-3">
-            <div className="flex space-x-3">
-                <p className="text-[23px] font-[600]">
+            <div className="flex space-x-3 items-center">
+                <Tooltip title="Quay lại">
+                    <ArrowLeftOutlined onClick={() => navigate(-1)} />
+                </Tooltip>
+                <p className="text-[23px] font-[600] m-0">
                     {
                         props.type === 'ADD' ?
                             'Thêm mới truyện'
@@ -241,7 +244,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             'Cập nhật truyện'
                     }
                 </p>
-                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Save</Button>
+                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Lưu</Button>
             </div>
 
             {
@@ -318,8 +321,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                             <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Release year:</span>
-                                <DatePicker allowClear={false} mode='year' onChange={(val) => setMangaInput({ ...mangaInput, releaseYear: val?.format('YYYY') })} 
-                                value={dayjs(`${mangaInput.releaseYear}-01-01`)} placement='bottomRight' picker="year" />
+                                <DatePicker allowClear={false} mode='year' onChange={(val) => setMangaInput({ ...mangaInput, releaseYear: val?.format('YYYY') })}
+                                    value={dayjs(`${mangaInput.releaseYear}-01-01`)} placement='bottomRight' picker="year" />
                             </div>
 
                             <GenreSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
