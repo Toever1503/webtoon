@@ -4,8 +4,8 @@ import org.springframework.stereotype.Service;
 import webtoon.comment.repositories.ICommentRepository;
 
 @Service
-public class CommentServiceImpl extends webtoon.comment.services.impl.CommentServiceImpl {
-    public CommentServiceImpl(ICommentRepository commentRepository) {
+public class CommentServiceLoader extends webtoon.comment.services.impl.CommentServiceImpl {
+    public CommentServiceLoader(ICommentRepository commentRepository) {
         super(commentRepository);
     }
 }

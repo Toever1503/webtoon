@@ -24,6 +24,8 @@
         <module>manga_service</module>
         <module>payment_service</module>
         <module>utils_service</module>
+        <module>combine_service</module>
+        <module>combine_resources</module>
     </modules>
 
     <parent>

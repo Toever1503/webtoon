@@ -14,4 +14,5 @@ public class CommentInput {
     private ECommentType commentType;
 
     private Long parentId;
+    private Long objectId;
 }

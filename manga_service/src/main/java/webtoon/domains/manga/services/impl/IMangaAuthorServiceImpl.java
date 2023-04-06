@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaAuthorDto;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
-import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaAuthorModel;
 import webtoon.domains.manga.repositories.IMangaAuthorRepository;
 import webtoon.domains.manga.services.IMangaAuthorService;

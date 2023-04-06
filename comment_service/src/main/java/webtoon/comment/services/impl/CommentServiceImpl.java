@@ -33,8 +33,8 @@ public class CommentServiceImpl implements ICommentService {
                 this.commentRepository.saveAndFlush(
                         CommentEntity.builder()
                                 .content(model.getContent())
-                                .commentType(ECommentType.MANGA)
-                                .objectId(1L)
+                                .commentType(model.getCommentType())
+                                .objectId(model.getObjectId())
                                 .parentComment(model.getParentId() != null ? this.getById(model.getParentId()) : null)
                                 .build()
                 )

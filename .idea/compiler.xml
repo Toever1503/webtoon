@@ -7,15 +7,19 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="webtoon-utils-service" />
-        <module name="webtoon-storage-service" />
         <module name="payment-service" />
         <module name="webtoon-comment-service" />
         <module name="webtoon-account-service" />
+        <module name="webtoon-utils-service" />
+        <module name="webtoon-storage-service" />
+        <module name="combine_service" />
+        <module name="combine_resources" />
         <module name="webtoon-manga-service" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="combine_resources" target="11" />
+      <module name="combine_service" target="11" />
       <module name="payment-service" target="1.8" />
       <module name="webtoon" target="11" />
       <module name="webtoon-account-service" target="11" />
@@ -27,6 +31,8 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="combine_resources" options="-parameters" />
+      <module name="combine_service" options="-parameters" />
       <module name="payment-service" options="-parameters" />
       <module name="webtoon-account-service" options="-parameters" />
       <module name="webtoon-comment-service" options="-parameters" />
