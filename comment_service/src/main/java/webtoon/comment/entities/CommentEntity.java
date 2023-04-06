@@ -1,8 +1,7 @@
 package webtoon.comment.entities;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.data.annotation.CreatedBy;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedBy;
@@ -18,6 +17,8 @@ import java.util.List;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CommentEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +37,7 @@ public class CommentEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)

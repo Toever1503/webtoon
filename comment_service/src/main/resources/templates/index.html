@@ -14,6 +14,26 @@
 
     <div th:replace="fragments/comment/comment-section :: comment-section " />
 
-</body>
+    <script>
 
+        document.querySelectorAll(".cmm_action_menu").forEach((e, index) => {
+            e.addEventListener('click', function () {
+                document.getElementsByClassName('cmm_action_list')[index].classList.toggle('hidden');
+            });
+        });
+
+        document.querySelectorAll(".comment_reply").forEach((e,index) => {
+            e.addEventListener('click', function () {
+                document.getElementsByClassName('comment_reply_form')[index].classList.toggle('hidden');
+            });
+        });
+
+        document.querySelectorAll(".comment_update").forEach((e,index) => {
+            e.addEventListener('click', function () {
+                document.getElementsByClassName('comment_update_form')[index].classList.toggle('hidden');
+            });
+        });
+
+    </script>
+</body>
 </html>

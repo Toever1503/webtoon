@@ -2,14 +2,18 @@ package webtoon.comment.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import webtoon.comment.entities.CommentEntity;
 import webtoon.comment.enums.ECommentType;
+import webtoon.comment.repositories.ICommentRepository;
 
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Builder
 public class CommentDto {
+
     private final Long id;
 
     private final String content;
@@ -25,6 +29,7 @@ public class CommentDto {
     private final Long modifiedBy;
 
     private Long commentParent;
+    private List<CommentEntity> childComments;
 
     public static CommentDto toDto(CommentEntity entity) {
         return CommentDto.builder()

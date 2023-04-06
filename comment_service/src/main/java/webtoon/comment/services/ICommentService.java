@@ -7,6 +7,8 @@ import webtoon.comment.dtos.CommentDto;
 import webtoon.comment.entities.CommentEntity;
 import webtoon.comment.inputs.CommentInput;
 
+import java.util.List;
+
 public interface ICommentService {
     CommentDto findById(Long id);
 
