@@ -90,6 +90,48 @@ export default {
             'createdAt': 'Ngày tạo',
             'accountType': 'Loại tài khoản',
             'action': 'Hành động'
+        },
+        modal: {
+            'add-title': 'Thêm người dùng mới',
+            'edit-title': 'Chỉnh sửa thông tin',
+        },
+        form: {
+            'fullName': 'Họ và tên',
+            'username': 'Tên đăng nhập',
+            'email': 'Email',
+            'phone': 'Số điện thoại',
+            'sex': 'Giới tính',
+            'password': 'Mật khẩu',
+            'confirm-password': 'Nhập lại mật khẩu',
+
+            'save-btn': 'Lưu',
+            'reset-btn': 'Làm mới',
+
+            'sure-delete': 'Bạn chắc chắn muốn xóa người dùng này?',
+            'delete-success': 'Xóa thành công!',
+            'delete-failed': 'Xóa thất bại!',
+            'sex-radio': {
+                male: 'Nam',
+                female: 'Nữ',
+            },
+            errors: {
+                'check-again': 'Vui lòng kiểm tra lại thông tin!',
+                'fullName-required': 'Họ và tên không được để trống!',
+                'fullName-max': 'Họ và tên không được quá 255 ký tự!',
+                'username-required': 'Tên đăng nhập không được để trống!',
+                'username-max': 'Tên đăng nhập không được quá 255 ký tự!',
+                'email-required': 'Email không được để trống!',
+                'email-max': 'Email không được quá 255 ký tự!',
+                'email-invalid': 'Email không đúng định dạng!',
+                'phone-required': 'Số điện thoại không được để trống!',
+                'phone-max': 'Số điện thoại không được quá 255 ký tự!',
+                'phone-invalid': 'Số điện thoại không đúng định dạng!',
+                'password-required': 'Mật khẩu không được để trống!',
+                'confirm-password-required': 'Vui lòng nhập lại mật khẩu!',
+                'confirm-password-not-match': 'Mật khẩu không khớp!',
+                'password-max': 'Mật khẩu không được quá 30 ký tự!',
+
+            }
         }
     },
     order: {
@@ -110,6 +152,7 @@ export default {
 
         }
     },
+
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
     'reset': 'Làm mới'

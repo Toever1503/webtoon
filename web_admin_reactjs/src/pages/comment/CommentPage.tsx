@@ -3,7 +3,7 @@ import Table, { ColumnsType } from "antd/es/table";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import IUserType from "../user/types/UserType";
+import IUserType from "../user/types/IUserType";
 
 
 type CommentFilter = {

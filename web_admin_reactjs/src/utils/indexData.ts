@@ -2,7 +2,8 @@
 const reIndexTbl = (page: number, size: number, data: any[]) => {
     return data.map((item, index) => ({
         ...item,
-        index: calculateIndexTbl(page, size, index + 1)
+        index: calculateIndexTbl(page, size, index + 1),
+        key: item.id,
     }));
 };
 

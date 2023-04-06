@@ -1,16 +1,24 @@
-import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip } from "antd";
+import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
-import IUserType, { IUserStatus, USER_STATUS_LIST } from "./types/UserType";
+import IUserType, { IUserStatus, USER_STATUS_LIST } from "./types/IUserType";
 import { DownOutlined } from "@ant-design/icons";
+import AddEditUserModal, { AddEditUserModalProps } from "./components/AddEditUserModal";
+import { UserState, addNewUser } from "../../stores/features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../stores";
+import { reIndexTbl } from "../../utils/indexData";
 
 
 
 const UserPage: React.FC = () => {
     const navigate = useNavigate();
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
+    const userState: UserState = useSelector((state: RootState) => state.user);
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState<IUserType[]>([
@@ -41,7 +49,7 @@ const UserPage: React.FC = () => {
 
     const getAccountStatuses = (status: IUserStatus, record: IUserType): MenuProps => {
         return {
-           items: USER_STATUS_LIST.filter((e: IUserStatus) => e !== status).map((e: IUserStatus) => {
+            items: USER_STATUS_LIST.filter((e: IUserStatus) => e !== status).map((e: IUserStatus) => {
                 return {
                     key: e,
                     label: e,
@@ -157,18 +165,61 @@ const UserPage: React.FC = () => {
         },
     ];
 
+
+    // begin add edit user modal
+    const [addEditUserModal, setAddEditUserModal] = useState<AddEditUserModalProps>({
+        title: 'Add new user',
+        visible: false,
+        cancel: () => {
+            setAddEditUserModal({ ...addEditUserModal, visible: false })
+        },
+        onOk: (data: any) => { },
+    });
+    // end add edit user modal
+
+    useEffect(() => {
+        console.log('userFilter', userState);
+
+        setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 0, userState.data))
+    }, [userState]);
+
+    const add = () => {
+        dispatch(addNewUser({
+            data: {
+                fullName: 'Nguyen Van A',
+                username: 'nguyenvana' + (Math.random() * 1000000),
+                email: (Math.random() * 1000000) + 'fa@fa.ca',
+                password: 'fasfas',
+                phone: '123123123',
+                sex: 'FEMALE',
+                status: 'ACTIVED',
+                accountType: 'NORMAL',
+            },
+            pageSize: pageConfig.pageSize
+        }))
+    };
+
     return (<>
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('user.page-title')}
                 </h1>
+                <Button className="font-medium" onClick={() => {
+                    setAddEditUserModal({
+                        ...addEditUserModal,
+                        visible: true,
+                        title: t('user.modal.add-title'),
+                    });
+                }}>Add new</Button>
+
             </div>
+            <AddEditUserModal visible={addEditUserModal.visible} cancel={addEditUserModal.cancel} onOk={addEditUserModal.onOk} title={addEditUserModal.title} userInput={addEditUserModal.userInput} />
             <div className="flex justify-end items-center">
                 <Input.Search placeholder="input search text" value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
             </div>
 
-            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
+            <Table columns={columns} loading={tableLoading} dataSource={dataSource} rowKey={(() => Math.random())} pagination={pageConfig} />
         </div>
     </>)
 }
