@@ -353,6 +353,12 @@
             </dependency>
 
             <dependency>
+                <groupId>webtoon.domains</groupId>
+                <artifactId>webtoon-manga-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
                 <groupId>webtoon.storage</groupId>
                 <artifactId>webtoon-storage-service</artifactId>
                 <version>1.0.0</version>
