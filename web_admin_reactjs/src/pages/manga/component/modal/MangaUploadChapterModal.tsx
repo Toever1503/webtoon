@@ -90,7 +90,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 console.log('file', file.type);
 
                 const allowType = ['text/plain'];
-                if (file.size > 100000000) {
+                if (file.size > 5000000) {
                     dispatch(showNofification({
                         type: 'error',
                         message: t('manga.form.chapter.errors.file-size-exceed'),
@@ -153,6 +153,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             const fileList: FileList | null = fileInput.files;
             const files: ImageChapterFileType[] = [];
             if (fileList) {
+                let totalSize = 0;
                 if ([...fileList].find((file: File) => !file.type.match('image.*'))) {
                     dispatch(showNofification({
                         type: 'error',
@@ -160,6 +161,17 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     }));
                     return;
                 }
+                for (let i = 0; i < fileList.length; i++) {
+                    totalSize += fileList[i].size;
+                }
+                if (totalSize > 100000000) {
+                    dispatch(showNofification({
+                        type: 'error',
+                        message: t('manga.form.errors.total-file-size-exceed-100mb'),
+                    }));
+                    return;
+                }
+
 
                 let lastIndex: number = imageChapterFiles.length;
                 for (let i = 0; i < fileList.length; i++) {

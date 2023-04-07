@@ -211,12 +211,10 @@
         <h2 th:if="${chapterData == null}">Không có dữ liệu!</h2>
         <div th:else class="text-left mt-4 mx-7">
             <div th:if="${mangaType} == 'TEXT'">
-                <h1 th:text="${chapterData.chapterName}"></h1>
                 <h3 th:utext="${chapterData.content}"></h3>
             </div>
 
             <div th:else="${mangaType} == 'IMAGE'">
-                <h1 th:text="${chapterData.chapterName}"></h1>
                 <p th:each="image : ${chapterData.chapterImages}">
                     <img th:src="${image.image}"/>
                 </p>

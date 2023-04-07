@@ -60,6 +60,7 @@ export default {
                 'delete-failed': 'Xóa thất bại!',
                 errors: {
                     'file-size-exceed': 'Kích thước file không được vượt quá 5MB!',
+                    'total-file-size-exceed-100mb': 'Kích thước tổng số file không được vượt quá 100MB!',
                     'exceed-character': 'Số ký tự không được vượt quá 30000 ký tự!',
                     'only-txt-allowed': 'Chỉ được tải file txt!',
                 }
