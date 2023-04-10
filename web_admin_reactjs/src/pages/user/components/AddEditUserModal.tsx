@@ -1,4 +1,4 @@
-import { Modal, Form, Input, Checkbox, Button, Radio, Space } from "antd";
+import { Modal, Form, Input, Checkbox, Button, Radio, Space, Select } from "antd";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
@@ -24,6 +24,10 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
 
     const [form] = Form.useForm();
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+    const [authorityOptions, setAuthorityOptions] = useState<{
+        id: number | string;
+        authorityName: string;
+    }[]>([]);
 
     const onSubmit = () => {
         if (isSubmitting) return;
@@ -33,11 +37,14 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
             .then((values: any) => {
                 console.log('ok', values);
                 userService
-                .addNewUser({})
-                .then((res: AxiosResponse<IUserType>) => {
-                    console.log('add uew: ');
-                    
-                } )
+                    .addNewUser({
+                        ...values,
+                        // authorities: values.authorities.join(',')
+                    })
+                    .then((res: AxiosResponse<IUserType>) => {
+                        console.log('add uew: ');
+
+                    })
             })
             .catch(err => {
                 onFinishFailed(err);
@@ -94,6 +101,16 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
             password: 'fasfas',
             'confirm-password': 'fasfas',
         });
+
+        userService.getAllAuthorities()
+        .then((res: AxiosResponse<any>) => {
+            console.log('get all authorities: ', res.data);
+            setAuthorityOptions(res.data);
+            
+        })
+        .catch(err => {
+            console.log('err: ', err);
+        })
 
     }, []);
 
@@ -167,6 +184,20 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                     ]}
                 >
                     <Input.Password />
+                </Form.Item>
+
+                <Form.Item
+                    label={t('user.form.authority')}
+                    name="authorities"
+                    rules={[
+                        { required: true, message: `${t('user.form.errors.authority-required')}` },
+                    ]}
+                >
+                    <Select mode="multiple"
+                        showArrow
+                        options={authorityOptions.map(au => ({label: t(`user.authority.${au.authorityName}`), value: au.id.toString()}))}>
+
+                    </Select>
                 </Form.Item>
 
                 <Form.Item

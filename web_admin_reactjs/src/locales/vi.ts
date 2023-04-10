@@ -103,7 +103,7 @@ export default {
             'sex': 'Giới tính',
             'password': 'Mật khẩu',
             'confirm-password': 'Nhập lại mật khẩu',
-
+            'authority': 'Quyền',
             'save-btn': 'Lưu',
             'reset-btn': 'Làm mới',
 
@@ -130,8 +130,42 @@ export default {
                 'confirm-password-required': 'Vui lòng nhập lại mật khẩu!',
                 'confirm-password-not-match': 'Mật khẩu không khớp!',
                 'password-max': 'Mật khẩu không được quá 30 ký tự!',
+                'authority-required': 'Vui lòng chọn quyền',
 
             }
+        },
+        authority: {
+            ROLE_ADD_EDIT_USER: 'Thêm/Sửa người dùng',
+            ROLE_DELETE_USER: 'Xóa người dùng',
+
+            ROLE_ADD_EDIT_MANGA: 'Thêm/Sửa truyện',
+            ROLE_DELETE_MANGA: 'Xóa truyện',
+
+            ROLE_ADD_EDIT_MANGA_GENRE: 'Thêm/Sửa thể loại truyện',
+            ROLE_DELETE_MANGA_GENRE: 'Xóa thể loại truyện',
+
+            ROLE_ADD_EDIT_MANGA_AUTHOR: 'Thêm/Sửa tác giả truyện',
+            ROLE_DELETE_MANGA_AUTHOR: 'Xóa tác giả truyện',
+
+            ROLE_ADD_EDIT_ORDER: 'Thêm/Sửa đơn hàng',
+            ROLE_DELETE_ORDER: 'Xóa đơn hàng',
+
+            ROLE_ADD_EDIT_CATEGORY: 'Thêm/Sửa thể loại bài viết',
+            ROLE_DELETE_CATEGORY: 'Xóa thể loại bài viết',
+
+            ROLE_ADD_EDIT_POST: 'Thêm/Sửa bài viết',
+            ROLE_DELETE_POST: 'Xóa bài viết',
+
+            ROLE_ADD_EDIT_COMMENT: 'Thêm/Sửa bình luận',
+            ROLE_DELETE_COMMENT: 'Xóa bình luận',
+
+            ROLE_ADD_EDIT_TAG: 'Thêm/Sửa tag',
+            ROLE_DELETE_TAG: 'Xóa tag',
+
+            ROLE_VIEW_STATISTIC: 'Xem thống kê',
+
+            ROLE_ADMIN: 'Quản trị viên',
+            ROLE_USER: 'Người dùng',
         }
     },
     order: {

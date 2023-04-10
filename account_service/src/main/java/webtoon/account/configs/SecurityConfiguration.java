@@ -23,7 +23,8 @@ public class SecurityConfiguration {
     private final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
             new AntPathRequestMatcher("/signin"),
             new AntPathRequestMatcher("/oauth2-failed"),
-            new AntPathRequestMatcher("/static/**")
+            new AntPathRequestMatcher("/static/**"),
+            new AntPathRequestMatcher("/**")
     );
     private RequestMatcher PRIVATE_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
     @Bean

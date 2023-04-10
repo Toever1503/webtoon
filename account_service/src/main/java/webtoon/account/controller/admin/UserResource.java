@@ -49,18 +49,19 @@ public class UserResource {
         return this.userService.findAll(pageable, finalSpec);
     }
 
-    @GetMapping("all-roles")
-    public List<AuthorityEntity> getAllRoles() {
+    @GetMapping("all-authorities")
+    public List<AuthorityEntity> getAllAuthorities() {
         return userService.getAllAuthorities();
     }
 
     @PostMapping
-    public UserDto addUser(UserInput input) {
+    public UserDto addUser(@RequestBody UserInput input) {
         return this.userService.add(input);
+        // MIS SET PASSWD, ACCOUNT TYPE
     }
 
     @PutMapping("{id}")
-    public UserDto updateUser(@PathVariable Long id, UserInput input) {
+    public UserDto updateUser(@PathVariable Long id, @RequestBody UserInput input) {
         return this.userService.update(input);
     }
 

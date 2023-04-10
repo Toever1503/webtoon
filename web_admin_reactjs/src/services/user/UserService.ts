@@ -12,6 +12,7 @@ const deleteUserById = async (id: number | string) => userAxios.del(`${basePath}
 const filterUser = async (payload: IUserInputType) => userAxios.post(`${basePath}`, payload);
 const changeStatus = (id: number | string, status: IUserStatus) => userAxios.patch(`${basePath}/${id}/change-status?status=${status}`);
 
+const getAllAuthorities = async () => userAxios.get(`${basePath}/all-authorities`);
 const userService = {
     findUserById,
     addNewUser,
@@ -19,6 +20,8 @@ const userService = {
     deleteUserById,
     filterUser,
     changeStatus,
+    getAllAuthorities,
+    
 };
 
 export default userService;
