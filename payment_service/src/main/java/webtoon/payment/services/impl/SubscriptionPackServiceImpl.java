@@ -60,7 +60,7 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
                 .modifiedAt(subscriptionPackEntity.getModifiedAt())
                 .build();
     }
-
+   @Override
    public SubscriptionPackEntity getById(Long id) {
         return this.subscriptionPackRepository.findById(id).get();
     }

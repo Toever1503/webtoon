@@ -11,4 +11,5 @@ public interface ISubscriptionPackService {
     SubscriptionPackDto updateSubscriptionPack(SubscriptionPackModel subscriptionPackModel);
     List<SubscriptionPackDto> getAll();
     SubscriptionPackEntity getByPrice(Double price);
+    SubscriptionPackEntity getById(Long id);
 }

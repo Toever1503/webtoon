@@ -23,7 +23,6 @@ import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.OrderModel;
-import webtoon.payment.models.PaymentModel;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
 import webtoon.payment.services.ISubscriptionPackService;
@@ -113,13 +112,8 @@ public class RefundController {
 			}
 		}
 
-		StringBuilder query = new StringBuilder();
-		StringBuilder hashData = new StringBuilder();
-		String queryUrl = query.toString();
-		String vnp_SecureHash1 = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
-		System.out.println("hash: " + vnp_SecureHash1);
-		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash1;
-		String paymentUrl = VnPayConfig.vnp_RefundUrl + "?" + queryUrl;
+	;
+
 
 		String vnp_SecureHash = request.getParameter("vnp_SecureHash");
 		if (fields.containsKey("vnp_SecureHashType")) {
@@ -140,7 +134,15 @@ public class RefundController {
 		String thoiGianTT = request.getParameter("vnp_PayDate");
 		String ketQua = "";
 		amount = amount.substring(0, amount.length() - 2);
-
+		StringBuilder query = new StringBuilder();
+		StringBuilder hashData = new StringBuilder();
+		String queryUrl = query.toString();
+		String vnp_SecureHash1 = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
+		System.out.println("hash: " + vnp_SecureHash1);
+		queryUrl +="vnp_Amount="+amount+"vnp_TransactionNo="+maGD+"vnp_BankCode="+maNganHang+"vnp_PayDate="+thoiGianTT
+//				+"&vnp_SecureHash=" + vnp_SecureHash
+		;
+		String paymentUrl = VnPayConfig.vnp_Returnurl + "?" + queryUrl;
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
 			orderService.add(new OrderModel(Long.parseLong(maDonHang), formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), 0,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack ));
@@ -148,8 +150,6 @@ public class RefundController {
 			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 		}else {
 			ketQua = "Giao dịch không thành thành công";
-//			veServiceImpl.deleteVeByHD(Integer.parseInt(maDonHang));
-//			hoaDonServiceImpl.deleteHoaDonById(Integer.parseInt(maDonHang));
 		}
 
 //		System.out.println(signValue);

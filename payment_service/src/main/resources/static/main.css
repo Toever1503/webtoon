@@ -174,7 +174,9 @@ table {
   border-collapse: collapse;
   /* 3 */
 }
-
+.table-auto{
+  table-layout: auto;
+}
 /*
 1. Change the font styles in all browsers.
 2. Remove the margin in Firefox and Safari.
@@ -532,9 +534,21 @@ video {
 .mr-2 {
   margin-right: 0.5rem;
 }
-
+.mx-16{
+  margin-left: 4rem; /* 40px */
+  margin-right: 4rem;
+}
+.mt-5{
+  margin-top: 1.25rem;
+}
 .mt-10 {
   margin-top: 2.5rem;
+}
+.mt-80{
+  margin-top: 20rem;
+}
+.mt-96{
+  margin-top: 24rem;
 }
 
 .flex {
@@ -560,9 +574,29 @@ video {
 .max-w-full {
   max-width: 100%;
 }
-
+.border-collapse{
+  border-collapse: collapse;
+}
+.h-10{
+  height: 2.5rem;
+}
+.h-72{
+  height: 18rem;
+}
+.w-72{
+  width: 20rem;
+}
+.w-125{
+  width: 40rem;
+}
 .flex-wrap {
   flex-wrap: wrap;
+}
+.w-96{
+  width: 24rem;
+}
+.w-100{
+  width: 30rem;
 }
 
 .justify-center {
@@ -625,7 +659,14 @@ video {
   font-size: 1.25rem;
   line-height: 1.75rem;
 }
-
+.text-2xl{
+  font-size: 2rem;
+  line-height: 2rem;
+}
+.text-center{
+  text-align: center;
+  
+}
 .font-bold {
   font-weight: 700;
 }
@@ -638,7 +679,22 @@ video {
   --tw-text-opacity: 1;
   color: rgb(194 65 12 / var(--tw-text-opacity));
 }
+.basis-0{
+  flex-basis: 0px;
+}
 
+.basis-1{
+  flex-basis: 0.25rem;
+}
+.basis-2{
+  flex-basis: 0.5rem;
+}
+.basis-3{
+  flex-basis: 0.75rem;
+}
+.basis-4{
+  flex-basis: 1rem;
+}
 .text-red-500 {
   --tw-text-opacity: 1;
   color: rgb(239 68 68 / var(--tw-text-opacity));
