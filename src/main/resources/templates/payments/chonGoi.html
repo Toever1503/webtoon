@@ -31,60 +31,17 @@
       </div>
       
       <div
-        class="grid justify-center 2xl:grid-cols-3 md:justify-center md:grid-cols-3 xl:grid-cols-3 gap-4 max-w-full xl:ml-16 ml-16" th:each="item : ${items}"
-      >
-        <div>
+        class="flex flex-row justify-center">
+        <div class="basis-1/4" th:each="item : ${items}">
           <button 
             type="button" th:onclick="| window.location.href='http://localhost:8080/subscription_pack/getByPrice/${item.price.intValue()}'|"
-            class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
+            class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg py-2.5 mb-2 w-[200px] h-[200px]"
           >
-          <ul>
-            <li th:text=" ${item.name}" >
-                </li>
-                <li th:text="${item.price.intValue()}">
-                </li>
-            </ul>
-          
-          </button>
+          <h2 th:text="${item.name}">
+          </h2>
+          <h2 th:text="${#numbers.formatCurrency(item.price)}"></h2>
+          <h2 th:text="${item.dayCount +' Ngày'}"></h2>
         </div>
-       <!--  <div>
-          <button
-            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=5100000' |"
-            class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
-          >
-          <ul>
-            <li >
-                Gói 3 tháng
-                </li>
-                <li>
-                    17k/1 tháng 
-                </li>
-                <li>
-                    Tiết kiệm 15%  
-                </li>
-            </ul>
-          </button>
-        </div>
-        <div>
-          <button
-            type="button" th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=18000000' |"
-            class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg px-5 py-2.5 mr-2 mb-2 w-[250px] h-[200px]"
-          >
-          <ul>
-            <li >
-                Gói 1 năm
-                </li>
-                <li>
-                    15k/1 tháng
-                </li>
-                <li>
-                    Tiết kiệm 25%
-                </li>
-            </ul>
-          </button>
-        </div> 
-      </div>-->
-
     </div>
     </div>
   </body>

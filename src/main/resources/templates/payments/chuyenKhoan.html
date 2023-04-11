@@ -26,7 +26,7 @@
         </div>
         <div class="basis-1/5 mx-16">
             <h2>Tổng cộng:</h2>
-            <h2 class="font-medium" th:text="${price.intValue()}">đ</h2>
+            <h2 class="font-medium" th:text="${#numbers.formatCurrency(price)}"></h2>
           </div>
         <div class="basis-1/5 mx-16">
           <h2>Phương thức thanh toán:</h2>
@@ -35,8 +35,8 @@
       </div>
 
       <h2 class="text-center mt-10 text-xl">Mã QR chuyển khoản ngân hàng</h2>
-      <div class="flex flex-row justify-center">
-        <div class="basis-1/2 mt-10">
+      <div class="flex flex-row ">
+        <div class="basis-1/2 mt-10 justify-center">
           <img
             src="https://bizweb.dktcdn.net/100/150/781/files/vnpayqr-code.jpg?v=1563855957237"
             class="h-72 w-72"

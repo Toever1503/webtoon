@@ -37,7 +37,7 @@
   
   </div>
   <div class="col-md-4 col-12">
-    <p class="text-end fw-bold text-danger text-uppercase" th:text="${soTien}"></p>
+    <p class="text-end fw-bold text-danger text-uppercase" th:text="${#numbers.formatCurrency(soTien)}"></p>
   </div>
   <hr>
 </div>
