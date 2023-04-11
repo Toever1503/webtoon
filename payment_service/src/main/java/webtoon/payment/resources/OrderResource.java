@@ -61,7 +61,7 @@ public class OrderResource {
         model.addAttribute("price",subscriptionPackEntity.getPrice());
         model.addAttribute("maDonHang", maDonHang);
         orderService.add(new OrderModel(id, createDate,createDate,subscriptionPackEntity.getPrice(),05,"CHUYENKHOAN","0:0:0:0:0:0:0:1",maDonHang, subscriptionPackEntity));
-        return "chuyenKhoan";
+        return "payments/chuyenKhoan";
     }
 
 

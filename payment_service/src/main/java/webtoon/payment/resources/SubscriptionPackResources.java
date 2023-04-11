@@ -39,14 +39,14 @@ public class SubscriptionPackResources {
         System.out.println(subscriptionPackEntity);
         model.addAttribute("id", subscriptionPackEntity.getId());
         model.addAttribute("items", subscriptionPackEntity.getPrice());
-        return "chonPTTT";
+        return "payments/chonPTTT";
     }
     @GetMapping("/load")
     public String Payment(Model model) {
         List<SubscriptionPackDto> subscriptionPackEntities = this.subscriptionPackService.getAll();
         System.out.println(subscriptionPackEntities + "test");
         model.addAttribute("items", subscriptionPackEntities);
-        return "chonGoi";
+        return "payments/chonGoi";
     }
 
 }

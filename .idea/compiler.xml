@@ -16,7 +16,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="payment-service" target="1.8" />
+      <module name="payment-service" target="11" />
       <module name="webtoon" target="11" />
       <module name="webtoon-account-service" target="11" />
       <module name="webtoon-comment-service" target="11" />
