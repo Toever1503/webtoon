@@ -28,3 +28,6 @@ coverage
 *.sw?
 target
 .idea
+
+/src/main/resources/static
+/src/main/resources/templates
