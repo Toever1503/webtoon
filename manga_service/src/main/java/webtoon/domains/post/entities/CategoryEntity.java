@@ -3,8 +3,6 @@ package webtoon.domains.post.entities;
 import lombok.*;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 
 @Entity
 @Data
@@ -18,10 +16,10 @@ public class CategoryEntity {
 	@Column(name = "id")
 	private Long id;
 
-	@Column(name = "category_name", length = 255, nullable = false)
+	@Column(name = "category_name", nullable = false)
 	private String categoryName;
 
-	@Column(name = "slug", length = 255, nullable = false, unique = true)
+	@Column(name = "slug", nullable = false, unique = true)
 	private String slug;
 
 }

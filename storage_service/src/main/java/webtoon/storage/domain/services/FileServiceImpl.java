@@ -1,5 +1,6 @@
 package webtoon.storage.domain.services;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -18,6 +19,7 @@ import webtoon.storage.domain.entities.FileEntity;
 import webtoon.storage.domain.mappers.FileMapper;
 import webtoon.storage.domain.repositories.IFileRepositoty;
 import webtoon.storage.domain.utils.FileUploadProvider;
+import webtoon.utils.ASCIIConverter;
 
 @Service
 @Transactional
@@ -76,6 +78,30 @@ public class FileServiceImpl implements IFileService {
 	public Page<FileDto> filterFile(Pageable pageable, Specification<FileEntity> specs) {
 		// TODO Auto-generated method stub
 		return this.fileMapper.toDtoPage(this.fileRepository.findAll(specs, pageable));
+	}
+
+	@Override
+	public List<FileDto> uploadImageByZipFile(List<MultipartFile> files, String folder) throws IOException {
+		// TODO Auto-generated method stub
+
+		List<FileEntity> fileEntities = files.stream().map(f -> {
+			System.out.println("zipEntry.getName(): " + f.getName());
+			String fName = ASCIIConverter.removeAccent(f.getOriginalFilename());
+			FileEntity fileEntity = null;
+			try {
+				fileEntity = this.fileUploadProvider.uploadFile(f.getBytes(), folder, fName);
+			} catch (IOException e) {
+				throw new RuntimeException(e);
+			}
+			fileEntity.setFileName(f.getOriginalFilename());
+			fileEntity.setAlt(ASCIIConverter.removeAccent(f.getOriginalFilename()));
+			fileEntity.setTitle(ASCIIConverter.removeAccent(f.getOriginalFilename()));
+			fileEntity.setFileType(f.getContentType());
+			return fileEntity;
+		}).collect(Collectors.toList());
+
+		this.fileRepository.saveAll(fileEntities);
+		return this.fileMapper.toDtoList(fileEntities);
 	}
 
 }

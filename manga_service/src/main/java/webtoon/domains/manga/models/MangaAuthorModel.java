@@ -14,4 +14,5 @@ public class MangaAuthorModel {
 	private Long id;
 	
 	private String name;
+	private String slug;
 }

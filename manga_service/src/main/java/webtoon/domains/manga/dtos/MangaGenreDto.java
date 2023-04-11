@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import webtoon.domains.manga.entities.MangaGenreEntity;
 @Getter
 @Setter
 @Builder
@@ -16,4 +17,16 @@ public class MangaGenreDto {
 	private String name;
 	
 	private String slug;
+
+	private Long mangaCount;
+	
+	public static MangaGenreDto toDto(MangaGenreEntity entity) {
+		if(entity == null) return null;
+		
+		return MangaGenreDto.builder()
+				.id(entity.getId())
+				.name(entity.getName())
+				.slug(entity.getSlug())
+				.build();
+	} 
 }

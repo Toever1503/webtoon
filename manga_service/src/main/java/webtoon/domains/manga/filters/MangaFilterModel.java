@@ -2,8 +2,8 @@ package webtoon.domains.manga.filters;
 
 public class MangaFilterModel {
 	private String title;
-	private String mangaName;
-	private String concerpt;
+	 String mangaName;
+	 String concerpt;
 	public String getTitle() {
 		return title;
 	}

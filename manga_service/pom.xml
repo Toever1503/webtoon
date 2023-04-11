@@ -1,146 +1,215 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
-	<modelVersion>4.0.0</modelVersion>
-	<groupId>webtoon.domains</groupId>
-	<artifactId>webtoon-manga-service</artifactId>
-	<packaging>jar</packaging>
-	<name>webtoon-manga-service</name>
-	<url>http://www.egovframe.go.kr</url>
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>webtoon.domains</groupId>
+    <artifactId>webtoon-manga-service</artifactId>
+    <packaging>jar</packaging>
+    <name>webtoon-manga-service</name>
+    <url>http://www.egovframe.go.kr</url>
 
-	<parent>
-		<groupId>webtoon</groupId>
-		<artifactId>webtoon</artifactId>
-		<version>1.0.0</version>
-	</parent>
-	<dependencies>
-		<dependency>
-			<groupId>junit</groupId>
-			<artifactId>junit</artifactId>
-		</dependency>
+    <parent>
+        <groupId>webtoon</groupId>
+        <artifactId>webtoon</artifactId>
+        <version>1.0.0</version>
+    </parent>
+    <dependencies>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.projectlombok</groupId>
-			<artifactId>lombok</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
-		<dependency>
-			<groupId>com.fasterxml.jackson.core</groupId>
-			<artifactId>jackson-annotations</artifactId>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/mysql/mysql-connector-java -->
+        <dependency>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-web</artifactId>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-web</artifactId>
+        </dependency>
 
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-test</artifactId>
-			<scope>test</scope>
-		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-test</artifactId>
+            <scope>test</scope>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-data-jpa</artifactId>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-data-jpa -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-data-jpa</artifactId>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
-		<dependency>
-			<groupId>org.springframework.boot</groupId>
-			<artifactId>spring-boot-starter-validation</artifactId>
-		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
-		<dependency>
-			<groupId>org.glassfish.jaxb</groupId>
-			<artifactId>jaxb-runtime</artifactId>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/org.glassfish.jaxb/jaxb-runtime -->
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
-		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/javax.xml.bind/jaxb-api -->
+        <dependency>
+            <groupId>javax.xml.bind</groupId>
+            <artifactId>jaxb-api</artifactId>
+        </dependency>
 
-		<!-- https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api -->
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
-		</dependency>
+        <!-- https://mvnrepository.com/artifact/jakarta.xml.bind/jakarta.xml.bind-api -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+        </dependency>
 
-	</dependencies>
-	<reporting>
-		<outputDirectory>${basedir}/target/site</outputDirectory>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-project-info-reports-plugin</artifactId>
-				<version>3.1.2</version>
-				<reportSets>
-					<reportSet>
-						<id>sunlink</id>
-						<reports>
-							<report>javadoc</report>
-						</reports>
-						<inherited>true</inherited>
-						<configuration>
-							<links>
-								<link>http://docs.oracle.com/javase/6/docs/api/</link>
-							</links>
-						</configuration>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<!-- JUnit Test Results & EMMA Coverage Reporting -->
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>emma-maven-plugin</artifactId>
-				<inherited>true</inherited>
-			</plugin>
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>surefire-report-maven-plugin</artifactId>
-				<inherited>true</inherited>
-				<reportSets>
-					<reportSet>
-						<reports>
-							<report>report-only</report>
-						</reports>
-					</reportSet>
-				</reportSets>
-			</plugin>
-			<!-- Generating JavaDoc Report -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-javadoc-plugin</artifactId>
-				<configuration>
-					<minmemory>128m</minmemory>
-					<maxmemory>512m</maxmemory>
-					<encoding>${encoding}</encoding>
-					<docencoding>${encoding}</docencoding>
-					<charset>${encoding}</charset>
-				</configuration>
-			</plugin>
-			<!-- Generating Java Source in HTML -->
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-jxr-plugin</artifactId>
-				<configuration>
-					<inputEncoding>${encoding}</inputEncoding>
-					<outputEncoding>${encoding}</outputEncoding>
-					<linkJavadoc>true</linkJavadoc>
-					<javadocDir>apidocs</javadocDir>
-				</configuration>
-			</plugin>
-		</plugins>
-	</reporting>
+
+        <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-thymeleaf -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/nz.net.ultraq.thymeleaf/thymeleaf-layout-dialect -->
+        <dependency>
+            <groupId>nz.net.ultraq.thymeleaf</groupId>
+            <artifactId>thymeleaf-layout-dialect</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-validation -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-validation</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.validation</groupId>
+            <artifactId>validation-api</artifactId>
+            <version>2.0.1.Final</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.hibernate.validator</groupId>
+            <artifactId>hibernate-validator</artifactId>
+            <version>8.0.0.Final</version>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-jpamodelgen -->
+        <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-jpamodelgen</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>webtoon.utils</groupId>
+            <artifactId>webtoon-utils-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>webtoon.storage</groupId>
+            <artifactId>webtoon-storage-service</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
+        <dependency>
+            <groupId>net.lingala.zip4j</groupId>
+            <artifactId>zip4j</artifactId>
+        </dependency>
+
+
+    </dependencies>
+
+    <reporting>
+        <outputDirectory>${basedir}/target/site</outputDirectory>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-project-info-reports-plugin</artifactId>
+                <version>3.1.2</version>
+                <reportSets>
+                    <reportSet>
+                        <id>sunlink</id>
+                        <reports>
+                            <report>javadoc</report>
+                        </reports>
+                        <inherited>true</inherited>
+                        <configuration>
+                            <links>
+                                <link>http://docs.oracle.com/javase/6/docs/api/</link>
+                            </links>
+                        </configuration>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <!-- JUnit Test Results & EMMA Coverage Reporting -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>emma-maven-plugin</artifactId>
+                <inherited>true</inherited>
+            </plugin>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>surefire-report-maven-plugin</artifactId>
+                <inherited>true</inherited>
+                <reportSets>
+                    <reportSet>
+                        <reports>
+                            <report>report-only</report>
+                        </reports>
+                    </reportSet>
+                </reportSets>
+            </plugin>
+            <!-- Generating JavaDoc Report -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <configuration>
+                    <minmemory>128m</minmemory>
+                    <maxmemory>512m</maxmemory>
+                    <encoding>${encoding}</encoding>
+                    <docencoding>${encoding}</docencoding>
+                    <charset>${encoding}</charset>
+                </configuration>
+            </plugin>
+            <!-- Generating Java Source in HTML -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <configuration>
+                    <inputEncoding>${encoding}</inputEncoding>
+                    <outputEncoding>${encoding}</outputEncoding>
+                    <linkJavadoc>true</linkJavadoc>
+                    <javadocDir>apidocs</javadocDir>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <annotationProcessorPaths>
+                        <path>
+                            <groupId>org.mapstruct</groupId>
+                            <artifactId>mapstruct-processor</artifactId>
+                            <version>${org.mapstruct.version}</version>
+                        </path>
+                    </annotationProcessorPaths>
+
+                </configuration>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>

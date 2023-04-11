@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
-@Table
+@Table(name ="tbl_manga_genre")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
@@ -31,4 +31,7 @@ public class MangaGenreEntity {
 	
 	@Column(name = "slug")
 	private String slug;
+
+	@Column(name = "manga_count", columnDefinition = "int default 0")
+	private Integer mangaCount;
 }

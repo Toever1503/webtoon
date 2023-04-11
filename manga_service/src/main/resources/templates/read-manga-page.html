@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../static/main.css" rel="stylesheet"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+<div class="flex justify-center" layout:fragment="content">
+    <div class="w-2/3 p-4 ">
+        <div class="flex flex-col">
+            <div class=" p-4 h-32">
+                <div class="relative ...">
+                    <div class="absolute top-16 left-0 font-bold text-2xl">
+                        <span th:text="${mangaData.title}"></span>
+                        -
+                        <span th:if="${mangaData.displayType == 'VOL'}"
+                              th:text="${'Tập ' + (currentVol.volumeIndex + 1) + ': ' + currentVol.name + ' -'}"></span>
+
+                        <span th:text="${'Chương ' + (chapterData.chapterIndex + 1) + ': ' + chapterData.chapterName }"></span>
+                    </div>
+                </div>
+            </div>
+            <div class=" p-4 ">
+                <div class="flex justify-between">
+                        <!--Third breadcrumb-->
+                        <nav class="w-full rounded-md">
+                            <ol class="list-reset flex">
+                                <li>
+                                    <a
+                                            href="/"
+                                            class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                                    >Home</a
+                                    >
+                                </li>
+                                <li>
+                                    <span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                                </li>
+                                <li>
+                                    <a
+                                            href="#"
+                                            class="text-primary transition duration-150 ease-in-out hover:text-primary-600 focus:text-primary-600 active:text-primary-700 dark:text-primary-400 dark:hover:text-primary-500 dark:focus:text-primary-500 dark:active:text-primary-600"
+                                    >Manga</a
+                                    >
+                                </li>
+                                <li>
+                                    <span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                                </li>
+                                <li th:if="${mangaData.displayType.name == 'VOL'}"  class="text-neutral-500 dark:text-neutral-400" th:text="${'Tập ' + (currentVol.volumeIndex + 1)}"></li>
+
+                                <li th:if="${mangaData.displayType.name == 'VOL'}">
+                                <span class="mx-2 text-neutral-500 dark:text-neutral-400"
+                                >/</span>
+                                </li>
+
+                                <li class="text-neutral-500 dark:text-neutral-400" th:text="${'Chương ' + (chapterData.chapterIndex + 1)}"></li>
+                            </ol>
+                        </nav>
+                    <div class=" p-4 flex items-center">
+                        <button class="p-2 mr-2 rounded-full bg-red-400 text-white">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
+                                <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
+                            </svg>
+                        </button>
+                        <button class="p-2 rounded-full text-white bg-red-400">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half" viewBox="0 0 16 16">
+                                <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
+                            </svg>
+
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class=" p-4 sticky top-0 z-12 px-4 py-2 shadow ">
+                <div class="flex justify-between " >
+                    <div class=" p-4">
+                        <div class="flex items-center select-auto">
+                            <!-- <select name="select1" id="select1" class="mr-2 shadow-md">
+                              <option value="option1">Lựa chọn 1</option>
+                              <option value="option2">Lựa chọn 2</option>
+                              <option value="option3">Lựa chọn 3</option>
+                            </select> -->
+                            <select
+                                    th:if="${mangaData.displayType.name == 'VOL'}"
+                                    id="volume"
+                                    data-te-select-init
+                                    data-te-select-size="lg"
+                                    class=" border-8 border-indigo-100 shadow-md mr-2"
+
+                            >
+                                <option th:each="item : ${volumeEntity1}"
+                                        th:value="${item.id}"
+                                        th:text="${'Tập ' + (item.volumeIndex + 1) +': '+item.name}"
+                                        th:selected="${currentVol.id == item.id}"></option>
+                            </select>
+                            <select
+                                    id="chapter"
+                                    th:value="${chapterData.id}"
+                                    class=" border-8 border-indigo-100 shadow-md mr-2">
+                                <option
+                                        th:each="itemchapter : ${chapterData1}"
+                                        th:value="${itemchapter.id}"
+                                        th:text="${'Chương ' + (itemchapter.chapterIndex + 1) +': '+itemchapter.chapterName}"
+                                        th:selected="${chapterData.id == itemchapter.id}"></option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class=" p-4">
+                        <div class="flex items-center justify-end">
+                            <div class="bg-slate-400" th:if="${prevChapter != null}">
+                                <a
+                                        th:href="@{'/manga/'+${chapterData.chapterName}+'/chapter/'+${prevChapter.id}}"
+                                        class="p-2 mr-2 rounded-full bg-red-500 text-white"
+                                        style="display: flex; align-items: center">
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="16" height="16" fill="currentColor" class="bi bi-arrow-left-short"
+                                         viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd"
+                                              d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0
+                                        1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z"/>
+                                    </svg>
+                                    Chương trước
+                                </a>
+                            </div>
+
+                            <div class="bg-slate-400" th:if="${nextChapter != null}" >
+                                <a
+                                        th:href="@{'/manga/'+ ${chapterData.chapterName}+'/chapter/'+${nextChapter.id}}"
+                                        class="p-2 mr-2 rounded-full bg-red-500 text-white"
+                                        style="display: flex; align-items: center">
+                                    Chương sau
+                                    <svg xmlns="http://www.w3.org/2000/svg"
+                                         width="16" height="16" fill="currentColor"
+                                         class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                                        <path fill-rule="evenodd" d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1
+                                        .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z"/>
+                                    </svg>
+                                </a>
+                            </div>
+                            <button class="p-2 rounded-full bg-red-500 text-white">Thông tin chương</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sự kiện onchange selectbox -->
+
+            <script>
+                // Lấy đối tượng select box 1
+                const selectVolume = document.getElementById("volume");
+
+                // Lấy đối tượng select box 2
+                const selectChapter = document.getElementById("chapter");
+
+                // Thêm sự kiện onchange cho select box
+
+                selectVolume.addEventListener("change", function (e) {
+                    // console.log('on choose vol: ', e.target.value)
+                    const x = selectVolume;
+
+                    selectChapter.querySelectorAll('option').forEach((opt, i) => i !== 0 && opt.remove());
+                    selectChapter.value = "";
+                    let listChapter = [];
+                    // call api de set vao listchapter
+                    fetch('http://localhost:8000/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
+                        method: 'GET'
+                    })
+                        .then(res => res.json())
+
+                        .then(res => {
+                            // console.log('chapter dât: ', res);
+                            listChapter = res;
+                            listChapter.forEach(item => {
+                                //  item la chapter item
+                                let optEl = document.createElement('option');
+                                optEl.innerText = `${'Chương ' + (item.chapterIndex + 1) + ': ' + item.chapterName}`; // e.name
+                                optEl.value = item.id; // e.value
+
+                                // add option to select
+                                selectChapter.append(optEl);
+                            })
+                        })
+                        .catch(err => {
+                            console.log('error', err)
+                        })
+
+                    // Lấy giá trị đã chọn
+                    const selectedValue = selectBox.value;
+
+                });
+                // Thêm sự kiện onchange cho select box2
+                selectChapter.addEventListener("change", function () {
+                    // Lấy giá trị đã chọn từ select box2
+                    const selectedValue2 = selectChapter.value;
+                    var selectedText = selectChapter.text;
+                    // Thực hiện các hành động mong muốn khi giá trị đã chọn từ select box2 thay đổi
+                    window.location.href = 'http://localhost:8000/manga/' + selectedText + '/chapter/' + selectedValue2
+                });
+
+            </script>
+
+            <!-- Kết thúc sự kiện -->
+
+
+
+            <div class=" p-4">
+                <div class="flex justify-center">
+                    <div class="w-2/3 p-4 ">
+                        <img src="https://live.mangabooth.com/wp-content/uploads/2017/10/ads-1.jpg" alt="">
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-3">
+                    <div class="w-3/4 p-4 ">
+                        <h2 th:if="${chapterData == null}">Không có dữ liệu!</h2>
+                        <div th:else class="text-left mt-4 mx-7">
+                            <div th:if="${mangaType} == 'TEXT'">
+                                <h1 th:text="${chapterData.chapterName}"></h1>
+                                <h3 th:utext="${chapterData.content}"></h3>
+                            </div>
+
+                            <div th:else="${mangaType} == 'IMAGE'">
+                                <h1 th:text="${chapterData.chapterName}"></h1>
+                                <p th:each="image : ${chapterData.chapterImages}">
+                                    <img th:src="${image.image}"/>
+                                </p>
+                                <!-- <h3 th:text="${item.chapterEntities.chapterImageEntities}"></h3> -->
+                            </div>
+                        </div>
+                        Something about being the only daughter. I’m the youngest in the family, the fourth child born after my three brothers. My whole life I’ve been coddled, protected, bullied, bribed, and all of that is all fine, because I love my brothers, I love my family, but sometimes I wish I were the eldest, so I wouldn’t be underestimated the way I am now. My name is Lana, but to them and my dad, I’m their Lainie baby even at twenty-two.
+
+                        My brothers and dad stand by our tent at the side of the track. Dozens of cars zoom past. Blue, black, yellow colors flying by, helmets with rainbow visors, sponsor logos, and testosterone galore. Other than the fact that they are all Formula One race cars, they have one other thing in common: none of those cars are ours. None of those cars are being driven by one of our drivers.
+
+                        I sigh and carry the lemonade cups back to our tent. The autumn cold air cuts into my cheeks and steals under my ponytail to freeze the back of my neck. This fall, while testing possible drivers, I’ve gained two bright spots on my cheeks, thank you wind-chill combined with sunlight, and judging by the way my face is stinging now, I’ll bet the red is spreading to my ears and nose.
+
+                        There’s a whistle as I pass our neighbor’s tent. “Lainey, that for me?” one of the mechanics calls.
+
+                        “Sorry I’ve only got two hands and they’re both spoken for.” I don’t even glance his way—it’s true that everybody is always nice to me, but I try not to get too friendly with the other teams. We’re opponents, after all. Let’s keep it real.
+
+                        HW RACING TEAM, our logo stares back at me as I reach our tent—black as background, red and white on the logo.
+
+                        The cars are rumbling past in practice and we already know this will be our last, and worst, season. We used to be the team with the smallest tent, the lowest budget, but the greatest talent. Now we have a small tent, low budget, and no talent. And next year, without my dad … I glance at my dad and he’s in a pullout chair. He’s got his face in his hands, exhaling deeply.
+
+                        At the side of the tent, the only driver out of three who still meant to race is puking. The car is smashed. He’s shaking, pale and pissed at himself. The driver was physically unharmed, but we all know, if you smash the car in a test drive, you’re not going to get the gig.
+
+                        I bring the guy one of the lemonades. “Sugar,” I coax. “Could help.”
+
+                        He keeps staring at his racing boots, his shoulders bent in defeat. “Only chance I get to test and blow it.”
+
+                        I set the cup at his side and give him my most comforting smile, though my three brothers and my dad want to murder him.
+
+                        “It’s gonna take hundreds of thousands to fix this fucker,” my oldest brother, Drake, grumbles as I head over to my dad.
+
+                        “Hundreds of thousands we barely have,” Clay grumbles back.
+
+                        I stroke the side of the smashed car. Dad has three cars. My favorite is Kelsey, and I’m relieved she was out. I’m still sad for Moira though.
+
+                        The day you think about a car as a friend …
+
+                        “Might be time for me to admit, I’m waiting for something that isn’t going to happen,” I hear my dad say.
+
+                        I head over to him with the other lemonade cup. “It will, daddy, it will.”
+
+                        I’m the assigned team PR. I feed them, organize hotel stays, interviews for our drivers (not that that’s been a big part of the job lately). I get their clothes cleaned, pick up the dry cleaning. Basically, I make a home for them an ocean and a thousand and one miles away from where we grew up in Ohio.
+
+                        We uprooted after mom left us, all dad’s money going to a Formula One team. It’s his dream. One thing he gave up for my mom and could never get over. And now that I know it’s his last chance to get it, it’s mine too.
+
+                        “So what’s the plan?”
+                        “Not now, Lainie.”
+
+                        They’re pissed. They need a pep talk, but I can see dad is fresh out of pep talks. He looks defeated.
+
+                        “He’s not the only guy with talent,” I tell my brothers.
+
+                        “We don’t have money to take in anyone with talent anymore. Everyone’s been groomed since they were racing go-karts at six. By the time they’re in their teens they’re already owned by their sponsors or their teams,” Drake says.
+
+                        “I’ll reel him in.”
+
+                        I’m panicked. I’ve never seen them look so defeated and frustrated. When did it stop being fun? When we lost hope of winning.
+
+                        “Clay, Drake, Adrian, shush. I’ll do it. You set the cars, dad’s head of the team, let me bring in the talent.”
+
+                        It’s my dad’s dream. Now it’s mine too.
+
+                        I head over to him with the other lemonade cup. “It will, daddy, it will.”
+
+                        I’m the assigned team PR. I feed them, organize hotel stays, interviews for our drivers (not that that’s been a big part of the job lately). I get their clothes cleaned, pick up the dry cleaning. Basically, I make a home for them an ocean and a thousand and one miles away from where we grew up in Ohio.
+
+                        We uprooted after mom left us, all dad’s money going to a Formula One team. It’s his dream. One thing he gave up for my mom and could never get over. And now that I know it’s his last chance to get it, it’s mine too.
+
+                        “So what’s the plan?”
+                        “Not now, Lainie.”
+
+                        They’re pissed. They need a pep talk, but I can see dad is fresh out of pep talks. He looks defeated.
+
+                        “He’s not the only guy with talent,” I tell my brothers.
+
+                        “We don’t have money to take in anyone with talent anymore. Everyone’s been groomed since they were racing go-karts at six. By the time they’re in their teens they’re already owned by their sponsors or their teams,” Drake says.
+
+                        “I’ll reel him in.”
+
+                        I’m panicked. I’ve never seen them look so defeated and frustrated. When did it stop being fun? When we lost hope of winning.
+
+                        “Clay, Drake, Adrian, shush. I’ll do it. You set the cars, dad’s head of the team, let me bring in the talent.”
+
+                        It’s my dad’s dream. Now it’s mine too.
+
+                        “I’ll do it.”
+
+                        My brothers keep on talking, and so does my dad.
+                        I grab my shoe and toss it at them. It hits Drake in the shoulders and he turns, scowling.
+
+                        “I said, I’ll do it.”
+
+                        “Did you just throw your shoe at me?”
+
+                        I grab the other one, and throw it too. “No, I threw you two.”
+
+                        “Lainie …”
+
+                        “Don’t Lainie me. Dad, you run this team, you guys fix the cars, let me bring in the talent.”
+
+                        “Look, Lane, just because dad made you the PR doesn’t mean you have a lick of sense in determining whether someone has talent,” Drake says.
+
+                        “It’s not hard to spot. Give me a chance. This is our life. We g
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import webtoon.domains.manga.entities.MangaChapterEntity;
+import webtoon.domains.manga.entities.MangaChapterImageEntity;
 
 @Getter
 @Setter
@@ -15,9 +16,20 @@ import webtoon.domains.manga.entities.MangaChapterEntity;
 public class MangaChapterImageDto {
 	private Long id;
 	
-	private MangaChapterEntity mangaChapterId;
+	private Long mangaChapterId;
 	
 	private String image;
 	
 	private Integer imageIndex;
+	
+	public static MangaChapterImageDto toDto(MangaChapterImageEntity mangaEntity) {
+		if(mangaEntity == null) return null;
+		
+		return MangaChapterImageDto.builder()
+				.id(mangaEntity.getId())
+				.mangaChapterId(mangaEntity.getMangaChapter().getId())
+				.image(mangaEntity.getImage())
+				.imageIndex(mangaEntity.getImageIndex())
+				.build();
+	}
 }
