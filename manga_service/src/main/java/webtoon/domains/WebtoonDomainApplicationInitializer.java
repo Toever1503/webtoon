@@ -19,12 +19,6 @@ public class WebtoonDomainApplicationInitializer implements WebMvcConfigurer {
 		// TODO Auto-generated constructor stub
 	}
 
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("forward:/index.jsp");
-		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-	}
-
 	@Bean
 	public SessionLocaleResolver localeResolver() {
 		return new SessionLocaleResolver();

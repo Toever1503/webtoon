@@ -365,6 +365,12 @@
                 <version>1.0.0</version>
             </dependency>
 
+            <dependency>
+                <groupId>webtoon.payment</groupId>
+                <artifactId>payment-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
             <!-- end child module -->
 
             <!-- https://mvnrepository.com/artifact/io.jsonwebtoken/jjwt-api -->
