@@ -1,5 +1,6 @@
 package webtoon.domains.manga.entities;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -10,6 +11,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Table(name = "manga_volume_entity")
@@ -35,6 +37,16 @@ public class MangaVolumeEntity {
     private Integer volumeIndex;
 
 
-    @OneToMany(mappedBy = "mangaVolume", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "mangaVolume", fetch = FetchType.EAGER,cascade = CascadeType.ALL)
     private List<MangaChapterEntity> chapterEntities;
+
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date createdAt;
+
+    @Column(name = "modified_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date modifiedAt;
 }

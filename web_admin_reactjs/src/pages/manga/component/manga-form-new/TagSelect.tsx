@@ -32,7 +32,7 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
     const onSearch = debounce((val: string) => {
         setInputVal(val);
         console.log('search tag: ', val);
-        onCallApiSearch(val, 'name,asc');
+        onCallApiSearch(val, 'tagName,asc');
     });
     const onCallApiSearch = (s: string = '', sort: string = 'id,desc') => {
         tagService.filterTag({
@@ -49,8 +49,8 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
 
     const addTag = () => {
         if (isAddingNew) return;
-        setIsAddingNew(true);
-        if (inputVal)
+        if (inputVal) {
+            setIsAddingNew(true);
             tagService.addTag({
                 tagName: inputVal,
             })
@@ -73,6 +73,13 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
                 .finally(() => {
                     setIsAddingNew(false);
                 });
+        }
+        else {
+            dispatch(showNofification({
+                type: 'error',
+                message: 'Vui lòng nhập tên thẻ bạn muốn thêm!',
+            }));
+        }
     }
     // end search
 
@@ -84,8 +91,7 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
             <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                <span className='text-red-500'>*</span>
-                <span> Tags:</span>
+                <span> Thẻ:</span>
             </label>
             <Select
                 className='w-full'
@@ -103,6 +109,7 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
                         <Divider style={{ margin: '8px 0' }} />
                         <Space style={{ padding: '0 8px 4px' }}>
                             <Input
+                                className=""
                                 placeholder="nhập tên"
                                 value={inputVal}
                                 onChange={val => setInputVal(val.target.value)}
@@ -125,12 +132,7 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
                 options={selectOptions ? selectOptions.map((item: TagInput) => ({ label: item.tagName, value: item.id?.toString() })) : []}
             />
 
-            {
-                mangaInputError.tags &&
-                <p className='text-[12px] text-red-500 px-[5px]'>
-                    {t(mangaInputError.tags)}
-                </p>
-            }
+
         </div>
     )
 };

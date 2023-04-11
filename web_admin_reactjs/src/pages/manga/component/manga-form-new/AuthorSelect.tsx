@@ -49,8 +49,8 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
 
     const addAuthor = () => {
         if (isAddingNew) return;
-        setIsAddingNew(true);
-        if (inputVal)
+        if (inputVal) {
+            setIsAddingNew(true);
             authorService.addAuthor({
                 name: inputVal,
             })
@@ -73,6 +73,13 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                 .finally(() => {
                     setIsAddingNew(false);
                 });
+        }
+        else {
+            dispatch(showNofification({
+                type: 'error',
+                message: 'Vui lòng nhập tên tác giả bạn muốn thêm!',
+            }));
+        }
     }
     // end search
 
@@ -84,8 +91,7 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
             <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                <span className='text-red-500'>*</span>
-                <span> Authors:</span>
+                <span> Tác giả:</span>
             </label>
             <Select
                 className='w-full'
@@ -102,6 +108,7 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                         <Divider style={{ margin: '8px 0' }} />
                         <Space style={{ padding: '0 8px 4px' }}>
                             <Input
+                                className=""
                                 placeholder="nhập tên"
                                 value={inputVal}
                                 onChange={val => setInputVal(val.target.value)}
@@ -120,13 +127,6 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                 }}
                 options={selectOptions ? selectOptions.map((item: AuthorInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />
-
-            {
-                mangaInputError.authors &&
-                <p className='text-[12px] text-red-500 px-[5px]'>
-                    {t(mangaInputError.authors)}
-                </p>
-            }
         </div>
     )
 };

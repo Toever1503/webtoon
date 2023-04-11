@@ -31,6 +31,7 @@ public interface IMangaService {
     Page<MangaEntity> filterBy(String s, Pageable page);
 
     Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
+    Page<MangaEntity> filterEntities(Pageable pageable, Specification<MangaEntity> specs);
 
     MangaDto findById(Long id);
 
@@ -40,7 +41,6 @@ public interface IMangaService {
 
     void changeStatus(Long id, EStatus status);
 
-    List<MangaEntity> findAllOrder();
 
     Page<MangaDto> findAllById(Long id);
 

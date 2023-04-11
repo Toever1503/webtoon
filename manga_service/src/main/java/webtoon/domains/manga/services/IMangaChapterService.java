@@ -34,9 +34,9 @@ public interface IMangaChapterService {
 
     List<MangaChapterDto> getAllByVolumeId(Long id);
 
-	MangaChapterDto[] findNextPosts(Long chapterID, Long volumeId);
+	MangaChapterDto[] findNextPrevChapterForDisplayVolType(Long chapterID, Long mangaId);
 
-    MangaChapterDto[] findNextPostsManga(Long chapterID, Long mangaId);
+    MangaChapterDto[] findNextPrevChapterForDisplayChapType(Long chapterID, Long mangaId);
 
     Page<MangaChapterDto> filterChapter(Pageable pageable, MangaChapterFilterInput input);
 

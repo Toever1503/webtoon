@@ -1,7 +1,7 @@
 import React, { ChangeEvent, ChangeEventHandler, EventHandler, useEffect, useRef, useState } from 'react';
-import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef } from 'antd';
+import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef, Tooltip } from 'antd';
 import MangaChapterForm from './component/MangaChapterForm';
-import { PlusOutlined } from '@ant-design/icons';
+import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import debounce from '../../utils/debounce';
 import RichtextEditorForm from '../../components/RichtextEditorForm';
 import { RichTextEditorComponent } from '@syncfusion/ej2-react-richtexteditor';
@@ -24,10 +24,7 @@ import { AuthorInput } from '../../services/manga/AuthorService';
 export interface MangaInputError {
     title: string;
     description: string;
-    genres: string;
-    authors: string;
     featuredImage: string;
-    tags: string;
 }
 
 let isAutoSavingMangaInfo = false;
@@ -111,20 +108,6 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         }
         else mangaInputError.description = '';
 
-        if (!mangaInput.genres || mangaInput.genres.length === 0) {
-            errorCount++;
-            mangaInputError.genres = 'manga.form.errors.genres-required';
-        }
-
-        if (!mangaInput.authors || mangaInput.authors.length === 0) {
-            errorCount++;
-            mangaInputError.authors = 'manga.form.errors.authors-required';
-        }
-
-        if (!mangaInput.tags || mangaInput.tags.length === 0) {
-            errorCount++;
-            mangaInputError.tags = 'manga.form.errors.tags-required';
-        }
 
         if (!mangaInput.featuredImage) {
             errorCount++;
@@ -181,15 +164,10 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         }
     };
 
-
-
     const [mangaInputError, setMangaInputError] = useState<MangaInputError>({
         title: '',
         description: '',
-        genres: '',
-        authors: '',
         featuredImage: '',
-        tags: '',
     });
 
     let { id } = useParams();
@@ -232,8 +210,11 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
     return (
         <div className="space-y-3 py-3">
-            <div className="flex space-x-3">
-                <p className="text-[23px] font-[600]">
+            <div className="flex space-x-3 items-center">
+                <Tooltip title="Quay lại">
+                    <ArrowLeftOutlined onClick={() => navigate(-1)} />
+                </Tooltip>
+                <p className="text-[23px] font-[600] m-0">
                     {
                         props.type === 'ADD' ?
                             'Thêm mới truyện'
@@ -241,7 +222,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             'Cập nhật truyện'
                     }
                 </p>
-                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Save</Button>
+                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Lưu</Button>
             </div>
 
             {
@@ -251,7 +232,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                         <section className='border max-w-[1000px] h-fit'>
                             <label htmlFor="mangaTitle" className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                                 <span className='text-red-500'>*</span>
-                                <span> Title:</span>
+                                <span> Tên truyện:</span>
                             </label>
                             <Input id="mangaTitle" className='' value={mangaInput.title} onChange={(val: any) => setMangaInput({ ...mangaInput, title: val.target.value })} placeholder="Title" />
                             {
@@ -263,7 +244,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             <div className=''>
                                 <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                                     <span className='text-red-500'>*</span>
-                                    <span>Content:</span>
+                                    <span>Nội dung:</span>
                                 </label>
                                 <RichtextEditorForm onReady={onReadyMangaContentEditor} toolbarSettings={{}} />
                                 {
@@ -279,16 +260,16 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                     <div className='manga-form-sidebar w-[280px] grid gap-y-[15px]' >
                         <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
-                            <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>More Info</p>
+                            <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Thông tin khác</p>
 
                             <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
-                                <span className='text-[14px] font-bold'>Alternative Title:</span>
+                                <span className='text-[14px] font-bold'>Tên thay thế:</span>
                                 <Input value={mangaInput.alternativeTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setMangaInput({ ...mangaInput, alternativeTitle: e.target.value })} placeholder='alternate title' />
                             </div>
 
 
                             <div className='flex justify-between items-center px-[10px]'>
-                                <span className='text-[14px] font-bold'>Manga Status:</span>
+                                <span className='text-[14px] font-bold'>Trạng thái:</span>
                                 <Select
                                     className='min-w-[150px]'
                                     value={mangaInput.status}
@@ -301,7 +282,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             </div>
 
                             <div className='flex justify-between items-center px-[10px]'>
-                                <span className='text-[14px] font-bold'>Release status:</span>
+                                <span className='text-[14px] font-bold'>Tình trạng phát hành:</span>
                                 <Select
                                     className='min-w-[150px]'
                                     defaultValue="COMING"
@@ -317,9 +298,9 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             </div>
 
                             <div className='flex justify-between items-center px-[10px]'>
-                                <span className='text-[14px] font-bold'>Release year:</span>
-                                <DatePicker allowClear={false} mode='year' onChange={(val) => setMangaInput({ ...mangaInput, releaseYear: val?.format('YYYY') })} 
-                                value={dayjs(`${mangaInput.releaseYear}-01-01`)} placement='bottomRight' picker="year" />
+                                <span className='text-[14px] font-bold'>Năm phát hành:</span>
+                                <DatePicker allowClear={false} mode='year' onChange={(val) => setMangaInput({ ...mangaInput, releaseYear: val?.format('YYYY') })}
+                                    value={dayjs(`${mangaInput.releaseYear}-01-01`)} placement='bottomRight' picker="year" />
                             </div>
 
                             <GenreSelect mangaInput={mangaInput} mangaInputError={mangaInputError} />
@@ -333,12 +314,12 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                             <div className='p-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>
                                 <span className='text-red-500 text-base'>*</span>
-                                <span className='text-[16px] font-bold'> Featured image:</span>
+                                <span className='text-[16px] font-bold'>Ảnh hiển thị:</span>
                             </div>
 
 
                             <div className='flex justify-between p-[10px]'>
-                                <a className='text-[13px]'>Choose image</a>
+                                <a className='text-[13px]'>Chọn ảnh</a>
 
                                 {
                                     mangaInput.featuredImage &&

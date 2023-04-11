@@ -1,12 +1,27 @@
 <!DOCTYPE html>
-<html lang="en"
-	  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-	  xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+
+
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+	<meta charset="UTF-8">
+	<title>Insert title here</title>
+	<link href="../static/main.css" rel="stylesheet">
+
 </head>
+
 <body>
-	index page
+	<ul th:else class="latest-chapters grid mt-[10px] ml-[30px] gap-[5px] divide-y">
+		<li class="gap-[5px] flex" th:each="chapter,iter: ${itemvolume.chapterEntities}"
+			th:if="${iter.index < 2}">
+			<a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
+			   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+			   class="font-bold cursor-pointer text-[#666666] w-full hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+			fsafa asf f
+			</a>
+		</li>
+	</ul>
+
+	
 </body>
+
 </html>

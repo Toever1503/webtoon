@@ -9,6 +9,7 @@ import javax.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import org.hibernate.annotations.Where;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
@@ -87,8 +88,13 @@ public class MangaEntity {
 //private  created_by;
 //
 //private modified_by;
-    @OneToMany(mappedBy = "manga", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "manga" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<MangaVolumeEntity> volumeEntities;
+
+    @OneToMany(mappedBy = "manga", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @Where(clause = "manga_volume_id is null")
+    @OrderBy("chapter_index desc")
+    private List<MangaChapterEntity> chapters;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "tbl_manga_genre_relation",
@@ -102,7 +108,6 @@ public class MangaEntity {
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-
     private Set<MangaAuthorEntity> authors;
 
     @Transient

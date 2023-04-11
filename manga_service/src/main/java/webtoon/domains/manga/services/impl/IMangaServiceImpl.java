@@ -63,13 +63,18 @@ public class IMangaServiceImpl implements IMangaService {
         MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
 
         mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
-        mangaEntity.setRating(0F);
-        mangaEntity.setViewCount(0);
-        mangaEntity.setCommentCount(0);
 
-//        if(model.getId() != null){
-//
-//        }
+
+        if (model.getId() != null) {
+            MangaEntity originalEntity = this.getById(model.getId());
+            mangaEntity.setVolumeEntities(originalEntity.getVolumeEntities());
+            mangaEntity.setChapters(originalEntity.getChapters());
+        } else {
+            mangaEntity.setRating(0F);
+            mangaEntity.setViewCount(0);
+            mangaEntity.setCommentCount(0);
+        }
+
         mangaEntity.setGenres(genreRepository.findAllById(model.getGenres()).stream().collect(Collectors.toSet()));
         mangaEntity.setAuthors(authorRepository.findAllById(model.getAuthors()).stream().collect(Collectors.toSet()));
 
@@ -167,6 +172,11 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
+    public Page<MangaEntity> filterEntities(Pageable pageable, Specification<MangaEntity> specs) {
+        return this.mangaRepository.findAll(specs, pageable);
+    }
+
+    @Override
     public MangaDto findById(Long id) {
         MangaEntity entity = this.getById(id);
         return MangaDto.toDto(entity);
@@ -203,36 +213,12 @@ public class IMangaServiceImpl implements IMangaService {
         this.mangaRepository.saveAndFlush(entity);
     }
 
-    @Override
-    public List<MangaEntity> findAllOrder(){
-        Pageable  pageable = PageRequest.of(0,10).withSort(Sort.Direction.DESC,"id");
-        return this.mangaRepository.findAll(pageable)
-                .stream().map(mangaEntity -> {
-                    return MangaEntity.builder()
-                        .id(mangaEntity.getId())
-                        .title(mangaEntity.getTitle())
-                        .alternativeTitle(mangaEntity.getAlternativeTitle())
-                        .excerpt(mangaEntity.getExcerpt())
-                        .description(mangaEntity.getDescription())
-                        .mangaName(mangaEntity.getMangaName())
-                        .featuredImage(mangaEntity.getFeaturedImage())
-                        .status(mangaEntity.getStatus())
-                        .mangaStatus(mangaEntity.getMangaStatus())
-                        .commentCount(mangaEntity.getCommentCount())
-                        .mangaType(mangaEntity.getMangaType())
-                        .rating(mangaEntity.getRating())
-                        .viewCount(mangaEntity.getViewCount())
-                        .createdAt(mangaEntity.getCreatedAt())
-                        .modifiedAt(mangaEntity.getModifiedAt())
-                        .volumeEntities(mangaEntity.getVolumeEntities())
-                        .build();
-                }).collect(Collectors.toList());
-    }
+
 
     @Override
     public Page<MangaDto> findAllById(Long id) {
-       Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
-        return  mangaRepository.findAllById(id,pageable);
+        Pageable pageable = PageRequest.of(0, 2).withSort(Sort.Direction.DESC, "id");
+        return mangaRepository.findAllById(id, pageable);
     }
 
     @Override
