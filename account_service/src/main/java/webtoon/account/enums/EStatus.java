@@ -2,12 +2,11 @@ package webtoon.account.enums;
 
 import lombok.RequiredArgsConstructor;
 
-@RequiredArgsConstructor
 public enum EStatus {
 
-    NOT_ENABLED("Not Enabled"),
-    ENABLED("Enabled"),
-    NOT_ACTIVE("Not Active");
+    NOT_ENABLED,
+    ACTIVED,
+    DEACTIVED,
 
-    private final String value;
+
 }

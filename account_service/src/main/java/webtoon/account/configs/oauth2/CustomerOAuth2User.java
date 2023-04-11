@@ -1,7 +1,6 @@
 package webtoon.account.configs.oauth2;
 
 import lombok.Builder;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 
@@ -9,7 +8,7 @@ import java.util.Collection;
 import java.util.Map;
 
 @Builder
-public class CustomerOAth2User implements OAuth2User {
+public class CustomerOAuth2User implements OAuth2User {
 
     private OAuth2User oAuth2User;
 

@@ -7,11 +7,11 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
-        <module name="webtoon-utils-service" />
-        <module name="webtoon-storage-service" />
         <module name="payment-service" />
         <module name="webtoon-comment-service" />
         <module name="webtoon-account-service" />
+        <module name="webtoon-utils-service" />
+        <module name="webtoon-storage-service" />
         <module name="webtoon-manga-service" />
       </profile>
     </annotationProcessing>
@@ -20,6 +20,7 @@
       <module name="webtoon" target="11" />
       <module name="webtoon-account-service" target="11" />
       <module name="webtoon-comment-service" target="11" />
+      <module name="webtoon-main-service" target="11" />
       <module name="webtoon-manga-service" target="11" />
       <module name="webtoon-storage-service" target="11" />
       <module name="webtoon-utils-service" target="11" />
@@ -30,6 +31,7 @@
       <module name="payment-service" options="-parameters" />
       <module name="webtoon-account-service" options="-parameters" />
       <module name="webtoon-comment-service" options="-parameters" />
+      <module name="webtoon-main-service" options="-parameters" />
       <module name="webtoon-manga-service" options="-parameters" />
       <module name="webtoon-storage-service" options="-parameters" />
       <module name="webtoon-utils-service" options="-parameters" />
