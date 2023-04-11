@@ -7,6 +7,7 @@
     "dev": "npx tailwindcss -i ./src/main/resources/static/base.css -o ./src/main/resources/static/main.css --watch",
     "manga-dev": "npx tailwindcss -i ./manga_service/src/main/resources/static/base.css -o ./manga_service/src/main/resources/static/main.css --watch",
     "comment-dev": "npx tailwindcss -i ./comment_service/src/main/resources/static/base.css -o ./comment_service/src/main/resources/static/main.css --watch",
+    "account-dev": "npx tailwindcss -i ./account_service/src/main/resources/static/base.css -o ./account_service/src/main/resources/static/main.css --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",

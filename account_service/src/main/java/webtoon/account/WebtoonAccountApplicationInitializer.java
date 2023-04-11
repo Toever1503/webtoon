@@ -12,12 +12,6 @@ import org.springframework.web.servlet.i18n.SessionLocaleResolver;
 @Configuration
 public class WebtoonAccountApplicationInitializer implements WebMvcConfigurer {
 
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/").setViewName("forward:/index.jsp");
-		registry.setOrder(Ordered.HIGHEST_PRECEDENCE);
-	}
-
 	@Bean
 	public SessionLocaleResolver localeResolver() {
 		return new SessionLocaleResolver();

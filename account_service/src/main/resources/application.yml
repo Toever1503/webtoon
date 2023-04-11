@@ -1,17 +1,30 @@
+server:
+  port: 8002
+  ssl:
+    key-store: classpath:keystore/baeldung.p12
+    key-store-password: 123456
+    key-store-type: PKCS12
+    key-alias: baeldung
+    enabled: true
+trust:
+  store: classpath:keystore/baeldung.p12
+  store.password: 123456
+
 app:
   domain: http://localhost:8080/storage/uploads/
   root-content-path: C:/Users/orisu/Desktop/DATN 2023/web/uploads/
 spring:
   datasource:
     driverClassName: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://free02.123host.vn:3306/stovizkj_webtoon_hoan?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Bangkok&createDatabaseIfNotExist=true
-    username: stovizkj_webtoon_hoan
+    url: jdbc:mysql://localhost:3306/stovizkj_webtoon_hau?useUnicode=true&characterEncoding=utf8&useSSL=false&useLegacyDatetimeCode=false&serverTimezone=Asia/Bangkok&createDatabaseIfNotExist=true
+    username: stovizkj_webtoon_hau
     password: $Abcd1234
   jpa:
     hibernate:
       ddl-auto: update
       dialect: org.hibernate.dialect.MySQL5Dialect
     show-sql: true
+    properties.hibernate.format_sql: true
   mail:
     host: smtp.gmail.com
     port: 587
@@ -28,11 +41,11 @@ spring:
       client:
         registration:
           facebook:
-            client-id: 611318980394625
-            client-secret: f94e6d38ef9d1dcdb468aef0cd8b8cc1
+            client-id: 432444247989026
+            client-secret: d73418162457ad431c83ec4665185199
           google:
-            client-id: 833366962467-apna5sfac5csj02085fnef3th3c88qa1.apps.googleusercontent.com
-            client-secret: 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
+            client-id: 939698702223-00eugrq3fg2pfa2fd0t6taj0a611hnhr.apps.googleusercontent.com
+            client-secret: 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
 logging:
   level:
     .org.springframework.web: DEBUG

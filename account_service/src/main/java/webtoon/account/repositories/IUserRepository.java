@@ -3,6 +3,7 @@ package webtoon.account.repositories;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.stereotype.Repository;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EAccountType;
@@ -10,7 +11,7 @@ import webtoon.account.enums.EAccountType;
 import java.util.Optional;
 
 @Repository
-public interface IUserRepository extends JpaRepository<UserEntity, Long> {
+public interface IUserRepository extends JpaRepository<UserEntity, Long>, JpaSpecificationExecutor<UserEntity> {
 
     boolean existsByUsername(String username);
 
@@ -22,7 +23,7 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long> {
 
     Page<UserEntity> findAllByStatus(Boolean status, Pageable pageable);
 
-    Optional<UserEntity> findByAccountTypeAndUsername(EAccountType type, String username);
+    Optional<UserEntity> findByUsernameOrEmail(String username, String email);
 
     Optional<UserEntity> findByUsername(String username);
 

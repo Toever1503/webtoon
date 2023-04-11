@@ -5,14 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import webtoon.account.models.CreateUserModel;
-import webtoon.account.services.UserService;
+import webtoon.account.services.IUserService;
 
 @Controller
 @RequestMapping(value = "user/register")
 @RequiredArgsConstructor
 public class RegisterUserController {
 
-    private final UserService userService;
+    private final IUserService userService;
 
     @GetMapping
     public String index(Model model) {
@@ -22,7 +22,7 @@ public class RegisterUserController {
 
     @PostMapping
     public String add(@ModelAttribute("createModel") CreateUserModel model) {
-        this.userService.add(model);
+//        this.userService.add(model);
         return "login";
     }
 }

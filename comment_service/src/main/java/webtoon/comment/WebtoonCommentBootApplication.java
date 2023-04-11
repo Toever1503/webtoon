@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Import;
 
 @ServletComponentScan
 @SpringBootApplication(exclude = SecurityAutoConfiguration.class)
-@Import({ WebtoonCommentApplicationInitializer.class })
+//@Import({ WebtoonCommentApplicationInitializer.class })
 
 public class WebtoonCommentBootApplication {
 	public static void main(String[] args) {

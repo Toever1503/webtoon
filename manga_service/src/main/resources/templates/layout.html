@@ -18,6 +18,7 @@
 </head>
 
 <body>
+<div th:replace="fragments/toast :: toast-component"></div>
 	<header th:replace="fragments/header-component :: header" />
 
 	<div class="main-layout w-[1100px] mx-auto shadown-sm" layout:fragment="content">
@@ -31,7 +32,11 @@
 		</div>
 	</div>
 
-<!--	<footer th:replace="fragments/footer-component :: footer"/>-->
+	<footer th:replace="fragments/footer-component :: footer"/>
+
+	<div th:if="${1>2}">
+
+	</div>
 </body>
 
 </html>
