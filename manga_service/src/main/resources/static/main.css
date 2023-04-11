@@ -155,10 +155,7 @@
 }
 
 .inset-0 {
-  top: 0px;
-  right: 0px;
-  bottom: 0px;
-  left: 0px;
+  inset: 0px;
 }
 
 .bottom-2 {
@@ -1095,6 +1092,10 @@
   padding: 5px;
 }
 
+.p-\[0px\] {
+  padding: 0px;
+}
+
 .px-1 {
   padding-left: 0.25rem;
   padding-right: 0.25rem;
@@ -1583,6 +1584,10 @@
 
 a{
   color: #333333;
+}
+
+ul{
+  list-style: none
 }
 
 .hover\:bottom-3:hover {

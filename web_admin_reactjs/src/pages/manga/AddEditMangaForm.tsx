@@ -262,10 +262,10 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                         <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
                             <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Thông tin khác</p>
 
-                            <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
+                            {/* <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
                                 <span className='text-[14px] font-bold'>Tên thay thế:</span>
                                 <Input value={mangaInput.alternativeTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setMangaInput({ ...mangaInput, alternativeTitle: e.target.value })} placeholder='alternate title' />
-                            </div>
+                            </div> */}
 
 
                             <div className='flex justify-between items-center px-[10px]'>

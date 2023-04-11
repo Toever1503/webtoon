@@ -200,7 +200,7 @@
                     <div class="vol-item px-[10px] rounded" th:if="${model.displayType.name} == 'VOL'"
                          th:each="itemvolume : ${model.volumeEntities}">
                             <span class="px-[10px] py-[5px] bg-neutral-200 flex justify-between rounded cursor-pointer">
-                                <p class="text-[18px] font-bold"
+                                <p class="text-[18px] font-bold m-0"
                                    th:text="${'Tập ' + (itemvolume.volumeIndex + 1) + ': ' + itemvolume.name}">
                                 </p>
                                 <span>+</span>

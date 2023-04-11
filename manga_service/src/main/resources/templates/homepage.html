@@ -153,7 +153,7 @@
 
                 <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
 
-                <ul th:else class="manga-list flex flex-wrap items-center gap-[20px] mt-[20px]">
+                <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-[15px] mt-[20px]">
 
                     <li class="w-[250px] border bg-white min-h-[135px] flex" th:each="manga : ${mangalist}">
                         <a th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}">
@@ -218,7 +218,7 @@
 
                     <ul class="sidebar-posts divide-y mt-[10px]" th:each="item : ${postList}">
                         <li>
-                            <a th:href="@{'/post/' + item.title + '/' + item.id}" class="w-full h-full flex gap-x-[5px] py-3">
+                            <a th:href="@{'/post/' + ${item.title} + '/' + ${item.id}}" class="w-full h-full flex gap-x-[5px] py-3">
                                 <div class="w-[90px] h-[100px] post_feature_image">
                                     <img class="w-[90px] h-[100px]"
                                          th:src="${item.featuredImage}">
@@ -461,6 +461,13 @@
         </div>
 
     </div>
+
+    <script th:if >
+
+    </script>
+    <script th:else>
+
+    </script>
 </div>
 
 </body>
