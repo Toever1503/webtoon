@@ -9,6 +9,7 @@ import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.EAuthorityConstants;
 import webtoon.account.entities.UserEntity;
+import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.UserInput;
@@ -211,9 +212,17 @@ public class UserServiceImpl implements IUserService {
     public UserDto add(UserInput input) {
         UserEntity entity = UserInput.toEntity(input);
 
+        if(this.userRepository.findByUsername(input.getUsername()).isPresent())
+            throw new CustomHandleException(11);
+
+        if (this.userRepository.existsByEmail(input.getEmail())) {
+            throw new CustomHandleException(12);
+        }
         entity.setHasBlocked(false);
         entity.setNumberOfFailedSignIn(0);
         entity.setStatus(EStatus.ACTIVED);
+        entity.setAccountType(EAccountType.DATABASE);
+        entity.setPassword(this.passwordEncoder.encode(input.getPassword()));
         entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         this.userRepository.saveAndFlush(entity);
         return UserDto.toDto(entity);
@@ -229,7 +238,7 @@ public class UserServiceImpl implements IUserService {
 
         // check if email is existed
         if (this.userRepository.existsByEmailAndIdNotLike(input.getEmail(), input.getId())) {
-            throw new CustomHandleException(2);
+            throw new CustomHandleException(12);
         }
         entity.setFullName(input.getFullName());
         entity.setEmail(input.getEmail());

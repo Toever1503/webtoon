@@ -1,5 +1,6 @@
 import { IUserStatus } from "../../pages/user/types/IUserType";
 import { userAxios } from "../config/UserAxios";
+import IUserFilterInputType from "./types/IUserFilterInputType";
 import IUserInputType from "./types/IUserInputType";
 
 
@@ -9,7 +10,7 @@ const findUserById = async (id: number | string) => userAxios.get(`${basePath}/$
 const addNewUser = async (payload: IUserInputType) => userAxios.post(`${basePath}`, payload);
 const updateUser = async (id: number | string, payload: IUserInputType) => userAxios.put(`${basePath}/${id}`, payload);
 const deleteUserById = async (id: number | string) => userAxios.del(`${basePath}/${id}`);
-const filterUser = async (payload: IUserInputType) => userAxios.post(`${basePath}`, payload);
+const filterUser = async (payload: IUserFilterInputType, page: number, size: number) => userAxios.post(`${basePath}/filter?page=${page}&size=${size}&sort=id,desc`, payload);
 const changeStatus = (id: number | string, status: IUserStatus) => userAxios.patch(`${basePath}/${id}/change-status?status=${status}`);
 
 const getAllAuthorities = async () => userAxios.get(`${basePath}/all-authorities`);

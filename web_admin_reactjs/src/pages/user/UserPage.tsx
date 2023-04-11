@@ -1,15 +1,18 @@
 import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button } from "antd";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link, useNavigate } from "react-router-dom";
 import IUserType, { IUserStatus, USER_STATUS_LIST } from "./types/IUserType";
 import { DownOutlined } from "@ant-design/icons";
 import AddEditUserModal, { AddEditUserModalProps } from "./components/AddEditUserModal";
-import { UserState, addNewUser } from "../../stores/features/user/userSlice";
+import { UserState, addNewUser, deleteUser, editUser, setUserData } from "../../stores/features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores";
 import { reIndexTbl } from "../../utils/indexData";
+import userService from "../../services/user/UserService";
+import { AxiosResponse } from "axios";
+import { showNofification } from "../../stores/features/notification/notificationSlice";
 
 
 
@@ -21,19 +24,7 @@ const UserPage: React.FC = () => {
     const userState: UserState = useSelector((state: RootState) => state.user);
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
-    const [dataSource, setDataSource] = useState<IUserType[]>([
-        {
-            id: 1,
-            avatar: '',
-            email: 'fa@fa.ca',
-            phone: '123456789',
-            fullName: 'Nguyen Van A',
-            sex: "FEMALE",
-            status: "ACTIVED",
-            username: 'nguyenvana',
-            accountType: 'NORMAL'
-        }
-    ]);
+    const [dataSource, setDataSource] = useState<IUserType[]>([]);
     const [pageConfig, setPageConfig] = useState({
         current: 1,
         pageSize: 10,
@@ -43,46 +34,47 @@ const UserPage: React.FC = () => {
         commentType: 'ALL'
     });
     const onSearch = () => {
+        onCallApiFilterUser();
     }
-
-
 
     const getAccountStatuses = (status: IUserStatus, record: IUserType): MenuProps => {
         return {
             items: USER_STATUS_LIST.filter((e: IUserStatus) => e !== status).map((e: IUserStatus) => {
                 return {
                     key: e,
-                    label: e,
+                    label: t(`user.table.status-item-select.${e}`),
                     onClick: () => {
                         console.log('e', e);
                         console.log('e', e);
                         setTableLoading(true);
-                        // mangaService.changeReleaseStatus(record.id, e)
-                        //     .then(() => {
-                        //         dispatch(showNofification({
-                        //             type: 'success',
-                        //             message: 'Thay đổi trạng thái thành công!'
-                        //         }));
-                        //         setMangaData(mangaData.map((item: MangaInput) => {
-                        //             if (item.id === record.id) {
-                        //                 item.mangaStatus = e;
-                        //             }
-                        //             return item;
-                        //         }));
-                        //     })
-                        //     .catch(err => {
-                        //         console.log('err', err);
-                        //         dispatch(showNofification({
-                        //             type: 'error',
-                        //             message: 'Thay đổi trạng thái thất bại!'
-                        //         }));
-                        //     })
-                        //     .finally(() => setTableLoading(false))
+                        if (record.id)
+                            userService.changeStatus(record.id, e)
+                                .then(() => {
+                                    dispatch(showNofification({
+                                        type: 'success',
+                                        message: t('user.table.change-status-success')
+                                    }));
+                                    dispatch(setUserData(dataSource.map((item: IUserType) => {
+                                        if (item.id === record.id) {
+                                            item.status = e;
+                                        }
+                                        return item;
+                                    })))
+                                })
+                                .catch(err => {
+                                    console.log('err', err);
+                                    dispatch(showNofification({
+                                        type: 'error',
+                                        message: t('user.table.change-status-failed')
+                                    }));
+                                })
+                                .finally(() => setTableLoading(false))
                     }
                 }
             })
         }
     };
+
     const columns: ColumnsType<IUserType> = [
         {
             title: 'STT',
@@ -111,30 +103,31 @@ const UserPage: React.FC = () => {
             title: t('user.table.phone'),
             dataIndex: 'phone',
             key: 'phone',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{text ? text : '-'}</>,
         },
         {
             title: t('user.table.sex'),
             dataIndex: 'sex',
             key: 'sex',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{t(`user.form.sex-radio.${text.toLowerCase()}`)}</>,
         },
         {
             title: t('user.table.accountType'),
             dataIndex: 'accountType',
             key: 'accountType',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{t(`user.table.accountType-item.${text}`)}</>,
         },
         {
             title: t('user.table.status'),
             dataIndex: 'status',
             key: 'status',
+            width: 150,
             render: (text, record) => <>
                 <Dropdown menu={getAccountStatuses(text, record)} trigger={['click']}>
                     <a onClick={(e) => e.preventDefault()} className='text-[12px]'>
                         <span className='text-[12px] flex gap-x-[5px] items-center'>
                             <Tooltip title="Thay đổi trạng thái">
-                                {text}
+                                {t(`user.table.status-item.${text}`)}
                             </Tooltip>
                             <DownOutlined />
                         </span>
@@ -145,19 +138,21 @@ const UserPage: React.FC = () => {
         {
             title: t('comment.table.action'),
             key: 'action',
+            width: 150,
             render: (_, record) => (
-                <Space size="middle">
-                    <Link to={`/mangas/edit/${record.id}`}>Edit</Link>
+                <Space size="small">
+                    <Button size="small" onClick={() => showEditUserModal(record)}>{t('user.form.edit-btn')}</Button>
                     <Popconfirm
-                        title={t('manga.form.sure-delete')}
+                        title={t('user.form.sure-delete')}
                         onConfirm={(e) => {
                             e?.stopPropagation();
-                            // onDeleleManga(record.id);
+                            if (record.id)
+                                onDeleleUser(record.id);
                         }}
                         okText={t('confirm-yes')}
                         cancelText={t('confirm-no')}
                     >
-                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">Delete</a>
+                        <Button size="small" onClick={e => e.stopPropagation()} >{t('user.form.delete-btn')}</Button>
                     </Popconfirm>
 
                 </Space>
@@ -173,31 +168,103 @@ const UserPage: React.FC = () => {
         cancel: () => {
             setAddEditUserModal({ ...addEditUserModal, visible: false })
         },
-        onOk: (data: any) => { },
+        onOk: (data: IUserType) => {
+            if (addEditUserModal.userInput)
+                dispatch(editUser(data))
+            else
+                dispatch(addNewUser({
+                    data,
+                    pageSize: pageConfig.pageSize
+                }));
+            setAddEditUserModal({ ...addEditUserModal, visible: false })
+        },
+        authorityOptions: []
     });
+    const [authorityOptions, setAuthorityOptions] = useState<{
+        id: number | string;
+        authorityName: string;
+    }[]>([]);
+
+    const showEditUserModal = (record: IUserType) => {
+        console.log('edit user: ', record);
+
+        setAddEditUserModal({
+            ...addEditUserModal,
+            visible: true,
+            title: t('user.modal.edit-title'),
+            userInput: record,
+        });
+    };
+
+    const onDeleleUser = (id: number | string) => {
+        setTableLoading(true);
+
+        userService
+            .deleteUserById(id)
+            .then(() => {
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('user.form.delete-success')
+                }))
+                dispatch(deleteUser(Number(id)));
+            })
+            .catch(err => {
+                console.log('delete user err', err);
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('user.form.delete-failed')
+                }))
+            })
+            .finally(() => setTableLoading(false))
+    }
     // end add edit user modal
 
-    useEffect(() => {
-        console.log('userFilter', userState);
-
-        setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 0, userState.data))
-    }, [userState]);
-
-    const add = () => {
-        dispatch(addNewUser({
-            data: {
-                fullName: 'Nguyen Van A',
-                username: 'nguyenvana' + (Math.random() * 1000000),
-                email: (Math.random() * 1000000) + 'fa@fa.ca',
-                password: 'fasfas',
-                phone: '123123123',
-                sex: 'FEMALE',
-                status: 'ACTIVED',
-                accountType: 'NORMAL',
-            },
-            pageSize: pageConfig.pageSize
-        }))
+    const onTblChange = (pagination: TablePaginationConfig) => {
+        pageConfig.current = pagination.current || 1;
+        setPageConfig(pageConfig);
+        onCallApiFilterUser();
     };
+    const onCallApiFilterUser = () => {
+        setTableLoading(true);
+        userService.filterUser({
+            q: userFilter.q,
+        }, pageConfig.current - 1, pageConfig.pageSize)
+            .then((res: AxiosResponse<{
+                content: IUserType[],
+                totalElements: number,
+            }>) => {
+                console.log('res', res.data);
+                dispatch(setUserData(
+                    res.data.content
+                ));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements,
+                });
+            })
+            .finally(() => setTableLoading(false));
+    }
+
+    const [hasInitialized, setHasInitialized] = useState(false);
+    useEffect(() => {
+        if (!hasInitialized) {
+            onCallApiFilterUser();
+
+            userService.getAllAuthorities()
+                .then((res: AxiosResponse<any>) => {
+                    console.log('get all authorities: ', res.data);
+                    setAuthorityOptions(res.data);
+                })
+                .catch(err => {
+                    console.log('err: ', err);
+                })
+
+            setHasInitialized(true);
+        }
+
+
+        setDataSource(reIndexTbl(pageConfig.current, pageConfig.pageSize || 0, userState.data))
+    }, [userState]);
 
     return (<>
         <div className="space-y-3 py-3">
@@ -211,15 +278,17 @@ const UserPage: React.FC = () => {
                         visible: true,
                         title: t('user.modal.add-title'),
                     });
-                }}>Add new</Button>
+                }}>
+                    {t('user.add-btn')}
+                </Button>
 
             </div>
-            <AddEditUserModal visible={addEditUserModal.visible} cancel={addEditUserModal.cancel} onOk={addEditUserModal.onOk} title={addEditUserModal.title} userInput={addEditUserModal.userInput} />
+            <AddEditUserModal visible={addEditUserModal.visible} authorityOptions={authorityOptions} cancel={addEditUserModal.cancel} onOk={addEditUserModal.onOk} title={addEditUserModal.title} userInput={addEditUserModal.userInput} />
             <div className="flex justify-end items-center">
-                <Input.Search placeholder="input search text" value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
+                <Input.Search placeholder={`${t('placholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
             </div>
 
-            <Table columns={columns} loading={tableLoading} dataSource={dataSource} rowKey={(() => Math.random())} pagination={pageConfig} />
+            <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} rowKey={(() => Math.random())} pagination={pageConfig} />
         </div>
     </>)
 }

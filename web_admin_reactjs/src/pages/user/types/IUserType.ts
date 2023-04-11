@@ -10,8 +10,12 @@ export default interface IUserType {
     avatar?: string;
     status: IUserStatus;
     accountType: 'FB' | 'GOOGLE' | 'NORMAL';
+    authorities: {
+        id: number | string;
+        authorityName: string;
+    }[]
 }
 
-export type IUserStatus = 'NOT_ENABLED' | 'ENABLED' | 'NOT_ACTIVE' | 'ACTIVED';
+export type IUserStatus = 'NOT_ENABLED' | 'DEACTIVED' | 'ACTIVED';
 export type IUserSex = 'MALE' | 'FEMALE';
-export const USER_STATUS_LIST: IUserStatus[] = ['NOT_ENABLED', 'ENABLED', 'NOT_ACTIVE', 'ACTIVED'];
+export const USER_STATUS_LIST: IUserStatus[] = ['DEACTIVED' , 'ACTIVED'];

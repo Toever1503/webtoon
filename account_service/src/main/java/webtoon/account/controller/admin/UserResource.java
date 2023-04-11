@@ -9,12 +9,14 @@ import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.entities.UserEntity_;
+import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.UserFilterInput;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.services.IUserService;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 @RestController
@@ -34,8 +36,10 @@ public class UserResource {
             specs.add((root, query, cb) ->
                     cb.or(
                             cb.like(root.get(UserEntity_.FULL_NAME), qLike),
+                            cb.like(root.get(UserEntity_.USERNAME), qLike),
                             cb.like(root.get(UserEntity_.EMAIL), qLike),
                             cb.like(root.get(UserEntity_.PHONE), qLike)
+//                            cb.like(root.get(UserEntity_.sex), Arrays.stream(ESex.values()).anyMatch(e -> e.name().equalsIgnoreCase(qLike)) ? qLike : "")
                     )
             );
         }
@@ -57,11 +61,11 @@ public class UserResource {
     @PostMapping
     public UserDto addUser(@RequestBody UserInput input) {
         return this.userService.add(input);
-        // MIS SET PASSWD, ACCOUNT TYPE
     }
 
     @PutMapping("{id}")
     public UserDto updateUser(@PathVariable Long id, @RequestBody UserInput input) {
+        input.setId(id);
         return this.userService.update(input);
     }
 

@@ -7,7 +7,7 @@ import { RootState } from "../../../stores";
 import { UserState } from "../../../stores/features/user/userSlice";
 import userService from "../../../services/user/UserService";
 import IUserType from "../types/IUserType";
-import { AxiosResponse } from "axios";
+import { AxiosError, AxiosResponse } from "axios";
 
 
 export interface AddEditUserModalProps {
@@ -15,7 +15,11 @@ export interface AddEditUserModalProps {
     onOk: Function;
     cancel: Function;
     title: string;
-    userInput?: any;
+    userInput?: IUserType;
+    authorityOptions: {
+        id: number | string;
+        authorityName: string;
+    }[];
 }
 const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserModalProps) => {
     const { t } = useTranslation();
@@ -24,27 +28,77 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
 
     const [form] = Form.useForm();
     const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
-    const [authorityOptions, setAuthorityOptions] = useState<{
-        id: number | string;
-        authorityName: string;
-    }[]>([]);
+
+    const [passwordVal, setPasswordVal] = useState<string>('');
 
     const onSubmit = () => {
         if (isSubmitting) return;
 
         setIsSubmitting(true);
+
+
+        const authorities: any = [];
+        form.getFieldValue('authorities').forEach((e: string | {
+            label: string;
+            value: string | number;
+        }) => {
+            if (typeof e === 'string')
+                authorities.push(e);
+            else
+                authorities.push(e.value);
+        });
+
         form.validateFields()
             .then((values: any) => {
                 console.log('ok', values);
-                userService
-                    .addNewUser({
-                        ...values,
-                        // authorities: values.authorities.join(',')
-                    })
-                    .then((res: AxiosResponse<IUserType>) => {
-                        console.log('add uew: ');
-
-                    })
+                if (!props.userInput) // for add
+                    userService
+                        .addNewUser({
+                            ...values,
+                            authorities: authorities
+                        })
+                        .then((res: AxiosResponse<IUserType>) => {
+                            console.log('add new user: ', res.data);
+                            props.onOk(res.data);
+                            dispatch(showNofification({
+                                type: 'success',
+                                message: `${t('user.form.add-success')}`
+                            }));
+                        })
+                        .catch((err: AxiosError<{
+                            code: string;
+                        }>) => {
+                            console.log('err: ', err?.response?.data);
+                            dispatch(showNofification({
+                                type: 'error',
+                                message: err?.response?.data ? `${t(`response.errors.${err?.response?.data.code}`)}` : `${t('user.form.add-failed')}`
+                            }));
+                        })
+                        .finally(() => setIsSubmitting(false));
+                else // for edit
+                    userService
+                        .updateUser(props.userInput.id || 1, {
+                            ...values,
+                            authorities: authorities
+                        })
+                        .then((res: AxiosResponse<IUserType>) => {
+                            console.log('edit new user: ', res.data);
+                            props.onOk(res.data);
+                            dispatch(showNofification({
+                                type: 'success',
+                                message: `${t('user.form.edit-success')}`
+                            }));
+                        })
+                        .catch((err: AxiosError<{
+                            code: string;
+                        }>) => {
+                            console.log('err: ', err?.response?.data);
+                            dispatch(showNofification({
+                                type: 'error',
+                                message: err?.response?.data ? `${t(`response.errors.${err?.response?.data.code}`)}` : `${t('user.form.add-failed')}`
+                            }));
+                        })
+                        .finally(() => setIsSubmitting(false));
             })
             .catch(err => {
                 onFinishFailed(err);
@@ -94,25 +148,29 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
         form.resetFields();
         form.setFieldValue('sex', 'MALE');
 
-        form.setFieldsValue({
-            fullName: 'Nguyen Van A',
-            username: 'nguyenvana' + (Math.random() * 1000000),
-            email: (Math.random() * 1000000) + 'fa@fa.ca',
-            password: 'fasfas',
-            'confirm-password': 'fasfas',
-        });
+        // form.setFieldsValue({
+        //     fullName: 'Nguyen Van A',
+        //     username: 'nguyenvana' + (Math.random() * 1000000),
+        //     email: (Math.random() * 1000000) + 'fa@fa.ca',
+        //     password: 'fasfas',
+        //     'confirm-password': 'fasfas',
+        // });
+        if (props.visible && props.userInput) {
+            console.log('edit: ', props.userInput);
+            form.setFieldsValue({
+                fullName: props.userInput.fullName,
+                username: props.userInput.username,
+                email: props.userInput.email,
+                authorities: props.userInput.authorities.map(e => {
+                    return {
+                        label: e.authorityName,
+                        value: e.id
+                    };
+                })
+            });
+        }
 
-        userService.getAllAuthorities()
-        .then((res: AxiosResponse<any>) => {
-            console.log('get all authorities: ', res.data);
-            setAuthorityOptions(res.data);
-            
-        })
-        .catch(err => {
-            console.log('err: ', err);
-        })
-
-    }, []);
+    }, [props.visible]);
 
     return <>
         <Modal title={props.title} open={props.visible} onCancel={() => props.cancel()} footer={null}>
@@ -165,23 +223,23 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                 <Form.Item
                     label={t('user.form.password')}
                     name="password"
-                    rules={[
+                    rules={!props.userInput ? [
                         { required: true, message: `${t('user.form.errors.password-required')}` },
                         {
                             max: 30,
                             message: `${t('user.form.errors.password-max')}`
                         }
-                    ]}
+                    ] : []}
                 >
-                    <Input.Password />
+                    <Input.Password onChange={e => setPasswordVal(e.target.value)} />
                 </Form.Item>
 
                 <Form.Item
                     label={t('user.form.confirm-password')}
                     name="confirm-password"
-                    rules={[
+                    rules={!props.userInput && passwordVal ? [
                         { required: true, validator: confirmPasswdValidator },
-                    ]}
+                    ] : []}
                 >
                     <Input.Password />
                 </Form.Item>
@@ -194,9 +252,12 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                     ]}
                 >
                     <Select mode="multiple"
-                        showArrow
-                        options={authorityOptions.map(au => ({label: t(`user.authority.${au.authorityName}`), value: au.id.toString()}))}>
-
+                        showArrow>
+                        {
+                            props.authorityOptions.map(au => (
+                                <Select.Option key={au.id.toString()} value={au.id.toString()}>{t(`user.authority.${au.authorityName}`)} </Select.Option>
+                            ))
+                        }
                     </Select>
                 </Form.Item>
 

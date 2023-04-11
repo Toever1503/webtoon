@@ -79,6 +79,7 @@ export default {
     },
     user: {
         'page-title': 'Danh sách người dùng',
+        'add-btn': 'Thêm mới',
         table: {
             'fullName': 'Họ và tên',
             'username': 'Tên đăng nhập',
@@ -89,7 +90,23 @@ export default {
             'status': 'Trạng thái',
             'createdAt': 'Ngày tạo',
             'accountType': 'Loại tài khoản',
-            'action': 'Hành động'
+            'action': 'Hành động',
+            'status-item': {
+                NOT_ENABLED: 'Chưa kích hoạt',
+                ACTIVED: 'Đang hoạt động',
+                DEACTIVED: 'Đã khóa'
+            },
+            'accountType-item': {
+                FACEBOOK: 'Facebook',
+                GOOGLE: 'Google',
+                DATABASE: 'Tài khoản thường'
+            },
+            'status-item-select': {
+                ACTIVED: 'Kích hoạt',
+                DEACTIVED: 'Khóa'
+            },
+            'change-status-success': 'Thay đổi trạng thái thành công!',
+            'change-status-failed': 'Thay đổi trạng thái thất bại!',
         },
         modal: {
             'add-title': 'Thêm người dùng mới',
@@ -106,7 +123,8 @@ export default {
             'authority': 'Quyền',
             'save-btn': 'Lưu',
             'reset-btn': 'Làm mới',
-
+            'edit-btn': 'Chỉnh sửa',
+            'delete-btn': 'Xóa',
             'sure-delete': 'Bạn chắc chắn muốn xóa người dùng này?',
             'delete-success': 'Xóa thành công!',
             'delete-failed': 'Xóa thất bại!',
@@ -114,6 +132,10 @@ export default {
                 male: 'Nam',
                 female: 'Nữ',
             },
+            'add-success': 'Thêm thành công!',
+            'add-failed': 'Thêm thất bại!',
+            'edit-success': 'Sửa thành công!',
+            'edit-failed': 'Sửa thất bại!',
             errors: {
                 'check-again': 'Vui lòng kiểm tra lại thông tin!',
                 'fullName-required': 'Họ và tên không được để trống!',
@@ -186,8 +208,17 @@ export default {
 
         }
     },
-
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
-    'reset': 'Làm mới'
+    'reset': 'Làm mới',
+    placholders: {
+        'search': 'Tìm kiếm...',
+    },
+    response: {
+        errors: {
+            'code-0': 'Lỗi server. Vui lòng thử lại sau!',
+            'code-11': 'Tên đăng nhập đã tồn tại!',
+            'code-12': 'Email đã tồn tại!',
+        }
+    }
 }

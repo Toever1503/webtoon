@@ -8,7 +8,7 @@ const reIndexTbl = (page: number, size: number, data: any[]) => {
 };
 
 const calculateIndexTbl = (page: number, size: number, index: number) => {
-    return (page - 1) * size + index;
+    return ((page - 1) * size) + index;
 }
 
 export {

@@ -33,11 +33,14 @@ export const userSlice = createSlice({
     },
     deleteUser: (state, action: PayloadAction<number>) => {
       state.data = state.data.filter((item: IUserType) => item.id !== action.payload);
-    }
+    },
+    setUserData: (state, action: PayloadAction<IUserType[]>) => {
+      state.data = action.payload;
+    },
   },
 })
 
 // Action creators are generated for each case reducer function
-export const { addNewUser, editUser, deleteUser } = userSlice.actions
+export const { addNewUser, editUser, deleteUser, setUserData } = userSlice.actions
 
 export default userSlice.reducer
