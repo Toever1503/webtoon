@@ -83,6 +83,11 @@
 			<artifactId>jakarta.xml.bind-api</artifactId>
 		</dependency>
 
+		<dependency>
+			<groupId>webtoon.utils</groupId>
+			<artifactId>webtoon-utils-service</artifactId>
+		</dependency>
+
     </dependencies>
 
 </project>

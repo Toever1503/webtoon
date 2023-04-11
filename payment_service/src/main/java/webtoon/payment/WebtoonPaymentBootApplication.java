@@ -5,20 +5,25 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.FileSystemUtils;
+import webtoon.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;
 
 @ServletComponentScan
-@SpringBootApplication
+@SpringBootApplication(
+		exclude = {
+				org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class
+		})
 @Import({ WebtoonPaymentApplicationInitializer.class })
 
 public class WebtoonPaymentBootApplication {
 	public static void main(String[] args) throws IOException {
 
 		if(new File("").getAbsolutePath().contains("webtoon")){ // is opening all project
-			new File("payment_service/src/main/resources/static").deleteOnExit();
-			new File("payment_service/src/main/resources/templates").deleteOnExit();
+			FileUtils.deleteFolderContent("payment_service/src/main/resources/static");
+			FileUtils.deleteFolderContent("payment_service/src/main/resources/templates");
+
 			FileSystemUtils.copyRecursively(new File("src/main/resources/static"), new File("payment_service/src/main/resources/static"));
 			FileSystemUtils.copyRecursively(new File("src/main/resources/templates"), new File("payment_service/src/main/resources/templates"));
 		}
