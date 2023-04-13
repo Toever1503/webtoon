@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/css/all.min.css" />
+    <link href="/static/main.css" rel="stylesheet">
+    <link href="../static/main.css" rel="stylesheet">
+
+    <style>
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body class="bg-neutral-100">
+    <section class="bg-gray-50 dark:bg-gray-900">
+        <div class="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
+            <a href="#" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+                <img class="w-8 h-8 mr-2" src="https://flowbite.s3.amazonaws.com/blocks/marketing-ui/logo.svg"
+                    alt="logo">
+                Login
+            </a>
+            <div
+                class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+                <div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+                    <h1
+                        class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+                        Đăng nhập bằng tài khoản của bạn
+                    </h1>
+                    <form class="space-y-4 md:space-y-6" action="/signin" method="post">
+                        <div>
+                            <label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+                                Tài khoản hoặc email
+                            </label>
+                            <input name="username" id="username"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                placeholder="nhập tài khoản hoặc email" required="">
+                        </div>
+                        <div>
+                            <label for="password"
+                                class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Mật khẩu</label>
+                            <input type="password" name="password" id="password" placeholder="••••••••"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                required="">
+                        </div>
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-start">
+                                <div class="flex items-center h-5">
+                                    <input id="remember" aria-describedby="remember" type="checkbox"
+                                        class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+                                        name="rememberMe">
+                                </div>
+                                <div class="ml-3 text-sm">
+                                    <label for="remember" class="text-gray-500 dark:text-gray-300">Nhớ</label>
+                                </div>
+                            </div>
+                            <a href="#"
+                                class="text-sm font-medium text-primary-600 hover:underline dark:text-primary-500">Quên
+                                mật khẩu?</a>
+                        </div>
+
+                        <div class="mt-7">
+                            <p th:if="${message != null}" class="text-red-500" th:text="${message}">
+                            </p>
+                            <button
+                                class="cursor-pointer bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                                Đăng nhập
+                            </button>
+                        </div>
+
+
+                        <!-- login by social -->
+                        <div class="flex mt-7 items-center text-center">
+                            <hr class="border-gray-300 border-1 w-full rounded-md">
+                            <label class="block font-medium text-sm text-gray-600 w-full">
+                                Hoặc đăng nhập bằng
+                            </label>
+                            <hr class="border-gray-300 border-1 w-full rounded-md">
+                        </div>
+                        <div class="flex mt-7 justify-center w-full">
+                            <a href="/oauth2/authorization/facebook"
+                                class="mr-5 bg-blue-500 border-none px-4 py-2 rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+
+                                Facebook
+                            </a>
+
+                            <a href="/oauth2/authorization/google"
+                                class="bg-red-500 border-none px-4 py-2 rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+
+                                Google
+                            </a>
+                        </div>
+
+                        <p class="text-sm font-light text-gray-500 dark:text-gray-400">
+                            Chưa có tài khoản? <a href="/register"
+                                class="font-medium text-primary-600 hover:underline dark:text-primary-500">Đăng ký</a>
+                        </p>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+</body>
+
+</html>

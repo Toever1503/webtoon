@@ -12,18 +12,17 @@
         <module name="webtoon-account-service" />
         <module name="webtoon-utils-service" />
         <module name="webtoon-storage-service" />
-        <module name="combine_service" />
-        <module name="combine_resources" />
         <module name="webtoon-manga-service" />
+        <module name="main_app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="combine_resources" target="11" />
-      <module name="combine_service" target="11" />
-      <module name="payment-service" target="1.8" />
+      <module name="main_app" target="11" />
+      <module name="payment-service" target="11" />
       <module name="webtoon" target="11" />
       <module name="webtoon-account-service" target="11" />
       <module name="webtoon-comment-service" target="11" />
+      <module name="webtoon-main-service" target="11" />
       <module name="webtoon-manga-service" target="11" />
       <module name="webtoon-storage-service" target="11" />
       <module name="webtoon-utils-service" target="11" />
@@ -31,11 +30,11 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
-      <module name="combine_resources" options="-parameters" />
-      <module name="combine_service" options="-parameters" />
+      <module name="main_app" options="-parameters" />
       <module name="payment-service" options="-parameters" />
       <module name="webtoon-account-service" options="-parameters" />
       <module name="webtoon-comment-service" options="-parameters" />
+      <module name="webtoon-main-service" options="-parameters" />
       <module name="webtoon-manga-service" options="-parameters" />
       <module name="webtoon-storage-service" options="-parameters" />
       <module name="webtoon-utils-service" options="-parameters" />

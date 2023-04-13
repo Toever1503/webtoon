@@ -44,14 +44,18 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
         volumeService.deleteById(selectedVolId)
             .then((res: AxiosResponse) => {
                 console.log('delete vol success: ', res.data);
-                setVolumeData(volumeData.filter((vol: VolumeType) => vol.id !== selectedVolId).map((vol: VolumeType) => {
+                const newVols: VolumeType[] = volumeData.filter((vol: VolumeType) => vol.id !== selectedVolId).map((vol: VolumeType) => {
                     if (volumeInput?.volumeIndex)
                         if (vol.volumeIndex > volumeInput.volumeIndex)
                             vol.volumeIndex--;
                     return vol;
-                }));
+                });
+                setVolumeData(newVols);
                 onCallApiLastVolIndex();
-                setSelectedVolId('');
+                if (newVols.length > 0) {
+                    setSelectedVolId(newVols[0].id);
+                    setLastVolIndex(newVols[0]);    
+                }
                 dispatch(showNofification({
                     type: 'success',
                     message: t('manga.form.volume.delete-success'),

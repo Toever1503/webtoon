@@ -6,6 +6,7 @@
     <groupId>webtoon</groupId>
     <artifactId>webtoon</artifactId>
     <packaging>pom</packaging>
+
     <version>1.0.0</version>
     <name>datn_modules</name>
     <url>http://www.egovframe.go.kr</url>
@@ -24,8 +25,7 @@
         <module>manga_service</module>
         <module>payment_service</module>
         <module>utils_service</module>
-        <module>combine_service</module>
-        <module>combine_resources</module>
+        <module>main_app</module>
     </modules>
 
     <parent>
@@ -355,12 +355,6 @@
             </dependency>
 
             <dependency>
-                <groupId>webtoon.domains</groupId>
-                <artifactId>webtoon-manga-service</artifactId>
-                <version>1.0.0</version>
-            </dependency>
-
-            <dependency>
                 <groupId>webtoon.storage</groupId>
                 <artifactId>webtoon-storage-service</artifactId>
                 <version>1.0.0</version>
@@ -370,6 +364,12 @@
             <dependency>
                 <groupId>webtoon.utils</groupId>
                 <artifactId>webtoon-utils-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>webtoon.payment</groupId>
+                <artifactId>payment-service</artifactId>
                 <version>1.0.0</version>
             </dependency>
 

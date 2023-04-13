@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../static/main.css" rel="stylesheet" />
+    <link href="/static/main.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
+    <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
+</head>
+<body>
+    <div class="w-[1100px] m-auto xl: mt-80" layout:fragment="content">
+        <h2 class="text-xl text-red-500 text-center font-medium">
+            Chọn cách thanh toán
+        </h2>
+    <div class="flex justify-center mt-5 ">
+    <a class="w-100 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+     th:href="@{'https://localhost:8080/payment/pay?amount=' + ${items.intValue()}}">Thanh toán bằng VNPAY</a>
+</div>
+   <div class="flex justify-center">
+    <a class="w-100 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+    th:href="@{'https://localhost:8080/order/chuyenKhoan/' + ${id}}">Thanh toán bằng hình thức chuyển khoản</a>
+   </div>
+</div>
+</body>
+</html>

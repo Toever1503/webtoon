@@ -1,6 +1,8 @@
 package webtoon.account.entities;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import webtoon.account.enums.EAccountType;
@@ -9,6 +11,7 @@ import webtoon.account.enums.EStatus;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.Set;
 
 @Entity
 @Table(name = "tbl_user")
@@ -23,18 +26,19 @@ public class UserEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "username", unique = true)
-    private String username;
-
     @Column(name = "full_name")
     private String fullName;
-
-    @Column(name = "avatar")
-    private String avatar;
+    @Column(name = "username", unique = true)
+    private String username;
 
     @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "avatar")
+    private String avatar;
+
+    @Column(name = "phone")
+    private String phone;
     @Column(name = "account_type")
     @Enumerated(EnumType.STRING)
     private EAccountType accountType;
@@ -58,11 +62,17 @@ public class UserEntity {
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
-    @CreatedDate
+    @CreationTimestamp
     private Date createdAt;
 
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "modified_at")
-    @LastModifiedDate
+    @UpdateTimestamp
     private Date modifiedAt;
+
+    @ManyToMany
+    @JoinTable(name = "tbl_user_authority",
+            joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "authority_id"))
+    private Set<AuthorityEntity> authorities;
 }

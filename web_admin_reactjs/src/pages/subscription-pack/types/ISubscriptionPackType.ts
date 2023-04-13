@@ -1,4 +1,4 @@
-import IUserType from "../../user/types/UserType";
+import IUserType from "../../user/types/IUserType";
 
 export default interface ISubscriptionPackType{
     id: number;

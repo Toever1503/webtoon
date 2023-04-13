@@ -129,6 +129,23 @@
             <artifactId>webtoon-comment-service</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>webtoon.account</groupId>
+            <artifactId>webtoon-account-service</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>webtoon.payment</groupId>
+            <artifactId>payment-service</artifactId>
+        </dependency>
+
+        <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
+        <dependency>
+            <groupId>net.lingala.zip4j</groupId>
+            <artifactId>zip4j</artifactId>
+        </dependency>
+
+
     </dependencies>
 
     <reporting>
