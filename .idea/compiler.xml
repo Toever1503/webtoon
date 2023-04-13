@@ -2,6 +2,7 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
@@ -15,7 +16,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="payment-service" target="11" />
+      <module name="payment-service" target="1.8" />
       <module name="webtoon" target="11" />
       <module name="webtoon-account-service" target="11" />
       <module name="webtoon-comment-service" target="11" />
@@ -23,5 +24,15 @@
       <module name="webtoon-storage-service" target="11" />
       <module name="webtoon-utils-service" target="11" />
     </bytecodeTargetLevel>
+  </component>
+  <component name="JavacSettings">
+    <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="payment-service" options="-parameters" />
+      <module name="webtoon-account-service" options="-parameters" />
+      <module name="webtoon-comment-service" options="-parameters" />
+      <module name="webtoon-manga-service" options="-parameters" />
+      <module name="webtoon-storage-service" options="-parameters" />
+      <module name="webtoon-utils-service" options="-parameters" />
+    </option>
   </component>
 </project>
