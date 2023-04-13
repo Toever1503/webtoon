@@ -3,9 +3,8 @@ package webtoon.account.inputs;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import webtoon.account.dtos.UserDto;
-import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.ESex;
+import webtoon.account.entities.UserEntity;
 
 import java.util.List;
 

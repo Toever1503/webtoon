@@ -4,15 +4,10 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
-import webtoon.domains.manga.dtos.MangaAuthorDto;
-import webtoon.domains.manga.dtos.MangaGenreDto;
-import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.entities.MangaAuthorEntity_;
-import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaAuthorModel;
-import webtoon.domains.manga.models.MangaGenreModel;
+import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.services.IMangaAuthorService;
-import webtoon.domains.manga.services.IMangaGenreService;
 
 import java.util.List;
 

@@ -7,7 +7,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import webtoon.comment.dtos.CommentDto;
 import webtoon.comment.entities.CommentEntity;
-import webtoon.comment.enums.ECommentType;
 import webtoon.comment.inputs.CommentInput;
 import webtoon.comment.repositories.ICommentRepository;
 import webtoon.comment.services.ICommentService;

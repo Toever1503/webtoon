@@ -12,7 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import webtoon.account.models.LoginModel;
 import webtoon.account.services.LoginService;
-import webtoon.utils.exception.CustomHandleException;
+import webtoon.main.utils.exception.CustomHandleException;
 
 @Controller
 @RequiredArgsConstructor

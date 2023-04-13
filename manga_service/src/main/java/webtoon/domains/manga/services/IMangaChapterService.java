@@ -6,11 +6,11 @@ import org.springframework.data.jpa.domain.Specification;
 
 import org.springframework.web.multipart.MultipartFile;
 import webtoon.domains.manga.dtos.MangaChapterDto;
-import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.domains.manga.models.MangaChapterFilterInput;
 import webtoon.domains.manga.models.MangaChapterModel;
 import webtoon.domains.manga.models.MangaUploadChapterInput;
+import webtoon.domains.manga.entities.MangaChapterEntity;
 
 import java.util.List;
 

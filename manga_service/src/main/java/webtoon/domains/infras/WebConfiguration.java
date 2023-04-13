@@ -13,15 +13,7 @@ import org.thymeleaf.TemplateEngine;
 
 import nz.net.ultraq.thymeleaf.layoutdialect.LayoutDialect;
 
-@Configuration
-@EntityScan(basePackages = {
-		"webtoon.domains",
-		"webtoon.comment.entities"
-})
-@EnableJpaRepositories(basePackages = {
-		"webtoon.domains",
-		"webtoon.comment.repositories"
-})
+@Configuration("webConfiguration")
 public class WebConfiguration implements WebMvcConfigurer {
 
 	@Override
@@ -40,11 +32,11 @@ public class WebConfiguration implements WebMvcConfigurer {
 		return new LayoutDialect();
 	}
 
-	@Override
-	public void addViewControllers(ViewControllerRegistry registry) {
-		registry.addViewController("/")
-				.setViewName("forward:/index");
-	}
+//	@Override
+//	public void addViewControllers(ViewControllerRegistry registry) {
+//		registry.addViewController("/")
+//				.setViewName("forward:/index");
+//	}
 	
 	@Bean
     public WebMvcConfigurer configurer() {

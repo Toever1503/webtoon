@@ -13,11 +13,9 @@ import lombok.Setter;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.tag.entity.TagEntity;
-
-import javax.persistence.Column;
 
 @AllArgsConstructor
 @NoArgsConstructor

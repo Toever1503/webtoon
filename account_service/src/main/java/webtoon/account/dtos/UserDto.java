@@ -2,16 +2,14 @@ package webtoon.account.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
-import webtoon.account.entities.AuthorityEntity;
-import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
+import webtoon.account.entities.AuthorityEntity;
+import webtoon.account.entities.UserEntity;
 
 import java.util.Date;
-import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Getter
 @Builder

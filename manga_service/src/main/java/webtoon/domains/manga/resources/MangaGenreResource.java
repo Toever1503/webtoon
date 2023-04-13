@@ -14,8 +14,8 @@ import org.springframework.web.bind.annotation.RestController;
 import webtoon.domains.manga.dtos.ResponseDto;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.entities.MangaGenreEntity_;
-import webtoon.domains.manga.filters.MangaGenreFilter;
 import webtoon.domains.manga.models.MangaGenreModel;
+import webtoon.domains.manga.filters.MangaGenreFilter;
 import webtoon.domains.manga.services.IMangaGenreService;
 
 @RestController

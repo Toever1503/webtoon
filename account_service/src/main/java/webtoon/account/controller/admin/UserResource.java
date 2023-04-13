@@ -9,14 +9,12 @@ import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.entities.UserEntity_;
-import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.UserFilterInput;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.services.IUserService;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 @RestController

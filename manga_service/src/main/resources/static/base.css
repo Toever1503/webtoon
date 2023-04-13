@@ -2,13 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-    --swiper-pagination-bottom: -50px;
-  }
-
-  a{
-    color: #333333;
-  }
-  ul{
-    list-style: none
-  }
+ul, ol{
+    list-style: none;
+}

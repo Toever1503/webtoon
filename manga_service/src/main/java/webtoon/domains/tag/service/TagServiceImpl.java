@@ -8,9 +8,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import webtoon.domains.tag.entity.ITagRelationRepository;
+import webtoon.domains.tag.entity.ITagRepository;
+import webtoon.domains.tag.entity.TagEntity;
+import webtoon.domains.tag.entity.TagEntityRelation;
 import webtoon.domains.tag.entity.*;
 import webtoon.domains.tag.entity.enums.ETagType;
-import webtoon.utils.ASCIIConverter;
+import webtoon.main.utils.ASCIIConverter;
 
 @Service
 public class TagServiceImpl implements ITagService {

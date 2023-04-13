@@ -4,8 +4,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import webtoon.account.entities.EmailDetails;
 import webtoon.account.services.EmailService;
+import webtoon.account.entities.EmailDetails;
 
 
 @RestController

@@ -4,8 +4,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
-import webtoon.account.entities.EAuthorityConstants;
-import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
@@ -13,10 +11,9 @@ import webtoon.account.models.LoginModel;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.LoginService;
-import webtoon.utils.exception.CustomHandleException;
+import webtoon.main.utils.exception.CustomHandleException;
 
 import javax.transaction.Transactional;
-import java.util.List;
 
 
 @Service

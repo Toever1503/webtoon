@@ -1,8 +1,5 @@
 package webtoon.domains.post.service;
 
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import webtoon.domains.post.entities.CategoryEntity;
 import webtoon.domains.post.entities.ICategoryRepository;

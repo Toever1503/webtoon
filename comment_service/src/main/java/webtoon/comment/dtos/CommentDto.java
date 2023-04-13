@@ -2,10 +2,8 @@ package webtoon.comment.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
-import org.springframework.beans.factory.annotation.Autowired;
 import webtoon.comment.entities.CommentEntity;
 import webtoon.comment.enums.ECommentType;
-import webtoon.comment.repositories.ICommentRepository;
 
 import java.util.Date;
 import java.util.List;

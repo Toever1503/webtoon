@@ -2,9 +2,7 @@ package webtoon.payment.dtos;
 
 import lombok.*;
 import webtoon.payment.entities.OrderEntity;
-import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
-import webtoon.payment.enums.EOrderType;
 
 import java.util.Date;
 

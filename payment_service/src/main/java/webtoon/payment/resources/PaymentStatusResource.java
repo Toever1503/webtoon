@@ -3,8 +3,8 @@ package webtoon.payment.resources;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import webtoon.payment.models.PaymentStatusModel;
 import webtoon.payment.services.IPaymentStatusService;
+import webtoon.payment.models.PaymentStatusModel;
 
 @RestController
 @RequestMapping("/payment_status")

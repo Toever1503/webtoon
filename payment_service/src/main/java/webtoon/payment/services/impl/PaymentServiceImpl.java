@@ -2,12 +2,9 @@ package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.dtos.PaymentDto;
-import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.models.PaymentModel;
-import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.repositories.IPaymentRepository;
 import webtoon.payment.services.IPaymentService;
 

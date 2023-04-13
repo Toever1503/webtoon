@@ -7,11 +7,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import webtoon.comment.entities.CommentEntity;
 import webtoon.comment.entities.CommentEntity_;
+import webtoon.comment.services.ICommentService;
+import webtoon.comment.entities.CommentEntity;
 import webtoon.comment.enums.ECommentType;
 import webtoon.comment.inputs.CommentInput;
-import webtoon.comment.services.ICommentService;
 
 @Controller
 @RequestMapping(value = "comments")

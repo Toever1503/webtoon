@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.*;
 
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.dtos.ResponseDto;
-import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaChapterEntity_;
 import webtoon.domains.manga.models.MangaChapterModel;
+import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.services.IMangaChapterService;
 
 import java.util.List;

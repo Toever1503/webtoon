@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}">
+<head>
+<title>Detail post title</title>
+</head>
+
+<body>
+	<div layout:fragment="main-layout-left">
+		<div class="breadcrumb py-[10px]">
+			<nav class="w-full rounded-md">
+				<ol class="list-reset flex">
+					<li><a href="#"
+						   class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Trang chủ</a>
+					</li>
+					<li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+					</li>
+					<li><a href="#"
+						   class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Tin tức</a>
+					</li>
+					<li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+					</li>
+					<li><a
+							class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400" th:text="${postModel.title}">
+
+					</a>
+					</li>
+				</ol>
+			</nav>
+		</div>
+
+		<div class="main_layout_content_left pr-[10px]">
+			<!-- begin post info -->
+			<div class="post_info">
+				<h1 class="post_title text-4xl font-bold" th:text="${postModel.title}"></h1>
+				<div class="post_metas text-[13px] my-2 flex gap-2">
+					<span>
+						Chuyên mục: <a th:href="@{'/category/' + ${postModel.category.categoryName} + '/' + ${postModel.category.id}}" th:text="${postModel.category.categoryName}"  class="text-blue-400"/>
+					</span> 
+					
+					<span class="text-neutral-300">|</span>
+					
+					<span>
+						Người viết:
+						 <a>Admin</a>
+					</span> 
+					
+					<span class="text-neutral-300">|</span>
+					
+					<span>
+						Ngày đăng:
+						<span th:text="${postModel.createdDate}" />
+					</span>
+					
+					<span class="text-neutral-300">|</span>
+					
+					<span>
+						Lượt xem:
+						<span th:text="${postModel.viewCount}" />
+					</span>
+				</div>
+
+				<hr class="mt-2" />
+			</div>
+			<!-- end post info -->
+
+		<!-- begin post content -->
+			<article class="post_content mt-[10px]" th:utext="${postModel.content}" />
+		<!-- end post content -->
+		
+			<!-- begin post tags -->
+			<div class="post_tags flex gap-2 mt-2">
+				<span class="flex gap-2 items-center"> <img
+					src="../../static/images/post/tag_icon.svg"> Tags:
+				</span>
+				<ul class="tag_list text-sm flex flex-wrap gap-[5px]">
+					<li class="hover:bg-slate-300 bg-slate-200 px-[10px] py-[2px] rounded" th:each="tag : ${postModel.tags}">
+						<a th:href="@{'/tag/'+ ${tag.tagName} + '/' + ${tag.id}}" th:text="${tag.tagName}" />
+					</li>
+				</ul>
+			</div>
+			<!-- end post tags -->
+
+			<!-- begin prev-next post max characters: 71  -->
+			<div th:replace="post/sections/next-prev-post :: next-prev-post" />
+			<!-- end prev-next post -->
+			
+			<!-- begin post comment -->
+			<div id="comment-container" class="min-h-[250px] mt-[30px]">
+				<iframe th:src="@{'/comments?commentType=POST&objectId=' + ${postModel.id}}" frameborder="0" width="100%" height="100%"></iframe>
+			</div>
+			<!-- end post comment -->
+
+		</div>
+	</div>
+	<div layout:fragment="main-layout-right" class="mt-[25px]">
+			<!-- begin post sidebar -->
+			<div th:replace="post/sections/post-sidebar :: post-sidebar" />
+			<!-- end post sidebar -->
+	</div>
+</body>
+
+</html>

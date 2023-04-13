@@ -8,8 +8,6 @@ import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.UserInput;
-import webtoon.account.models.CreateUserModel;
-import webtoon.account.models.UpdateUserModel;
 
 import java.util.List;
 

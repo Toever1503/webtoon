@@ -12,7 +12,7 @@ import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaGenreModel;
 import webtoon.domains.manga.repositories.IMangaGenreRepository;
 import webtoon.domains.manga.services.IMangaGenreService;
-import webtoon.utils.ASCIIConverter;
+import webtoon.main.utils.ASCIIConverter;
 
 import java.util.List;
 import java.util.stream.Collectors;
