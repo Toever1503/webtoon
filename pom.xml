@@ -6,6 +6,7 @@
     <groupId>webtoon</groupId>
     <artifactId>webtoon</artifactId>
     <packaging>pom</packaging>
+
     <version>1.0.0</version>
     <name>datn_modules</name>
     <url>http://www.egovframe.go.kr</url>
@@ -24,6 +25,7 @@
         <module>manga_service</module>
         <module>payment_service</module>
         <module>utils_service</module>
+        <module>main_app</module>
     </modules>
 
     <parent>

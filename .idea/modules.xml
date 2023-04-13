@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/main_app.iml" filepath="$PROJECT_DIR$/main_app.iml" />
       <module fileurl="file://$PROJECT_DIR$/payment_service/payment-service.iml" filepath="$PROJECT_DIR$/payment_service/payment-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/webtoon.iml" filepath="$PROJECT_DIR$/webtoon.iml" />
       <module fileurl="file://$PROJECT_DIR$/account_service/webtoon-account-service.iml" filepath="$PROJECT_DIR$/account_service/webtoon-account-service.iml" />

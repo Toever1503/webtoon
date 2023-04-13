@@ -13,9 +13,11 @@
         <module name="webtoon-utils-service" />
         <module name="webtoon-storage-service" />
         <module name="webtoon-manga-service" />
+        <module name="main_app" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="main_app" target="11" />
       <module name="payment-service" target="11" />
       <module name="webtoon" target="11" />
       <module name="webtoon-account-service" target="11" />
@@ -28,6 +30,7 @@
   </component>
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
+      <module name="main_app" options="-parameters" />
       <module name="payment-service" options="-parameters" />
       <module name="webtoon-account-service" options="-parameters" />
       <module name="webtoon-comment-service" options="-parameters" />

@@ -2,6 +2,7 @@ package webtoon.domains.main.loader.infras;
 
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,6 +29,14 @@ import webtoon.payment.repositories.ISubscriptionPackRepository;
                 "webtoon.comment.repositories",
                 "webtoon.payment.repositories",
                 "webtoon.account.repositories"
+        }
+)
+@ComponentScan(
+        basePackages = {
+                "webtoon.account.services",
+                "webtoon.account.controller",
+                "webtoon.comment.services",
+                "webtoon.comment.controllers",
         }
 )
 public class JpaLoader {
