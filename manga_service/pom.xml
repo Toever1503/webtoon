@@ -124,6 +124,12 @@
             <artifactId>webtoon-storage-service</artifactId>
         </dependency>
 
+<!--        <dependency>-->
+<!--            <groupId>webtoon.account_service</groupId>-->
+<!--            <artifactId>webtoon-account-service</artifactId>-->
+<!--        </dependency>-->
+
+
         <!-- https://mvnrepository.com/artifact/net.lingala.zip4j/zip4j -->
         <dependency>
             <groupId>net.lingala.zip4j</groupId>
