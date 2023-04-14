@@ -1,0 +1,31 @@
+<!-- <link href="../../../static/main.css" rel="stylesheet"> -->
+
+<div th:fragment="next-prev-post"
+     class="prev-next-post flex gap-[20px] justify-center mt-[50px]">
+
+    <div th:if="${prevPost != null}" class="prev_post_info max-w-[300px] text-sm rounded cursor-pointer hover:scale-[1.05] ease-in-out duration-100 transform"
+         style="border: 1px solid gainsboro;">
+        <p class="text-center text-sm">Prev post</p>
+        <a th:href="@{'/post/' + ${prevPost.title} + '/' + ${prevPost.id}}" class="flex gap-1">
+            <img
+                    style="height: 120px; width: 150px; object-fit: fill;"
+                    th:src="${prevPost.featuredImage}"
+                    th:attr="src=@{${prevPost.featuredImage}},title=${prevPost.title},alt=${prevPost.postName}"
+            >
+
+            <h3 class="prev_post_title px-1" th:text="${prevPost.title}" />
+        </a>
+    </div>
+
+    <div th:if="${nextPost != null}" class="next_post_info  max-w-[300px] text-sm rounded cursor-pointer hover:scale-[1.05] ease-in-out duration-100 transform"
+         style="border: 1px solid gainsboro;">
+        <p class="text-center">Next post</p>
+        <a th:href="@{'/post/' + ${nextPost.title} + '/' + ${nextPost.id}}" class="flex gap-1">
+            <h3 class="next_post_title px-1" th:text="${nextPost.title}" />
+
+            <img
+                    style="height: 120px; width: 150px; object-fit: fill;"
+                    src="https://files.itworld.co.kr/ITW_202302_02/890xrobot.png">
+        </a>
+    </div>
+</div>

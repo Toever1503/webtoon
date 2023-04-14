@@ -2,10 +2,11 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/main_app.iml" filepath="$PROJECT_DIR$/main_app.iml" />
       <module fileurl="file://$PROJECT_DIR$/payment_service/payment-service.iml" filepath="$PROJECT_DIR$/payment_service/payment-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/webtoon.iml" filepath="$PROJECT_DIR$/webtoon.iml" />
       <module fileurl="file://$PROJECT_DIR$/account_service/webtoon-account-service.iml" filepath="$PROJECT_DIR$/account_service/webtoon-account-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/comment_service/webtoon-comment-service.iml" filepath="$PROJECT_DIR$/comment_service/webtoon-comment-service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/main_app/webtoon-main-app.iml" filepath="$PROJECT_DIR$/main_app/webtoon-main-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/manga_service/webtoon-manga-service.iml" filepath="$PROJECT_DIR$/manga_service/webtoon-manga-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/storage_service/webtoon-storage-service.iml" filepath="$PROJECT_DIR$/storage_service/webtoon-storage-service.iml" />
       <module fileurl="file://$PROJECT_DIR$/utils_service/webtoon-utils-service.iml" filepath="$PROJECT_DIR$/utils_service/webtoon-utils-service.iml" />
