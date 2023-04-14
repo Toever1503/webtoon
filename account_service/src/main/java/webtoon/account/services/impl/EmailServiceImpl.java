@@ -13,12 +13,12 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 import webtoon.account.entities.EmailDetails;
-import webtoon.account.services.EmailService;
+import webtoon.account.services.IEmailService;
 
 // Annotation
 @Service
 @RequiredArgsConstructor
-public class EmailServiceImpl implements EmailService {
+public class EmailServiceImpl implements IEmailService {
 
     private final JavaMailSender javaMailSender;
 

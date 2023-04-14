@@ -40,7 +40,7 @@ public class BeanConfiguration implements WebMvcConfigurer {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:3000",
-                                "http://localhost:8080",
+                                "https://localhost:8080",
                                 "http://localhost:8081",
                                 "http://localhost:8085",
                                 "http://localhost:19006",

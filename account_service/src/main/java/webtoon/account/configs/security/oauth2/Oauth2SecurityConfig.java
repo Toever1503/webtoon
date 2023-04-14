@@ -1,12 +1,12 @@
-package webtoon.account.configs.oauth2;
+package webtoon.account.configs.security.oauth2;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.oauth2.client.CommonOAuth2Provider;
 import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import webtoon.account.configs.security.jwt.JwtProvider;
 
 import java.util.Arrays;
 import java.util.List;
@@ -73,5 +74,10 @@ public class Oauth2SecurityConfig {
                     .clientId(clientId).clientSecret(clientSecret).build();
         }
         return null;
+    }
+
+    @Bean
+    public JwtProvider jwtProvider(@Value("${webtoon.security.jwt.secret}") String secret) throws Exception {
+        return new JwtProvider(secret);
     }
 }

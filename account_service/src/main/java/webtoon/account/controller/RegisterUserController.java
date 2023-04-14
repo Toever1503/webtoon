@@ -8,7 +8,7 @@ import webtoon.account.models.CreateUserModel;
 import webtoon.account.services.IUserService;
 
 @Controller
-@RequestMapping(value = "user/register")
+@RequestMapping(value = "/signup")
 @RequiredArgsConstructor
 public class RegisterUserController {
 

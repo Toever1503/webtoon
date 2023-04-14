@@ -1,4 +1,4 @@
-package webtoon.account.configs.oauth2;
+package webtoon.account.configs.security.oauth2;
 
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;

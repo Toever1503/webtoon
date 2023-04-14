@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.post.service.ICategoryService;
@@ -36,7 +37,7 @@ public class HomeController {
     private IPostService postService;
 
     @RequestMapping("/index")
-    public String homepage(Model model, Pageable pageable) {
+    public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type")String hasLogged) {
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, null);
 
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
@@ -49,6 +50,7 @@ public class HomeController {
 //        model.addAttribute("cateList", categoryEntity);
         model.addAttribute("mangalist", mangaEntity.getContent());
         model.addAttribute("postList", postEntity);
+        model.addAttribute("hasLogged", hasLogged);
         return "homepage";
     }
 }

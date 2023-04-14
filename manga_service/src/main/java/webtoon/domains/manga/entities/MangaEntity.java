@@ -69,6 +69,8 @@ public class MangaEntity {
     @Column(name = "display_type")
     private EMangaDisplayType displayType;
 
+    @Column(name = "is_free")
+    private Boolean isFree;
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp

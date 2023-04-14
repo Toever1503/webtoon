@@ -40,6 +40,7 @@ public class MangaDto {
     private Date modifiedAt;
     private Float rating;
     private Integer viewCount;
+    private Boolean isFree;
 
     private List<MangaAuthorDto> authors;
     private List<MangaGenreDto> genres;
@@ -69,6 +70,7 @@ public class MangaDto {
                 .genres(mangaEntity.getGenres() != null ? mangaEntity.getGenres().stream().map(MangaGenreDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .authors(mangaEntity.getAuthors() != null ? mangaEntity.getAuthors().stream().map(MangaAuthorDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .tags(mangaEntity.getTags())
+                .isFree(mangaEntity.getIsFree())
                 .build();
     }
 }

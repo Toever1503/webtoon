@@ -3,8 +3,13 @@ package webtoon.account.services.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import webtoon.account.configs.security.CustomUserDetail;
+import webtoon.account.configs.security.jwt.JwtProvider;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
 import webtoon.account.repositories.IUserRepository;
@@ -17,6 +22,8 @@ import webtoon.account.inputs.UserInput;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.main.utils.exception.CustomHandleException;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -29,11 +36,13 @@ public class UserServiceImpl implements IUserService {
     private final IUserRepository userRepository;
 
     private final IAuthorityRepository authorityRepository;
+    private final JwtProvider jwtProvider;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository) {
+    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.jwtProvider = jwtProvider;
         initAuthority();
     }
 
@@ -312,4 +321,19 @@ public class UserServiceImpl implements IUserService {
         return null;
     }
 
+    @Override
+    public boolean tokenFilter(String token, HttpServletRequest req, HttpServletResponse res) {
+        try {
+            String username = this.jwtProvider.getUsernameFromToken(token);
+            CustomUserDetail userDetail = new CustomUserDetail(this.findByUsername(username));
+            UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+            usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+            SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
 }

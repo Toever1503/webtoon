@@ -1,4 +1,4 @@
-package webtoon.main.utils.infra.security.jwt;
+package webtoon.account.configs.security.jwt;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

@@ -1,10 +1,9 @@
-package webtoon.main.utils.infra.security.jwt;
+package webtoon.account.configs.security.jwt;
 
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.filter.OncePerRequestFilter;
-
 import webtoon.main.utils.exception.ResponseDto;
 
 import javax.servlet.FilterChain;
@@ -27,27 +26,33 @@ public class JwtFilter extends OncePerRequestFilter {
 			throws ServletException, IOException {
 		log.info("JwtFilter is checking");
 		// If request method is options, do filter
-		if (req.getMethod().equalsIgnoreCase("OPTIONS") || req.getServletPath().equals("/socket")) {
+		if (req.getMethod().equalsIgnoreCase("OPTIONS") ||
+				req.getServletPath().equals("/socket") ||
+				req.getSession().getAttribute("loggedUser") != null ||
+				!req.getServletPath().startsWith("/api")) {
 			filterChain.doFilter(req, res);
 		}
 		// if not, checking token and do filter afterward
 		else {
 			String token = req.getHeader("Authorization");
 			System.out.println("token: " + token);
+
 			if (token == null) {
 				// token null
-				res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-				res.getWriter().println(new JSONObject(ResponseDto.ofError(3)));
+				deniedAccess(res);
 			} else {
 				if (this.jwtService.tokenFilter(token.substring(7), req, res))
 					filterChain.doFilter(req, res);
 				else {
 					// token not valid
-					res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
-					res.getWriter().println(new JSONObject(ResponseDto.ofError(3)));
+					deniedAccess(res);
 				}
 			}
 		}
+	}
 
+	private void deniedAccess(HttpServletResponse res) throws IOException {
+		res.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+		res.getWriter().println(new JSONObject(ResponseDto.ofError(3)));
 	}
 }

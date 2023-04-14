@@ -1,4 +1,4 @@
-package webtoon.account.configs.oauth2;
+package webtoon.account.configs.security.oauth2;
 
 import lombok.Builder;
 import org.springframework.security.core.GrantedAuthority;

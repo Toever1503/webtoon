@@ -8,7 +8,6 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="payment-service" />
-        <module name="webtoon-comment-service" />
         <module name="webtoon-account-service" />
         <module name="webtoon-utils-service" />
         <module name="webtoon-storage-service" />

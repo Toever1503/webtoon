@@ -2,7 +2,7 @@ package webtoon.account.services;
 
 import webtoon.account.entities.EmailDetails;
 
-public interface EmailService {
+public interface IEmailService {
     // Method
     // To send a simple email
     String sendSimpleMail(EmailDetails details);

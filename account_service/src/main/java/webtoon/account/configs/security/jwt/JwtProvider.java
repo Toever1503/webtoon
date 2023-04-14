@@ -1,10 +1,9 @@
-package webtoon.main.utils.infra.security.jwt;
+package webtoon.account.configs.security.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 
 import java.io.Serializable;
 import java.util.Base64;
@@ -18,7 +17,7 @@ public class JwtProvider implements Serializable {
 
 	private final String secretKey; // secret key
 
-	public JwtProvider(@Value("${webtoon.security.jwt.secret}") String secret) throws Exception {
+	public JwtProvider( String secret) throws Exception {
 		if (secret == null)
 			throw new Exception("jwt secrete must not be null.");
 		else if (secret.length() < 20)

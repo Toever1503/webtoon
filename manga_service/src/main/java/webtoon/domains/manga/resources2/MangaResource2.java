@@ -55,7 +55,7 @@ public class MangaResource2 {
     }
 
     @PostMapping
-    public MangaDto createMangaInfo(@RequestBody MangaModel input) {
+    public MangaDto saveMangaInfo(@RequestBody MangaModel input) {
         return mangaService.add(input);
     }
 

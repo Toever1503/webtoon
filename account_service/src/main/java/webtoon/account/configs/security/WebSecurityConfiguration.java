@@ -1,8 +1,10 @@
-package webtoon.account.configs;
+package webtoon.account.configs.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
@@ -15,15 +17,21 @@ import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.NegatedRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
+import webtoon.account.configs.security.jwt.JwtFilter;
+import webtoon.account.services.IUserService;
 
 @Configuration
 @EnableWebSecurity
+
 public class WebSecurityConfiguration {
     private final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
             new AntPathRequestMatcher("/signin"),
-            new AntPathRequestMatcher("/oauth2-failed"),
-            new AntPathRequestMatcher("/static/**"),
-            new AntPathRequestMatcher("/**")
+            new AntPathRequestMatcher("/static/**")
+            , new AntPathRequestMatcher("/")
+            , new AntPathRequestMatcher("/manga/**")
+            , new AntPathRequestMatcher("/post/**")
+            , new AntPathRequestMatcher("/signin/**")
+            , new AntPathRequestMatcher("/signup/**")
     );
     private RequestMatcher PRIVATE_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
 
@@ -33,6 +41,9 @@ public class WebSecurityConfiguration {
     }
 
 
+    @Autowired
+    @Lazy
+    private IUserService userService;
     @Autowired
     private ClientRegistrationRepository clientRegistrationRepository;
     @Autowired
@@ -50,12 +61,11 @@ public class WebSecurityConfiguration {
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
-
         http.httpBasic().disable();
-        http.cors().and().csrf().disable()
-                .formLogin().disable()
-                .logout().disable();
+        http.cors().and().csrf().disable();
+
+//        http.formLogin().disable()
+//                .logout().disable();
 
         http.authorizeRequests()
                 .requestMatchers(PRIVATE_URLS).authenticated();
@@ -69,6 +79,8 @@ public class WebSecurityConfiguration {
                 .failureUrl("/oauth2-failed")
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorization");
+
+        http.addFilterBefore(new JwtFilter(this.userService), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }

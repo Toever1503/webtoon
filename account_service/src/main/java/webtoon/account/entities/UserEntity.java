@@ -12,7 +12,10 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "tbl_user"
+//        , uniqueConstraints = {
+//                @UniqueConstraint(columnNames = { "email", "account_type" }) }
+)
 @Getter
 @Setter
 @AllArgsConstructor
