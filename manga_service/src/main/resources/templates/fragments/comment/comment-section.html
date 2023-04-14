@@ -1,11 +1,12 @@
 
-<div class="comment-list mt-[20px]" th:fragment="comment-section">
+<div id="comment-list" class="mx-[10px]" th:fragment="comment-section">
 	<!-- comment_top -->
 	<div
 		class="comment-list_top flex justify-between bg-[salmon] px-2 py-4 ">
-		<span class="text-white">Total 1254 comments</span>
+		<span class="text-white" th:text="'Total '+ ${commentPage.content.size()} + ' comments'"></span>
 		<div>
-			<span class="text-white"> Sort: </span> <select class="rounded"
+			<span class="text-white"> Sort: </span>
+			<select class="rounded"
 				value="newest">
 				<option class="newest">Oldest</option>
 				<option>Newest</option>
@@ -24,9 +25,9 @@
 
 		<!-- begin comment list -->
 		<ul class="comment_list grid gap-y-[20px]">
-			<!-- begin comment-item  -->
-			<div th:replace="fragments/comment/comment-item :: comment-item" />
-			<!-- end comment-item  -->
+			<!-- begin comment-list  -->
+			<div th:replace="fragments/comment/comment-list :: comment-list" />
+			<!-- end comment-list  -->
 		</ul>
 		<!-- end comment list -->
 	</div>

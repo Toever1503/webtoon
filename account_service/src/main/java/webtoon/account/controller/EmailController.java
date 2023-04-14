@@ -4,15 +4,15 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
+import webtoon.account.services.IEmailService;
 import webtoon.account.entities.EmailDetails;
-import webtoon.account.services.EmailService;
 
 
 @RestController
 @RequiredArgsConstructor
 public class EmailController {
 
-    private final EmailService emailService;
+    private final IEmailService emailService;
 
     // Sending a simple Email
     @PostMapping("/sendMail")

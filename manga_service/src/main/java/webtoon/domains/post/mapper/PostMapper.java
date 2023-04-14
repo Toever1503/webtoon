@@ -1,6 +1,5 @@
 package webtoon.domains.post.mapper;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -11,14 +10,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
 import webtoon.domains.post.entities.ICategoryRepository;
-import webtoon.domains.post.entities.IPostRepository;
 import webtoon.domains.post.entities.PostEntity;
 import webtoon.domains.post.entities.dtos.PostDto;
 import webtoon.domains.post.input.PostInput;
-import webtoon.domains.tag.entity.ITagRelationRepository;
-import webtoon.domains.tag.entity.ITagRepository;
-import webtoon.domains.tag.entity.TagEntity;
-import webtoon.domains.tag.entity.TagEntityRelation;
 
 @Component
 public class PostMapper {

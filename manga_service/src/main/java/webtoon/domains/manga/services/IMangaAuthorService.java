@@ -5,9 +5,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 
 import webtoon.domains.manga.dtos.MangaAuthorDto;
-import webtoon.domains.manga.entities.MangaAuthorEntity;
-import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaAuthorModel;
+import webtoon.domains.manga.entities.MangaAuthorEntity;
 
 import java.util.List;
 

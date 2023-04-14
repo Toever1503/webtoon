@@ -108,6 +108,11 @@
             <artifactId>hibernate-jpamodelgen</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>webtoon.utils</groupId>
+            <artifactId>webtoon-utils-service</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

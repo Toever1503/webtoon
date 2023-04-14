@@ -6,8 +6,8 @@ import java.util.stream.Collectors;
 import org.springframework.data.domain.Page;
 import org.springframework.stereotype.Component;
 
-import webtoon.storage.domain.dtos.FileDto;
 import webtoon.storage.domain.entities.FileEntity;
+import webtoon.storage.domain.dtos.FileDto;
 
 @Component
 public class FileMapper {

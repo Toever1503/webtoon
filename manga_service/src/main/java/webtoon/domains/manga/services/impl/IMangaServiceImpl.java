@@ -12,18 +12,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
-import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.mappers.MangaMapper;
 import webtoon.domains.manga.models.MangaModel;
-import webtoon.domains.manga.repositories.*;
-import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.tag.entity.enums.ETagType;
 import webtoon.domains.tag.service.ITagService;
-import webtoon.utils.ASCIIConverter;
+import webtoon.domains.manga.entities.MangaEntity_;
+import webtoon.domains.manga.repositories.*;
+import webtoon.domains.manga.services.IMangaService;
+import webtoon.main.utils.ASCIIConverter;
 
 import java.util.Collections;
 import java.util.List;
@@ -59,7 +59,6 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public MangaDto add(MangaModel model) {
         MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
-
         mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
 
 

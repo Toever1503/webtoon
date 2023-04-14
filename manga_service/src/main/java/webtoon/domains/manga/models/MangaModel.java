@@ -33,7 +33,7 @@ public class MangaModel {
 	private EMangaDisplayType displayType;
 	private Date createdAt;
 	private Date modifiedAt;
-
+	private Boolean isFree;
 	private List<Long> authors;
 	private List<Long> genres;
 	private List<Long> tags;

@@ -127,8 +127,18 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
                         <Radio value={'CHAP'} className="text-[13px]">Theo chương</Radio>
                         <Radio value={'VOL'} className="text-[13px]">Theo tập</Radio>
                     </Radio.Group>
+                    <div className="max-w-[800px] mx-auto mb-[20px] rounded" style={{border: '1px solid #80808063'}}>
+                        {
+                            displayType === 'CHAP' ?
+                                <img className="w-full h-full" src="/src/assets/chap-type-demo.jpg" />
+                                :
+                                <img className="w-full h-full" src="/src/assets/vol-type-demo.jpg" />
+                        }
+
+                    </div>
 
                     <div className="flex space-x-2 w-fit mx-auto">
+                        <Button size="small" type="primary" onClick={() => setCurrentStep(0)}>Quay lại</Button>
                         <Button size="small" type="primary" onClick={confirmDisplayType}>Tiếp theo</Button>
                     </div>
                 </section>

@@ -4,15 +4,12 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import webtoon.domains.post.entities.CategoryEntity;
-import webtoon.domains.post.entities.PostEntity;
 import webtoon.domains.post.input.EPostStatus;
 import webtoon.domains.tag.entity.TagEntity;
+import webtoon.domains.post.entities.CategoryEntity;
 
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Builder
 @Data

@@ -13,11 +13,9 @@ import lombok.Setter;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.enums.EMangaType;
+import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.tag.entity.TagEntity;
-
-import javax.persistence.Column;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -42,6 +40,7 @@ public class MangaDto {
     private Date modifiedAt;
     private Float rating;
     private Integer viewCount;
+    private Boolean isFree;
 
     private List<MangaAuthorDto> authors;
     private List<MangaGenreDto> genres;
@@ -71,6 +70,7 @@ public class MangaDto {
                 .genres(mangaEntity.getGenres() != null ? mangaEntity.getGenres().stream().map(MangaGenreDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .authors(mangaEntity.getAuthors() != null ? mangaEntity.getAuthors().stream().map(MangaAuthorDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .tags(mangaEntity.getTags())
+                .isFree(mangaEntity.getIsFree())
                 .build();
     }
 }

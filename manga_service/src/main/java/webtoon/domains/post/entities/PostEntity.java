@@ -7,10 +7,7 @@ import lombok.NoArgsConstructor;
 import webtoon.domains.post.input.EPostStatus;
 import webtoon.domains.tag.entity.TagEntityRelation;
 
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.annotations.Where;
-import webtoon.domains.tag.entity.enums.TagRelationTypeConstant;
 
 import javax.persistence.*;
 import java.util.Date;

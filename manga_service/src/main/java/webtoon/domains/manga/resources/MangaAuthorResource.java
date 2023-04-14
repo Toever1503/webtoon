@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import webtoon.domains.manga.dtos.MangaAuthorDto;
 import webtoon.domains.manga.dtos.ResponseDto;
-import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.entities.MangaAuthorEntity_;
 import webtoon.domains.manga.models.MangaAuthorModel;
+import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.services.IMangaAuthorService;
 
 @RestController

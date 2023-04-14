@@ -4,21 +4,23 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import webtoon.account.models.LoginModel;
-import webtoon.account.services.LoginService;
-import webtoon.utils.exception.CustomHandleException;
+import webtoon.account.services.ILoginService;
+import webtoon.main.utils.exception.CustomHandleException;
 
 @Controller
 @RequiredArgsConstructor
 public class LoginController {
 
-    private final LoginService loginService;
+    private final ILoginService loginService;
 
 
     @RequestMapping("/signin")
@@ -29,10 +31,10 @@ public class LoginController {
 
     @ResponseBody
     @PostMapping("signin")
-    public String loginHandle(LoginModel model, HttpServletResponse res) throws IOException {
+    public String loginHandle(LoginModel model, HttpServletRequest req, HttpServletResponse res) throws IOException {
         try {
-            this.loginService.login(model);
-            res.sendRedirect("http://localhost:8000/");
+            this.loginService.login(model, req);
+            res.sendRedirect("/");
         } catch (CustomHandleException e) {
             if (e.getCode() == 0) {
                 return "login error";
@@ -44,13 +46,16 @@ public class LoginController {
 
 
     @RequestMapping(value = "oauth2-success")
-    public void onOauth2Success(OAuth2AuthenticationToken token, HttpServletResponse res) throws IOException {
+    public String onOauth2Success(OAuth2AuthenticationToken token,
+                                  HttpServletRequest req,
+                                  HttpServletResponse res) throws IOException {
         if (token == null)
-            res.sendRedirect("/oauth2-failed");
+            return "redirect:/oauth2-failed";
         else {
-            int result = this.loginService.loginViaOAuth2(token);
-            res.sendRedirect("http://localhost:8000/?login-type=" + result);
+            int result = this.loginService.loginViaOAuth2(token, req, res);
+            return "redirect:/index?login-type=" + result;
         }
+
     }
 
     @RequestMapping(value = "oauth2-failed")

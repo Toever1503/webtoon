@@ -3,8 +3,6 @@ package webtoon.account.entities;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
@@ -14,7 +12,10 @@ import java.util.Date;
 import java.util.Set;
 
 @Entity
-@Table(name = "tbl_user")
+@Table(name = "tbl_user"
+//        , uniqueConstraints = {
+//                @UniqueConstraint(columnNames = { "email", "account_type" }) }
+)
 @Getter
 @Setter
 @AllArgsConstructor

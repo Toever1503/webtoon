@@ -47,6 +47,7 @@ public class MangaMapper {
                 .displayType(input.getDisplayType())
                 .createdAt(input.getCreatedAt())
                 .modifiedAt(input.getModifiedAt())
+                .isFree(input.getIsFree())
                 .build();
     }
 

@@ -3,26 +3,21 @@ package webtoon.account.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import webtoon.account.configs.security.jwt.IJwtService;
 import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.UserInput;
-import webtoon.account.models.CreateUserModel;
-import webtoon.account.models.UpdateUserModel;
 
 import java.util.List;
 
-public interface IUserService {
+public interface IUserService extends IJwtService {
 
 
     Page<UserDto> findAllByStatus(Boolean status, Pageable pageable);
 
     UserDto findById(Long id);
-
-
-
-
 
     void delete(Long id);
 

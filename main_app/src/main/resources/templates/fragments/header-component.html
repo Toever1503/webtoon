@@ -1,0 +1,72 @@
+ <header class="bg-red-400 py-[20px]" th:fragment="header">
+        <div class="main-header-layout max-w-[1100px] mx-auto flex gap-[50px] justify-between items-center">
+
+            <div class="logo">
+                <a href="/">
+                    <img src="https://live.mangabooth.com/wp-content/themes/madara/images/logo.png" alt="logo">
+                </a>
+            </div>
+
+            <div class="flex items-center gap-[20px]">
+                <ul class="menu-nav-bar flex gap-[30px]">
+                    <li><a class="text-white font-bold hover:text-yellow-200" href="/">Home</a></li>
+                    <li><a class="text-white font-bold hover:text-yellow-200" href="/about">Manga</a></li>
+                    <li><a class="text-white font-bold hover:text-yellow-200" href="/about">News</a></li>
+                    <li><a class="text-white font-bold hover:text-yellow-200" href="/contact">Price</a></li>
+                    <li><a class="text-white font-bold hover:text-yellow-200" href="/contact">Contact</a></li>
+                </ul>
+
+                <!--  write seach button -->
+                <div class="search-button w-[20px] h-[20px] flex gap-[10px]">
+                    <button class="bg-white" id="header_search_btn">
+                        <i class="fa-sharp fa-solid fa-magnifying-glass"></i>
+                    </button>
+
+                    <div id="search_modal" class="relative z-10 ease-in-out duration-300 hidden"
+                        aria-labelledby="modal-title" role="dialog" aria-modal="true">
+                        <!--
+                          Background backdrop, show/hide based on modal state.
+                      
+                          Entering: "ease-out duration-300"
+                            From: "opacity-0"
+                            To: "opacity-100"
+                          Leaving: "ease-in duration-200"
+                            From: "opacity-100"
+                            To: "opacity-0"
+                        -->
+                        <div id="search_modal_bg"
+                            class="fixed inset-0 none flex justify-center bg-gray-500 bg-opacity-75 transition-opacity">
+                            <form action="/search" method="get"
+                                class="p-[20px] h-fit flex gap-[10px] mt-[10%] relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all  sm:w-full sm:max-w-lg">
+                                <input name="q" class="rounded h-[35px] py-1 px-2 w-full"
+                                    style="border: 1px solid gainsboro;" />
+                                <button type="submit"
+                                    class="inline-flex w-full justify-center rounded-md h-[35px] bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">Search</button>
+                        </div>
+                    </div>
+
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        var searchModal = document.getElementById('search_modal');
+                        var searchBtn = document.getElementById('header_search_btn');
+                        searchBtn.addEventListener('click', function () {
+                            console.log(1242);
+                            searchModal.classList.remove('hidden');
+                        });
+
+                        var searchModalBg = document.getElementById('search_modal_bg');
+                        searchModalBg.addEventListener('click', function (e) {
+                            console.log("close search modal: ", e.target.id)
+                            if (e.target.id === 'search_modal_bg')
+                                searchModal.classList.add('hidden');
+                        });
+                    });
+                </script>
+            </div>
+
+        </div>
+        </div>
+
+    </header>

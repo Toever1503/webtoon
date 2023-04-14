@@ -1,7 +1,6 @@
 package webtoon.payment.controller;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -13,7 +12,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -22,14 +20,13 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
 
 @Controller
 @RequestMapping("payment/pay")
 public class PaymentController {
 
 	@GetMapping
-	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam int amount) throws IOException {
+	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam Integer amount) throws IOException {
 		String vnp_OrderInfo = "order info";
 		String vnp_TxnRef = VnPayConfig.getRandomNumber(8);
 		String bank_code = ""; // edit later
@@ -39,6 +36,7 @@ public class PaymentController {
 		String orderType = "ATM";
 		String vnp_IpAddr = "0:0:0:0:0:0:0:1";
 		String vnp_TmnCode = VnPayConfig.vnp_TmnCode;
+
 		amount = amount * 100;
 
 		Map<String, String> vnp_Params = new HashMap<>();

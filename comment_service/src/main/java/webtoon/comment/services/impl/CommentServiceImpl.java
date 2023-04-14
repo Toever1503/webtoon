@@ -7,10 +7,11 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import webtoon.comment.dtos.CommentDto;
 import webtoon.comment.entities.CommentEntity;
-import webtoon.comment.enums.ECommentType;
 import webtoon.comment.inputs.CommentInput;
 import webtoon.comment.repositories.ICommentRepository;
 import webtoon.comment.services.ICommentService;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -25,7 +26,6 @@ public class CommentServiceImpl implements ICommentService {
         );
     }
 
-
     @Override
     public CommentDto add(CommentInput model) {
         return CommentDto.toDto(
@@ -33,6 +33,8 @@ public class CommentServiceImpl implements ICommentService {
                         CommentEntity.builder()
                                 .content(model.getContent())
                                 .commentType(model.getCommentType())
+                                .objectId(model.getObjectId())
+                                .parentComment(model.getParentId() != null ? this.getById(model.getParentId()) : null)
                                 .build()
                 )
         );
@@ -42,8 +44,6 @@ public class CommentServiceImpl implements ICommentService {
     public CommentDto update(CommentInput model) {
         CommentEntity entity = this.getById(model.getId());
         entity.setContent(model.getContent());
-        entity.setCommentType(model.getCommentType());
-
         return CommentDto.toDto(
                 this.commentRepository.saveAndFlush(entity)
         );
@@ -52,11 +52,23 @@ public class CommentServiceImpl implements ICommentService {
     @Override
     public Page<CommentDto> findAll(Pageable pageable, Specification<CommentEntity> spec) {
         return this.commentRepository.findAll(spec, pageable)
-                .map(CommentDto::toDto);
+                .map(entity ->
+                        CommentDto.builder()
+                                .id(entity.getId())
+                                .content(entity.getContent())
+                                .commentType(entity.getCommentType())
+                                .createdAt(entity.getCreatedAt())
+                                .modifiedAt(entity.getModifiedAt())
+                                .commentParent(entity.getParentComment() != null ? entity.getId() : null)
+                                .childComments(commentRepository.findAllByParentId(entity.getId()))
+                                .build()
+                );
     }
 
     @Override
     public void delete(Long id) {
+        List<CommentEntity> childComments = commentRepository.findAllByParentId(id);
+        childComments.forEach(commentEntity -> this.commentRepository.deleteById(commentEntity.getId()));
         this.commentRepository.deleteById(id);
     }
 

@@ -6,6 +6,7 @@
     <groupId>webtoon</groupId>
     <artifactId>webtoon</artifactId>
     <packaging>pom</packaging>
+
     <version>1.0.0</version>
     <name>datn_modules</name>
     <url>http://www.egovframe.go.kr</url>
@@ -24,6 +25,7 @@
         <module>manga_service</module>
         <module>payment_service</module>
         <module>utils_service</module>
+        <module>main_app</module>
     </modules>
 
     <parent>
@@ -84,6 +86,12 @@
                 <artifactId>spring-boot-starter-security</artifactId>
                 <version>${springboot.version}</version>
             </dependency>
+
+<!--            <dependency>-->
+<!--                <groupId>org.springframework.boot</groupId>-->
+<!--                <artifactId>spring-boot-starter-oauth2-client</artifactId>-->
+<!--                <version>${springboot.version}</version>-->
+<!--            </dependency>-->
 
             <!-- https://mvnrepository.com/artifact/org.thymeleaf.extras/thymeleaf-extras-springsecurity5 -->
             <dependency>
@@ -362,6 +370,18 @@
             <dependency>
                 <groupId>webtoon.utils</groupId>
                 <artifactId>webtoon-utils-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>webtoon.payment</groupId>
+                <artifactId>payment-service</artifactId>
+                <version>1.0.0</version>
+            </dependency>
+
+            <dependency>
+                <groupId>webtoon.domains</groupId>
+                <artifactId>webtoon-manga-service</artifactId>
                 <version>1.0.0</version>
             </dependency>
 

@@ -5,13 +5,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
-import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaFilterInput;
 import webtoon.domains.manga.models.MangaModel;
+import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.services.IMangaService;
 
 import java.util.ArrayList;
@@ -55,7 +55,7 @@ public class MangaResource2 {
     }
 
     @PostMapping
-    public MangaDto createMangaInfo(@RequestBody MangaModel input) {
+    public MangaDto saveMangaInfo(@RequestBody MangaModel input) {
         return mangaService.add(input);
     }
 

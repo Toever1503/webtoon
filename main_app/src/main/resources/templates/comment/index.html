@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <title>Comment list</title>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="../static//main.css" rel="stylesheet">
+    <link href="/static/main.css" rel="stylesheet">
+</head>
+
+<body>
+
+    <div th:replace="fragments/comment/comment-section :: comment-section " />
+
+    <script>
+
+        document.querySelectorAll(".cmm_action_menu").forEach((e, index) => {
+            e.addEventListener('click', function () {
+                document.getElementsByClassName('cmm_action_list')[index].classList.toggle('hidden');
+            });
+        });
+
+        document.querySelectorAll(".comment_reply").forEach((e,index) => {
+            e.addEventListener('click', function () {
+                document.getElementsByClassName('comment_reply_form')[index].classList.toggle('hidden');
+            });
+        });
+
+        document.querySelectorAll(".comment_update").forEach((e,index) => {
+            e.addEventListener('click', function () {
+                document.getElementsByClassName('comment_update_form')[index].classList.toggle('hidden');
+            });
+        });
+
+    </script>
+</body>
+</html>

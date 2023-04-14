@@ -1,26 +1,34 @@
 package webtoon.account.services.impl;
 
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import webtoon.account.configs.security.CustomUserDetail;
+import webtoon.account.configs.security.jwt.JwtProvider;
 import webtoon.account.entities.EAuthorityConstants;
-import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
 import webtoon.account.models.LoginModel;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.account.repositories.IUserRepository;
-import webtoon.account.services.LoginService;
-import webtoon.utils.exception.CustomHandleException;
+import webtoon.account.services.ILoginService;
+import webtoon.main.utils.exception.CustomHandleException;
 
-import javax.transaction.Transactional;
-import java.util.List;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.util.Set;
 
 
 @Service
-public class LoginServiceImpl implements LoginService {
+@Transactional
+public class LoginServiceImpl implements ILoginService {
 
     private final PasswordEncoder passwordEncoder;
 
@@ -28,15 +36,18 @@ public class LoginServiceImpl implements LoginService {
 
     private final IAuthorityRepository authorityRepository;
 
-    public LoginServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository) {
+    private final JwtProvider jwtProvider;
+
+    public LoginServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
+        this.jwtProvider = jwtProvider;
     }
 
 
     @Override
-    public void login(LoginModel model) {
+    public void login(LoginModel model, HttpServletRequest req) {
         UserEntity userEntity = this.userRepository
                 .findByUsernameOrEmail(model.getUsername(), model.getUsername())
                 .orElseThrow(
@@ -46,46 +57,27 @@ public class LoginServiceImpl implements LoginService {
         if (!this.passwordEncoder.matches(model.getPassword(), userEntity.getPassword())) {
             throw new CustomHandleException(1);
         }
+
+        req.getSession().setAttribute("loggedUser", userEntity);
+        CustomUserDetail userDetail = new CustomUserDetail(userEntity);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
     }
 
 
-    @Transactional
     @Override
-    public void loginFormOAuth2(OAuth2AuthenticationToken token) {
-        EAccountType type = EAccountType.valueOf(token.getAuthorizedClientRegistrationId().toUpperCase());
-
-        OAuth2User oAuth2User = token.getPrincipal();
-//
-//        UserEntity userEntity = this.userRepository
-//                .findByAccountTypeAndUsername(
-//                        type,
-//                        oAuth2User.getName()
-//                )
-//                .orElseGet(() -> this.userRepository.save(
-//                                UserEntity.builder()
-//                                        .username(oAuth2User.getName())
-//                                        .fullName(oAuth2User.getAttribute("given_name"))
-//                                        .avatar(oAuth2User.getAttribute("picture"))
-//                                        .email(oAuth2User.getAttribute("email"))
-//                                        .accountType(type)
-//                                        .status(EStatus.ENABLED)
-//                                        .build()
-//                        )
-//                );
-
-    }
-
-    @Override
-    public int loginViaOAuth2(OAuth2AuthenticationToken token) {
+    public int loginViaOAuth2(OAuth2AuthenticationToken token, HttpServletRequest req, HttpServletResponse res) {
         EAccountType accountType = EAccountType.valueOf(token.getAuthorizedClientRegistrationId().toUpperCase());
         OAuth2User oAuth2User = token.getPrincipal();
 
         String username;
+        String email = oAuth2User.getAttribute("email");
         if (accountType == EAccountType.GOOGLE)
             username = accountType + "-" + oAuth2User.getAttribute("sub");
         else username = accountType + "-" + oAuth2User.getAttribute("id");
 
-        UserEntity entity = this.userRepository.findByUsername(username)
+        UserEntity entity = this.userRepository.findByUsernameOrEmail(username, email)
                 .orElse(null);
 
         int typeOfLogin = 0;
@@ -93,20 +85,31 @@ public class LoginServiceImpl implements LoginService {
             entity = UserEntity.builder()
                     .username(username)
                     .accountType(accountType)
-                    .email(oAuth2User.getAttribute("email"))
+                    .email(email)
                     .fullName(oAuth2User.getAttribute("name"))
                     .hasBlocked(false)
                     .numberOfFailedSignIn(1)
                     .status(EStatus.NOT_ENABLED)
                     .password(this.passwordEncoder.encode(username))
+                    .authorities(Set.of(this.authorityRepository.findByAuthorityName(EAuthorityConstants.ROLE_USER)))
                     .build();
             if (accountType == EAccountType.GOOGLE)
                 entity.setAvatar(oAuth2User.getAttribute("picture"));
             this.userRepository.saveAndFlush(entity);
-            typeOfLogin = 0;
+            typeOfLogin = 1;
         } else { // handle old user
+
         }
 
+        req.getSession().setAttribute("loggedUser", entity);
+        Cookie tokenCookie = new Cookie("token", jwtProvider.generateToken(entity.getUsername(), 86400));
+        tokenCookie.setMaxAge(86400);
+        res.addCookie(tokenCookie);
+
+        CustomUserDetail userDetail = new CustomUserDetail(entity);
+        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());
+        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(req));
+        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
 
         return typeOfLogin;
     }
