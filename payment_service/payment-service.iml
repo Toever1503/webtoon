@@ -20,7 +20,7 @@
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
           <factory-entry name="entityManagerFactory" />
-          <factory-entry name="payment-service" />
+          <factory-entry name="payment-service" value="a12621d6-3c8c-4894-996a-6cbd16f8ae12" />
         </datasource-mapping>
         <naming-strategy-map />
       </configuration>
