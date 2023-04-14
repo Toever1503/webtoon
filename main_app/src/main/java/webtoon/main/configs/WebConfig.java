@@ -30,7 +30,14 @@ public class WebConfig implements WebMvcConfigurer {
         // session.getAttribute("loggedUser");
         // PUBLIC PATH
         return List.of(
-                new AntPathRequestMatcher("/index")
+                new AntPathRequestMatcher("/index"),
+                new AntPathRequestMatcher("/signin"),
+                new AntPathRequestMatcher("/static/**")
+                , new AntPathRequestMatcher("/")
+                , new AntPathRequestMatcher("/manga/**")
+                , new AntPathRequestMatcher("/post/**")
+                , new AntPathRequestMatcher("/signin/**")
+                , new AntPathRequestMatcher("/signup/**")
         );
     }
 

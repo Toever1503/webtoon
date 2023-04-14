@@ -39,9 +39,7 @@ public class WebSecurityConfiguration {
     private RequestMatcher PRIVATE_URLS;
 
 
-    public WebSecurityConfiguration(List<AntPathRequestMatcher>[] publicRequestPaths) {
-        List<AntPathRequestMatcher> publics = Stream.of(publicRequestPaths)
-                .flatMap(Collection::stream).collect(Collectors.toList());
+    public WebSecurityConfiguration(List<AntPathRequestMatcher> publics) {
         this.PUBLIC_URLS = new OrRequestMatcher(publics.toArray(new AntPathRequestMatcher[0]));
         this.PRIVATE_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
         System.out.println("SecurityConfiguration");
