@@ -43,7 +43,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                 "webtoon.payment.controllers",
         }
 )
-
 public class ComponentLoaderConfiguration {
     @Bean
     public PasswordEncoder passwordEncoder() {

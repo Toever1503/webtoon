@@ -24,25 +24,26 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import webtoon.account.configs.security.jwt.JwtFilter;
 import webtoon.account.services.IUserService;
 
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @Configuration
 @EnableWebSecurity
 
 public class WebSecurityConfiguration {
-    private final RequestMatcher PUBLIC_URLS = new OrRequestMatcher(
-            new AntPathRequestMatcher("/signin"),
-            new AntPathRequestMatcher("/static/**")
-            , new AntPathRequestMatcher("/")
-            , new AntPathRequestMatcher("/manga/**")
-            , new AntPathRequestMatcher("/post/**")
-            , new AntPathRequestMatcher("/signin/**")
-            , new AntPathRequestMatcher("/signup/**")
-    );
-    private RequestMatcher PRIVATE_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
+    private final RequestMatcher PUBLIC_URLS;
+    private RequestMatcher PRIVATE_URLS;
 
 
-    public WebSecurityConfiguration() {
+    public WebSecurityConfiguration(List<AntPathRequestMatcher>[] publicRequestPaths) {
+        List<AntPathRequestMatcher> publics = Stream.of(publicRequestPaths)
+                .flatMap(Collection::stream).collect(Collectors.toList());
+        this.PUBLIC_URLS = new OrRequestMatcher(publics.toArray(new AntPathRequestMatcher[0]));
+        this.PRIVATE_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
         System.out.println("SecurityConfiguration");
     }
 

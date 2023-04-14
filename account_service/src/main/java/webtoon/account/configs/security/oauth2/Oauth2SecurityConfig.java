@@ -16,6 +16,7 @@ import org.springframework.security.oauth2.client.registration.InMemoryClientReg
 import org.springframework.security.oauth2.client.web.AuthorizationRequestRepository;
 import org.springframework.security.oauth2.client.web.HttpSessionOAuth2AuthorizationRequestRepository;
 import org.springframework.security.oauth2.core.endpoint.OAuth2AuthorizationRequest;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import webtoon.account.configs.security.jwt.JwtProvider;
 
 import java.util.Arrays;
@@ -38,6 +39,7 @@ public class Oauth2SecurityConfig {
 
         return new HttpSessionOAuth2AuthorizationRequestRepository();
     }
+
     @Bean
     public ClientRegistrationRepository clientRegistrationRepository() {
         List<ClientRegistration> registrations = clients.stream()
@@ -79,5 +81,18 @@ public class Oauth2SecurityConfig {
     @Bean
     public JwtProvider jwtProvider(@Value("${webtoon.security.jwt.secret}") String secret) throws Exception {
         return new JwtProvider(secret);
+    }
+
+    @Bean
+    public List<AntPathRequestMatcher> publicUrls() {
+        return List.of(
+                new AntPathRequestMatcher("/signin"),
+                new AntPathRequestMatcher("/static/**")
+                , new AntPathRequestMatcher("/")
+                , new AntPathRequestMatcher("/manga/**")
+                , new AntPathRequestMatcher("/post/**")
+                , new AntPathRequestMatcher("/signin/**")
+                , new AntPathRequestMatcher("/signup/**")
+        );
     }
 }
