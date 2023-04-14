@@ -37,7 +37,7 @@ public class HomeController {
     private IPostService postService;
 
     @RequestMapping("/index")
-    public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type")String hasLogged) {
+    public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged) {
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, null);
 
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
@@ -50,7 +50,13 @@ public class HomeController {
 //        model.addAttribute("cateList", categoryEntity);
         model.addAttribute("mangalist", mangaEntity.getContent());
         model.addAttribute("postList", postEntity);
-        model.addAttribute("hasLogged", hasLogged);
+
+        if (hasLogged != null) {
+            if (hasLogged == 1)
+                model.addAttribute("hasLogged", "Đăng ký thành công!");
+            else
+                model.addAttribute("hasLogged", "Đăng nhập thành công!");
+        }
         return "homepage";
     }
 }
