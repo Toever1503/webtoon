@@ -93,6 +93,7 @@ public class MangaEntity {
     @OneToMany(mappedBy = "manga" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<MangaVolumeEntity> volumeEntities;
 
+
     @OneToMany(mappedBy = "manga", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Where(clause = "manga_volume_id is null")
     @OrderBy("chapter_index desc")

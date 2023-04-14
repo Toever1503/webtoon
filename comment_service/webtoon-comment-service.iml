@@ -15,7 +15,10 @@
       <configuration>
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
-        <datasource-mapping />
+        <datasource-mapping>
+          <factory-entry name="entityManagerFactory" />
+          <factory-entry name="webtoon-comment-service" value="840ab30b-be1b-4b17-b8e5-e7ecd28e8f1e" />
+        </datasource-mapping>
         <naming-strategy-map />
       </configuration>
     </facet>

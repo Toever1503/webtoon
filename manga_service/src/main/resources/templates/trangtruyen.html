@@ -126,8 +126,8 @@
                             <div class="basis-1/4 pl-6">
                                 <h1>Xếp hạng</h1>
                             </div>
-                            <div class="basis-3/4 ">
-                                <h5>Trung bình 4.2 / 5 trên 24</h5>
+                            <div class="basis-3/4 " th:each="avg : ${rating}"   >
+                                <h5  th:text="${'Trung bình '+ avg.xh + '/ 5 out of ' + avg.tongso }"></h5>
                             </div>
                         </div>
                         <div class="flex  justify-center flex-row py-2">
