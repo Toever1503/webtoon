@@ -1,5 +1,7 @@
 package webtoon.domains.manga.services.impl;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -8,10 +10,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.dtos.MangaRatingDto;
+import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaRatingEntity;
 import webtoon.domains.manga.models.MangaRatingModel;
 import webtoon.domains.manga.repositories.IMangaRatingRepository;
+import webtoon.domains.manga.repositories.IMangaRepository;
 import webtoon.domains.manga.services.IMangaRatingService;
+import webtoon.domains.manga.services.IMangaService;
 
 import java.util.List;
 import java.util.Map;
@@ -21,21 +26,33 @@ import java.util.Map;
 public class IMangaRatingServiceImpl implements IMangaRatingService {
 
     private final IMangaRatingRepository ratingRepository;
+    @Autowired
+    @Lazy
+    private  IMangaService mangaService;
 
-    public IMangaRatingServiceImpl(IMangaRatingRepository ratingRepository) {
+    private final IMangaRepository mangaRepository;
+
+    public IMangaRatingServiceImpl(IMangaRatingRepository ratingRepository,  IMangaRepository mangaRepository) {
         this.ratingRepository = ratingRepository;
+        this.mangaRepository = mangaRepository;
     }
 
     @Override
     public MangaRatingDto add(MangaRatingModel model){
-        MangaRatingEntity entity = MangaRatingEntity.builder()
 
+
+        MangaRatingEntity entity = MangaRatingEntity.builder()
                 .id(model.getId())
                 .rate(model.getRate())
                 .createdBy(model.getCreatedBy())
                 .mangaId(model.getMangaEntity())
                 .build();
         this.ratingRepository.saveAndFlush(entity);
+//        viết ở đây
+        MangaRatingEntity entity1 =  this.ratingRepository.findByManga(entity.getMangaId());
+        MangaEntity mangaEntity = this.mangaService.getById(entity.getId());
+        mangaEntity.setRating(entity1.getRate());
+        this.mangaRepository.saveAndFlush(mangaEntity);
         return MangaRatingDto.builder()
                 .mangaEntity(entity.getMangaId())
                 .rate(entity.getRate())

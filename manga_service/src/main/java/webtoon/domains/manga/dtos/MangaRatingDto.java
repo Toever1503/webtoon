@@ -16,5 +16,5 @@ public class MangaRatingDto {
 
     private String createdBy;
 
-    private String rate;
+    private Float rate;
 }

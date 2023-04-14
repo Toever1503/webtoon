@@ -23,5 +23,5 @@ public class MangaRatingEntity {
     private String createdBy;
 
     @Column(name = "rate")
-    private String rate;
+    private Float rate;
 }

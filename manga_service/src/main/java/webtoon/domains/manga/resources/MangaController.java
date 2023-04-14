@@ -1,31 +1,27 @@
 package webtoon.domains.manga.resources;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import webtoon.domains.manga.dtos.MangaChapterDto;
-import webtoon.domains.manga.entities.MangaChapterEntity;
-import webtoon.domains.manga.entities.MangaEntity;
-import webtoon.domains.manga.entities.MangaVolumeEntity;
-import webtoon.domains.manga.entities.ReadHistory;
-import webtoon.domains.manga.models.ReadHistoryModel;
+import webtoon.domains.manga.entities.*;
 import webtoon.domains.manga.services.*;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("manga")
 public class MangaController {
 
 	@Autowired
-	private IMangaService mangaService;
+	@Lazy
+	private  IMangaService mangaService;
 
 	@Autowired
 	private IMangaVolumeService mangaVolumeService;
@@ -38,14 +34,23 @@ public class MangaController {
 
 	private final IReadHistoryService historyService;
 
-	public MangaController(IMangaRatingService ratingService, IReadHistoryService historyService) {
+	private final IMangaGenreService mangaGenreService;
+
+	public MangaController( IMangaRatingService ratingService, IReadHistoryService historyService, IMangaGenreService mangaGenreService) {
+
 		this.ratingService = ratingService;
 		this.historyService = historyService;
+		this.mangaGenreService = mangaGenreService;
 	}
 
 	@GetMapping
-	public String mangaList() {
-		return "trangtruyenchu";
+	public String mangaList(Model model,Pageable pageable) {
+		Page<MangaEntity> mangaEntities = this.mangaService.filterEntities(pageable,null);
+		List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
+
+		model.addAttribute("genreList", mangaGenreEntity);
+		model.addAttribute("mangalist", mangaEntities.getContent());
+		return "trangmanga";
 	}
 
 	@GetMapping("{name}/{id}")
@@ -62,8 +67,6 @@ public class MangaController {
 		model.addAttribute("rating",list);
 			return "trangtruyen";
 	}
-
-
 
 	@GetMapping("{name}/chapter/{id}")
 	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
@@ -107,19 +110,9 @@ public class MangaController {
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);
-
-
-
-
 		return "read-manga-page";
 	}
-	@GetMapping("/index")
-	public String showMangaList(Model model,Pageable pageable,@RequestParam String s  ) {
-		model.addAttribute("model", mangaService.filterBy(s,pageable));
 
-
-		return "trangtruyenchu";
-	}
 
 
 }

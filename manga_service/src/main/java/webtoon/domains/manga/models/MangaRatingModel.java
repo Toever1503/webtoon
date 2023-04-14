@@ -21,5 +21,6 @@ public class MangaRatingModel {
 
     private String createdBy;
 
-    private String rate;
+    private Float  rate;
+
 }
