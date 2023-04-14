@@ -82,17 +82,4 @@ public class Oauth2SecurityConfig {
     public JwtProvider jwtProvider(@Value("${webtoon.security.jwt.secret}") String secret) throws Exception {
         return new JwtProvider(secret);
     }
-
-    @Bean
-    public List<AntPathRequestMatcher> publicUrls() {
-        return List.of(
-                new AntPathRequestMatcher("/signin"),
-                new AntPathRequestMatcher("/static/**")
-                , new AntPathRequestMatcher("/")
-                , new AntPathRequestMatcher("/manga/**")
-                , new AntPathRequestMatcher("/post/**")
-                , new AntPathRequestMatcher("/signin/**")
-                , new AntPathRequestMatcher("/signup/**")
-        );
-    }
 }
