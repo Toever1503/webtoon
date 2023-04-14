@@ -23,7 +23,7 @@ import webtoon.domains.tag.service.ITagService;
 import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
-import webtoon.main.utils.ASCIIConverter;
+import webtoon.utils.ASCIIConverter;
 
 import java.util.Collections;
 import java.util.List;

@@ -5,7 +5,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Import;
 import org.springframework.util.FileSystemUtils;
-import webtoon.main.utils.FileUtils;
+import webtoon.utils.FileUtils;
 
 import java.io.File;
 import java.io.IOException;

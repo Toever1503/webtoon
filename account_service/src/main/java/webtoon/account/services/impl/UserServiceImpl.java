@@ -20,7 +20,7 @@ import webtoon.account.entities.EAuthorityConstants;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.repositories.IAuthorityRepository;
-import webtoon.main.utils.exception.CustomHandleException;
+import webtoon.utils.exception.CustomHandleException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

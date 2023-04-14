@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import webtoon.storage.domain.repositories.IFileRepositoty;
-import webtoon.main.utils.ASCIIConverter;
+import webtoon.utils.ASCIIConverter;
 import webtoon.storage.domain.dtos.FileDto;
 import webtoon.storage.domain.entities.FileEntity;
 import webtoon.storage.domain.mappers.FileMapper;

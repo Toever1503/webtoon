@@ -1,4 +1,4 @@
-package webtoon.main.utils;
+package webtoon.utils;
 
 import junit.framework.Test;
 import junit.framework.TestCase;

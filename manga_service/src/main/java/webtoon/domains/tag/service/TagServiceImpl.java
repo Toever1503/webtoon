@@ -14,7 +14,7 @@ import webtoon.domains.tag.entity.TagEntity;
 import webtoon.domains.tag.entity.TagEntityRelation;
 import webtoon.domains.tag.entity.*;
 import webtoon.domains.tag.entity.enums.ETagType;
-import webtoon.main.utils.ASCIIConverter;
+import webtoon.utils.ASCIIConverter;
 
 @Service
 public class TagServiceImpl implements ITagService {

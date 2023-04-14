@@ -11,10 +11,9 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import webtoon.account.models.LoginModel;
 import webtoon.account.services.ILoginService;
-import webtoon.main.utils.exception.CustomHandleException;
+import webtoon.utils.exception.CustomHandleException;
 
 @Controller
 @RequiredArgsConstructor

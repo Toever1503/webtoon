@@ -1,4 +1,4 @@
-package webtoon.main.utils.exception;
+package webtoon.utils.exception;
 
 import lombok.Getter;
 import org.springframework.security.core.AuthenticationException;

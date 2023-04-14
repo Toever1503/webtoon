@@ -1,4 +1,4 @@
-package webtoon.main.utils.exception;
+package webtoon.utils.exception;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

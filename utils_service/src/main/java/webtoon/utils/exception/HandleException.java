@@ -1,4 +1,4 @@
-package webtoon.main.utils.exception;
+package webtoon.utils.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

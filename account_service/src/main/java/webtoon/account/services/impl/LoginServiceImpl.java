@@ -18,7 +18,7 @@ import webtoon.account.models.LoginModel;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.ILoginService;
-import webtoon.main.utils.exception.CustomHandleException;
+import webtoon.utils.exception.CustomHandleException;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;

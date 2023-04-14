@@ -1,4 +1,4 @@
-package webtoon.main.utils;
+package webtoon.utils;
 
 import java.io.File;
 
