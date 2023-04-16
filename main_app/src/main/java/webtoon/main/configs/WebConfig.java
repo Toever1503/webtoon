@@ -33,7 +33,8 @@ public class WebConfig implements WebMvcConfigurer {
                 new AntPathRequestMatcher("/index"),
                 new AntPathRequestMatcher("/signin"),
                 new AntPathRequestMatcher("/static/**")
-                , new AntPathRequestMatcher("/")
+                , new AntPathRequestMatcher("/"),
+                new AntPathRequestMatcher("/rating/add")
                 , new AntPathRequestMatcher("/manga/**")
                 , new AntPathRequestMatcher("/post/**")
                 , new AntPathRequestMatcher("/signin/**")

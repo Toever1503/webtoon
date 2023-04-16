@@ -155,7 +155,10 @@
 }
 
 .inset-0 {
-  inset: 0px
+  top: 0px;
+  right: 0px;
+  bottom: 0px;
+  left: 0px
 }
 
 .bottom-2 {

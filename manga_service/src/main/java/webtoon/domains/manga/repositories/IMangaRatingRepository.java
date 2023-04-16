@@ -23,6 +23,6 @@ public interface IMangaRatingRepository extends JpaRepository<MangaRatingEntity,
     @Query("select a from MangaRatingEntity a where a.mangaId =?1")
     List<MangaRatingEntity> findByMangaId(Long mangaId);
 
-    @Query("select avg(a.rate) as xh from MangaRatingEntity a where a.mangaId = ?1")
-    MangaRatingEntity findByManga(Long mangaId);
+    @Query("select avg(a.rate) as rate from MangaRatingEntity a where a.mangaId = ?1")
+    Double findByManga(Long mangaId);
 }
