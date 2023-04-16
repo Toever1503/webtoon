@@ -33,4 +33,7 @@ public class WebConfiguration implements WebMvcConfigurer {
 		};
 	}
 
+	public static void main(String[] args) {
+		System.out.println(Float.valueOf("4.99"));
+	}
 }

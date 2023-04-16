@@ -147,6 +147,14 @@
 
     </dependencies>
 
+    <build>
+
+        <resources>
+            <resource>
+                <directory>../src/main/resources</directory>s
+            </resource>
+        </resources>
+    </build>
     <reporting>
         <outputDirectory>${basedir}/target/site</outputDirectory>
         <plugins>
