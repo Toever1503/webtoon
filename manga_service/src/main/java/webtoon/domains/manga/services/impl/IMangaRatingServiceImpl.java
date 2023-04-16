@@ -43,15 +43,15 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
 
         MangaRatingEntity entity = MangaRatingEntity.builder()
                 .id(model.getId())
-                .rate(model.getRate())
+                .rate(Float.valueOf(model.getRate()))
                 .createdBy(model.getCreatedBy())
                 .mangaId(model.getMangaEntity())
                 .build();
         this.ratingRepository.saveAndFlush(entity);
 //        viết ở đây
-        MangaRatingEntity entity1 =  this.ratingRepository.findByManga(entity.getMangaId());
-        MangaEntity mangaEntity = this.mangaService.getById(entity.getId());
-        mangaEntity.setRating(entity1.getRate());
+        Double entity1 =  this.ratingRepository.findByManga(entity.getMangaId());
+        MangaEntity mangaEntity = this.mangaService.getById(entity.getMangaId());
+        mangaEntity.setRating(entity1.floatValue());
         this.mangaRepository.saveAndFlush(mangaEntity);
         return MangaRatingDto.builder()
                 .mangaEntity(entity.getMangaId())
@@ -63,7 +63,7 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
     public MangaRatingDto update(MangaRatingModel model){
         MangaRatingEntity entity = this.getById(model.getId());
         entity.setMangaId(model.getMangaEntity());
-        entity.setRate(model.getRate());
+        entity.setRate(Float.valueOf(model.getRate()));
         this.ratingRepository.saveAndFlush(entity);
         return MangaRatingDto.builder()
                 .rate(entity.getRate())

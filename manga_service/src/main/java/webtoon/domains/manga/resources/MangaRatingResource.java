@@ -7,7 +7,6 @@ import webtoon.domains.manga.services.IMangaRatingService;
 
 @RestController
 @RequestMapping("/rating")
-
 public class MangaRatingResource {
     private final IMangaRatingService ratingService;
 
