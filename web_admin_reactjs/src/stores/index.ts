@@ -5,6 +5,7 @@ import genreSlice from './features/manga/genreSlice';
 import tagSlice from './features/manga/tagSlice';
 import authorSlice from './features/manga/authorSlice';
 import userSlice from './features/user/userSlice';
+import subscriptionPackSlice from './features/subscription-pack/subscriptionPackSlice';
 
 export const store = configureStore({
   reducer: {
@@ -13,6 +14,7 @@ export const store = configureStore({
     author: authorSlice,
     tag: tagSlice,
     user: userSlice,
+    subscriptionPack: subscriptionPackSlice,
     notification: notificationSlice
   },
 })

@@ -31,7 +31,7 @@ const router = createBrowserRouter([
                 element: <OrderPage />,
             },
             {
-                path: "/subscription-pack",
+                path: "/subscription-packs",
                 element: <SubscriptionPackPage />,
             },
             {

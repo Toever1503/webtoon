@@ -196,16 +196,42 @@ export default {
     },
     'subscription-pack': {
         'page-title': 'Danh sách gói đọc',
+        addBtn: 'Thêm mới',
         table: {
-            'name': 'Tên gói',
-            'desc': 'Mô tả',
-            'price': 'Giá',
+            'title': 'Tên gói',
+            'price': 'Giá gói',
             'limitedDayCount': 'Số ngày đọc',
             'createdAt': 'Ngày tạo',
             'modifiedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
-            'action': 'Hành động'
+            'action': 'Hành động',
+
+        },
+        modal: {
+            addTitle: "Thêm gói đọc mới",
+            editTitle: "Chỉnh sửa gói đọc",
+            month: "Tháng",
+            title: "Tên gói",
+            price: "Giá gói",
+            resetBtn: "Làm mới",
+            saveBtn: "Lưu",
+            dateCount: "Thời hạn gói",
+            placeholders: {
+                title: "Nhập tên gói",
+                price: "Nhập giá gói",
+                "choose-month": "Chọn thời hạn gói",
+            
+            },
+            errors: {
+                "required-title": "Tên gói không được để trống",
+                "required-price": "Giá gói không được để trống",
+                "required-dateCount": "Vui lòng chọn hời hạn gói",
+                "max-title": "Tên gói không được quá 255 ký tự",
+                "min-price": "Giá gói không được nhỏ hơn 10.000vnd",
+                "max-price": "Giá gói không được quá 100.000.000vnd",
+
+            }
 
         }
     },
