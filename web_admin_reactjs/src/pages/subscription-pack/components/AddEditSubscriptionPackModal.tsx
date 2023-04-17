@@ -1,14 +1,17 @@
 import { Button, Form, Input, Modal, Select, Space } from "antd";
 import ISubscriptionPack from "../../../services/subscription_pack/types/ISubscriptionPack";
 import { useDispatch } from "react-redux";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
+import { showNofification } from "../../../stores/features/notification/notificationSlice";
+import subscriptionPackService from "../../../services/subscription_pack/subscriptionPackService";
+import { AxiosResponse } from "axios";
 
 export interface AddEditSubscriptionPackModalProps {
     visible: boolean;
     title: string;
     onCancel: () => void;
-    onOk: () => void;
+    onOk: (record: ISubscriptionPack) => void;
     input?: ISubscriptionPack
 }
 
@@ -19,28 +22,74 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
     const [form] = Form.useForm();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
 
-    const handleOk = () => {
-        console.log('OK', props);
-    };
+    const [dateCountChooseType, setDateCountChooseType] = useState<'CUSTOM' | 'SELECT'>('SELECT');
 
     const handleCancel = () => {
         props.onCancel();
         form.resetFields();
     };
 
-    const onFinish = (values: any) => {
+    const onFinish = (values: ISubscriptionPack) => {
         console.log('Success:', values);
 
-        if(props.input){ // edit
-
+        setIsSubmitting(true);
+        if (props.input) { // edit
+            subscriptionPackService
+                .updateSubscriptionPack(props.input.id || 0,values)
+                .then((res: AxiosResponse<ISubscriptionPack>) => {
+                    console.log('add ok', res.data);
+                    props.onOk(res.data);
+                    dispatch(showNofification({
+                        type: 'success', message: `${t('subscription-pack.modal.form.edit-success')}`
+                    }));
+                })
+                .catch((err: any) => {
+                    console.log(err);
+                    dispatch(showNofification({
+                        type: 'success', message: `${t('subscription-pack.modal.form.edit-failed')}`
+                    }));
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
         }
         else { //add
-
+            subscriptionPackService
+                .addSubscriptionPack(values)
+                .then((res: AxiosResponse<ISubscriptionPack>) => {
+                    console.log('add ok', res.data);
+                    props.onOk(res.data);
+                    dispatch(showNofification({
+                        type: 'success', message: `${t('subscription-pack.modal.form.add-success')}`
+                    }));
+                })
+                .catch((err: any) => {
+                    console.log(err);
+                    dispatch(showNofification({
+                        type: 'success', message: `${t('subscription-pack.modal.form.add-failed')}`
+                    }));
+                })
+                .finally(() => {
+                    setIsSubmitting(false);
+                });
         }
     };
 
     const onFinishFailed = (errorInfo: any) => {
         console.log('Failed:', errorInfo);
+        dispatch(showNofification({
+            type: 'warning', message: `${t('subscription-pack.modal.errors.check-input-again')}`
+        }))
+    };
+
+
+    const discountPriceValidator = (rule: any, value: string) => {
+        if (!form.getFieldValue('originalPrice'))
+            return Promise.reject(`${t('subscription-pack.modal.errors.required-price')}`);
+        else if (Number(value) > Number(form.getFieldValue('originalPrice')))
+            return Promise.reject(`${t('subscription-pack.modal.errors.exceed-discount-price')}`);
+
+        return Promise.resolve();
     };
 
     const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
@@ -48,7 +97,7 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
     useEffect(() => {
         form.resetFields();
 
-        if(props.input ){
+        if (props.input) {
             form.setFieldsValue({
                 ...props.input
             });
@@ -66,64 +115,93 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                     onFinish={onFinish}
                     onFinishFailed={onFinishFailed}
                     autoComplete="off"
-                    labelCol={{ span: 6 }}
+                    labelCol={{ span: 8 }}
                 >
                     <Form.Item
-                        label={t('subscription-pack.modal.title')}
-                        name="title"
-                        rules={[
-                            { required: true, message: `${t('subscription-pack.modal.errors.required-title')}`},
-                            { max: 255, message: `${t('subscription-pack.modal.errors.max-title')}`},
-                        ]}
+                        label={t('subscription-pack.modal.name')}
+                        name="name"
                     >
-                        <Input placeholder={`${t('subscription-pack.modal.title')}`} />
+                        <Input readOnly disabled placeholder={`${t('subscription-pack.modal.name')}`} />
                     </Form.Item>
 
                     <Form.Item
-                        label={t('subscription-pack.modal.price')}
-                        name="price"
+                        label={t('subscription-pack.modal.originalPrice')}
+                        name="originalPrice"
                         rules={[
-                            { required: true, message: `${t('subscription-pack.modal.errors.required-price')}`},
-                            // { min: 10000, message: `${t('subscription-pack.modal.errors.min-price')}`},
-                            // { max: 100000, message: `${t('subscription-pack.modal.errors.max-price')}`},
+                            { required: true, message: `${t('subscription-pack.modal.errors.required-price')}` },
+                            { min: 5, message: `${t('subscription-pack.modal.errors.min-price')}` },
+                            { max: 10, message: `${t('subscription-pack.modal.errors.max-price')}` },
                         ]}
 
                     >
-                        <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`}  suffix="vnd" />
+                        <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`} suffix="vnd" />
+                    </Form.Item>
+
+                    <Form.Item
+                        label={<span>{t('subscription-pack.modal.discountPrice')}</span>}
+                        name="discountPrice"
+                        rules={[{ required: false, validator: discountPriceValidator }]}
+
+                    >
+                        <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`} suffix="vnd" />
                     </Form.Item>
 
                     <Form.Item
                         label={t('subscription-pack.modal.dateCount')}
-                        name="dateCount"
-                        rules={[{ required: true, message: `${t('subscription-pack.modal.errors.required-dateCount')}`}]}
+                        name="monthCount"
+                        rules={[{ required: true, message: `${t('subscription-pack.modal.errors.required-dateCount')}` }]}
                     >
-                        <Select defaultValue="">
-                            <Select.Option value="">{
-                                t('subscription-pack.modal.placeholders.choose-month')
-                            }</Select.Option>
+                        {
+                            dateCountChooseType === 'SELECT' ?
+                                <Space>
+                                    <Select defaultValue="" onChange={val => {
+                                        form.setFieldValue('monthCount', val);
+                                        form.setFieldValue('name', t('subscription-pack.modal.name') + ' ' + Number(val) + ' ' + t('subscription-pack.modal.month'));
+                                    }}
 
-                            {
-                                months.map((month, index) => <>
-                                    <Select.Option key={index} value={month*30}>
-                                        {month} {t('subscription-pack.modal.month')}
-                                    </Select.Option>
+                                    >
+                                        <Select.Option value="">{
+                                            t('subscription-pack.modal.placeholders.choose-month')
+                                        }</Select.Option>
 
-                                </>)
-                            }
+                                        {
+                                            months.map((month, index) => <>
+                                                <Select.Option key={Math.random()} value={month}>
+                                                    {month} {t('subscription-pack.modal.month')}
+                                                </Select.Option>
 
-                        </Select>
+                                            </>)
+                                        }
+
+                                    </Select>
+                                    <a onClick={() => {
+                                        setDateCountChooseType('CUSTOM');
+                                        form.setFieldValue('monthCount', "13");
+                                    }}>Nhập thủ công</a>
+                                </Space>
+                                :
+                                <Space >
+                                    <Input type="number" defaultValue={13} min={13} max={60} onChange={e => {
+                                        form.setFieldValue('name', t('subscription-pack.modal.name') + ' ' + Number(e.target.value) + ' ' + t('subscription-pack.modal.month'));
+                                    }} suffix={t('subscription-pack.modal.month')} />
+                                    <a onClick={() => {
+                                        setDateCountChooseType('SELECT');
+                                    }}>{t('subscription-pack.modal.resetBtn')}</a>
+                                </Space>
+                        }
+
                     </Form.Item>
 
 
 
                     <Form.Item className="mt-[10px]" wrapperCol={{ offset: 8, span: 16 }}>
-                    
-                    <Button className="mr-2" type="primary" htmlType="button" loading={isSubmitting}>
+
+                        <Button className="mr-2" type="primary" htmlType="button" loading={isSubmitting}>
                             {t('subscription-pack.modal.resetBtn')}
                         </Button>
 
                         <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                        {t('subscription-pack.modal.saveBtn')}
+                            {t('subscription-pack.modal.saveBtn')}
                         </Button>
                     </Form.Item>
                 </Form>

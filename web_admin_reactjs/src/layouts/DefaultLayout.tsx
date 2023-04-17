@@ -32,7 +32,7 @@ const items: MenuItem[] = [
     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
     getItem('Đơn hàng', '/orders', <ShoppingCartOutlined />),
     getItem('Thống kê', '/stats', <AreaChartOutlined />),
-    getItem('Gói đọc', '/subscription-pack', <AppstoreOutlined />),
+    getItem('Gói đọc', '/subscription-packs', <AppstoreOutlined />),
     getItem('Manga', 'parent-mangas',<FormOutlined />, [
         getItem('All mangas', '/mangas'),
         getItem('Manga genres', '/mangas/genres'),

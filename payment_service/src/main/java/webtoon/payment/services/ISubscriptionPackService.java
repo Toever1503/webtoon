@@ -12,4 +12,6 @@ public interface ISubscriptionPackService {
     List<SubscriptionPackDto> getAll();
     SubscriptionPackEntity getByPrice(Double price);
     SubscriptionPackEntity getById(Long id);
+
+    void deleteById(Long id);
 }

@@ -10,7 +10,9 @@ import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
 import webtoon.payment.repositories.ISubscriptionPackRepository;
 import webtoon.payment.services.ISubscriptionPackService;
+import webtoon.utils.DateUtil;
 
+import java.util.Calendar;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,47 +24,45 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
 
     @Override
     public SubscriptionPackDto addSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
-        SubscriptionPackEntity subscriptionPackEntity = SubscriptionPackEntity.builder()
-                .name(subscriptionPackModel.getName())
-                .desc(subscriptionPackModel.getDesc())
-                .dayCount(subscriptionPackModel.getDayCount())
-                .price(subscriptionPackModel.getPrice())
-                .createdAt(subscriptionPackModel.getCreatedAt())
-                .modifiedAt(subscriptionPackModel.getModifiedAt())
-                .build();
+        SubscriptionPackEntity subscriptionPackEntity = SubscriptionPackModel.toEntity(subscriptionPackModel);
+        subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
-        return SubscriptionPackDto.builder()
-                .name(subscriptionPackEntity.getName())
-                .desc(subscriptionPackEntity.getDesc())
-                .dayCount(subscriptionPackEntity.getDayCount())
-                .price(subscriptionPackEntity.getPrice())
-                .createdAt(subscriptionPackEntity.getCreatedAt())
-                .modifiedAt(subscriptionPackEntity.getModifiedAt())
-                .build();
+        return SubscriptionPackDto.toDto(subscriptionPackEntity);
+    }
+
+    protected int getDateCount(int dayCount) {
+        Calendar currentDate = Calendar.getInstance();
+        Calendar futureDate = Calendar.getInstance();
+        futureDate.add(Calendar.MONTH, dayCount);
+        return Long.valueOf(DateUtil.countDaysBetween2Date(currentDate.getTime(), futureDate.getTime())).intValue();
     }
 
     @Override
     public SubscriptionPackDto updateSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
         SubscriptionPackEntity subscriptionPackEntity = this.getById(subscriptionPackModel.getId());
         subscriptionPackEntity.setName(subscriptionPackModel.getName());
-        subscriptionPackEntity.setDesc(subscriptionPackModel.getDesc());
-        subscriptionPackEntity.setDayCount(subscriptionPackModel.getDayCount());
-        subscriptionPackEntity.setPrice(subscriptionPackModel.getPrice());
-        subscriptionPackEntity.setCreatedAt(subscriptionPackModel.getCreatedAt());
-        subscriptionPackEntity.setModifiedAt(subscriptionPackModel.getModifiedAt());
+        subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
+        subscriptionPackEntity.setOriginalPrice(subscriptionPackModel.getOriginalPrice());
+        subscriptionPackEntity.setDiscountPrice(subscriptionPackModel.getDiscountPrice());
+        subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
+
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
-        return SubscriptionPackDto.builder()
-                .name(subscriptionPackEntity.getName())
-                .desc(subscriptionPackEntity.getDesc())
-                .dayCount(subscriptionPackEntity.getDayCount())
-                .price(subscriptionPackEntity.getPrice())
-                .createdAt(subscriptionPackEntity.getCreatedAt())
-                .modifiedAt(subscriptionPackEntity.getModifiedAt())
-                .build();
+        return SubscriptionPackDto.toDto(subscriptionPackEntity);
     }
-   @Override
-   public SubscriptionPackEntity getById(Long id) {
+
+    @Override
+    public SubscriptionPackEntity getById(Long id) {
         return this.subscriptionPackRepository.findById(id).get();
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        try {
+            this.subscriptionPackRepository.deleteById(id);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw e;
+        }
     }
 
     @Override

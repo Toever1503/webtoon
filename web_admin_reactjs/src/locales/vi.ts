@@ -206,31 +206,37 @@ export default {
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'action': 'Hành động',
-
         },
         modal: {
             addTitle: "Thêm gói đọc mới",
             editTitle: "Chỉnh sửa gói đọc",
             month: "Tháng",
-            title: "Tên gói",
-            price: "Giá gói",
+            name: "Gói",
+            originalPrice: "Giá gốc",
+            discountPrice: 'Giá sau khi giảm giá',
             resetBtn: "Làm mới",
             saveBtn: "Lưu",
             dateCount: "Thời hạn gói",
+            form: {
+                'add-success': 'Thêm thành công!',
+                'add-failed': 'Thêm thất bại!',
+                'edit-success': 'Sửa thành công!',
+                'edit-failed': 'Sửa thất bại!',
+                'delete-success': 'Xóa thành công!',
+                'delete-failed': 'Xóa thất bại!',
+            },
             placeholders: {
                 title: "Nhập tên gói",
-                price: "Nhập giá gói",
+                price: "Nhập giá",
                 "choose-month": "Chọn thời hạn gói",
-            
             },
             errors: {
-                "required-title": "Tên gói không được để trống",
                 "required-price": "Giá gói không được để trống",
                 "required-dateCount": "Vui lòng chọn hời hạn gói",
-                "max-title": "Tên gói không được quá 255 ký tự",
-                "min-price": "Giá gói không được nhỏ hơn 10.000vnd",
+                "min-price": "Giá gói tối thiểu phải là 10.000vnd",
                 "max-price": "Giá gói không được quá 100.000.000vnd",
-
+                "exceed-discount-price": 'Giá sau khi giảm không được lớn hơn giá gốc',
+                'check-input-again': 'Vui lòng kiểm tra lại thông tin!',
             }
 
         }

@@ -18,15 +18,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="main_app" target="11" />
-      <module name="payment-service" target="11" />
-      <module name="webtoon" target="11" />
-      <module name="webtoon-account-service" target="11" />
-      <module name="webtoon-comment-service" target="11" />
-      <module name="webtoon-main-app" target="11" />
       <module name="webtoon-main-service" target="11" />
-      <module name="webtoon-manga-service" target="11" />
-      <module name="webtoon-storage-service" target="11" />
-      <module name="webtoon-utils-service" target="11" />
     </bytecodeTargetLevel>
   </component>
   <component name="JavacSettings">

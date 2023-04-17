@@ -5,7 +5,7 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import AddEditSubscriptionPackModal, { AddEditSubscriptionPackModalProps } from "./components/AddEditSubscriptionPackModal";
-import { SubscriptionPackState, setSubscriptionPackData } from "../../stores/features/subscription-pack/subscriptionPackSlice";
+import { SubscriptionPackState, addSubscriptionPack, setSubscriptionPackData } from "../../stores/features/subscription-pack/subscriptionPackSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
@@ -31,9 +31,9 @@ const SubscriptionPackPage: React.FC = () => {
     const [addEditSubscriptionPackModal, setAddEditSubscriptionPackModal] = useState<AddEditSubscriptionPackModalProps>({
         visible: false,
         title: '',
-        onCancel: () => { 
+        onCancel: () => {
             console.log('Cancel');
-            
+
             setAddEditSubscriptionPackModal({
                 ...addEditSubscriptionPackModal,
                 visible: false,
@@ -41,7 +41,16 @@ const SubscriptionPackPage: React.FC = () => {
                 input: undefined
             })
         },
-        onOk: () => { },
+        onOk: (record: ISubscriptionPack) => {
+            if (addEditSubscriptionPackModal.input) { // for edit
+
+            } else // for add
+                dispatch(addSubscriptionPack({
+                    data: record,
+                    pageSize: pageConfig.pageSize || 10,
+                }));
+            addEditSubscriptionPackModal.onCancel();
+        },
         input: undefined
     });
 
@@ -157,7 +166,7 @@ const SubscriptionPackPage: React.FC = () => {
         };
 
 
-        setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, subscriptionPackState.data))
+        // setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, subscriptionPackState.data))
     }, [subscriptionPackState]);
 
 
@@ -175,18 +184,18 @@ const SubscriptionPackPage: React.FC = () => {
                         input: undefined
                     })
                 }}>
-                        <span className="mr-2">{t('subscription-pack.addBtn')}</span>
-                    </Button>
+                    <span className="mr-2">{t('subscription-pack.addBtn')}</span>
+                </Button>
             </div>
             <div className="flex justify-end items-center">
                 <Input.Search placeholder="input search text" style={{ width: 200 }} />
             </div>
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
-            <AddEditSubscriptionPackModal visible={addEditSubscriptionPackModal.visible} title={addEditSubscriptionPackModal.title} 
-            onCancel={addEditSubscriptionPackModal.onCancel}
-             onOk={addEditSubscriptionPackModal.onOk}
-             input={addEditSubscriptionPackModal.input} />
+            <AddEditSubscriptionPackModal visible={addEditSubscriptionPackModal.visible} title={addEditSubscriptionPackModal.title}
+                onCancel={addEditSubscriptionPackModal.onCancel}
+                onOk={addEditSubscriptionPackModal.onOk}
+                input={addEditSubscriptionPackModal.input} />
         </div>
     </>)
 };

@@ -268,20 +268,6 @@
                 <scope>provided</scope>
             </dependency>
 
-            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-annotations -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-annotations</artifactId>
-                <version>2.14.2</version>
-            </dependency>
-
-            <!-- https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind -->
-            <dependency>
-                <groupId>com.fasterxml.jackson.core</groupId>
-                <artifactId>jackson-databind</artifactId>
-                <version>2.14.2</version>
-            </dependency>
-
 
             <!-- https://mvnrepository.com/artifact/commons-fileupload/commons-fileupload -->
             <dependency>
@@ -289,15 +275,6 @@
                 <artifactId>commons-fileupload</artifactId>
                 <version>1.5</version>
             </dependency>
-
-            <!-- for jpa config -->
-            <!-- https://mvnrepository.com/artifact/org.springframework.data/spring-data-jpa -->
-            <!-- <dependency> <groupId>org.springframework.data</groupId> <artifactId>spring-data-jpa</artifactId>
-                <version>2.7.7</version> </dependency> <dependency> <groupId>org.springframework.data</groupId>
-                <artifactId>spring-data-bom</artifactId> <version>2021.2.7</version> <scope>import</scope>
-                <type>pom</type> </dependency> https://mvnrepository.com/artifact/org.hibernate.orm/hibernate-core
-                <dependency> <groupId>org.hibernate.orm</groupId> <artifactId>hibernate-core</artifactId>
-                <version>6.2.0.CR2</version> </dependency> -->
 
 
             <!-- https://mvnrepository.com/artifact/org.mariadb.jdbc/mariadb-java-client -->

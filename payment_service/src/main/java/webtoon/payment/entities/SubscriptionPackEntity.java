@@ -21,18 +21,29 @@ public class SubscriptionPackEntity {
     private Long id;
     @Column(name = "subs_name")
     private String name;
-    @Column(name = "description")
-    private String desc;
+
     @Column(name = "day_count")
     private Integer dayCount;
-    @Column(name = "price")
-    private Double price;
+
+    @Column(name = "month_count")
+    private Integer monthCount;
+
+    @Column(name = "original_price", nullable = false)
+    private Double originalPrice;
+
+    @Column(name = "discount_price", columnDefinition = "double default 0")
+    private Double discountPrice;
+
+    @Deprecated
     @Column
-    @Temporal(TemporalType.DATE)
+    private Double price;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
 
     @Column
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date modifiedAt;
 

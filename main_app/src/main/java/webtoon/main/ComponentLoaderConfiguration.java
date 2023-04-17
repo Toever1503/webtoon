@@ -32,7 +32,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         basePackages = {
                 "webtoon.domains",
 
-                "webtoon.account.configs",
+                "webtoon.account.configs.security",
                 "webtoon.account.controller",
                 "webtoon.account.services",
 
@@ -41,11 +41,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
                 "webtoon.payment.services",
                 "webtoon.payment.controllers",
+                "webtoon.payment.resources",
         }
 )
 public class ComponentLoaderConfiguration {
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }

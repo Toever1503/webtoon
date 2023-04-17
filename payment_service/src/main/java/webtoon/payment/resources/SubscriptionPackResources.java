@@ -38,6 +38,7 @@ public class SubscriptionPackResources {
         SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(Double.parseDouble(price.toString()));
         System.out.println(subscriptionPackEntity);
         model.addAttribute("id", subscriptionPackEntity.getId());
+
         model.addAttribute("items", subscriptionPackEntity.getPrice());
         return "payments/chonPTTT";
     }

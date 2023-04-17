@@ -51,11 +51,15 @@ public class OrderResource {
         String maDonHang = VnPayConfig.getRandomNumber(8);
         Date createDate = new Date();
         SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
-        System.out.println("price: "+subscriptionPackEntity.getPrice());
+//        System.out.println("price: "+subscriptionPackEntity.getPrice());
         model.addAttribute("name", subscriptionPackEntity.getName());
-        model.addAttribute("price",subscriptionPackEntity.getPrice());
+
+        Double price = subscriptionPackEntity.getDiscountPrice();
+        if (subscriptionPackEntity.getDiscountPrice() != null)
+            price = subscriptionPackEntity.getDiscountPrice();
+        model.addAttribute("price", price);
         model.addAttribute("maDonHang", maDonHang);
-        orderService.add(new OrderModel(id, createDate,createDate,subscriptionPackEntity.getPrice(),05,"CHUYENKHOAN","0:0:0:0:0:0:0:1",maDonHang, subscriptionPackEntity));
+        orderService.add(new OrderModel(id, createDate, createDate, price, 05, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity));
         return "payments/chuyenKhoan";
     }
 

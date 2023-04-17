@@ -7,7 +7,7 @@ export interface SubscriptionPackState {
 
 const initialState = (): SubscriptionPackState => {
     return {
-        data: [        ],
+        data: [],
  
     }
 }
