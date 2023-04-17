@@ -1,6 +1,7 @@
 package webtoon.payment.entities;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -40,6 +41,7 @@ public class SubscriptionPackEntity {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date createdAt;
 
     @Column

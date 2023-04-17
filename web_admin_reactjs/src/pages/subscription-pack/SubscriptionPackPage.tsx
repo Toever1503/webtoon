@@ -79,7 +79,9 @@ const SubscriptionPackPage: React.FC = () => {
             title: t('subscription-pack.table.price'),
             dataIndex: 'price',
             key: 'price',
-            render: (text) => <>{text}</>,
+            render: (text, record) => <>{
+                text
+            }</>,
         },
         {
             title: t('subscription-pack.table.limitedDayCount'),
@@ -166,7 +168,8 @@ const SubscriptionPackPage: React.FC = () => {
         };
 
 
-        // setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, subscriptionPackState.data))
+        setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, subscriptionPackState.data))
+
     }, [subscriptionPackState]);
 
 

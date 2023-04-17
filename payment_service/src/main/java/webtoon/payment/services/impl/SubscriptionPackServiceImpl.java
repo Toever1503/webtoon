@@ -1,9 +1,11 @@
 package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.entities.SubscriptionPackEntity;
@@ -63,6 +65,11 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
             e.printStackTrace();
             throw e;
         }
+    }
+
+    @Override
+    public Page<SubscriptionPackDto> filter(Pageable pageable, Specification<SubscriptionPackEntity> spec) {
+        return this.subscriptionPackRepository.findAll(spec, pageable).map(SubscriptionPackDto::toDto);
     }
 
     @Override
