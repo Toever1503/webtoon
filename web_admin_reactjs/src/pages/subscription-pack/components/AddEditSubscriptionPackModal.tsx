@@ -35,9 +35,9 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
         setIsSubmitting(true);
         if (props.input) { // edit
             subscriptionPackService
-                .updateSubscriptionPack(props.input.id || 0,values)
+                .updateSubscriptionPack(props.input.id || 0, values)
                 .then((res: AxiosResponse<ISubscriptionPack>) => {
-                    console.log('add ok', res.data);
+                    console.log('edit ok', res.data);
                     props.onOk(res.data);
                     dispatch(showNofification({
                         type: 'success', message: `${t('subscription-pack.modal.form.edit-success')}`
@@ -129,8 +129,8 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                         name="originalPrice"
                         rules={[
                             { required: true, message: `${t('subscription-pack.modal.errors.required-price')}` },
-                            { min: 5, message: `${t('subscription-pack.modal.errors.min-price')}` },
-                            { max: 10, message: `${t('subscription-pack.modal.errors.max-price')}` },
+                            // { min: 5, message: `${t('subscription-pack.modal.errors.min-price')}` },
+                            // { max: 10, message: `${t('subscription-pack.modal.errors.max-price')}` },
                         ]}
 
                     >
@@ -154,7 +154,7 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                         {
                             dateCountChooseType === 'SELECT' ?
                                 <Space>
-                                    <Select defaultValue="" onChange={val => {
+                                    <Select defaultValue={props.input?.monthCount || ""} onChange={val => {
                                         form.setFieldValue('monthCount', val);
                                         form.setFieldValue('name', t('subscription-pack.modal.name') + ' ' + Number(val) + ' ' + t('subscription-pack.modal.month'));
                                     }}
@@ -165,12 +165,11 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                                         }</Select.Option>
 
                                         {
-                                            months.map((month, index) => <>
-                                                <Select.Option key={Math.random()} value={month}>
+                                            months.map((month) => 
+                                                <Select.Option key={month} value={month}>
                                                     {month} {t('subscription-pack.modal.month')}
                                                 </Select.Option>
-
-                                            </>)
+                                            )
                                         }
 
                                     </Select>

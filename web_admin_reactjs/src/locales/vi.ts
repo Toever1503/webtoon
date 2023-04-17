@@ -198,7 +198,7 @@ export default {
         'page-title': 'Danh sách gói đọc',
         addBtn: 'Thêm mới',
         table: {
-            'title': 'Tên gói',
+            'name': 'Tên gói',
             'price': 'Giá gói',
             'limitedDayCount': 'Số ngày đọc',
             'createdAt': 'Ngày tạo',
@@ -206,6 +206,7 @@ export default {
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'action': 'Hành động',
+            'sure-delete': 'Bạn chắc chắn muốn xóa gói đọc này?',
         },
         modal: {
             addTitle: "Thêm gói đọc mới",
@@ -244,7 +245,7 @@ export default {
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
     'reset': 'Làm mới',
-    placholders: {
+    placeholders: {
         'search': 'Tìm kiếm...',
     },
     response: {

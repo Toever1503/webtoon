@@ -13,7 +13,7 @@ import java.util.Date;
 public class SubscriptionPackDto {
     private Long id;
     private String name;
-    private String desc;
+    private Integer monthCount;
     private Integer dayCount;
     private Double originalPrice;
     private Double discountPrice;
@@ -30,6 +30,7 @@ public class SubscriptionPackDto {
         return SubscriptionPackDto.builder()
                 .id(subscriptionPackEntity.getId())
                 .name(subscriptionPackEntity.getName())
+                .monthCount(subscriptionPackEntity.getMonthCount())
                 .dayCount(subscriptionPackEntity.getDayCount())
                 .originalPrice(subscriptionPackEntity.getOriginalPrice())
                 .discountPrice(subscriptionPackEntity.getDiscountPrice())

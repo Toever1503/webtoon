@@ -5,19 +5,22 @@ import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import AddEditSubscriptionPackModal, { AddEditSubscriptionPackModalProps } from "./components/AddEditSubscriptionPackModal";
-import { SubscriptionPackState, addSubscriptionPack, setSubscriptionPackData } from "../../stores/features/subscription-pack/subscriptionPackSlice";
+import { SubscriptionPackState, addSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData, updateSubscriptionPack } from "../../stores/features/subscription-pack/subscriptionPackSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
 import { AxiosResponse } from "axios";
 import { reIndexTbl } from "../../utils/indexData";
+import formatVnCurrency from "../../utils/formatVnCurrency";
+import ISubscriptionPackFilterInput from "../../services/subscription_pack/types/ISubscriptionPackFilterInput";
+import debounce from "../../utils/debounce";
+import { showNofification } from "../../stores/features/notification/notificationSlice";
 
 const SubscriptionPackPage: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
     const subscriptionPackState: SubscriptionPackState = useSelector((state: RootState) => state.subscriptionPack);
-
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState<any[]>();
@@ -27,42 +30,6 @@ const SubscriptionPackPage: React.FC = () => {
         total: 0,
         showSizeChanger: false
     });
-
-    const [addEditSubscriptionPackModal, setAddEditSubscriptionPackModal] = useState<AddEditSubscriptionPackModalProps>({
-        visible: false,
-        title: '',
-        onCancel: () => {
-            console.log('Cancel');
-
-            setAddEditSubscriptionPackModal({
-                ...addEditSubscriptionPackModal,
-                visible: false,
-                title: t('subscription-pack.modal.addTitle'),
-                input: undefined
-            })
-        },
-        onOk: (record: ISubscriptionPack) => {
-            if (addEditSubscriptionPackModal.input) { // for edit
-
-            } else // for add
-                dispatch(addSubscriptionPack({
-                    data: record,
-                    pageSize: pageConfig.pageSize || 10,
-                }));
-            addEditSubscriptionPackModal.onCancel();
-        },
-        input: undefined
-    });
-
-    const showAddEditModal = (input?: ISubscriptionPack) => {
-        setAddEditSubscriptionPackModal({
-            ...addEditSubscriptionPackModal,
-            visible: true,
-            title: t('subscription-pack.modal.editTitle'),
-            input: input
-        })
-    };
-
     const columns: ColumnsType<ISubscriptionPack> = [
         {
             title: 'STT',
@@ -70,24 +37,40 @@ const SubscriptionPackPage: React.FC = () => {
             key: 'index',
         },
         {
-            title: t('subscription-pack.table.title'),
-            dataIndex: 'title',
-            key: 'title',
+            title: t('subscription-pack.table.name'),
+            dataIndex: 'name',
+            key: 'name',
             render: (text) => <>{text}</>,
         },
         {
             title: t('subscription-pack.table.price'),
             dataIndex: 'price',
             key: 'price',
-            render: (text, record) => <>{
-                text
-            }</>,
+            render: (text, record) => <>
+                {
+                    record.discountPrice ?
+                        <>
+                            <div>
+                                {formatVnCurrency(record.discountPrice)}
+                            </div>
+                            {
+                                <del>
+                                    {formatVnCurrency(record.originalPrice)}
+                                </del>
+                            }
+                        </>
+                        :
+                        formatVnCurrency(record.originalPrice)
+                }
+            </>,
         },
         {
             title: t('subscription-pack.table.limitedDayCount'),
-            dataIndex: 'dayCount',
-            key: 'dayCount',
-            render: (text) => <>{text}</>,
+            dataIndex: 'monthCount',
+            key: 'monthCount',
+            render: (text) => <>
+                {text} {t('subscription-pack.modal.month')}
+            </>,
         },
         {
             title: t('subscription-pack.table.createdAt'),
@@ -118,12 +101,10 @@ const SubscriptionPackPage: React.FC = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Link to={`/mangas/edit/${record.id}`}>Edit</Link>
+                    <a onClick={() => showAddEditModal(record)}>Edit</a>
                     <Popconfirm
-                        title={t('manga.form.sure-delete')}
-                        onConfirm={(e) => {
-                            e?.stopPropagation();
-                        }}
+                        title={t('subscription-pack.table.sure-delete')}
+                        onConfirm={() => onDelete(record.id || 0)}
                         okText={t('confirm-yes')}
                         cancelText={t('confirm-no')}
                     >
@@ -135,8 +116,99 @@ const SubscriptionPackPage: React.FC = () => {
         },
     ];
 
-    const onCallApiFilter = () => {
 
+    const onTblChange = (pagination: PaginationProps) => {
+        pageConfig.current = pagination.current;
+        setPageConfig({
+            ...pageConfig,
+        });
+        onCallApiFilter();
+    };
+    const [addEditSubscriptionPackModal, setAddEditSubscriptionPackModal] = useState<AddEditSubscriptionPackModalProps>({
+        visible: false,
+        title: '',
+        onCancel: () => {
+            console.log('Cancel');
+
+            setAddEditSubscriptionPackModal({
+                ...addEditSubscriptionPackModal,
+                visible: false,
+                title: t('subscription-pack.modal.addTitle'),
+                input: undefined
+            })
+        },
+        onOk: (record: ISubscriptionPack) => {
+            if (addEditSubscriptionPackModal.input) { // for edit
+                dispatch(updateSubscriptionPack(record));
+            } else // for add
+                dispatch(addSubscriptionPack({
+                    data: record,
+                    pageSize: pageConfig.pageSize || 10,
+                }));
+            addEditSubscriptionPackModal.onCancel();
+        },
+        input: undefined
+    });
+
+    const showAddEditModal = (input?: ISubscriptionPack) => {
+        addEditSubscriptionPackModal.input = input;
+
+        setAddEditSubscriptionPackModal({
+            ...addEditSubscriptionPackModal,
+            visible: true,
+            title: t('subscription-pack.modal.editTitle'),
+            input: input
+        });
+    };
+
+    const onDelete = (id: number | string) => {
+        if (tableLoading) return;
+        setTableLoading(true);
+
+        subscriptionPackService.deleteSubscriptionPack(id)
+            .then(() => {
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('subscription-pack.table.delete-success')
+                }));
+                dispatch(deleteSubscriptionPackById({ id }));
+            })
+            .catch(err => {
+                console.log('delete subs pack failed: ', err);
+
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('subscription-pack.table.delete-failed')
+                }))
+            })
+            .finally(() => setTableLoading(false));
+
+    }
+
+    const onCallApiFilter = () => {
+        if (tableLoading) return;
+        setTableLoading(true);
+        subscriptionPackService.filterSubscriptionPack({
+            q: undefined
+        }, (pageConfig.current || 1) - 1, pageConfig.pageSize)
+            .then((res: AxiosResponse<{
+                content: ISubscriptionPack[],
+                totalElements: number
+            }>) => {
+                console.log('get all subscriptions: ', res.data);
+
+                dispatch(setSubscriptionPackData(
+                    res.data.content
+                ));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements
+                });
+            })
+            .catch(err => {
+                console.log('err: ', err);
+            })
+            .finally(() => setTableLoading(false))
     };
 
     const [hasInitialized, setHasInitialized] = useState(false);
@@ -144,26 +216,6 @@ const SubscriptionPackPage: React.FC = () => {
         if (!hasInitialized) {
             onCallApiFilter();
 
-            subscriptionPackService.filterSubscriptionPack({
-                q: undefined
-            })
-                .then((res: AxiosResponse<{
-                    content: ISubscriptionPack[],
-                    totalElements: number
-                }>) => {
-                    console.log('get all subscriptions: ', res.data);
-
-                    dispatch(setSubscriptionPackData(
-                        res.data.content
-                    ));
-                    setPageConfig({
-                        ...pageConfig,
-                        total: res.data.totalElements
-                    });
-                })
-                .catch(err => {
-                    console.log('err: ', err);
-                })
             setHasInitialized(true);
         };
 
@@ -190,11 +242,8 @@ const SubscriptionPackPage: React.FC = () => {
                     <span className="mr-2">{t('subscription-pack.addBtn')}</span>
                 </Button>
             </div>
-            <div className="flex justify-end items-center">
-                <Input.Search placeholder="input search text" style={{ width: 200 }} />
-            </div>
 
-            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
+            <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} pagination={pageConfig} />
             <AddEditSubscriptionPackModal visible={addEditSubscriptionPackModal.visible} title={addEditSubscriptionPackModal.title}
                 onCancel={addEditSubscriptionPackModal.onCancel}
                 onOk={addEditSubscriptionPackModal.onOk}

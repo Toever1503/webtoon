@@ -10,7 +10,7 @@ const addSubscriptionPack = async (input: ISubscriptionPack) => mangaAxios.post(
 
 const updateSubscriptionPack = async (id: string | number, input: ISubscriptionPack) => mangaAxios.put(`${basePath}/${id}`, input);
 
-const deleteSubscriptionPack = async (id: string) => mangaAxios.del(`${basePath}/${id}`);
+const deleteSubscriptionPack = async (id: string | number) => mangaAxios.del(`${basePath}/${id}`);
 
 const subscriptionPackService = {
     filterSubscriptionPack,
