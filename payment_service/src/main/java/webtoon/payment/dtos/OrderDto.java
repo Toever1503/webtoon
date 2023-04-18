@@ -3,6 +3,7 @@ package webtoon.payment.dtos;
 import lombok.*;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EPaymentMethod;
 
 import java.util.Date;
 
@@ -20,6 +21,7 @@ public class OrderDto {
     private String content;
     private String ipAddr;
     private String maDonHang;
+    private EPaymentMethod paymentMethod;
     private SubscriptionPackEntity subs_pack_id;
 
     public static OrderDto toDto(OrderEntity orderEntity) {
@@ -34,6 +36,7 @@ public class OrderDto {
                 .content(orderEntity.getContent())
                 .ipAddr(orderEntity.getIpAddr())
                 .maDonHang(orderEntity.getMaDonHang())
+                .paymentMethod(orderEntity.getPaymentMethod())
                 .subs_pack_id(orderEntity.getSubs_pack_id())
                 .build();
     }

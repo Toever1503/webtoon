@@ -1,6 +1,9 @@
 package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webtoon.payment.dtos.OrderDto;
@@ -85,6 +88,11 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderEntity getMaDonHang(String maDonHang) {
         return this.orderRepository.getByMaDonHang(maDonHang);
+    }
+
+    @Override
+    public Page<OrderDto> filter(Pageable pageable, Specification<OrderEntity> finalSpec) {
+        return this.orderRepository.findAll(finalSpec, pageable).map(OrderDto::toDto);
     }
 
 

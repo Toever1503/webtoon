@@ -38,10 +38,10 @@ const items: MenuItem[] = [
         getItem('Manga genres', '/mangas/genres'),
         getItem('Manga authors', '/mangas/authors')
     ]),
-    getItem('Tin tức', 'parent-posts', <FormOutlined />, [
-        getItem('All Posts', 'posts'),
-        getItem('Categories', 'categories')
-    ]),
+    // getItem('Tin tức', 'parent-posts', <FormOutlined />, [
+    //     getItem('All Posts', 'posts'),
+    //     getItem('Categories', 'categories')
+    // ]),
     getItem('Thẻ', '/tag', <TagsOutlined />),
     getItem('Bình luận', 'comments', <CommentOutlined />),
     getItem('Người dùng', 'parent-users', <UserOutlined />, [

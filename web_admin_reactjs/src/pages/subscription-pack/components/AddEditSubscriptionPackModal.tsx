@@ -46,7 +46,7 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                 .catch((err: any) => {
                     console.log(err);
                     dispatch(showNofification({
-                        type: 'success', message: `${t('subscription-pack.modal.form.edit-failed')}`
+                        type: 'error', message: `${t('subscription-pack.modal.form.edit-failed')}`
                     }));
                 })
                 .finally(() => {
@@ -66,7 +66,7 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                 .catch((err: any) => {
                     console.log(err);
                     dispatch(showNofification({
-                        type: 'success', message: `${t('subscription-pack.modal.form.add-failed')}`
+                        type: 'error', message: `${t('subscription-pack.modal.form.add-failed')}`
                     }));
                 })
                 .finally(() => {
@@ -125,22 +125,13 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                     </Form.Item>
 
                     <Form.Item
-                        label={t('subscription-pack.modal.originalPrice')}
-                        name="originalPrice"
+                        label={t('subscription-pack.modal.price')}
+                        name="price"
                         rules={[
                             { required: true, message: `${t('subscription-pack.modal.errors.required-price')}` },
-                            // { min: 5, message: `${t('subscription-pack.modal.errors.min-price')}` },
-                            // { max: 10, message: `${t('subscription-pack.modal.errors.max-price')}` },
+                            { min: 5, message: `${t('subscription-pack.modal.errors.min-price')}` },
+                            { max: 10, message: `${t('subscription-pack.modal.errors.max-price')}` },
                         ]}
-
-                    >
-                        <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`} suffix="vnd" />
-                    </Form.Item>
-
-                    <Form.Item
-                        label={<span>{t('subscription-pack.modal.discountPrice')}</span>}
-                        name="discountPrice"
-                        rules={[{ required: false, validator: discountPriceValidator }]}
 
                     >
                         <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`} suffix="vnd" />

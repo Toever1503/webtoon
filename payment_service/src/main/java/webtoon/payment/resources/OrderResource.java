@@ -54,12 +54,9 @@ public class OrderResource {
 //        System.out.println("price: "+subscriptionPackEntity.getPrice());
         model.addAttribute("name", subscriptionPackEntity.getName());
 
-        Double price = subscriptionPackEntity.getDiscountPrice();
-        if (subscriptionPackEntity.getDiscountPrice() != null)
-            price = subscriptionPackEntity.getDiscountPrice();
-        model.addAttribute("price", price);
+        model.addAttribute("price", subscriptionPackEntity.getPrice());
         model.addAttribute("maDonHang", maDonHang);
-        orderService.add(new OrderModel(id, createDate, createDate, price, 05, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity));
+        orderService.add(new OrderModel(id, createDate, createDate, subscriptionPackEntity.getPrice(), 05, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity));
         return "payments/chuyenKhoan";
     }
 

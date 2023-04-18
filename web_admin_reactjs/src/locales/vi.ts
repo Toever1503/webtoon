@@ -193,6 +193,45 @@ export default {
     },
     order: {
         'page-title': 'Danh sách đơn hàng',
+        addBtn: 'Thêm mới',
+        table: {
+            'orderNumber': 'Mã đơn hàng',
+            'subscription': 'Gói đăng ký',
+            'finalPrice': 'Giá tiền',
+            'paymentMethod': 'Phương thức thanh toán',
+            'status': 'Trạng thái',
+            'note': 'Ghi chú',
+            'orderType': 'Loại đơn hàng',
+            'createdAt': 'Ngày tạo',
+            'updatedAt': 'Ngày sửa',
+            'createdBy': 'Người tạo',
+            'modifiedBy': 'Người sửa',
+        },
+        modal: {
+            editTitle: 'Chỉnh sửa thông tin',
+            form: {
+                labels: {
+                    'orderNumber': 'Mã đơn hàng',
+                    subscriptionPack: 'Gói đăng ký',
+                    choosePack: 'Chọn gói đăng ký',
+                    price: 'Giá tiền',
+                    paymentMethod: 'Phương thức thanh toán',
+                    choosePaymentMethod: 'Chọn phương thức thanh toán',
+                    'createdBy': 'Người tạo',
+                    status: 'Trạng thái',
+                }
+            }
+        },
+        eStatus: {
+            'ALL': 'Tất cả',
+            'PENDING_PAYMENT': 'Chờ thanh toán',
+            'PAID': 'Đã thanh toán',
+            'CANCELED': 'Đã hủy',
+            'COMPLETED': 'Hoàn tất',
+            'REFUND_CONFIRM_PENDING': 'Chờ xác nhận hoàn tiền',
+            'REFUNDING': 'Đang hoàn tiền',
+            'REFUNDED': 'Đã hoàn tiền',
+        }
     },
     'subscription-pack': {
         'page-title': 'Danh sách gói đọc',
@@ -213,8 +252,7 @@ export default {
             editTitle: "Chỉnh sửa gói đọc",
             month: "Tháng",
             name: "Gói",
-            originalPrice: "Giá gốc",
-            discountPrice: 'Giá sau khi giảm giá',
+            price: "Giá",
             resetBtn: "Làm mới",
             saveBtn: "Lưu",
             dateCount: "Thời hạn gói",
@@ -240,7 +278,7 @@ export default {
                 'check-input-again': 'Vui lòng kiểm tra lại thông tin!',
             }
 
-        }
+        },
     },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',

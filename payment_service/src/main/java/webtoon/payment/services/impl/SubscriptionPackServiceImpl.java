@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import webtoon.payment.dtos.SubscriptionPackDto;
+import webtoon.payment.dtos.SubscriptionPackMetadataDto;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
 import webtoon.payment.repositories.ISubscriptionPackRepository;
@@ -44,8 +45,7 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
         SubscriptionPackEntity subscriptionPackEntity = this.getById(subscriptionPackModel.getId());
         subscriptionPackEntity.setName(subscriptionPackModel.getName());
         subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
-        subscriptionPackEntity.setOriginalPrice(subscriptionPackModel.getOriginalPrice());
-        subscriptionPackEntity.setDiscountPrice(subscriptionPackModel.getDiscountPrice());
+        subscriptionPackEntity.setPrice(subscriptionPackModel.getPrice());
         subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
 
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
@@ -73,9 +73,14 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     }
 
     @Override
+    public List<SubscriptionPackMetadataDto> getAllPackMetadata() {
+        return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
+                SubscriptionPackMetadataDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());
+    }
+
+    @Override
     public List<SubscriptionPackDto> getAll() {
-        Pageable pageable = PageRequest.of(0, 10).withSort(Sort.Direction.ASC, "id");
-        return subscriptionPackRepository.findAll(pageable).stream().map(subscriptionPackEntity ->
+        return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
                 SubscriptionPackDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());
     }
 

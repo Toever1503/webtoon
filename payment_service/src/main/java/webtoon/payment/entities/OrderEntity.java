@@ -1,7 +1,9 @@
 package webtoon.payment.entities;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import webtoon.payment.enums.EPaymentMethod;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,7 +23,7 @@ public class OrderEntity {
 
     @Column
     @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    @CreationTimestamp
     private Date created_at;
 
     @Column
@@ -43,6 +45,10 @@ public class OrderEntity {
 
     @Column
     private String maDonHang;
+
+    @Enumerated(EnumType.STRING)
+    @Column
+    private EPaymentMethod paymentMethod;
 
     @JoinColumn(name ="subs_pack_id")
     @OneToOne

@@ -15,26 +15,19 @@ public class SubscriptionPackDto {
     private String name;
     private Integer monthCount;
     private Integer dayCount;
-    private Double originalPrice;
-    private Double discountPrice;
-    private long discountPercent;
+    private Double price;
     private Date createdAt;
     private Date modifiedAt;
 
     public static SubscriptionPackDto toDto(SubscriptionPackEntity subscriptionPackEntity) {
         if (subscriptionPackEntity == null) return null;
 
-        long discountPercent = 0;
-        if (subscriptionPackEntity.getDiscountPrice() != null)
-            discountPercent = Math.round(subscriptionPackEntity.getDiscountPrice() / subscriptionPackEntity.getOriginalPrice() * 100);
         return SubscriptionPackDto.builder()
                 .id(subscriptionPackEntity.getId())
                 .name(subscriptionPackEntity.getName())
                 .monthCount(subscriptionPackEntity.getMonthCount())
                 .dayCount(subscriptionPackEntity.getDayCount())
-                .originalPrice(subscriptionPackEntity.getOriginalPrice())
-                .discountPrice(subscriptionPackEntity.getDiscountPrice())
-                .discountPercent(discountPercent)
+                .price(subscriptionPackEntity.getPrice())
                 .createdAt(subscriptionPackEntity.getCreatedAt())
                 .modifiedAt(subscriptionPackEntity.getModifiedAt())
                 .build();

@@ -2,7 +2,6 @@ import { Button, Input, PaginationProps, Popconfirm, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import AddEditSubscriptionPackModal, { AddEditSubscriptionPackModalProps } from "./components/AddEditSubscriptionPackModal";
 import { SubscriptionPackState, addSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData, updateSubscriptionPack } from "../../stores/features/subscription-pack/subscriptionPackSlice";
@@ -12,9 +11,8 @@ import subscriptionPackService from "../../services/subscription_pack/subscripti
 import { AxiosResponse } from "axios";
 import { reIndexTbl } from "../../utils/indexData";
 import formatVnCurrency from "../../utils/formatVnCurrency";
-import ISubscriptionPackFilterInput from "../../services/subscription_pack/types/ISubscriptionPackFilterInput";
-import debounce from "../../utils/debounce";
 import { showNofification } from "../../stores/features/notification/notificationSlice";
+import IUserType from "../user/types/IUserType";
 
 const SubscriptionPackPage: React.FC = () => {
     const { t } = useTranslation();
@@ -48,19 +46,7 @@ const SubscriptionPackPage: React.FC = () => {
             key: 'price',
             render: (text, record) => <>
                 {
-                    record.discountPrice ?
-                        <>
-                            <div>
-                                {formatVnCurrency(record.discountPrice)}
-                            </div>
-                            {
-                                <del>
-                                    {formatVnCurrency(record.originalPrice)}
-                                </del>
-                            }
-                        </>
-                        :
-                        formatVnCurrency(record.originalPrice)
+                    formatVnCurrency(record.price)
                 }
             </>,
         },
@@ -82,13 +68,17 @@ const SubscriptionPackPage: React.FC = () => {
             title: t('subscription-pack.table.modifiedAt'),
             dataIndex: 'modifiedAt',
             key: 'modifiedAt',
-            render: (text) => <>{text}</>,
+            render: (text: IUserType) => <>{
+                text ? text.fullName : '-' 
+            }</>,
         },
         {
             title: t('subscription-pack.table.createdBy'),
             dataIndex: 'createdBy',
             key: 'createdBy',
-            render: (text) => <>{text}</>,
+            render: (text: IUserType) => <>{
+                text ? text.fullName : '-'
+            }</>,
         },
         {
             title: t('subscription-pack.table.modifiedBy'),
@@ -169,7 +159,7 @@ const SubscriptionPackPage: React.FC = () => {
             .then(() => {
                 dispatch(showNofification({
                     type: 'success',
-                    message: t('subscription-pack.table.delete-success')
+                    message: t('subscription-pack.modal.form.delete-success')
                 }));
                 dispatch(deleteSubscriptionPackById({ id }));
             })
@@ -178,7 +168,7 @@ const SubscriptionPackPage: React.FC = () => {
 
                 dispatch(showNofification({
                     type: 'success',
-                    message: t('subscription-pack.table.delete-failed')
+                    message: t('subscription-pack.modal.form.delete-failed')
                 }))
             })
             .finally(() => setTableLoading(false));

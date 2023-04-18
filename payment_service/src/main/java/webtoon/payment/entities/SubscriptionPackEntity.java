@@ -29,13 +29,6 @@ public class SubscriptionPackEntity {
     @Column(name = "month_count")
     private Integer monthCount;
 
-    @Column(name = "original_price", nullable = false)
-    private Double originalPrice;
-
-    @Column(name = "discount_price", columnDefinition = "double default 0")
-    private Double discountPrice;
-
-    @Deprecated
     @Column
     private Double price;
 
