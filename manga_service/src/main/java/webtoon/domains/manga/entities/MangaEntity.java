@@ -10,6 +10,7 @@ import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import org.hibernate.annotations.Where;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
@@ -87,7 +88,9 @@ public class MangaEntity {
     @Column(name = "view_count")
     private Integer viewCount;
 
-//private  created_by;
+    @JoinColumn(name = "created_by")
+    @ManyToOne
+    private UserEntity createdBy;
 //
 //private modified_by;
     @OneToMany(mappedBy = "manga" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)

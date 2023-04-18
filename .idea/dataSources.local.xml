@@ -8,13 +8,11 @@
     </data-source>
     <data-source name="webtoon-account-service/Hibernate" uuid="757f3d28-6aa2-4a50-ae01-2032827c1e61">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
-      <secret-storage>master_key</secret-storage>
       <user-name>stovizkj_webtoon_hau</user-name>
       <schema-mapping />
     </data-source>
     <data-source name="payment-service/Hibernate" uuid="a12621d6-3c8c-4894-996a-6cbd16f8ae12">
       <database-info product="" version="" jdbc-version="" driver-name="" driver-version="" dbms="MYSQL" exact-version="0" />
-      <secret-storage>master_key</secret-storage>
       <user-name>stovizkj_webtoon_hau</user-name>
       <schema-mapping />
     </data-source>
