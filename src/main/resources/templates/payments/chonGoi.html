@@ -1,48 +1,70 @@
 <!DOCTYPE >
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}">
-<head>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout.html}"
+>
+  <head>
+    <title>Chọn gói phù hợp</title>
+    <script
+      src="https://kit.fontawesome.com/b86979ecfa.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
+  </head>
 
-  <title>Chọn gói phù hợp</title>
-  <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
-  <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
-</head>
-
-<body ng-app="paymentApp" ng-controller="paymentController">
-<div class="w-[1100px] m-auto" layout:fragment="content">
-  <div class="flex 2xl:justify-start py-4 md:py-8 flex-wrap">
-    <div class="max-w-full autofill: ml-56 mt-10">
-      <ul>
-        <li class="text-xl font-bold text-orange-700">
-          Chọn gói dịch vụ phù hợp với bạn
-        </li>
-        <li class="text-sm text-orange-700">
-          <i class="fa-solid fa-check"></i> Truy cập và đọc tất cả truyện trên trang web.
-        </li>
-        <li class="text-sm text-orange-700">
-            <i class="fa-solid fa-check"></i> Không yêu cầu cam kết, hủy bất kỳ lúc nào.
-          </li>
-          <li class="text-sm text-orange-700">
-            <i class="fa-solid fa-check"></i> Thay đổi hoặc hủy gói dịch vụ của bạn bất cứ khi nào.
-        </li>
-    </ul>
+  <body ng-app="paymentApp" ng-controller="paymentController">
+    <div class="w-[1100px] m-auto" layout:fragment="content">
+      <div class="flex 2xl:justify-start py-4 md:py-8 flex-wrap">
+        <div class="max-w-full autofill: ml-56 mt-10">
+          <ul>
+            <li class="text-xl font-bold text-orange-700">
+              Chọn gói dịch vụ phù hợp với bạn
+            </li>
+            <li class="text-sm text-orange-700">
+              <i class="fa-solid fa-check"></i> Truy cập và đọc tất cả truyện
+              trên trang web.
+            </li>
+            <li class="text-sm text-orange-700">
+              <i class="fa-solid fa-check"></i> Không yêu cầu cam kết, hủy bất
+              kỳ lúc nào.
+            </li>
+            <li class="text-sm text-orange-700">
+              <i class="fa-solid fa-check"></i> Thay đổi hoặc hủy gói dịch vụ
+              của bạn bất cứ khi nào.
+            </li>
+          </ul>
         </div>
       </div>
-      
-      <div
-        class="flex flex-row justify-center">
+
+      <div class="flex flex-row justify-center">
         <div class="basis-1/4" th:each="item : ${items}">
-          <button 
-            type="button" th:onclick="| window.location.href='https://localhost:8080/subscription_pack/getByPrice/${item.price.intValue()}'|"
-            class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg py-2.5 mb-2 w-[200px] h-[200px]"
-          >
-          <h2 th:text="${item.name}">
-          </h2>
-          <h2 th:text="${#numbers.formatCurrency(item.price)}"></h2>
-          <h2 th:text="${item.dayCount +' Ngày'}"></h2>
+          <!-- <div th:if="${item.discountPrice == 0}"> -->
+            <button
+              type="button"
+              th:onclick="| window.location.href='http://localhost:8080/subscription_pack/getByPrice/${item.price.intValue()}'|"
+              class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg py-2.5 mb-2 w-[200px] h-[200px]"
+            >
+              <p class="text-sm" th:text="${item.name}"></p>
+              <p class="text-sm" th:text="${#numbers.formatCurrency(item.price)}"></p>
+              <p class="text-sm" th:text="${'Đọc miễn phí trong '+ item.dayCount +' Ngày'}"></p>
+            </button>
+          <!-- </div> -->
+          <!-- <div th:if="${item.discountPrice != 0}">
+            <button
+              type="button"
+              th:onclick="| window.location.href='https://localhost:8080/subscription_pack/getByPrice/${item.discountPrice.intValue()}'|"
+              class="text-red-500 bg-white border border-red-500 focus:outline-gray-100 hover:bg-red-500 hover:text-white focus:ring-4 focus:ring-gray-200 font-medium rounded-lg text-lg py-2.5 mb-2 w-[200px] h-[200px]"
+            >
+              <p th:text="${item.name}"></p>
+              <p class="text-sm" th:text="${#numbers.formatCurrency(item.discountPrice)}"></p>
+              <p class="line-through text-sm" th:text="${#numbers.formatCurrency(item.originalPrice)}"></p>
+              <p class="text-sm" th:text="${'Đọc miễn phí trong '+ item.dayCount +' Ngày'}"></p>
+            </button>
+          </div> -->
         </div>
-    </div>
+      </div>
     </div>
   </body>
 </html>

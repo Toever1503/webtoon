@@ -29,6 +29,7 @@ public class OrderServiceImpl implements IOrderService {
               .ipAddr(orderModel.getIpAddr())
               .maDonHang(orderModel.getMaDonHang())
                 .subs_pack_id(orderModel.getSubs_pack_id())
+              .user_id(orderModel.getUser_id())
               .build();
       this.orderRepository.saveAndFlush(orderEntity);
       return OrderDto.builder()
@@ -40,6 +41,7 @@ public class OrderServiceImpl implements IOrderService {
               .ipAddr(orderEntity.getIpAddr())
               .maDonHang(orderEntity.getMaDonHang())
               .subs_pack_id(orderEntity.getSubs_pack_id())
+              .user_id(orderEntity.getUser_id())
               .build();
     }
 //
@@ -54,6 +56,7 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
         orderEntity.setSubs_pack_id(orderModel.getSubs_pack_id());
+        orderEntity.setUser_id(orderModel.getUser_id());
         this.orderRepository.saveAndFlush(orderEntity);
         return OrderDto.builder()
                 .created_at(orderEntity.getCreated_at())
@@ -64,6 +67,7 @@ public class OrderServiceImpl implements IOrderService {
                 .ipAddr(orderEntity.getIpAddr())
                 .maDonHang(orderEntity.getMaDonHang())
                 .subs_pack_id(orderEntity.getSubs_pack_id())
+                .user_id(orderEntity.getUser_id())
                 .build();
     }
 
@@ -85,6 +89,11 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderEntity getMaDonHang(String maDonHang) {
         return this.orderRepository.getByMaDonHang(maDonHang);
+    }
+
+    @Override
+    public List<OrderEntity> getByUserId(Long userId) {
+        return orderRepository.getByUserId(userId);
     }
 
 

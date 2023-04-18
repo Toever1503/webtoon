@@ -17,6 +17,7 @@ public class SubscriptionPackDto {
     private Integer dayCount;
     private Double originalPrice;
     private Double discountPrice;
+    private Double price;
     private long discountPercent;
     private Date createdAt;
     private Date modifiedAt;
@@ -32,6 +33,7 @@ public class SubscriptionPackDto {
                 .name(subscriptionPackEntity.getName())
                 .dayCount(subscriptionPackEntity.getDayCount())
                 .originalPrice(subscriptionPackEntity.getOriginalPrice())
+                .price(subscriptionPackEntity.getPrice())
                 .discountPrice(subscriptionPackEntity.getDiscountPrice())
                 .discountPercent(discountPercent)
                 .createdAt(subscriptionPackEntity.getCreatedAt())

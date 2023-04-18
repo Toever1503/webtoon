@@ -13,4 +13,5 @@ public interface IOrderService {
     List<OrderEntity> getAll();
     OrderEntity getById(Long id);
     OrderEntity getMaDonHang(String maDonHang);
+    List<OrderEntity> getByUserId(Long userId);
 }

@@ -1,6 +1,7 @@
 package webtoon.payment.dtos;
 
 import lombok.*;
+import webtoon.account.entities.UserEntity;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 
@@ -21,6 +22,7 @@ public class OrderDto {
     private String ipAddr;
     private String maDonHang;
     private SubscriptionPackEntity subs_pack_id;
+    private UserEntity user_id;
 
     public static OrderDto toDto(OrderEntity orderEntity) {
         if(orderEntity == null) return null;
@@ -35,6 +37,7 @@ public class OrderDto {
                 .ipAddr(orderEntity.getIpAddr())
                 .maDonHang(orderEntity.getMaDonHang())
                 .subs_pack_id(orderEntity.getSubs_pack_id())
+                .user_id(orderEntity.getUser_id())
                 .build();
     }
 }

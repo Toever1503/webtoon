@@ -40,7 +40,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                 "webtoon.comment.controllers",
 
                 "webtoon.payment.services",
-                "webtoon.payment.controllers",
+                "webtoon.payment.controller",
                 "webtoon.payment.resources",
         }
 )

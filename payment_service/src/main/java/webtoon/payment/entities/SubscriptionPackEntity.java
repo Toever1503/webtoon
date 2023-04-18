@@ -34,7 +34,6 @@ public class SubscriptionPackEntity {
     @Column(name = "discount_price", columnDefinition = "double default 0")
     private Double discountPrice;
 
-    @Deprecated
     @Column
     private Double price;
 

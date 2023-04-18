@@ -55,6 +55,7 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
         return this.subscriptionPackRepository.findById(id).get();
     }
 
+
     @Override
     public void deleteById(Long id) {
         try {
