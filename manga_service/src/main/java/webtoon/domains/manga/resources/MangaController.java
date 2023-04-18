@@ -29,17 +29,18 @@ public class MangaController {
 	@Autowired
 	private IMangaChapterService mangaChapterService;
 
+	@Autowired
+	@Lazy
+	private IReadHistoryService  historyService;
+
 
 	private final IMangaRatingService ratingService;
 
-	private final IReadHistoryService historyService;
-
 	private final IMangaGenreService mangaGenreService;
 
-	public MangaController( IMangaRatingService ratingService, IReadHistoryService historyService, IMangaGenreService mangaGenreService) {
+	public MangaController( IMangaRatingService ratingService,  IMangaGenreService mangaGenreService) {
 
 		this.ratingService = ratingService;
-		this.historyService = historyService;
 		this.mangaGenreService = mangaGenreService;
 	}
 
@@ -58,6 +59,12 @@ public class MangaController {
 		MangaEntity mangaEntity =this.mangaService.getById(id);
 
 		List<MangaChapterEntity> mangaChapter = this.mangaChapterService.findAllByMangaId(id);
+
+		ReadHistory readHistory  =  this.historyService.findByMangaId(id);
+		if(readHistory != null){
+
+		}
+
 
 //		hiển thị số sao và sô bản ghi rating
 		List<Map> list = this.ratingService.getRating(id);

@@ -17,12 +17,14 @@ import java.util.Optional;
 public interface IMangaRatingRepository extends JpaRepository<MangaRatingEntity, Long>, JpaSpecificationExecutor<MangaRatingEntity> {
     Page<MangaDto> findAllById(Long id, Pageable pageable);
 
-    @Query("select count(a)as tongso,avg(a.rate) as xh from MangaRatingEntity a where a.mangaId = ?1")
+    @Query("select count(a)as tongso,ROUND(AVG(a.rate), 1) as xh from MangaRatingEntity a where a.mangaId = ?1")
     List<Map> getRateAvg(Long mangaId);
 
     @Query("select a from MangaRatingEntity a where a.mangaId =?1")
     List<MangaRatingEntity> findByMangaId(Long mangaId);
 
-    @Query("select avg(a.rate) as rate from MangaRatingEntity a where a.mangaId = ?1")
-    Double findByManga(Long mangaId);
+    @Query("select ROUND(AVG(a.rate), 1) as rate from MangaRatingEntity a where a.mangaId = ?1")
+    Double findRatingByManga(Long mangaId);
+
+
 }

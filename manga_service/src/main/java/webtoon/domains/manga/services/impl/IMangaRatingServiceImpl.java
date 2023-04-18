@@ -49,7 +49,7 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
                 .build();
         this.ratingRepository.saveAndFlush(entity);
 //        viết ở đây
-        Double entity1 =  this.ratingRepository.findByManga(entity.getMangaId());
+        Double entity1 =  this.ratingRepository.findRatingByManga(entity.getMangaId());
         MangaEntity mangaEntity = this.mangaService.getById(entity.getMangaId());
         mangaEntity.setRating(entity1.floatValue());
         this.mangaRepository.saveAndFlush(mangaEntity);
@@ -97,6 +97,12 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
 
         return this.ratingRepository.getRateAvg(id);
     }
+
+    @Override
+    public Double findRatingByMangaId(Long id){
+        return this.ratingRepository.findRatingByManga(id);
+    }
+
 
 
 

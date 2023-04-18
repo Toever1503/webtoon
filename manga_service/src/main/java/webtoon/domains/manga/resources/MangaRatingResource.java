@@ -30,4 +30,12 @@ public class MangaRatingResource {
     public void delete(@PathVariable Long id){
         this.ratingService.deleteById(id);
     }
+
+
+    @GetMapping("/getRating/{id}")
+    public Double getAll(@PathVariable Long id){
+        return this.ratingService.findRatingByMangaId(id);
+    }
+
+
 }

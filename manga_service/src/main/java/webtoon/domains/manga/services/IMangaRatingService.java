@@ -23,4 +23,6 @@ public interface IMangaRatingService {
 
 
     List<Map> getRating(Long id);
+
+    Double findRatingByMangaId(Long id);
 }

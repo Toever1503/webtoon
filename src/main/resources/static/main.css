@@ -380,10 +380,6 @@
   margin-left: auto
 }
 
-.mr-10 {
-  margin-right: 2.5rem
-}
-
 .mr-2 {
   margin-right: 0.5rem
 }
@@ -484,6 +480,10 @@
   height: 14rem
 }
 
+.h-60 {
+  height: 15rem
+}
+
 .h-72 {
   height: 18rem
 }
@@ -535,6 +535,22 @@
 
 .h-full {
   height: 100%
+}
+
+.h-48 {
+  height: 12rem
+}
+
+.h-14 {
+  height: 3.5rem
+}
+
+.h-80 {
+  height: 20rem
+}
+
+.h-96 {
+  height: 24rem
 }
 
 .min-h-\[135px\] {
@@ -630,6 +646,22 @@
   width: 100%
 }
 
+.w-52 {
+  width: 13rem
+}
+
+.w-48 {
+  width: 12rem
+}
+
+.w-12 {
+  width: 3rem
+}
+
+.w-60 {
+  width: 15rem
+}
+
 .min-w-\[80px\] {
   min-width: 80px
 }
@@ -662,16 +694,8 @@
   flex-shrink: 0
 }
 
-.flex-grow {
-  flex-grow: 1
-}
-
 .basis-1\/2 {
   flex-basis: 50%
-}
-
-.basis-1\/3 {
-  flex-basis: 33.333333%
 }
 
 .basis-1\/4 {
@@ -680,10 +704,6 @@
 
 .basis-1\/5 {
   flex-basis: 20%
-}
-
-.basis-2\/3 {
-  flex-basis: 66.666667%
 }
 
 .basis-3\/4 {
@@ -1143,11 +1163,6 @@
   padding-right: 1.5rem
 }
 
-.px-8 {
-  padding-left: 2rem;
-  padding-right: 2rem
-}
-
 .px-\[0\.65em\] {
   padding-left: 0.65em;
   padding-right: 0.65em
@@ -1201,11 +1216,6 @@
 .py-4 {
   padding-top: 1rem;
   padding-bottom: 1rem
-}
-
-.py-5 {
-  padding-top: 1.25rem;
-  padding-bottom: 1.25rem
 }
 
 .py-\[10px\] {
