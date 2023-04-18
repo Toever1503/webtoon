@@ -39,7 +39,10 @@
           >
           <h2 th:text="${item.name}">
           </h2>
-          <h2 th:text="${#numbers.formatCurrency(item.price)}"></h2>
+          <h2>
+            <span th:text="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'POINT')}">10.00</span>
+            vnd
+          </h2>
           <h2 th:text="${item.dayCount +' Ngày'}"></h2>
         </div>
     </div>
