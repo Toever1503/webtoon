@@ -66,6 +66,27 @@ export default {
                 }
 
             }
+        },
+        table: {
+            title: 'Tiêu đề',
+            mangaType: 'Loại truyện',
+            releaseStatus: 'Trạng thái phát hành',
+            genre: 'Thể loại',
+            author: 'Tác giả',
+            tag: 'Thẻ',
+            action: 'Hành động',
+        },
+        eReleaseStatus: {
+            'COMING': 'Sắp ra mắt',
+            'ONGOING': 'Đang ra',
+            'COMPLETED': 'Đã hoàn thành',
+            'CANCELLED': 'Đã hủy',
+            'ON_STOPPING': 'Tạm ngừng',
+            'STOPPED': 'Đã ngừng',
+        },
+        eMangaType: {
+            'IMAGE': 'Truyện tranh',
+            'TEXT': 'Truyện chữ',
         }
     },
     comment: {
@@ -246,6 +267,8 @@ export default {
             'modifiedBy': 'Người sửa',
             'action': 'Hành động',
             'sure-delete': 'Bạn chắc chắn muốn xóa gói đọc này?',
+            'all': 'Tất cả',
+            'deleted': 'Xóa mềm',
         },
         modal: {
             addTitle: "Thêm gói đọc mới",
@@ -292,5 +315,17 @@ export default {
             'code-11': 'Tên đăng nhập đã tồn tại!',
             'code-12': 'Email đã tồn tại!',
         }
+    },
+    table: {
+        col: {
+            edit: 'Sửa',
+            delete: 'Xóa',
+        }
+    },
+    buttons: {
+        add: 'Thêm mới',
+        save: 'Lưu',
+        cancel: 'Hủy',
+        edit: 'Sửa',
     }
 }

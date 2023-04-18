@@ -1,5 +1,5 @@
 import React, { ChangeEvent, ChangeEventHandler, EventHandler, useEffect, useRef, useState } from 'react';
-import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef, Tooltip } from 'antd';
+import { Button, Select, Table, TablePaginationConfig, Tag, Input, DatePicker, Divider, Space, InputRef, Tooltip, Checkbox } from 'antd';
 import MangaChapterForm from './component/MangaChapterForm';
 import { ArrowLeftOutlined, PlusOutlined } from '@ant-design/icons';
 import debounce from '../../utils/debounce';
@@ -71,6 +71,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         genres: [],
         authors: [],
         tags: [],
+        isFree: false,
         featuredImage: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAVSp94.img?w=768&h=1024&m=6&x=257&y=190&s=273&d=273',
         displayType: 'CHAP'
     });
@@ -120,6 +121,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
             console.log('begin save manga');
 
             setIsSavingMangaInfo(true);
+            mangaInput.status = 'PUBLISHED';
             mangaService.addMangaInfo(mangaInput)
                 .then((res) => {
                     console.log('add manga success', res.data);
@@ -222,7 +224,9 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             'Cập nhật truyện'
                     }
                 </p>
-                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>Lưu</Button>
+                <Button loading={isSavingMangaInfo} onClick={onSaveMangaInfo}>
+                    {t('buttons.save')}
+                </Button>
             </div>
 
             {
@@ -260,15 +264,15 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                     <div className='manga-form-sidebar w-[280px] grid gap-y-[15px]' >
                         <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
-                            <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Thông tin khác</p>
+                            <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Thông tin bổ sung</p>
 
-                            {/* <div className='grid gap-y-[5px] px-[10px] mt-[10px]'>
-                                <span className='text-[14px] font-bold'>Tên thay thế:</span>
-                                <Input value={mangaInput.alternativeTitle} onChange={(e: ChangeEvent<HTMLInputElement>) => setMangaInput({ ...mangaInput, alternativeTitle: e.target.value })} placeholder='alternate title' />
-                            </div> */}
+                            <div className='flex gap-x-[15px] px-[10px] mt-[10px]'>
+                                <span className='text-[14px] font-bold'>Truyện có phí?</span>
+                                <Checkbox checked={mangaInput.isFree} onChange={e => mangaInput.isFree = e.target.checked}/>
+                            </div>
 
 
-                            <div className='flex justify-between items-center px-[10px]'>
+                            {/* <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Trạng thái:</span>
                                 <Select
                                     className='min-w-[150px]'
@@ -279,7 +283,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                         { value: 'DRAFTED', label: 'Đăng sau' },
                                     ]}
                                 />
-                            </div>
+                            </div> */}
 
                             <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Tình trạng phát hành:</span>

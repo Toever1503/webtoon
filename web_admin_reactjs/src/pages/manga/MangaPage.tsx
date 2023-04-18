@@ -22,7 +22,7 @@ const mangaStatus: MangaStatus[] = [
 ];
 
 const releaseStatus: ReleaseStatus[] = [
-    'COMING', 'GOING', 'STOPPED', 'CANCELLED', 'COMPLETED'
+    'COMING', 'ONGOING', 'STOPPED', 'ON_STOPPING', 'CANCELLED', 'COMPLETED'
 ];
 
 
@@ -54,27 +54,29 @@ const MangaPage: React.FC = () => {
             key: 'index',
         },
         {
-            title: 'Name',
+            title: t('manga.table.title'),
             dataIndex: 'title',
-            key: 'name',
+            key: 'title',
             render: (text) => <>{text}</>,
         },
         {
-            title: 'Manga Type',
+            title: t('manga.table.mangaType'),
             dataIndex: 'mangaType',
             key: 'mangaType',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{t(`manga.eMangaType.${text}`)}</>,
         },
         {
-            title: 'Release status',
+            title: t('manga.table.releaseStatus'),
             dataIndex: 'mangaStatus',
             key: 'mangaStatus',
-            render: (text, record) => <>
+            render: (text: ReleaseStatus, record) => <>
                 <Dropdown menu={getReleaseStatus(text, record)} trigger={['click']}>
                     <a onClick={(e) => e.preventDefault()} className='text-[12px]'>
                         <span className='text-[12px] flex gap-x-[5px] items-center'>
                             <Tooltip title="Thay đổi trạng thái">
-                                {text}
+                                {
+                                    t(`manga.eReleaseStatus.${text}`)
+                                }
                             </Tooltip>
                             <DownOutlined />
                         </span>
@@ -84,7 +86,7 @@ const MangaPage: React.FC = () => {
             </>,
         },
         {
-            title: 'Genres',
+            title: t('manga.table.genre'),
             dataIndex: 'genres',
             key: 'genres',
             render: (_, record) => (
@@ -102,7 +104,7 @@ const MangaPage: React.FC = () => {
             width: 200,
         },
         {
-            title: 'Authors',
+            title: t('manga.table.author'),
             dataIndex: 'authors',
             key: 'authors',
             render: (_, record) => (
@@ -120,7 +122,7 @@ const MangaPage: React.FC = () => {
             width: 200,
         },
         {
-            title: 'Tags',
+            title: t('manga.table.tag'),
             key: 'tags',
             dataIndex: 'tags',
             render: (_, record) => (
@@ -137,29 +139,31 @@ const MangaPage: React.FC = () => {
             ),
             width: 200,
         },
+        // {
+        //     title: 'Trạng thái',
+        //     dataIndex: 'status',
+        //     key: 'status',
+        //     render: (text, record) => <>
+        //         <Dropdown menu={getStatusItems(text, record)} trigger={['click']}>
+        //             <a onClick={(e) => e.preventDefault()} className='text-[12px]'>
+        //                 <span className='text-[12px] flex gap-x-[5px] items-center'>
+        //                     <Tooltip title="Thay đổi trạng thái">
+        //                         {text}
+        //                     </Tooltip>
+        //                     <DownOutlined />
+        //                 </span>
+        //             </a>
+        //         </Dropdown>
+        //     </>,
+        // },
         {
-            title: 'Trạng thái',
-            dataIndex: 'status',
-            key: 'status',
-            render: (text, record) => <>
-                <Dropdown menu={getStatusItems(text, record)} trigger={['click']}>
-                    <a onClick={(e) => e.preventDefault()} className='text-[12px]'>
-                        <span className='text-[12px] flex gap-x-[5px] items-center'>
-                            <Tooltip title="Thay đổi trạng thái">
-                                {text}
-                            </Tooltip>
-                            <DownOutlined />
-                        </span>
-                    </a>
-                </Dropdown>
-            </>,
-        },
-        {
-            title: 'Action',
+            title: t('manga.table.action'),
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Link to={`/mangas/edit/${record.id}`}>Edit</Link>
+                    <Link to={`/mangas/edit/${record.id}`}>
+                        {t('table.col.edit')}
+                    </Link>
                     <Popconfirm
                         title={t('manga.form.sure-delete')}
                         onConfirm={(e) => {
@@ -169,7 +173,9 @@ const MangaPage: React.FC = () => {
                         okText={t('confirm-yes')}
                         cancelText={t('confirm-no')}
                     >
-                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">Delete</a>
+                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">
+                            {t('table.col.delete')}
+                        </a>
                     </Popconfirm>
 
                 </Space>
@@ -262,7 +268,7 @@ const MangaPage: React.FC = () => {
             items: releaseStatus.filter((e: ReleaseStatus) => e !== status).map((e: ReleaseStatus) => {
                 return {
                     key: e,
-                    label: e,
+                    label: t(`manga.eReleaseStatus.${e}`),
                     onClick: () => {
                         console.log('e', e);
                         console.log('e', e);
@@ -325,24 +331,11 @@ const MangaPage: React.FC = () => {
                 <p className="text-[23px] font-[400]">Manga</p>
                 <Button className="font-medium" onClick={() => navigate('/mangas/add')}>Add new</Button>
             </div>
-            <div className="flex justify-between">
-                <div className="flex space-x-3 items-center">
+            
+            <div className="flex justify-end">
+                <div className="flex space-x-3 items-center hidden">
                     <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'ALL' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'ALL' })}>
                         <p className="m-0">All</p><p className="m-0">({mangaStatusCalc.ALL})</p>
-                    </div>
-                    <div>
-                        <p className="m-0">|</p>
-                    </div>
-                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'PUBLISHED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'PUBLISHED' })}>
-                        <p className="m-0">Published</p><p className="m-0">({mangaStatusCalc.PUBLISHED})</p>
-                    </div>
-
-                    <div>
-                        <p className="m-0">|</p>
-                    </div>
-
-                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'DRAFTED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'DRAFTED' })}>
-                        <p className="m-0">Drafted</p><p className="m-0">({mangaStatusCalc.DRAFTED})</p>
                     </div>
                     <div>
                         <p className="m-0">|</p>
@@ -353,7 +346,7 @@ const MangaPage: React.FC = () => {
                     </div>
                 </div>
                 <div>
-                    <Search placeholder="input search text" value={mangaFilter.q} onChange={e => setMangaFilter({ ...mangaFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
+                    <Search placeholder={`${t('placeholders.search')}`} value={mangaFilter.q} onChange={e => setMangaFilter({ ...mangaFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
             <Table columns={columns} loading={tableLoading} pagination={pageConfig} dataSource={mangaData} onChange={onChangeTable} />

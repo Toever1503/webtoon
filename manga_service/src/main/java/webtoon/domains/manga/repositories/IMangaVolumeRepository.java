@@ -31,6 +31,14 @@ public interface IMangaVolumeRepository extends JpaRepository<MangaVolumeEntity,
     void reindexVolumeAfterIndex(Integer index);
 
     @Modifying
-//    @Query("DELETE FROM MangaVolumeEntity v where v.manga.id = ?1")
     void deleteAllByMangaId(Long id);
+
+
+    @Modifying
+    @Query("DELETE FROM MangaVolumeEntity v where v.id = ?1")
+    void deleteVolById(Long id);
+
+//    @Modifying
+//    @Query("DELETE FROM MangaVolumeEntity v where v.id = ?1")
+//    void deleteById(Long id);
 }
