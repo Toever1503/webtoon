@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,7 +15,7 @@
 </head>
 <body>
 
-    <div class="w-[1100px] ms-auto">
+    <div class="w-[1100px] ms-auto" layout:fragment="content">
         <div class="flex flex-row justify-start mt-10">
             <button class="w-32 h-9 bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-black focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"  th:onclick="| window.location.href='http://localhost:8080/subscription_pack/load'|">Chọn lại gói</button> 
         </div>
@@ -21,11 +23,11 @@
             Chọn cách thanh toán
         </h2>
     <div class="flex justify-center mt-5 ">
-    <button class="w-100 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"
+    <button type="button" class="w-100 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"
      th:onclick="| window.location.href='http://localhost:8080/payment/pay?amount=${items.intValue()}'|">Thanh toán bằng VNPAY</button>
 </div>
    <div class="flex justify-center">
-    <button class="w-100 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"
+    <button type="button" class="w-100 py-2.5 px-5 mr-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-200 dark:focus:ring-gray-700"
     th:onClick="| window.location.href='http://localhost:8080/order/chuyenKhoan/${id}'|">Thanh toán bằng hình thức chuyển khoản</button>
    </div>
 </div>

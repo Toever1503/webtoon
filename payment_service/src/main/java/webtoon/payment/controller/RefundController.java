@@ -165,6 +165,6 @@ public class RefundController {
 		model.addAttribute("maNganHang", maNganHang);
 		model.addAttribute("thoiGianTT", thoiGianTT);
 		model.addAttribute("ketQua", ketQua);
-		return "order_detail";
+		return "payments/order_detail";
 	}
 }

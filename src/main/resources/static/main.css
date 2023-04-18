@@ -198,6 +198,10 @@
   top: 55px
 }
 
+.top-\[-14px\] {
+  top: -14px
+}
+
 .z-10 {
   z-index: 10
 }
@@ -570,6 +574,10 @@
   height: 2.25rem
 }
 
+.h-\[60px\] {
+  height: 60px
+}
+
 .min-h-\[135px\] {
   min-height: 135px
 }
@@ -677,6 +685,14 @@
 
 .w-full {
   width: 100%
+}
+
+.w-\[50px\] {
+  width: 50px
+}
+
+.w-\[40px\] {
+  width: 40px
 }
 
 .min-w-\[80px\] {

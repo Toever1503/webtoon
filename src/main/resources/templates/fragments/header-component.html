@@ -8,8 +8,8 @@
             </div>
 
             <div class="flex items-center gap-[20px]">
-                    <ul class="menu-nav-bar flex gap-[30px]">
-                        <li><a class="text-white font-bold hover:text-yellow-200" href="/">Home</a></li>
+                    <ul class="menu-nav-bar flex gap-[30px] text-[18px]">
+                        <li><a class="text-white font-bold hover:text-yellow-200" href="/">Trang chủ</a></li>
                         <li><a class="text-white font-bold hover:text-yellow-200" href="/mangas">Danh sách truyện</a></li>
                         <li><a class="text-white font-bold hover:text-yellow-200" href="/subscription_pack/load">Mua gói</a></li>
                         <li><a class="text-white font-bold hover:text-yellow-200" href="/contact">Liên hệ</a></li>
@@ -47,21 +47,21 @@
                 </div>
 
                 <script>
-                    document.addEventListener('DOMContentLoaded', function () {
-                        var searchModal = document.getElementById('search_modal');
-                        var searchBtn = document.getElementById('header_search_btn');
-                        searchBtn.addEventListener('click', function () {
-                            console.log(1242);
-                            searchModal.classList.remove('hidden');
-                        });
+<!--                    document.addEventListener('DOMContentLoaded', function () {-->
+<!--                        var searchModal = document.getElementById('search_modal');-->
+<!--                        var searchBtn = document.getElementById('header_search_btn');-->
+<!--                        searchBtn.addEventListener('click', function () {-->
+<!--                            console.log(1242);-->
+<!--                            searchModal.classList.remove('hidden');-->
+<!--                        });-->
 
-                        var searchModalBg = document.getElementById('search_modal_bg');
-                        searchModalBg.addEventListener('click', function (e) {
-                            console.log("close search modal: ", e.target.id)
-                            if (e.target.id === 'search_modal_bg')
-                                searchModal.classList.add('hidden');
-                        });
-                    });
+<!--                        var searchModalBg = document.getElementById('search_modal_bg');-->
+<!--                        searchModalBg.addEventListener('click', function (e) {-->
+<!--                            console.log("close search modal: ", e.target.id)-->
+<!--                            if (e.target.id === 'search_modal_bg')-->
+<!--                                searchModal.classList.add('hidden');-->
+<!--                        });-->
+<!--                    });-->
                 </script>
             </div>
 

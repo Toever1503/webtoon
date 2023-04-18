@@ -268,7 +268,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                             <div className='flex gap-x-[15px] px-[10px] mt-[10px]'>
                                 <span className='text-[14px] font-bold'>Truyện có phí?</span>
-                                <Checkbox checked={mangaInput.isFree} onChange={e => mangaInput.isFree = e.target.checked}/>
+                                <Checkbox defaultChecked={mangaInput.isFree} onChange={e => mangaInput.isFree = e.target.checked}/>
                             </div>
 
 
