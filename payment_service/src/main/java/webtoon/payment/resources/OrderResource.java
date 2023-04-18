@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import webtoon.account.configs.security.SecurityUtils;
+import webtoon.account.entities.UserEntity;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.controller.VnPayConfig;
@@ -51,14 +53,22 @@ public class OrderResource {
         String maDonHang = VnPayConfig.getRandomNumber(8);
         Date createDate = new Date();
         SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
+        UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
 //        System.out.println("price: "+subscriptionPackEntity.getPrice());
         model.addAttribute("name", subscriptionPackEntity.getName());
-
-        model.addAttribute("price", subscriptionPackEntity.getPrice());
+        Double price = subscriptionPackEntity.getPrice();
+        model.addAttribute("price", price);
         model.addAttribute("maDonHang", maDonHang);
-        orderService.add(new OrderModel(id, createDate, createDate, subscriptionPackEntity.getPrice(), 05, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity));
+
+        orderService.add(new OrderModel(id, createDate, createDate, price, 05, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity,userEntity));
         return "payments/chuyenKhoan";
     }
 
+    @GetMapping("/userOrder/{id}")
+    public String userOrder(@PathVariable Long id,Model model) {
+        List<OrderEntity> order = orderService.getByUserId(id);
+        System.out.println("order: "+order);
+        return "payments/userOrder";
+    }
 
 }

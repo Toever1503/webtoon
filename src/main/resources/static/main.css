@@ -448,6 +448,11 @@
   margin-top: 50px
 }
 
+.ms-auto {
+  -webkit-margin-start: auto;
+          margin-inline-start: auto
+}
+
 .block {
   display: block
 }
@@ -559,6 +564,10 @@
 
 .h-full {
   height: 100%
+}
+
+.h-9 {
+  height: 2.25rem
 }
 
 .min-h-\[135px\] {
@@ -1661,6 +1670,10 @@
   color: rgb(255 255 255 / var(--tw-text-opacity))
 }
 
+.line-through {
+  text-decoration-line: line-through
+}
+
 .opacity-0 {
   opacity: 0
 }
@@ -1880,6 +1893,11 @@
 .hover\:text-yellow-200:hover {
   --tw-text-opacity: 1;
   color: rgb(254 240 138 / var(--tw-text-opacity))
+}
+
+.hover\:text-black:hover {
+  --tw-text-opacity: 1;
+  color: rgb(0 0 0 / var(--tw-text-opacity))
 }
 
 .hover\:underline:hover {
@@ -2186,6 +2204,10 @@
 }
 
 @media (min-width: 1280px) {
+  .xl\:mt-80 {
+    margin-top: 20rem
+  }
+
   .xl\:p-0 {
     padding: 0px
   }

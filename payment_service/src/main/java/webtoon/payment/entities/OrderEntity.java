@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
 import webtoon.payment.enums.EPaymentMethod;
+import webtoon.account.entities.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -53,4 +54,8 @@ public class OrderEntity {
     @JoinColumn(name ="subs_pack_id")
     @OneToOne
     private SubscriptionPackEntity subs_pack_id;
+
+    @JoinColumn(name ="user_id")
+    @ManyToOne
+    private UserEntity user_id;
 }

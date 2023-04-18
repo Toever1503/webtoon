@@ -18,4 +18,5 @@ public interface IOrderService {
     OrderEntity getMaDonHang(String maDonHang);
 
     Page<OrderDto> filter(Pageable pageable, Specification<OrderEntity> finalSpec);
+    List<OrderEntity> getByUserId(Long userId);
 }

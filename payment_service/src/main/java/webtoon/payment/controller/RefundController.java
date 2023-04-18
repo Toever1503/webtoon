@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import webtoon.account.configs.security.SecurityUtils;
+import webtoon.account.entities.UserEntity;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
@@ -142,10 +144,11 @@ public class RefundController {
 		queryUrl +="vnp_Amount="+amount+"vnp_TransactionNo="+maGD+"vnp_BankCode="+maNganHang+"vnp_PayDate="+thoiGianTT
 //				+"&vnp_SecureHash=" + vnp_SecureHash
 		;
+		UserEntity user = SecurityUtils.getCurrentUser().getUser();
 		String paymentUrl = VnPayConfig.vnp_Returnurl + "?" + queryUrl;
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
-			orderService.add(new OrderModel(Long.parseLong(maDonHang), formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), 0,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack ));
+			orderService.add(new OrderModel(Long.parseLong(maDonHang), formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), 0,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user ));
 			OrderEntity order = orderService.getMaDonHang(maDonHang);
 			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 		}else {
