@@ -65,6 +65,10 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
         entity.setMangaId(model.getMangaEntity());
         entity.setRate(Float.valueOf(model.getRate()));
         this.ratingRepository.saveAndFlush(entity);
+        Double entity1 =  this.ratingRepository.findRatingByManga(entity.getMangaId());
+        MangaEntity mangaEntity = this.mangaService.getById(entity.getMangaId());
+        mangaEntity.setRating(entity1.floatValue());
+        this.mangaRepository.saveAndFlush(mangaEntity);
         return MangaRatingDto.builder()
                 .rate(entity.getRate())
                 .mangaEntity(entity.getMangaId())
