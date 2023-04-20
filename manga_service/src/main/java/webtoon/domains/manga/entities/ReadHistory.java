@@ -2,6 +2,7 @@ package webtoon.domains.manga.entities;
 
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
+import webtoon.account.entities.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -26,8 +27,9 @@ public class ReadHistory {
     @Column(name = "chapter_id")
     private Long chapterEntity;
 
-    @Column(name = "created_by")
-    private String createdBy;
+    @JoinColumn(name = "created_by")
+    @ManyToOne
+    private UserEntity createdBy;
 
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)

@@ -2,6 +2,7 @@ package webtoon.domains.manga.models;
 
 import lombok.*;
 import org.hibernate.annotations.UpdateTimestamp;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 
@@ -22,7 +23,7 @@ public class ReadHistoryModel {
 
     private Long chapterEntity;
 
-    private String createdBy;
+    private UserEntity createdBy;
 
     private Date createdDate;
 

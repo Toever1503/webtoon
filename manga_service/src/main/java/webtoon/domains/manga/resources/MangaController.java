@@ -103,6 +103,7 @@ public class MangaController {
 			model.addAttribute("prevChapter",prevNextChapter[0]);
 			model.addAttribute("nextChapter",prevNextChapter[1]);
 		}
+
 		ReadHistory readHistory = new ReadHistory();
 		readHistory = historyService.findByCBAndMG(null,mangaEntity.getId());
 		if(readHistory != null){

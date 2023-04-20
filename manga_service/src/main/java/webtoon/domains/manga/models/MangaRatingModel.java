@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 
 import javax.persistence.Column;
@@ -19,7 +20,7 @@ public class MangaRatingModel {
 
     private Long mangaEntity;
 
-    private String createdBy;
+    private UserEntity createdBy;
 
     private String  rate;
 

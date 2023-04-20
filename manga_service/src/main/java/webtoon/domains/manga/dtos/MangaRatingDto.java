@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 @AllArgsConstructor
 @NoArgsConstructor
@@ -14,7 +15,7 @@ public class MangaRatingDto {
 
     private Long mangaEntity;
 
-    private String createdBy;
+    private UserEntity createdBy;
 
     private Float rate;
 }

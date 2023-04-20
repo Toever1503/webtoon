@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 
@@ -19,7 +20,7 @@ public class ReadHistoryDto {
 
     private Long chapterEntity;
 
-    private String createdBy;
+    private UserEntity createdBy;
 
     private Date createdDate;
 
