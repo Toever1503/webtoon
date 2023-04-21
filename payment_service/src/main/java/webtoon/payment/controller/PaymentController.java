@@ -3,6 +3,7 @@ package webtoon.payment.controller;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -16,17 +17,37 @@ import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import webtoon.account.configs.security.SecurityUtils;
+import webtoon.account.entities.UserEntity;
+import webtoon.payment.entities.OrderEntity;
+import webtoon.payment.entities.PaymentEntity;
+import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EOrderType;
+import webtoon.payment.models.OrderModel;
+import webtoon.payment.services.IOrderService;
+import webtoon.payment.services.IPaymentService;
+import webtoon.payment.services.ISubscriptionPackService;
 
 @Controller
 @RequestMapping("payment/pay")
 public class PaymentController {
 
+	@Autowired
+	private IPaymentService paymentService;
+
+	@Autowired
+	private IOrderService orderService;
+
+	@Autowired
+	private ISubscriptionPackService subscriptionPackService;
+
 	@GetMapping
-	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam Integer amount) throws IOException {
+	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam Integer amount) throws IOException, ParseException {
 		String vnp_OrderInfo = "order info";
 		String vnp_TxnRef = VnPayConfig.getRandomNumber(8);
 		String bank_code = ""; // edit later
@@ -106,6 +127,14 @@ public class PaymentController {
 		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
 		String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
 
+
+		SubscriptionPackEntity subscriptionPack = subscriptionPackService.getByPrice(Double.parseDouble(String.valueOf(amount))/100);
+
+		UserEntity user = SecurityUtils.getCurrentUser().getUser();
+
+		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user,"VNPAY"));
+		OrderEntity order = orderService.getMaDonHang(vnp_TxnRef);
+		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order , null , null ,Double.parseDouble(String.valueOf(amount))/100 , null, 2, vnp_OrderInfo, "pay-url" , formatter.parse(vnp_ExpireDate)));
 		resp.sendRedirect(paymentUrl);
 	}
 }

@@ -26,8 +26,8 @@ public class PaymentResource {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updatePayment(@RequestBody PaymentModel paymentModel){
-        return ResponseEntity.ok(paymentService.update(paymentModel));
+    public ResponseEntity<?> updatePayment(@RequestBody PaymentEntity paymentEntity){
+        return ResponseEntity.ok(paymentService.update(paymentEntity));
     }
 
     @GetMapping("/getAll")

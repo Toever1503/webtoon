@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
+import webtoon.payment.enums.EOrderType;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.controller.VnPayConfig;
@@ -60,14 +61,17 @@ public class OrderResource {
         model.addAttribute("price", price);
         model.addAttribute("maDonHang", maDonHang);
 
-        orderService.add(new OrderModel(id, createDate, createDate, price, 05, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity,userEntity));
+        orderService.add(new OrderModel(id, createDate, createDate, price, EOrderType.NEW, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity,userEntity,"CHUYENKHOAN"));
+
         return "payments/chuyenKhoan";
     }
 
     @GetMapping("/userOrder/{id}")
     public String userOrder(@PathVariable Long id,Model model) {
-        List<OrderEntity> order = orderService.getByUserId(id);
+        Long userId = SecurityUtils.getCurrentUser().getUser().getId();
+        List<OrderEntity> order = orderService.getByUserId(userId);
         System.out.println("order: "+order);
+        model.addAttribute("order", order);
         return "payments/userOrder";
     }
 
