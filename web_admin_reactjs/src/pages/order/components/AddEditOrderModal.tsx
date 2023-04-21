@@ -44,7 +44,7 @@ const AddEditOrderModal: React.FC<AddEditOrderModalProps> = (props: AddEditOrder
                 price: props.input.finalPrice,
                 paymentMethod: props.input.paymentMethod,
                 status: props.input.status,
-                createdBy: props.input?.createdBy?.id,
+                user_id: props.input?.user_id?.id,
             });
         }
     }, [props]);
@@ -85,7 +85,7 @@ const AddEditOrderModal: React.FC<AddEditOrderModalProps> = (props: AddEditOrder
 
                     {
                         props.subscriptionPackList && props.subscriptionPackList.map((item: ISubscriptionPack) =>
-                            <Select.Option value={item.id}>{item.name}</Select.Option>
+                            <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
                         )
                     }
 
@@ -122,7 +122,7 @@ const AddEditOrderModal: React.FC<AddEditOrderModalProps> = (props: AddEditOrder
 
             <Form.Item
                 label={t('order.modal.form.labels.createdBy')}
-                name="createdBy"
+                name="user_id"
             >
                 <Input readOnly disabled />
             </Form.Item>

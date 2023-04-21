@@ -4,6 +4,7 @@ import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import webtoon.account.entities.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -42,5 +43,12 @@ public class SubscriptionPackEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
-    // private UserEntity created_by
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private UserEntity createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by")
+    private UserEntity updatedBy;
+
 }

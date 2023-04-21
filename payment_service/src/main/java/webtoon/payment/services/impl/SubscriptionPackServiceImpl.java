@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import webtoon.account.configs.security.SecurityUtils;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.dtos.SubscriptionPackMetadataDto;
 import webtoon.payment.entities.SubscriptionPackEntity;
@@ -29,6 +30,7 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     public SubscriptionPackDto addSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
         SubscriptionPackEntity subscriptionPackEntity = SubscriptionPackModel.toEntity(subscriptionPackModel);
         subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
+        subscriptionPackEntity.setCreatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);
     }
@@ -47,7 +49,7 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
         subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
         subscriptionPackEntity.setPrice(subscriptionPackModel.getPrice());
         subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
-
+        subscriptionPackEntity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);
     }

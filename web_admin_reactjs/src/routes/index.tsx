@@ -16,6 +16,7 @@ import StatisticsPage from "../pages/stats/StatisticsPage";
 import CommentPage from "../pages/comment/CommentPage";
 import UserPage from "../pages/user/UserPage";
 import SubscriptionPackPage from "../pages/subscription-pack/SubscriptionPackPage";
+import LoginPage from "../pages/login/LoginPage";
 
 const router = createBrowserRouter([
     {
@@ -85,8 +86,8 @@ const router = createBrowserRouter([
         element: <CounterPage />
     },
     {
-        path: "/drag",
-        element: <DragPage />
+        path: "/signin",
+        element: <LoginPage />
     },
     {
         path: "/uploadzip",

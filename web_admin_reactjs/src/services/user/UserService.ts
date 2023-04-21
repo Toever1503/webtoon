@@ -14,6 +14,10 @@ const filterUser = async (payload: IUserFilterInputType, page: number, size: num
 const changeStatus = (id: number | string, status: IUserStatus) => userAxios.patch(`${basePath}/${id}/change-status?status=${status}`);
 
 const getAllAuthorities = async () => userAxios.get(`${basePath}/all-authorities`);
+
+const forgotPassword = async (email: string) => userAxios.post(`${basePath}/forgot-password?email=${email}`);
+const signin = async (input: any) => userAxios.post(`${basePath}/signin`, input);
+
 const userService = {
     findUserById,
     addNewUser,
@@ -22,7 +26,8 @@ const userService = {
     filterUser,
     changeStatus,
     getAllAuthorities,
-    
+    forgotPassword,
+    signin
 };
 
 export default userService;

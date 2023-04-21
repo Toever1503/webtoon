@@ -1,4 +1,5 @@
 import axios, { AxiosInstance } from "axios";
+import { getCookie } from "../../plugins/cookieUtil";
 
 let axiosInstance: AxiosInstance | null = null;
 function getInstance(): AxiosInstance {
@@ -12,7 +13,8 @@ function getInstance(): AxiosInstance {
 
     //hook interceptor cài ở đây
     axiosInstance.interceptors.request.use((config) => {
-        const token: string | null = localStorage.getItem('token');
+        const token: string | null = getCookie('token');
+        console.log('token: ', token);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

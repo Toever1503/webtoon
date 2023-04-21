@@ -227,6 +227,7 @@ export default {
             'updatedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
+            'expireDate': 'Ngày hết hạn đọc',
         },
         modal: {
             editTitle: 'Chỉnh sửa thông tin',
@@ -302,6 +303,38 @@ export default {
             }
 
         },
+    },
+    login: {
+        placeholders: {
+            username: 'Tên đăng nhập',
+            password: 'Mật khẩu',
+            remember: 'Nhớ mật khẩu',
+            forgot: 'Quên mật khẩu?',
+            email: 'Địa chỉ email',
+        },
+        buttons: {
+            login: 'Đăng nhập',
+            send: 'Gửi'
+        },
+        modal: {
+            title: 'Quên mật khẩu',
+            form: {
+                labels: {
+                    email: 'Nhập email của bạn để lấy lại mật khẩu:',
+                }
+            },
+            errors: {
+                'check-again': 'Vui lòng kiểm tra lại thông tin!',
+                email: 'Vui lòng nhập emai!',
+            },
+            'forgot-success': 'Mật khẩu mới đã được gửi vào email của bạn!',
+            'forgot-failed': 'Lỗi server!',
+        },
+        errors: {
+            'login-failed': 'Tên đăng nhập hoặc mật khẩu không đúng!',
+            'login-success': 'Đăng nhập thành công!',
+        },
+        'logout-success': 'Đăng xuất thành công!',
     },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',

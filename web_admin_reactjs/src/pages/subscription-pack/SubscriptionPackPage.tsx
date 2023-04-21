@@ -69,7 +69,7 @@ const SubscriptionPackPage: React.FC = () => {
             dataIndex: 'modifiedAt',
             key: 'modifiedAt',
             render: (text: IUserType) => <>{
-                text ? text.fullName : '-' 
+                text ? text.fullName : '-'
             }</>,
         },
         {
@@ -82,9 +82,11 @@ const SubscriptionPackPage: React.FC = () => {
         },
         {
             title: t('subscription-pack.table.modifiedBy'),
-            dataIndex: 'modifiedBy',
+            dataIndex: 'updatedBy',
             key: 'modifiedBy',
-            render: (text) => <>{text}</>,
+            render: (text: IUserType) => <>{
+                text ? text.fullName : '-'
+            }</>,
         },
         {
             title: 'Action',

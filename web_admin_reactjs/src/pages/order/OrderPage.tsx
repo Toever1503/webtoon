@@ -65,7 +65,14 @@ const OrderPage: React.FC = () => {
             key: 'status',
             render: (text) => <>{text}</>,
         },
-
+        {
+            title: t('order.table.expireDate'),
+            dataIndex: 'expireDate',
+            key: 'expireDate',
+            render: (_, record: IOrder) => <span>
+                {record.expireDate}
+            </span>,
+        },
 
         {
             title: t('order.table.createdAt'),
@@ -83,7 +90,9 @@ const OrderPage: React.FC = () => {
             title: t('order.table.createdBy'),
             dataIndex: 'createdBy',
             key: 'createdBy',
-            render: (text) => <>{text}</>,
+            render: (_, record: IOrder) => <>{
+                record.user_id.fullName
+            }</>,
         },
         {
             title: t('order.table.note'),
@@ -180,9 +189,9 @@ const OrderPage: React.FC = () => {
         if (!hasInitialized) {
             onCallApi();
             subscriptionPackService.getAllSubscriptionPack()
-            .then((res: AxiosResponse<ISubscriptionPack[]>) => {
-                setSubscriptionPackList(res.data);
-            });
+                .then((res: AxiosResponse<ISubscriptionPack[]>) => {
+                    setSubscriptionPackList(res.data);
+                });
             setHasInitialized(true);
         }
 

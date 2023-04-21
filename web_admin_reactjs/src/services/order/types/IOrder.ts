@@ -8,8 +8,10 @@ export default interface IOrder{
     status: number;
     paymentMethod: PAYMENT_METHOD;
     created_at: string;
+    updatedAt: string;
+    expireDate: string;
     subs_pack_id: ISubscriptionPack;
-    createdBy: IUserType
+    user_id: IUserType
 }
  
 export enum PAYMENT_METHOD {
