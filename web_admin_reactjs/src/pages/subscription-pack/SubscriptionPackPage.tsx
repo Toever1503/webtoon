@@ -13,6 +13,7 @@ import { reIndexTbl } from "../../utils/indexData";
 import formatVnCurrency from "../../utils/formatVnCurrency";
 import { showNofification } from "../../stores/features/notification/notificationSlice";
 import IUserType from "../user/types/IUserType";
+import { dateTimeFormat } from "../../utils/dateFormat";
 
 const SubscriptionPackPage: React.FC = () => {
     const { t } = useTranslation();
@@ -62,14 +63,14 @@ const SubscriptionPackPage: React.FC = () => {
             title: t('subscription-pack.table.createdAt'),
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{dateTimeFormat(text)}</>,
         },
         {
             title: t('subscription-pack.table.modifiedAt'),
             dataIndex: 'modifiedAt',
             key: 'modifiedAt',
-            render: (text: IUserType) => <>{
-                text ? text.fullName : '-'
+            render: (text) => <>{
+                dateTimeFormat(text)
             }</>,
         },
         {

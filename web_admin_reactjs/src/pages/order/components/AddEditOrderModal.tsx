@@ -3,7 +3,8 @@ import {
     Form,
     Button,
     Input,
-    Select
+    Select,
+    Space
 } from 'antd';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -54,9 +55,11 @@ const AddEditOrderModal: React.FC<AddEditOrderModalProps> = (props: AddEditOrder
         title={t('order.modal.editTitle')}
         footer={null}
         onCancel={onCancelModal}
+        width={'800px'}
     >
 
         <Form
+            className='w-full'
             style={{ marginTop: 50 }}
             name="basic"
             form={form}
@@ -64,7 +67,7 @@ const AddEditOrderModal: React.FC<AddEditOrderModalProps> = (props: AddEditOrder
             // onFinish={onFinish}
             // onFinishFailed={onFinishFailed}
             autoComplete="off"
-            labelCol={{ span: 10 }}
+            labelCol={{ span: 6 }}
         >
             <Form.Item
                 label={t('order.modal.form.labels.orderNumber')}
@@ -79,13 +82,18 @@ const AddEditOrderModal: React.FC<AddEditOrderModalProps> = (props: AddEditOrder
             >
                 <Select
                     showSearch
-                    disabled
                 >
                     <Select.Option value="">{t('order.modal.form.labels.choosePack')}</Select.Option>
 
                     {
                         props.subscriptionPackList && props.subscriptionPackList.map((item: ISubscriptionPack) =>
-                            <Select.Option value={item.id} key={item.id}>{item.name}</Select.Option>
+                            <Select.Option value={item.id} key={item.id}>
+                                <Space align='baseline'>
+                                    <h5 className='text-xl'>{item.name}</h5>
+                                    -
+                                    <span>99000vnd.</span>
+                                </Space>
+                            </Select.Option>
                         )
                     }
 

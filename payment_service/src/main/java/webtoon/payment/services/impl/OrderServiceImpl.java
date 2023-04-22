@@ -27,7 +27,7 @@ public class OrderServiceImpl implements IOrderService {
               .created_at(orderModel.getCreated_at())
               .gioLap(orderModel.getGioLap())
               .finalPrice(orderModel.getFinalPrice())
-              .status(orderModel.getStatus())
+//              .status(orderModel.getStatus())
               .content(orderModel.getContent())
               .ipAddr(orderModel.getIpAddr())
               .maDonHang(orderModel.getMaDonHang())
@@ -35,17 +35,7 @@ public class OrderServiceImpl implements IOrderService {
               .user_id(orderModel.getUser_id())
               .build();
       this.orderRepository.saveAndFlush(orderEntity);
-      return OrderDto.builder()
-              .created_at(orderEntity.getCreated_at())
-              .gioLap(orderEntity.getGioLap())
-              .finalPrice(orderEntity.getFinalPrice())
-              .status(orderEntity.getStatus())
-              .content(orderEntity.getContent())
-              .ipAddr(orderEntity.getIpAddr())
-              .maDonHang(orderEntity.getMaDonHang())
-              .subs_pack_id(orderEntity.getSubs_pack_id())
-              .user_id(orderEntity.getUser_id())
-              .build();
+      return OrderDto.toDto(orderEntity);
     }
 //
     @Override
@@ -54,24 +44,14 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
-        orderEntity.setStatus(orderModel.getStatus());
+//        orderEntity.setStatus(orderModel.getStatus());
         orderEntity.setContent(orderModel.getContent());
         orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
         orderEntity.setSubs_pack_id(orderModel.getSubs_pack_id());
         orderEntity.setUser_id(orderModel.getUser_id());
         this.orderRepository.saveAndFlush(orderEntity);
-        return OrderDto.builder()
-                .created_at(orderEntity.getCreated_at())
-                .gioLap(orderEntity.getGioLap())
-                .finalPrice(orderEntity.getFinalPrice())
-                .status(orderEntity.getStatus())
-                .content(orderEntity.getContent())
-                .ipAddr(orderEntity.getIpAddr())
-                .maDonHang(orderEntity.getMaDonHang())
-                .subs_pack_id(orderEntity.getSubs_pack_id())
-                .user_id(orderEntity.getUser_id())
-                .build();
+        return OrderDto.toDto(orderEntity);
     }
 
 //    @Override

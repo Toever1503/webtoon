@@ -15,6 +15,9 @@ import ISubscriptionPack from "../../services/subscription_pack/types/ISubscript
 import AddEditOrderModal, { AddEditOrderModalProps } from "./components/AddEditOrderModal";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
 import debounce from "../../utils/debounce";
+import IUserType from "../user/types/IUserType";
+import formatVnCurrency from "../../utils/formatVnCurrency";
+import { dateTimeFormat } from "../../utils/dateFormat";
 
 const OrderPage: React.FC = () => {
     const { t } = useTranslation();
@@ -51,7 +54,9 @@ const OrderPage: React.FC = () => {
             title: t('order.table.finalPrice'),
             dataIndex: 'finalPrice',
             key: 'finalPrice',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{
+                formatVnCurrency(text)
+            }</>,
         },
         {
             title: t('order.table.paymentMethod'),
@@ -63,29 +68,20 @@ const OrderPage: React.FC = () => {
             title: t('order.table.status'),
             dataIndex: 'status',
             key: 'status',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{
+                t('order.table.eStatus.' + text)
+            }</>,
         },
         {
             title: t('order.table.expireDate'),
-            dataIndex: 'expireDate',
+            dataIndex: 'expiredSubsDate',
             key: 'expireDate',
             render: (_, record: IOrder) => <span>
                 {record.expireDate}
             </span>,
         },
 
-        {
-            title: t('order.table.createdAt'),
-            dataIndex: 'created_at',
-            key: 'createdAt',
-            render: (text) => <>{text}</>,
-        },
-        {
-            title: t('order.table.updatedAt'),
-            dataIndex: 'updatedAt',
-            key: 'updatedAt',
-            render: (text) => <>{text}</>,
-        },
+
         {
             title: t('order.table.createdBy'),
             dataIndex: 'createdBy',
@@ -95,10 +91,24 @@ const OrderPage: React.FC = () => {
             }</>,
         },
         {
-            title: t('order.table.note'),
-            dataIndex: 'note',
-            key: 'note',
-            render: (text) => <>{text}</>,
+            title: t('order.table.modifiedBy'),
+            dataIndex: 'modifiedBy',
+            key: 'modifiedBy',
+            render: (text: IUserType) => <>{
+                text ? text.fullName : '-'
+            }</>,
+        },
+        {
+            title: t('order.table.createdAt'),
+            dataIndex: 'created_at',
+            key: 'createdAt',
+            render: (text) => <>{dateTimeFormat(text)}</>,
+        },
+        {
+            title: t('order.table.updatedAt'),
+            dataIndex: 'modifiedAt',
+            key: 'updatedAt',
+            render: (text) => <>{dateTimeFormat(text)}</>,
         },
         {
             title: 'Action',

@@ -12,6 +12,7 @@ export default interface IOrder{
     expireDate: string;
     subs_pack_id: ISubscriptionPack;
     user_id: IUserType
+    modifiedBy: IUserType
 }
  
 export enum PAYMENT_METHOD {
