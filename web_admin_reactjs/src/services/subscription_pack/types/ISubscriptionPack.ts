@@ -1,14 +1,15 @@
+import IUserType from "../../../pages/user/types/IUserType";
+
 export default interface ISubscriptionPack{
     id?: string | number;
     name: string;
     dateCount?: number;
     monthCount: number;
-    originalPrice: number;
-    discountPrice?: number;
+    price: number;
 
     createdAt?: String;
     updatedAt?: String;
     
-    createdBy?: String;
-    updatedBy?: String;
+    createdBy?: IUserType;
+    updatedBy?: IUserType;
 }

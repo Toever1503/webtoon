@@ -26,6 +26,9 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     Optional<Long> getLastChapterIndexForChapType(Long mangaId);
 
     void deleteALlByMangaId(Long id);
+    @Modifying
+    @Query("DELETE FROM MangaChapterEntity c where c.mangaVolume.id = ?1")
+    void deleteALlByMangaVolumeId(Long id);
 
     @Query("select p from MangaChapterEntity p where p.id > ?1 and p.mangaVolume.manga.id = ?2")
     List<MangaChapterEntity> findNextChapterForDisplayVolType(Long chapterID, Long mangaId, Pageable page);

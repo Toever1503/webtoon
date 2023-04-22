@@ -37,6 +37,8 @@ public class MangaResource2 {
     @PostMapping("filter")
     public Page<MangaDto> filter(@RequestBody MangaFilterInput input, Pageable page) {
         List<Specification> specs = new ArrayList<>();
+        specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not());
+
         if (input.getStatus() != null)
             if (!input.getStatus().equals(EStatus.ALL))
                 specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), input.getStatus()));

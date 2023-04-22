@@ -1,11 +1,15 @@
 package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import webtoon.account.configs.security.SecurityUtils;
 import webtoon.payment.dtos.SubscriptionPackDto;
+import webtoon.payment.dtos.SubscriptionPackMetadataDto;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
 import webtoon.payment.repositories.ISubscriptionPackRepository;
@@ -26,6 +30,7 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     public SubscriptionPackDto addSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
         SubscriptionPackEntity subscriptionPackEntity = SubscriptionPackModel.toEntity(subscriptionPackModel);
         subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
+        subscriptionPackEntity.setCreatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);
     }
@@ -42,10 +47,9 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
         SubscriptionPackEntity subscriptionPackEntity = this.getById(subscriptionPackModel.getId());
         subscriptionPackEntity.setName(subscriptionPackModel.getName());
         subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
-        subscriptionPackEntity.setOriginalPrice(subscriptionPackModel.getOriginalPrice());
-        subscriptionPackEntity.setDiscountPrice(subscriptionPackModel.getDiscountPrice());
+        subscriptionPackEntity.setPrice(subscriptionPackModel.getPrice());
         subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
-
+        subscriptionPackEntity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);
     }
@@ -67,9 +71,19 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     }
 
     @Override
+    public Page<SubscriptionPackDto> filter(Pageable pageable, Specification<SubscriptionPackEntity> spec) {
+        return this.subscriptionPackRepository.findAll(spec, pageable).map(SubscriptionPackDto::toDto);
+    }
+
+    @Override
+    public List<SubscriptionPackMetadataDto> getAllPackMetadata() {
+        return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
+                SubscriptionPackMetadataDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());
+    }
+
+    @Override
     public List<SubscriptionPackDto> getAll() {
-        Pageable pageable = PageRequest.of(0, 10).withSort(Sort.Direction.ASC, "id");
-        return subscriptionPackRepository.findAll(pageable).stream().map(subscriptionPackEntity ->
+        return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
                 SubscriptionPackDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());
     }
 

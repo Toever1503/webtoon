@@ -8,7 +8,7 @@ export interface SubscriptionPackState {
 const initialState = (): SubscriptionPackState => {
     return {
         data: [],
- 
+
     }
 }
 
@@ -22,12 +22,12 @@ export const subscriptionPackSlice = createSlice({
         addSubscriptionPack: (state, action: PayloadAction<{
             data: ISubscriptionPack,
             pageSize: number | undefined,
-          }>) => {
+        }>) => {
             if (state.data.length === action.payload.pageSize) {
-              state.data.pop();
+                state.data.pop();
             }
             state.data = [action.payload.data, ...state.data]
-          },
+        },
         updateSubscriptionPack: (state, { payload }) => {
             state.data = state.data.map((item) => {
                 if (item.id === payload.id) {
@@ -36,7 +36,9 @@ export const subscriptionPackSlice = createSlice({
                 return item;
             });
         },
-        deleteSubscriptionPackById: (state, { payload }) => {
+        deleteSubscriptionPackById: (state, { payload }: PayloadAction<{
+            id: string | number,
+        }>) => {
             state.data = state.data.filter((item) => item.id !== payload.id);
         },
         setSubscriptionPackData: (state, { payload }) => {
@@ -46,6 +48,6 @@ export const subscriptionPackSlice = createSlice({
 })
 
 // Action creators are generated for each case reducer function
-export const { addSubscriptionPack, updateSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData} = subscriptionPackSlice.actions
+export const { addSubscriptionPack, updateSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData } = subscriptionPackSlice.actions
 
 export default subscriptionPackSlice.reducer

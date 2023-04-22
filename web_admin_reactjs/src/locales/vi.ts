@@ -66,6 +66,27 @@ export default {
                 }
 
             }
+        },
+        table: {
+            title: 'Tiêu đề',
+            mangaType: 'Loại truyện',
+            releaseStatus: 'Trạng thái phát hành',
+            genre: 'Thể loại',
+            author: 'Tác giả',
+            tag: 'Thẻ',
+            action: 'Hành động',
+        },
+        eReleaseStatus: {
+            'COMING': 'Sắp ra mắt',
+            'ONGOING': 'Đang ra',
+            'COMPLETED': 'Đã hoàn thành',
+            'CANCELLED': 'Đã hủy',
+            'ON_STOPPING': 'Tạm ngừng',
+            'STOPPED': 'Đã ngừng',
+        },
+        eMangaType: {
+            'IMAGE': 'Truyện tranh',
+            'TEXT': 'Truyện chữ',
         }
     },
     comment: {
@@ -193,12 +214,52 @@ export default {
     },
     order: {
         'page-title': 'Danh sách đơn hàng',
+        addBtn: 'Thêm mới',
+        table: {
+            'orderNumber': 'Mã đơn hàng',
+            'subscription': 'Gói đăng ký',
+            'finalPrice': 'Giá tiền',
+            'paymentMethod': 'Phương thức thanh toán',
+            'status': 'Trạng thái',
+            'note': 'Ghi chú',
+            'orderType': 'Loại đơn hàng',
+            'createdAt': 'Ngày tạo',
+            'updatedAt': 'Ngày sửa',
+            'createdBy': 'Người tạo',
+            'modifiedBy': 'Người sửa',
+            'expireDate': 'Ngày hết hạn đọc',
+        },
+        modal: {
+            editTitle: 'Chỉnh sửa thông tin',
+            form: {
+                labels: {
+                    'orderNumber': 'Mã đơn hàng',
+                    subscriptionPack: 'Gói đăng ký',
+                    choosePack: 'Chọn gói đăng ký',
+                    price: 'Giá tiền',
+                    paymentMethod: 'Phương thức thanh toán',
+                    choosePaymentMethod: 'Chọn phương thức thanh toán',
+                    'createdBy': 'Người tạo',
+                    status: 'Trạng thái',
+                }
+            }
+        },
+        eStatus: {
+            'ALL': 'Tất cả',
+            'PENDING_PAYMENT': 'Chờ thanh toán',
+            'PAID': 'Đã thanh toán',
+            'CANCELED': 'Đã hủy',
+            'COMPLETED': 'Hoàn tất',
+            'REFUND_CONFIRM_PENDING': 'Chờ xác nhận hoàn tiền',
+            'REFUNDING': 'Đang hoàn tiền',
+            'REFUNDED': 'Đã hoàn tiền',
+        }
     },
     'subscription-pack': {
         'page-title': 'Danh sách gói đọc',
         addBtn: 'Thêm mới',
         table: {
-            'title': 'Tên gói',
+            'name': 'Tên gói',
             'price': 'Giá gói',
             'limitedDayCount': 'Số ngày đọc',
             'createdAt': 'Ngày tạo',
@@ -206,14 +267,16 @@ export default {
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'action': 'Hành động',
+            'sure-delete': 'Bạn chắc chắn muốn xóa gói đọc này?',
+            'all': 'Tất cả',
+            'deleted': 'Xóa mềm',
         },
         modal: {
             addTitle: "Thêm gói đọc mới",
             editTitle: "Chỉnh sửa gói đọc",
             month: "Tháng",
             name: "Gói",
-            originalPrice: "Giá gốc",
-            discountPrice: 'Giá sau khi giảm giá',
+            price: "Giá",
             resetBtn: "Làm mới",
             saveBtn: "Lưu",
             dateCount: "Thời hạn gói",
@@ -239,12 +302,44 @@ export default {
                 'check-input-again': 'Vui lòng kiểm tra lại thông tin!',
             }
 
-        }
+        },
+    },
+    login: {
+        placeholders: {
+            username: 'Tên đăng nhập',
+            password: 'Mật khẩu',
+            remember: 'Nhớ mật khẩu',
+            forgot: 'Quên mật khẩu?',
+            email: 'Địa chỉ email',
+        },
+        buttons: {
+            login: 'Đăng nhập',
+            send: 'Gửi'
+        },
+        modal: {
+            title: 'Quên mật khẩu',
+            form: {
+                labels: {
+                    email: 'Nhập email của bạn để lấy lại mật khẩu:',
+                }
+            },
+            errors: {
+                'check-again': 'Vui lòng kiểm tra lại thông tin!',
+                email: 'Vui lòng nhập emai!',
+            },
+            'forgot-success': 'Mật khẩu mới đã được gửi vào email của bạn!',
+            'forgot-failed': 'Lỗi server!',
+        },
+        errors: {
+            'login-failed': 'Tên đăng nhập hoặc mật khẩu không đúng!',
+            'login-success': 'Đăng nhập thành công!',
+        },
+        'logout-success': 'Đăng xuất thành công!',
     },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
     'reset': 'Làm mới',
-    placholders: {
+    placeholders: {
         'search': 'Tìm kiếm...',
     },
     response: {
@@ -253,5 +348,17 @@ export default {
             'code-11': 'Tên đăng nhập đã tồn tại!',
             'code-12': 'Email đã tồn tại!',
         }
+    },
+    table: {
+        col: {
+            edit: 'Sửa',
+            delete: 'Xóa',
+        }
+    },
+    buttons: {
+        add: 'Thêm mới',
+        save: 'Lưu',
+        cancel: 'Hủy',
+        edit: 'Sửa',
     }
 }

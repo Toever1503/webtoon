@@ -1,6 +1,7 @@
 package webtoon.payment.dtos;
 
 import lombok.*;
+import webtoon.account.dtos.UserDto;
 import webtoon.payment.entities.SubscriptionPackEntity;
 
 import java.util.Date;
@@ -13,31 +14,28 @@ import java.util.Date;
 public class SubscriptionPackDto {
     private Long id;
     private String name;
-    private String desc;
+    private Integer monthCount;
     private Integer dayCount;
-    private Double originalPrice;
-    private Double discountPrice;
     private Double price;
-    private long discountPercent;
     private Date createdAt;
     private Date modifiedAt;
+
+    private UserDto createdBy;
+    private UserDto updatedBy;
 
     public static SubscriptionPackDto toDto(SubscriptionPackEntity subscriptionPackEntity) {
         if (subscriptionPackEntity == null) return null;
 
-        long discountPercent = 0;
-        if (subscriptionPackEntity.getDiscountPrice() != null)
-            discountPercent = Math.round(subscriptionPackEntity.getDiscountPrice() / subscriptionPackEntity.getOriginalPrice() * 100);
         return SubscriptionPackDto.builder()
                 .id(subscriptionPackEntity.getId())
                 .name(subscriptionPackEntity.getName())
+                .monthCount(subscriptionPackEntity.getMonthCount())
                 .dayCount(subscriptionPackEntity.getDayCount())
-                .originalPrice(subscriptionPackEntity.getOriginalPrice())
                 .price(subscriptionPackEntity.getPrice())
-                .discountPrice(subscriptionPackEntity.getDiscountPrice())
-                .discountPercent(discountPercent)
                 .createdAt(subscriptionPackEntity.getCreatedAt())
                 .modifiedAt(subscriptionPackEntity.getModifiedAt())
+                .createdBy(UserDto.toDto(subscriptionPackEntity.getCreatedBy()))
+                .updatedBy(UserDto.toDto(subscriptionPackEntity.getUpdatedBy()))
                 .build();
     }
 }

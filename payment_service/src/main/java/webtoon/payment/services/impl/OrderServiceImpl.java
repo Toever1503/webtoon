@@ -1,6 +1,9 @@
 package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webtoon.payment.dtos.OrderDto;
@@ -25,6 +28,7 @@ public class OrderServiceImpl implements IOrderService {
               .gioLap(orderModel.getGioLap())
               .finalPrice(orderModel.getFinalPrice())
               .estatus(orderModel.getEstatus())
+//              .status(orderModel.getStatus())
               .content(orderModel.getContent())
               .ipAddr(orderModel.getIpAddr())
               .maDonHang(orderModel.getMaDonHang())
@@ -33,18 +37,7 @@ public class OrderServiceImpl implements IOrderService {
               .payment_method(orderModel.getPayment_method())
               .build();
       this.orderRepository.saveAndFlush(orderEntity);
-      return OrderDto.builder()
-              .created_at(orderEntity.getCreated_at())
-              .gioLap(orderEntity.getGioLap())
-              .finalPrice(orderEntity.getFinalPrice())
-              .estatus(orderEntity.getEstatus())
-              .content(orderEntity.getContent())
-              .ipAddr(orderEntity.getIpAddr())
-              .maDonHang(orderEntity.getMaDonHang())
-              .subs_pack_id(orderEntity.getSubs_pack_id())
-              .user_id(orderEntity.getUser_id())
-              .payment_method(orderEntity.getPayment_method())
-              .build();
+      return OrderDto.toDto(orderEntity);
     }
 //
     @Override
@@ -54,6 +47,7 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setEstatus(orderModel.getEstatus());
+//        orderEntity.setStatus(orderModel.getStatus());
         orderEntity.setContent(orderModel.getContent());
         orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
@@ -61,18 +55,7 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setUser_id(orderModel.getUser_id());
         orderEntity.setPayment_method(orderModel.getPayment_method());
         this.orderRepository.saveAndFlush(orderEntity);
-        return OrderDto.builder()
-                .created_at(orderEntity.getCreated_at())
-                .gioLap(orderEntity.getGioLap())
-                .finalPrice(orderEntity.getFinalPrice())
-                .estatus(orderEntity.getEstatus())
-                .content(orderEntity.getContent())
-                .ipAddr(orderEntity.getIpAddr())
-                .maDonHang(orderEntity.getMaDonHang())
-                .subs_pack_id(orderEntity.getSubs_pack_id())
-                .user_id(orderEntity.getUser_id())
-                .payment_method(orderEntity.getPayment_method())
-                .build();
+        return OrderDto.toDto(orderEntity);
     }
 
 //    @Override
@@ -96,6 +79,9 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public Page<OrderDto> filter(Pageable pageable, Specification<OrderEntity> finalSpec) {
+        return this.orderRepository.findAll(finalSpec, pageable).map(OrderDto::toDto);
+    }
     public List<OrderEntity> getByUserId(Long userId) {
         return orderRepository.getByUserId(userId);
     }

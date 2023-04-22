@@ -20,11 +20,12 @@ export interface MangaInput {
     authors: string[];
     tags: string[];
     featuredImage: string;
+    isFree: boolean;
     displayType: 'VOL' | 'CHAP';
 }
 
 export type MangaStatus = 'ALL' | 'PUBLISHED' | 'DELETED' | 'DRAFTED';
-export type ReleaseStatus = 'COMING' | 'GOING' | 'STOPPED' | 'CANCELLED' | 'COMPLETED';
+export type ReleaseStatus = 'COMING' | 'ONGOING' | 'STOPPED' | 'ON_STOPPING' | 'CANCELLED' | 'COMPLETED';
 export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 
 // export type MangaChapterInput = {

@@ -96,16 +96,16 @@ public class MangaController {
 			model.addAttribute("prevChapter",prevNextChapter[0]);
 			model.addAttribute("nextChapter",prevNextChapter[1]);
 		}
-		ReadHistory readHistory = new ReadHistory();
-		readHistory = historyService.findByCBAndMG(null,mangaEntity.getId());
-		if(readHistory != null){
-			readHistory.setChapterEntity(id);
-		} else {
-			readHistory.setMangaEntity(mangaEntity.getId());
-			readHistory.setChapterEntity(id);
-			readHistory.setCreatedBy(null);
-		}
-		historyService.save(readHistory);
+//		ReadHistory readHistory = new ReadHistory();
+//		readHistory = historyService.findByCBAndMG(null,mangaEntity.getId());
+//		if(readHistory != null){
+//			readHistory.setChapterEntity(id);
+//		} else {
+//			readHistory.setMangaEntity(mangaEntity.getId());
+//			readHistory.setChapterEntity(id);
+//			readHistory.setCreatedBy(null);
+//		}
+//		historyService.save(readHistory);
 
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
