@@ -117,14 +117,19 @@ public class RefundController {
 
 	;
 
-
-		String vnp_SecureHash = request.getParameter("vnp_SecureHash");
 		if (fields.containsKey("vnp_SecureHashType")) {
 			fields.remove("vnp_SecureHashType");
 		}
 		if (fields.containsKey("vnp_SecureHash")) {
 			fields.remove("vnp_SecureHash");
 		}
+		StringBuilder hashData = new StringBuilder();
+		StringBuilder query = new StringBuilder();
+		String queryUrl = query.toString();
+		String vnp_SecureHash = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
+		System.out.println("hash: " + vnp_SecureHash);
+		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+		String paymentUrl = VnPayConfig.vnp_RefundUrl + "?" + queryUrl;
 
 		String signValue = VnPayConfig.hashAllFields(fields);
 		String maDonHang = request.getParameter("vnp_TxnRef");
@@ -139,16 +144,8 @@ public class RefundController {
 		String thoiGianTT = request.getParameter("vnp_PayDate");
 		String ketQua = "";
 		amount = amount.substring(0, amount.length() - 2);
-		StringBuilder query = new StringBuilder();
-		StringBuilder hashData = new StringBuilder();
-		String queryUrl = query.toString();
-		String vnp_SecureHash1 = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
-		System.out.println("hash: " + vnp_SecureHash1);
-		queryUrl +="vnp_Amount="+amount+"vnp_TransactionNo="+maGD+"vnp_BankCode="+maNganHang+"vnp_PayDate="+thoiGianTT
-//				+"&vnp_SecureHash=" + vnp_SecureHash
-		;
+
 		UserEntity user = SecurityUtils.getCurrentUser().getUser();
-		String paymentUrl = VnPayConfig.vnp_Returnurl + "?" + queryUrl;
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
 			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.EXTEND,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user,"VNPAY"));

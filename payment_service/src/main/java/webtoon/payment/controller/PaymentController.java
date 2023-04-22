@@ -134,7 +134,7 @@ public class PaymentController {
 
 		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user,"VNPAY"));
 		OrderEntity order = orderService.getMaDonHang(vnp_TxnRef);
-		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order , null , null ,Double.parseDouble(String.valueOf(amount))/100 , null, 2, vnp_OrderInfo, "pay-url" , formatter.parse(vnp_ExpireDate)));
+		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order , null , null ,Double.parseDouble(String.valueOf(amount))/100 , null, 2, vnp_OrderInfo, paymentUrl , formatter.parse(vnp_ExpireDate)));
 		resp.sendRedirect(paymentUrl);
 	}
 }
