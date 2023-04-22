@@ -1,11 +1,10 @@
-package webtoon.payment.resources;
+package webtoon.payment.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import webtoon.account.configs.security.SecurityUtils;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.entities.SubscriptionPackEntity;
@@ -15,7 +14,7 @@ import java.util.List;
 
 @Controller
 @RequestMapping("/subscription_pack")
-public class SubscriptionPackResources {
+public class SubscriptionPackController {
     @Autowired
     private ISubscriptionPackService subscriptionPackService;
 

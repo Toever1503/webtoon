@@ -27,14 +27,14 @@ public class OrderServiceImpl implements IOrderService {
               .created_at(orderModel.getCreated_at())
               .gioLap(orderModel.getGioLap())
               .finalPrice(orderModel.getFinalPrice())
-              .estatus(orderModel.getEstatus())
+              .orderType(orderModel.getEstatus())
 //              .status(orderModel.getStatus())
               .content(orderModel.getContent())
               .ipAddr(orderModel.getIpAddr())
               .maDonHang(orderModel.getMaDonHang())
                 .subs_pack_id(orderModel.getSubs_pack_id())
               .user_id(orderModel.getUser_id())
-              .payment_method(orderModel.getPayment_method())
+              .paymentMethod(orderModel.getPayment_method())
               .build();
       this.orderRepository.saveAndFlush(orderEntity);
       return OrderDto.toDto(orderEntity);
@@ -46,14 +46,14 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
-        orderEntity.setEstatus(orderModel.getEstatus());
+        orderEntity.setOrderType(orderModel.getEstatus());
 //        orderEntity.setStatus(orderModel.getStatus());
         orderEntity.setContent(orderModel.getContent());
         orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
         orderEntity.setSubs_pack_id(orderModel.getSubs_pack_id());
         orderEntity.setUser_id(orderModel.getUser_id());
-        orderEntity.setPayment_method(orderModel.getPayment_method());
+        orderEntity.setPaymentMethod(orderModel.getPayment_method());
         this.orderRepository.saveAndFlush(orderEntity);
         return OrderDto.toDto(orderEntity);
     }

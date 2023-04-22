@@ -1,5 +1,5 @@
 
-package webtoon.payment.controller;
+package webtoon.payment.controllers;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;

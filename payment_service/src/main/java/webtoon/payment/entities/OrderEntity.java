@@ -49,7 +49,7 @@ public class OrderEntity {
 
     @Column
     @Enumerated(EnumType.STRING)
-    private EOrderType estatus;
+    private EOrderType orderType;
     private EOrderStatus status;
 
     @Column
@@ -73,9 +73,6 @@ public class OrderEntity {
     @ManyToOne
     private UserEntity user_id;
 
-    @Column
-    private String payment_method;
-
     @Override
     public String toString() {
         return "OrderEntity{" +
@@ -83,13 +80,12 @@ public class OrderEntity {
                 ", created_at=" + created_at +
                 ", gioLap=" + gioLap +
                 ", finalPrice=" + finalPrice +
-                ", estatus=" + estatus +
+                ", estatus=" + orderType +
                 ", content='" + content + '\'' +
                 ", ipAddr='" + ipAddr + '\'' +
                 ", maDonHang='" + maDonHang + '\'' +
                 ", subs_pack_id=" + subs_pack_id +
                 ", user_id=" + user_id +
-                ", payment_method='" + payment_method + '\'' +
                 '}';
     }
     @ManyToOne

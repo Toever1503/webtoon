@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import webtoon.account.entities.UserEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.enums.EOrderType;
+import webtoon.payment.enums.EPaymentMethod;
 
 import java.util.Date;
 
@@ -26,5 +27,5 @@ public class OrderModel {
     private String maDonHang;
     private SubscriptionPackEntity subs_pack_id;
     private UserEntity user_id;
-    private String payment_method;
+    private EPaymentMethod payment_method;
 }
