@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.entities.OrderEntity;
+import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.models.OrderModel;
 
 import java.util.List;
@@ -20,4 +21,12 @@ public interface IOrderService {
     Page<OrderDto> filter(Pageable pageable, Specification<OrderEntity> finalSpec);
     List<OrderEntity> getByUserId(Long userId);
     Long getIdByMaDonHang(String maDonHang);
+
+
+    // for api
+    OrderDto addNewOrder(OrderInput input);
+
+    OrderDto updateOrder(OrderInput input);
+
+    void deleteById(Long id);
 }

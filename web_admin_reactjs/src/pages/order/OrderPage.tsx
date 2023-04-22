@@ -1,4 +1,4 @@
-import { Input, PaginationProps, Popconfirm, Select, Space, Table } from "antd";
+import { Button, Input, PaginationProps, Popconfirm, Select, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -6,11 +6,11 @@ import { Link } from "react-router-dom";
 import IOrderFilterInput from "../../services/order/types/IOrderFilterInput";
 import orderService from "../../services/order/OrderService";
 import { AxiosResponse } from "axios";
-import IOrder from "../../services/order/types/IOrder";
+import IOrder, { EORDER_STATUS } from "../../services/order/types/IOrder";
 import { reIndexTbl } from "../../utils/indexData";
 import { RootState } from "../../stores";
 import { useDispatch, useSelector } from "react-redux";
-import { IOrderState, setOrderData } from "../../stores/features/order/orderSlice";
+import { IOrderState, addOrder, setOrderData, updateOrder } from "../../stores/features/order/orderSlice";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import AddEditOrderModal, { AddEditOrderModalProps } from "./components/AddEditOrderModal";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
@@ -42,6 +42,7 @@ const OrderPage: React.FC = () => {
             title: t('order.table.orderNumber'),
             dataIndex: 'maDonHang',
             key: 'orderNumber',
+            width: 200,
             render: (text) => <>{text}</>,
         },
         {
@@ -69,7 +70,7 @@ const OrderPage: React.FC = () => {
             dataIndex: 'status',
             key: 'status',
             render: (text) => <>{
-                t('order.table.eStatus.' + text)
+                t('order.eStatus.' + text)
             }</>,
         },
         {
@@ -77,7 +78,9 @@ const OrderPage: React.FC = () => {
             dataIndex: 'expiredSubsDate',
             key: 'expireDate',
             render: (_, record: IOrder) => <span>
-                {record.expireDate}
+                {
+                    dateTimeFormat(record.expiredSubsDate)
+                }
             </span>,
         },
 
@@ -115,7 +118,8 @@ const OrderPage: React.FC = () => {
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => showEditModal(record)}>Edit</a>
+                    <a onClick={() => showEditModal(record)}>{t('order.upgradeSubs')}</a>
+                    <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
                     <Popconfirm
                         title={t('manga.form.sure-delete')}
                         onConfirm={(e) => {
@@ -124,7 +128,9 @@ const OrderPage: React.FC = () => {
                         okText={t('confirm-yes')}
                         cancelText={t('confirm-no')}
                     >
-                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">Delete</a>
+                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">{
+                            t('buttons.delete')
+                        }</a>
                     </Popconfirm>
 
                 </Space>
@@ -136,7 +142,8 @@ const OrderPage: React.FC = () => {
         status: '',
     });
 
-    const FINAL_STATUSES = [
+
+    const FINAL_STATUSES: EORDER_STATUS[] = [
         'PENDING_PAYMENT',
         'PAID',
         'CANCELED',
@@ -146,25 +153,39 @@ const OrderPage: React.FC = () => {
         'REFUNDED',
     ];
 
-
-
     // begin edit modal
     const [subscriptionPackList, setSubscriptionPackList] = useState<ISubscriptionPack[]>([]);
     const [addEditOrderModal, setAddEditOrderModal] = useState<AddEditOrderModalProps>({
         visible: false,
+        title: t('order.modal.addTitle'),
         onCancel: () => {
             addEditOrderModal.visible = false;
+            addEditOrderModal.title = t('order.modal.addTitle');
             addEditOrderModal.input = undefined;
-            setAddEditOrderModal({ ...addEditOrderModal });
+            setAddEditOrderModal(addEditOrderModal);
         },
-        onOk: () => { },
+        onOk: (record: IOrder) => {
+            console.log('on ok: ', addEditOrderModal);
+
+            if (addEditOrderModal.input) {// for edit
+                dispatch(updateOrder(record));
+            }
+            else {// for add
+                dispatch(addOrder({
+                    data: record,
+                    pageSize: pageConfig.pageSize,
+                }));
+            }
+            addEditOrderModal.onCancel();
+        }
     });
 
     const showEditModal = (record: IOrder) => {
+        addEditOrderModal.input = record;
         setAddEditOrderModal({
             ...addEditOrderModal,
             visible: true,
-            input: record,
+            title: t('order.modal.editTitle'),
         });
     }
     // end edit modal
@@ -214,6 +235,12 @@ const OrderPage: React.FC = () => {
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('order.page-title')}
                 </h1>
+                <Button onClick={() => setAddEditOrderModal({
+                    ...addEditOrderModal,
+                    visible: true
+                })}>
+                    {t('order.addBtn')}
+                </Button>
             </div>
 
             <div className="flex justify-between items-center">
@@ -247,6 +274,7 @@ const OrderPage: React.FC = () => {
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
             <AddEditOrderModal
                 visible={addEditOrderModal.visible}
+                title={addEditOrderModal.title}
                 onCancel={addEditOrderModal.onCancel}
                 onOk={addEditOrderModal.onOk}
                 input={addEditOrderModal.input}

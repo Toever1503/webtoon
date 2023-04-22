@@ -215,6 +215,7 @@ export default {
     order: {
         'page-title': 'Danh sách đơn hàng',
         addBtn: 'Thêm mới',
+        upgradeSubs: 'Nâng cấp gói',
         table: {
             'orderNumber': 'Mã đơn hàng',
             'subscription': 'Gói đăng ký',
@@ -230,6 +231,7 @@ export default {
             'expireDate': 'Ngày hết hạn đọc',
         },
         modal: {
+            addTitle: 'Thêm mới',
             editTitle: 'Chỉnh sửa thông tin',
             form: {
                 labels: {
@@ -239,9 +241,21 @@ export default {
                     price: 'Giá tiền',
                     paymentMethod: 'Phương thức thanh toán',
                     choosePaymentMethod: 'Chọn phương thức thanh toán',
-                    'createdBy': 'Người tạo',
+                    'createdBy': 'Người mua',
                     status: 'Trạng thái',
+                    chooseUser: 'Chọn người dùng',
                 }
+            },
+            actions: {
+                'add-success': 'Thêm thành công!',
+                'add-failed': 'Thêm thất bại!',
+                'edit-success': 'Sửa thành công!',
+                'edit-failed': 'Sửa thất bại!',
+            },
+            errors: {
+                'required-user': 'Vui lòng chọn người dùng!',
+                'required-subs': 'Vui lòng chọn gói đăng ký!',
+
             }
         },
         eStatus: {
@@ -360,5 +374,7 @@ export default {
         save: 'Lưu',
         cancel: 'Hủy',
         edit: 'Sửa',
+        delete: 'Xóa',
+        reset: 'Làm mới',
     }
 }

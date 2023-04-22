@@ -50,6 +50,9 @@ public class OrderEntity {
     @Column
     @Enumerated(EnumType.STRING)
     private EOrderType orderType;
+
+    @Column
+    @Enumerated(EnumType.STRING)
     private EOrderStatus status;
 
     @Column
@@ -91,4 +94,8 @@ public class OrderEntity {
     @ManyToOne
     @JoinColumn(name = "modified_by")
     private UserEntity modifiedBy;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }

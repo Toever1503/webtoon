@@ -45,6 +45,7 @@ public class OrderDto {
                 .gioLap(orderEntity.getGioLap())
                 .finalPrice(orderEntity.getFinalPrice())
                 .orderType(orderEntity.getOrderType())
+                .status(orderEntity.getStatus())
                 .content(orderEntity.getContent())
                 .ipAddr(orderEntity.getIpAddr())
                 .maDonHang(orderEntity.getMaDonHang())
