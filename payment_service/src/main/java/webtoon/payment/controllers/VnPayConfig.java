@@ -1,5 +1,5 @@
 
-package webtoon.payment.controller;
+package webtoon.payment.controllers;
 
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
@@ -24,7 +24,7 @@ public class VnPayConfig {
 	public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 	public static String vnp_Returnurl = "http://localhost:8080/payment/refund/ket-qua";
 	public static String vnp_RefundUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";
-	public static String vnp_RefundReturnUrl = "https://localhost:8080/vnpay_jsp/vnpay_refund.jsp";
+	public static String vnp_RefundReturnUrl = "http://localhost:8080/vnpay_jsp/vnpay_refund.jsp";
 	public static String vnp_TmnCode = "N2XBMR4S";
 	public static String vnp_HashSecret = "QSZYMQVRZDMMSIAQFHJSTOVYQOVKBGAZ";
 	public static String vnp_apiUrl = "https://sandbox.vnpayment.vn/merchant_webapi/api/transaction";

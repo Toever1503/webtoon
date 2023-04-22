@@ -1,4 +1,4 @@
-package webtoon.payment.controller;
+package webtoon.payment.controllers;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -28,6 +28,7 @@ import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.enums.EOrderType;
+import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
@@ -132,7 +133,7 @@ public class PaymentController {
 
 		UserEntity user = SecurityUtils.getCurrentUser().getUser();
 
-		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user,"VNPAY"));
+		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user, EPaymentMethod.VN_PAY));
 		OrderEntity order = orderService.getMaDonHang(vnp_TxnRef);
 		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order , null , null ,Double.parseDouble(String.valueOf(amount))/100 , null, 2, vnp_OrderInfo, paymentUrl , formatter.parse(vnp_ExpireDate)));
 		resp.sendRedirect(paymentUrl);

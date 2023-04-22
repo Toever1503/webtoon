@@ -5,11 +5,13 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
+import webtoon.account.dtos.LoginResponseDto;
 import webtoon.account.dtos.UserDto;
 import webtoon.account.entities.AuthorityEntity;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.entities.UserEntity_;
 import webtoon.account.enums.EStatus;
+import webtoon.account.inputs.LoginInput;
 import webtoon.account.inputs.UserFilterInput;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.services.IUserService;
@@ -80,5 +82,15 @@ public class UserResource {
     @PatchMapping("{id}/reset-block")
     public void unBlockUser(@PathVariable Long id) {
         this.userService.unHasBlockedByNumberOfFailedSignInAndResetNumberOfFailedSignIn(id);
+    }
+
+    @PostMapping("forgot-password")
+    public void forgotPassword(@RequestParam String email) {
+        this.userService.forgotPassword(email);
+    }
+
+    @PostMapping("signin")
+    public LoginResponseDto signin(@RequestBody LoginInput input) {
+        return this.userService.signin(input);
     }
 }

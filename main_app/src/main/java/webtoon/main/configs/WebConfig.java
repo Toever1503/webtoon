@@ -8,12 +8,14 @@ import org.springframework.security.web.util.matcher.OrRequestMatcher;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import org.thymeleaf.expression.Numbers;
 import webtoon.account.configs.security.SecurityUtils;
 
 import java.util.List;
 
 @Configuration
 public class WebConfig implements WebMvcConfigurer {
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
@@ -41,9 +43,13 @@ public class WebConfig implements WebMvcConfigurer {
                 , new AntPathRequestMatcher("/post/**")
                 , new AntPathRequestMatcher("/signin/**")
                 , new AntPathRequestMatcher("/signup/**")
-                , new AntPathRequestMatcher("/api/**")
-                , new AntPathRequestMatcher("/api/subscription-packs/**")
-                , new AntPathRequestMatcher("/api/subscription-packs/filter")
+                , new AntPathRequestMatcher("/subscription_pack/**")
+                , new AntPathRequestMatcher("/mangas/**")
+                , new AntPathRequestMatcher("/payment/**")
+                , new AntPathRequestMatcher("/order/**")
+                // for account module
+                , new AntPathRequestMatcher("/api/users/forgot-password")
+                , new AntPathRequestMatcher("/api/users/signin")
         );
     }
 

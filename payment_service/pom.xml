@@ -88,10 +88,16 @@
 			<artifactId>webtoon-utils-service</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.hibernate/hibernate-jpamodelgen -->
 		<dependency>
-				<groupId>webtoon.account</groupId>
-				<artifactId>webtoon-account-service</artifactId>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-jpamodelgen</artifactId>
 		</dependency>
+		<dependency>
+			<groupId>webtoon.account</groupId>
+			<artifactId>webtoon-account-service</artifactId>
+		</dependency>
+
 
     </dependencies>
 

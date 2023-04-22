@@ -28,6 +28,7 @@ public class MangaMapper {
                 .viewCount(entity.getViewCount())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
+                .isFree(entity.getIsFree())
                 .build();
     }
 

@@ -14,13 +14,9 @@ import webtoon.payment.entities.SubscriptionPackEntity;
 public class SubscriptionPackModel {
     private Long id;
     private String name;
-    private Integer monthCount;
+    private int monthCount;
+    private Double price;
 
-    @JsonSetter
-    private Double originalPrice;
-
-    @JsonSetter
-    private Double discountPrice;
 
     public static SubscriptionPackEntity toEntity(SubscriptionPackModel model) {
         if (model == null) return null;
@@ -28,8 +24,7 @@ public class SubscriptionPackModel {
         return SubscriptionPackEntity.builder()
                 .id(model.getId())
                 .name(model.getName())
-                .originalPrice(model.getOriginalPrice())
-                .discountPrice(model.getDiscountPrice())
+                .price(model.getPrice())
                 .monthCount(model.getMonthCount())
                 .build();
     }
