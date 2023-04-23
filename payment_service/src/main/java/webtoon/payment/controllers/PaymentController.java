@@ -92,6 +92,7 @@ public class PaymentController {
 		Calendar cldvnp_ExpireDate = Calendar.getInstance();
 		cldvnp_ExpireDate.add(Calendar.MINUTE, 30);
 		Date vnp_ExpireDateD = cldvnp_ExpireDate.getTime();
+		System.out.println(vnp_ExpireDateD);
 		String vnp_ExpireDate = formatter.format(vnp_ExpireDateD);
 
 		vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
