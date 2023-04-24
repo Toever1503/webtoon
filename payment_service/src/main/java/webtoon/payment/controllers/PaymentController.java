@@ -5,6 +5,7 @@ import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
@@ -27,6 +28,7 @@ import webtoon.account.entities.UserEntity;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EOrderType;
 import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.models.OrderModel;
@@ -90,9 +92,10 @@ public class PaymentController {
 		vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
 		Calendar cldvnp_ExpireDate = Calendar.getInstance();
-		cldvnp_ExpireDate.add(Calendar.MINUTE, 30);
+		cldvnp_ExpireDate.add(Calendar.MINUTE,30 );
 		Date vnp_ExpireDateD = cldvnp_ExpireDate.getTime();
-		System.out.println(vnp_ExpireDateD);
+
+		System.out.println("expireDate: "+vnp_ExpireDateD);
 		String vnp_ExpireDate = formatter.format(vnp_ExpireDateD);
 
 		vnp_Params.put("vnp_ExpireDate", vnp_ExpireDate);
@@ -134,9 +137,12 @@ public class PaymentController {
 
 		UserEntity user = SecurityUtils.getCurrentUser().getUser();
 
-		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user, EPaymentMethod.VN_PAY));
+		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW, EOrderStatus.PENDING_PAYMENT ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user, EPaymentMethod.VN_PAY));
 		OrderEntity order = orderService.getMaDonHang(vnp_TxnRef);
-		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order , null , null ,Double.parseDouble(String.valueOf(amount))/100 , null, 2, vnp_OrderInfo, paymentUrl , formatter.parse(vnp_ExpireDate)));
+		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order ,
+				null , null ,Double.parseDouble(String.valueOf(amount))/100 ,
+				null, 01, vnp_OrderInfo, paymentUrl , formatter.parse(vnp_ExpireDate)));
+
 		resp.sendRedirect(paymentUrl);
 	}
 }

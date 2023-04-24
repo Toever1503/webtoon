@@ -18,6 +18,7 @@ public class PaymentDto {
     private String transTrackNumber;
     private Double payMoney;
     private String bank;
+    private Integer status;
     private String paymentContent;
     private String payUrl;
     private Date expired_date;

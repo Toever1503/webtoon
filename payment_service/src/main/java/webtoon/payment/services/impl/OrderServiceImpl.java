@@ -44,7 +44,7 @@ public class OrderServiceImpl implements IOrderService {
                 .gioLap(orderModel.getGioLap())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
-//              .status(orderModel.getStatus())
+                .status(orderModel.getStatus())
                 .content(orderModel.getContent())
                 .ipAddr(orderModel.getIpAddr())
                 .maDonHang(orderModel.getMaDonHang())
@@ -64,7 +64,7 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
-//        orderEntity.setStatus(orderModel.getStatus());
+        orderEntity.setStatus(orderModel.getStatus());
         orderEntity.setContent(orderModel.getContent());
         orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());

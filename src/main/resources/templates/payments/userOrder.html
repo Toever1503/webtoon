@@ -75,7 +75,7 @@
                         d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"
                       ></path>
                     </svg>
-                    Settings
+                   Lịch sử đơn hàng
                   </button>
                 </div>
               </div>
@@ -97,15 +97,15 @@
           </thead>
           <tbody>
             <tr class="bg-white border-b" th:each="item: ${order}">
-              <!-- <td class="px-6 py-4" th:text="${item.subs_pack_id.name}"></td> -->
+              <td class="px-6 py-4" th:text="${item.subs_pack_id.name}"></td>
               <td
                 class="px-6 py-4"
                 th:text="${#numbers.formatCurrency(item.finalPrice)}"
               ></td>
-              <!-- <td
+              <td
                 class="px-6 py-4"
                 th:text="${item.subs_pack_id.dayCount + ' Ngày'}"
-              ></td> -->
+              ></td>
               <td class="px-6 py-4" th:text="${item.gioLap}"></td>
             </tr>
           </tbody>

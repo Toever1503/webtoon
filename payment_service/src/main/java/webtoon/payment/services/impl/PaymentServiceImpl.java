@@ -23,6 +23,7 @@ public class PaymentServiceImpl implements IPaymentService {
                 .transTrackNumber(paymentModel.getTransTrackNumber())
                 .payMoney(paymentModel.getPayMoney())
                 .bank(paymentModel.getBank())
+                .status(paymentModel.getStatus())
                 .paymentContent(paymentModel.getPaymentContent())
                 .payUrl(paymentModel.getPayUrl())
                 .expired_date(paymentModel.getExpired_date())
@@ -38,6 +39,7 @@ public class PaymentServiceImpl implements IPaymentService {
         paymentEntity.setTransTrackNumber(PaymentEntity.getTransTrackNumber());
         paymentEntity.setPayMoney(PaymentEntity.getPayMoney());
         paymentEntity.setBank(PaymentEntity.getBank());
+        paymentEntity.setStatus(PaymentEntity.getStatus());
         paymentEntity.setPaymentContent(PaymentEntity.getPaymentContent());
         paymentEntity.setPayUrl(PaymentEntity.getPayUrl());
         paymentEntity.setExpired_date(PaymentEntity.getExpired_date());
@@ -48,6 +50,7 @@ public class PaymentServiceImpl implements IPaymentService {
                 .transTrackNumber(paymentEntity.getTransTrackNumber())
                 .payMoney(paymentEntity.getPayMoney())
                 .bank(paymentEntity.getBank())
+                .status(paymentEntity.getStatus())
                 .paymentContent(paymentEntity.getPaymentContent())
                 .payUrl(paymentEntity.getPayUrl())
                 .expired_date(paymentEntity.getExpired_date())
@@ -63,6 +66,7 @@ public class PaymentServiceImpl implements IPaymentService {
     public Long getIdByOrderId(Long id) {
         return this.paymentRepository.getIdByOrderId(id);
     }
+
 
     public PaymentEntity getById(Long id){
         return this.paymentRepository.findById(id).get();

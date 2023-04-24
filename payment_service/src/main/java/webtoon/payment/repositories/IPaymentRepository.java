@@ -10,4 +10,7 @@ public interface IPaymentRepository extends JpaRepository<PaymentEntity, Long>, 
 
     @Query("SELECT p.id from tbl_payment p where p.orderId.id = ?1")
     Long getIdByOrderId(Long id);
+
+    @Query("DELETE FROM tbl_payment p where p.orderId.id = ?1")
+    void DeleteByOrderId(Long id);
 }
