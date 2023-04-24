@@ -2,9 +2,12 @@ package webtoon.payment.entities;
 
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EPaymentMethod;
 import webtoon.account.entities.UserEntity;
+import webtoon.payment.enums.EOrderType;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -23,20 +26,34 @@ public class OrderEntity {
     private Long id;
 
     @Column
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     @CreationTimestamp
     private Date created_at;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date modifiedAt;
 
     @Column
     @Temporal(TemporalType.DATE)
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     private Date gioLap;
 
+    @Column(name = "expired_subs_date")
+    private Date expiredSubsDate;
+
     @Column
     private Double finalPrice;
 
     @Column
-    private int status;
+    @Enumerated(EnumType.STRING)
+    private EOrderType orderType;
+
+    @Column
+    @Enumerated(EnumType.STRING)
+    private EOrderStatus status;
 
     @Column
     private String content;
@@ -58,4 +75,27 @@ public class OrderEntity {
     @JoinColumn(name ="user_id")
     @ManyToOne
     private UserEntity user_id;
+
+    @Override
+    public String toString() {
+        return "OrderEntity{" +
+                "id=" + id +
+                ", created_at=" + created_at +
+                ", gioLap=" + gioLap +
+                ", finalPrice=" + finalPrice +
+                ", estatus=" + orderType +
+                ", content='" + content + '\'' +
+                ", ipAddr='" + ipAddr + '\'' +
+                ", maDonHang='" + maDonHang + '\'' +
+                ", subs_pack_id=" + subs_pack_id +
+                ", user_id=" + user_id +
+                '}';
+    }
+    @ManyToOne
+    @JoinColumn(name = "modified_by")
+    private UserEntity modifiedBy;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }

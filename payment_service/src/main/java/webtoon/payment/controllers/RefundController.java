@@ -1,4 +1,4 @@
-package webtoon.payment.controller;
+package webtoon.payment.controllers;
 
 import java.io.IOException;
 import java.net.URLEncoder;
@@ -24,6 +24,8 @@ import webtoon.account.entities.UserEntity;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EOrderType;
+import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
 import webtoon.payment.services.ISubscriptionPackService;
@@ -129,6 +131,8 @@ public class RefundController {
 		String maDonHang = request.getParameter("vnp_TxnRef");
 		String amount = request.getParameter("vnp_Amount");
 		SubscriptionPackEntity subscriptionPack = subscriptionPackService.getByPrice(Double.parseDouble(amount)/100);
+		Long id = orderService.getIdByMaDonHang(maDonHang);
+		Long idPayment = paymentService.getIdByOrderId(id);
 		String noiDungTT = request.getParameter("vnp_OrderInfo");
 		String maPhanHoi = request.getParameter("vnp_ResponseCode");
 		String maGD = request.getParameter("vnp_TransactionNo");
@@ -148,9 +152,11 @@ public class RefundController {
 		String paymentUrl = VnPayConfig.vnp_Returnurl + "?" + queryUrl;
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
-			orderService.add(new OrderModel(Long.parseLong(maDonHang), formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), 0,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user ));
+			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.EXTEND,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
 			OrderEntity order = orderService.getMaDonHang(maDonHang);
-			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
+//			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
+			paymentService.update(new PaymentEntity(idPayment, order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, 00, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
+
 		}else {
 			ketQua = "Giao dịch không thành thành công";
 		}

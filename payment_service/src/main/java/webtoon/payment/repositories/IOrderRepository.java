@@ -16,4 +16,10 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
 
     @Query("SELECT o FROM tbl_order o where o.user_id.id = ?1")
     List<OrderEntity> getByUserId(Long userId);
+
+    @Query("SELECT o.id FROM tbl_order o where o.maDonHang = ?1")
+    Long getIdByMaDonHang(String maDonHang);
+
+
+
 }

@@ -41,4 +41,6 @@ public interface IUserService extends IJwtService {
     void forgotPassword(String email);
 
     LoginResponseDto signin(LoginInput input);
+
+    UserEntity getById(Long userId);
 }

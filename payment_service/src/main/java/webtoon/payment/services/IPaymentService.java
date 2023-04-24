@@ -8,6 +8,7 @@ import java.util.List;
 
 public interface IPaymentService {
     PaymentEntity add(PaymentEntity paymentModel);
-    PaymentDto update(PaymentModel paymentModel);
+    PaymentDto update(PaymentEntity PaymentEntity);
     List<PaymentEntity> getAll();
+    Long getIdByOrderId(Long id);
 }
