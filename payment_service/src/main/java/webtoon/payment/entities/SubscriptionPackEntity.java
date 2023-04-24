@@ -43,6 +43,10 @@ public class SubscriptionPackEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
     @ManyToOne
     @JoinColumn(name = "created_by")
     private UserEntity createdBy;

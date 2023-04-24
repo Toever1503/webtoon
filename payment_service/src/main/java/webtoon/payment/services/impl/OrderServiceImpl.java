@@ -166,6 +166,7 @@ public class OrderServiceImpl implements IOrderService {
     public void deleteById(Long id) {
         OrderEntity entity = this.getById(id);
         entity.setDeletedAt(Calendar.getInstance().getTime());
+        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
     }
 

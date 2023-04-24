@@ -1,5 +1,23 @@
 export default {
     'test': 'Ví dụ',
+    dashboard: {
+        newOrderCount: 'Tổng đơn hàng mới',
+        totalRevenue: 'Tổng doanh thu',
+        paymentPending: 'Chờ thanh toán',
+        orderCompleted: 'Đã hoàn tất',
+        orderCancelledCount: 'Đã hủy',
+        recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
+
+        orderLatest: {
+            title: 'Đơn hàng mới nhất',
+            table: {
+                orderNo: 'Mã đơn hàng',
+                createdBy: 'Người mua',
+                subscriptionPack: 'Gói đăng ký',
+                price: 'Giá',
+            }
+        }
+    },
     manga: {
         form:
         {

@@ -49,7 +49,6 @@ public class MangaResource {
 
 	@GetMapping("/filter")
 	public Page<MangaEntity> filter(@RequestParam String s, Pageable page){
-		
 		return this.iMangaService.filterBy(s, page);
 	}
 }
