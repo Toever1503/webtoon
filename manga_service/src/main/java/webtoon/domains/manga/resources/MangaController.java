@@ -8,10 +8,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.*;
 import webtoon.domains.manga.services.*;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -55,28 +60,27 @@ public class MangaController {
 	}
 
 	@GetMapping("{name}/{id}")
-	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
+	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model, HttpSession session) {
 		MangaEntity mangaEntity =this.mangaService.getById(id);
 
-		List<MangaChapterEntity> mangaChapter = this.mangaChapterService.findAllByMangaId(id);
-
-		ReadHistory readHistory  =  this.historyService.findByMangaId(id);
-		if(readHistory != null){
-
+		UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+		if(userEntity != null){
+			ReadHistory readHistory  =  this.historyService.findByCBAndMG(userEntity.getId(),mangaEntity.getId());
+			if(readHistory != null){
+				MangaChapterEntity mangaChapterEntity = this.mangaChapterService.getById(readHistory.getChapterEntity());
+				model.addAttribute("chapterHistory",mangaChapterEntity);
+				System.out.println(mangaChapterEntity);
+			}
 		}
-
-
-//		hiển thị số sao và sô bản ghi rating
-		List<Map> list = this.ratingService.getRating(id);
-
-		model.addAttribute("modelchapter",mangaChapter);
+//		hiển thị số sao và sô bản ghi ratingy
+		List<Map> list = this.ratingService.getRating(mangaEntity.getId());
 		model.addAttribute("model",mangaEntity);
 		model.addAttribute("rating",list);
 			return "trangtruyen";
 	}
 
 	@GetMapping("{name}/chapter/{id}")
-	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
+	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model,HttpSession session) {
 		MangaChapterEntity chapterEntity = this.mangaChapterService.getById(id);
 		MangaEntity mangaEntity = null;
 		if(chapterEntity.getMangaVolume() == null){ // display type chap
@@ -89,6 +93,7 @@ public class MangaController {
 
 			model.addAttribute("prevChapter",prevNextChapters[0]);
 			model.addAttribute("nextChapter",prevNextChapters[1]);
+
 		}
 		else { // display type vol
 			MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
@@ -103,18 +108,23 @@ public class MangaController {
 			model.addAttribute("prevChapter",prevNextChapter[0]);
 			model.addAttribute("nextChapter",prevNextChapter[1]);
 		}
-
 		ReadHistory readHistory = new ReadHistory();
-		readHistory = historyService.findByCBAndMG(null,mangaEntity.getId());
-		if(readHistory != null){
-			readHistory.setChapterEntity(id);
-		} else {
-			readHistory.setMangaEntity(mangaEntity.getId());
-			readHistory.setChapterEntity(id);
-			readHistory.setCreatedBy(null);
-		}
-		historyService.save(readHistory);
 
+		UserEntity logger = (UserEntity) session.getAttribute("loggedUser");
+		if(logger != null){
+			readHistory = historyService.findByCBAndMG(logger.getId(), mangaEntity.getId());
+			if(readHistory != null){
+
+				readHistory.setChapterEntity(chapterEntity.getId());
+				historyService.save(readHistory);
+			} else {
+				ReadHistory readHistory1 = new ReadHistory();
+				readHistory1.setMangaEntity(mangaEntity.getId());
+				readHistory1.setChapterEntity(chapterEntity.getId());
+				readHistory1.setCreatedBy(logger.getId());
+				historyService.save(readHistory1);
+			}
+		}
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);

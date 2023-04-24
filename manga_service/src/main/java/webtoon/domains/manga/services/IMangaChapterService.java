@@ -54,4 +54,6 @@ public interface IMangaChapterService {
     List<MangaChapterDto> findAllById(Long id);
 
     List<MangaChapterEntity> findAllByMangaId(Long id);
+
+    MangaChapterEntity finByMangaId(Long id);
 }

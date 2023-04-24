@@ -21,6 +21,8 @@ public interface IMangaService {
     MangaEntity getById(java.lang.Long id);
 
 
+    MangaEntity getByIdAndCb(Long mangaId, Long createId);
+
     boolean deleteById(java.lang.Long id);
 
     MangaDto update(MangaModel model);

@@ -20,10 +20,12 @@ public class MangaRatingEntity {
     @Column(name = "manga_id")
     private Long mangaId;
 
-    @JoinColumn(name = "created_by")
-    @ManyToOne
-    private UserEntity createdBy;
+    @Column(name = "created_by")
+//    @ManyToOne
+    private Long createdBy;
 
     @Column(name = "rate")
     private Float rate;
+
+
 }

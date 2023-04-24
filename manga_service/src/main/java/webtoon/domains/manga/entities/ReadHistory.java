@@ -21,15 +21,17 @@ public class ReadHistory {
     private Long id;
 
     @Column(name = "manga_id")
+
     private Long mangaEntity;
 
 
     @Column(name = "chapter_id")
     private Long chapterEntity;
 
-    @JoinColumn(name = "created_by")
-    @ManyToOne
-    private UserEntity createdBy;
+//    @JoinColumn(name = "created_by")
+//    @ManyToOne
+    @Column(name = "created_by")
+    private Long createdBy;
 
     @Column(name = "created_date")
     @Temporal(TemporalType.TIMESTAMP)

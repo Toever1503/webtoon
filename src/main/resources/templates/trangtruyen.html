@@ -132,11 +132,10 @@
                                         <input class="rating-input"  type="radio" name="rating" value="1" id="rating-1">
                                         <label class="rating-star"   for="rating-1">★</label>
                                     </div>
-
-
                                 </div>
-                                <script th:inline="javascript">
 
+                                <!-- javascript sự kiện đánh giá sao-->
+                                <script th:inline="javascript">
                                     /*<![CDATA[*/
                                     // console.log(model + ' model id');
 
@@ -203,8 +202,9 @@
                                                     return data.json();
                                                 })
                                                 .then(result => {
+                                                    console.log(result + 'result');
                                                     // Thiết lập giá trị đánh giá sao lên phần tử HTML
-                                                    ratingContainer.attr('data-rating', result);
+                                                    ratingContainer.attr('data-rating', result || 5);
 
                                                     // Hiển thị các icon sao tương ứng với giá trị đánh giá
                                                     const ratingValue = ratingContainer.attr('data-rating');
@@ -218,6 +218,8 @@
                                                 })
                                                 .catch(error => {
                                                     console.error('Error:', error);
+                                                    // Nếu giá trị trả về là null, thiết lập giá trị mặc định là 5
+                                                    ratingContainer.attr('data-rating', 5);
                                                 });
 
                                         // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
@@ -237,8 +239,6 @@
                                                 }
                                             });
                                         });
-
-
                                         // Sự kiện khi người dùng thay đổi đánh giá sao
                                         ratingContainer.find('.rating-input').on('change', function() {
                                             // Lấy giá trị đánh giá sao mới
@@ -288,16 +288,10 @@
                                                     console.error('Error:', error);
                                                 });
                                         });
-
-
-
                                     });
-
                                     /*]]>*/
-
-
-
                                 </script>
+                                <!-- Kết thúc javascript sự kiện đánh giá sao-->
                             </div>
                             <div class=" w-1/3 flex justify-center   ">
                                 <div class="flex justify-end w-full">
@@ -313,7 +307,7 @@
                             </div>
                             <div class="basis-3/4 " th:each="avg : ${rating}"   >
 
-                                <h5 th:if="${avg.xh == null}" th:text="${'Trung bình 5/5 out of 1'}"></h5>
+                                <h5 th:if="${avg.xh == null}" th:text="${'Trung bình 5/5 '}"></h5>
 
                                 <h5 th:unless="${avg.xh == null}" th:text="${'Trung bình '+ avg.xh + '/ 5 out of ' + avg.tongso }"></h5>
                             </div>
@@ -362,8 +356,54 @@
 
                         </div>
                         <div class=" flex ml-3 pl-6">
-                            <a href="" class="bg-red-400">Đọc truyện</a>
-                            <a class="ml-3 bg-red-400">Đọc tiếp</a>
+<!--                            <a th:href="@{'/manga/' + ${#} +'/chapter/' + ${#}}" class="bg-red-400">Đọc truyện</a>-->
+<!--                            <a class="ml-3 bg-red-400">Đọc tiếp</a>-->
+                           <!--  for display chapter by vol-->
+
+                           <ul th:if="${model.volumeEntities.size() > 0 && volI.index < 1}"
+                            class="latest-chapters grid mt-[10px] gap-[5px] p-0"
+                            th:each="volume,volI : ${model.volumeEntities}" >
+                            <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 1}">
+
+                                <div class="gap-[5px] flex items-center">
+                                    <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
+                                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
+                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] 
+                                        hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
+                                        th:text="'Đọc truyện'">
+                                    </a>
+                                    <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
+                                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
+                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb]
+                                        hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
+                                       th:text="'Đọc tiếp'">
+                                    </a>
+                                </span>
+                                </div>
+                            </li>
+                        </ul>
+                        <!--  for display chapter by chap -->
+                        <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
+                            <li class="gap-[5px] flex" th:each="chapter,iter: ${model.chapters}"
+                                th:if="${iter.index < 1}"
+                            >
+                                <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
+                                   class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center 
+                                   text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] 
+                                   duration-300 ease-in rounded-[10px]"
+                                   th:text="'Đọc truyện'">
+                                </a>
+                                <a
+                                    th:if="chapterHistory != null"
+                                    th:each="history : ${chapterHistory}"
+                                    th:href="@{'/manga/'+${model.title}+'/chapter/'+${history.id}}"
+                                   class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
+                                   text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
+                                   duration-300 ease-in rounded-[10px]"
+                                   th:text="'Đọc tiếp'">
+                                </a>
+                            </li>
+                        </ul>
                         </div>
                     </div>
                   </div>

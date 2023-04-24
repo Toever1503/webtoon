@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.dtos.MangaRatingDto;
 import webtoon.domains.manga.entities.MangaEntity;
@@ -18,6 +19,7 @@ import webtoon.domains.manga.repositories.IMangaRepository;
 import webtoon.domains.manga.services.IMangaRatingService;
 import webtoon.domains.manga.services.IMangaService;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -37,31 +39,37 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
         this.mangaRepository = mangaRepository;
     }
 
+
     @Override
-    public MangaRatingDto add(MangaRatingModel model){
-
-
+    public MangaRatingDto add(MangaRatingModel model, HttpSession session){
+        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
+        if (user == null) {
+            // Nếu người dùng chưa đăng nhập, lưu trữ thông tin đánh giá vào Local Storage thay vì lưu trữ trong phiên.
+            // Viết mã xử lý tại đây, ví dụ:
+            return null;
+        }
         MangaRatingEntity entity = MangaRatingEntity.builder()
                 .id(model.getId())
                 .rate(Float.valueOf(model.getRate()))
-                .createdBy(model.getCreatedBy())
+                .createdBy(user.getId())
                 .mangaId(model.getMangaEntity())
                 .build();
         this.ratingRepository.saveAndFlush(entity);
-//        viết ở đây
-        Double entity1 =  this.ratingRepository.findRatingByManga(entity.getMangaId());
-        MangaEntity mangaEntity = this.mangaService.getById(entity.getMangaId());
+        Double entity1 =  this.ratingRepository.findRatingByMangaAndCb(entity.getMangaId(), user.getId());
+        MangaEntity mangaEntity = this.mangaService.getByIdAndCb(entity.getMangaId(), user.getId());
         mangaEntity.setRating(entity1.floatValue());
         this.mangaRepository.saveAndFlush(mangaEntity);
         return MangaRatingDto.builder()
                 .mangaEntity(entity.getMangaId())
                 .rate(entity.getRate())
+                .createdBy(entity.getCreatedBy())
                 .build();
     }
 
     @Override
-    public MangaRatingDto update(MangaRatingModel model){
-        MangaRatingEntity entity = this.getById(model.getId());
+    public MangaRatingDto update(MangaRatingModel model, HttpSession session){
+        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
+        MangaRatingEntity entity = this.getById(model.getId(),user.getId() );
         entity.setMangaId(model.getMangaEntity());
         entity.setRate(Float.valueOf(model.getRate()));
         this.ratingRepository.saveAndFlush(entity);
@@ -75,9 +83,11 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
                 .build();
     }
 
+
     @Override
-    public MangaRatingEntity getById(Long id){
-        return ratingRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
+    public MangaRatingEntity getById(Long id, Long createId){
+        return  ratingRepository.findByMangaIdAndCB(id, createId);
+//        return ratingRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }
 
     @Override

@@ -26,5 +26,11 @@ public interface IMangaRatingRepository extends JpaRepository<MangaRatingEntity,
     @Query("select ROUND(AVG(a.rate), 1) as rate from MangaRatingEntity a where a.mangaId = ?1")
     Double findRatingByManga(Long mangaId);
 
+    @Query("select ROUND(AVG(a.rate), 1) as rate from MangaRatingEntity a where a.mangaId = ?1 and a.createdBy = ?2")
+    Double findRatingByMangaAndCb(Long mangaId ,Long createBy);
+
+    @Query("select a from MangaRatingEntity a where a.mangaId =?1 and a.createdBy = ?2")
+    MangaRatingEntity findByMangaIdAndCB(Long mangaId ,Long createBy);
+
 
 }

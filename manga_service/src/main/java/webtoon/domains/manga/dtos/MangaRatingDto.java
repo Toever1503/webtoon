@@ -15,7 +15,7 @@ public class MangaRatingDto {
 
     private Long mangaEntity;
 
-    private UserEntity createdBy;
+    private Long createdBy;
 
     private Float rate;
 }

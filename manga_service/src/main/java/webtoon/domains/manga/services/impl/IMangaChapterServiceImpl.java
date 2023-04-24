@@ -386,5 +386,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         }).collect(Collectors.toList());
     }
 
+    @Override
+    public MangaChapterEntity finByMangaId(Long id){
+        return chapterRepository.findByMangId(id);
+    }
 
 }

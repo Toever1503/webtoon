@@ -23,7 +23,7 @@ public class ReadHistoryModel {
 
     private Long chapterEntity;
 
-    private UserEntity createdBy;
+    private Long createdBy;
 
     private Date createdDate;
 

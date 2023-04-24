@@ -139,4 +139,9 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
         return mangaVolumeRepository.findByMangaId(manga);
     }
 
+    @Override
+    public MangaVolumeEntity finByMangaId(Long mangaId){
+        return mangaVolumeRepository.finByMangaId(mangaId);
+    }
+
 }

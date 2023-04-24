@@ -27,7 +27,7 @@ public class WebConfig implements WebMvcConfigurer {
     public List<AntPathRequestMatcher> publicUrls() {
 //        SecurityUtils.isAuthenticated();
 //        SecurityUtils.getCurrentUser().getUser();
-        // session.getAttribute("loggedUser");
+//         session.getAttribute("loggedUser");
         // PUBLIC PATH
         return List.of(
                 new AntPathRequestMatcher("/index"),

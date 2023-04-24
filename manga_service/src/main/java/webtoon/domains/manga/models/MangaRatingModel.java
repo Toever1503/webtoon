@@ -20,7 +20,7 @@ public class MangaRatingModel {
 
     private Long mangaEntity;
 
-    private UserEntity createdBy;
+    private Long createdBy;
 
     private String  rate;
 

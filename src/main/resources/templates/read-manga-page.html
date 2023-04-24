@@ -84,11 +84,7 @@
                 <div class="flex justify-between " >
                     <div class=" p-4">
                         <div class="flex items-center select-auto">
-                            <!-- <select name="select1" id="select1" class="mr-2 shadow-md">
-                              <option value="option1">Lựa chọn 1</option>
-                              <option value="option2">Lựa chọn 2</option>
-                              <option value="option3">Lựa chọn 3</option>
-                            </select> -->
+
                             <select
                                     th:if="${mangaData.displayType.name == 'VOL'}"
                                     id="volume"
@@ -146,7 +142,9 @@
                                     </svg>
                                 </a>
                             </div>
-                            <div class="p-2 rounded-full bg-red-500 text-white">Thông tin chương</div>
+                            <div class="p-2 rounded-full bg-red-500 text-white">
+                                <a th:href="@{'/manga/'+ ${mangaData.mangaName} + '/' + ${mangaData.id}}">Thông tin chương</a>
+                            </div>
                         </div>
                     </div>
                 </div>

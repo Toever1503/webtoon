@@ -126,10 +126,16 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
 
-    public MangaEntity getById(java.lang.Long id) {
+    public MangaEntity getById(java.lang.Long id ) {
         MangaEntity entity = this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 
         entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
+        return entity;
+    }
+
+    @Override
+    public MangaEntity getByIdAndCb(Long mangaId, Long createId){
+        MangaEntity entity = this.mangaRepository.getByIdAndCb(mangaId, createId);
         return entity;
     }
 
