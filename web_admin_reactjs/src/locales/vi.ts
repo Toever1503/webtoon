@@ -276,6 +276,16 @@ export default {
 
             }
         },
+        upgradeModal: {
+            title: 'Nâng cấp gói đọc',
+            currentSubscriptionPack: 'Gói hiện tại',
+            chooseUpgradeSubscriptionPack: 'Chọn gói nâng cấp',
+            needPriceToPay: 'Số tiền cần thanh toán:',
+            createOrder: 'Tạo đơn hàng',
+            newPack: 'Gói mới',
+            oldPack: 'Gói cũ',
+            paymentMethod: 'Phương thức thanh toán:',
+        },
         eStatus: {
             'ALL': 'Tất cả',
             'PENDING_PAYMENT': 'Chờ thanh toán',

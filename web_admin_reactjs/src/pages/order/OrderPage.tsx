@@ -18,6 +18,7 @@ import debounce from "../../utils/debounce";
 import IUserType from "../user/types/IUserType";
 import formatVnCurrency from "../../utils/formatVnCurrency";
 import { dateTimeFormat } from "../../utils/dateFormat";
+import UpgradeOrderModal, { UpgradeOrderModalProps } from "./components/UpgradeOrderModal";
 
 const OrderPage: React.FC = () => {
     const { t } = useTranslation();
@@ -116,24 +117,30 @@ const OrderPage: React.FC = () => {
         {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
-                <Space size="middle">
-                    <a onClick={() => showEditModal(record)}>{t('order.upgradeSubs')}</a>
-                    <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
-                    <Popconfirm
-                        title={t('manga.form.sure-delete')}
-                        onConfirm={(e) => {
-                            e?.stopPropagation();
-                        }}
-                        okText={t('confirm-yes')}
-                        cancelText={t('confirm-no')}
-                    >
-                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">{
-                            t('buttons.delete')
-                        }</a>
-                    </Popconfirm>
+            render: (_, record: IOrder) => (
+                <>
+                    <Space size="small">
+                        <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
+                        <Popconfirm
+                            title={t('manga.form.sure-delete')}
+                            onConfirm={(e) => {
+                                e?.stopPropagation();
+                            }}
+                            okText={t('confirm-yes')}
+                            cancelText={t('confirm-no')}
+                        >
+                            <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">{
+                                t('buttons.delete')
+                            }</a>
+                        </Popconfirm>
 
-                </Space>
+                    </Space>
+                    <br />
+                    {
+                        subscriptionPackList[subscriptionPackList.length - 1].id !== record.subs_pack_id.id &&
+                        <a onClick={() => showUpgradeModal(record)}>{t('order.upgradeSubs')}</a>
+                    }
+                </>
             ),
         },
     ];
@@ -189,6 +196,30 @@ const OrderPage: React.FC = () => {
         });
     }
     // end edit modal
+
+
+    // begin upgrade modal
+    const [upgradeOrderModal, setUpgradeOrderModal] = useState<UpgradeOrderModalProps>({
+        visible: false,
+        onCancel: () => {
+            upgradeOrderModal.visible = false;
+            upgradeOrderModal.input = undefined;
+            setUpgradeOrderModal(upgradeOrderModal);
+        },
+        onOk: (record: IOrder) => { },
+        input: undefined,
+        subscriptionPackList: []
+    });
+
+    const showUpgradeModal = (record: IOrder) => {
+        upgradeOrderModal.input = record;
+        setUpgradeOrderModal({
+            ...upgradeOrderModal,
+            visible: true,
+        });
+    }
+
+    // end upgrade modal
 
     const onSearch = debounce(() => {
         onCallApi();
@@ -281,6 +312,11 @@ const OrderPage: React.FC = () => {
                 subscriptionPackList={subscriptionPackList}
             />
         </div>
+
+        <UpgradeOrderModal visible={upgradeOrderModal.visible}
+            onCancel={upgradeOrderModal.onCancel}
+            onOk={upgradeOrderModal.onOk} subscriptionPackList={subscriptionPackList}
+            input={upgradeOrderModal.input} />
     </>)
 };
 
