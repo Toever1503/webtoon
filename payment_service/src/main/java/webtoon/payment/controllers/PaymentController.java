@@ -34,12 +34,15 @@ import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
+import webtoon.payment.services.ISendEmail;
 import webtoon.payment.services.ISubscriptionPackService;
 
 @Controller
 @RequestMapping("payment/pay")
 public class PaymentController {
 
+//	@Autowired
+//	private ISendEmail sendEmail;
 	@Autowired
 	private IPaymentService paymentService;
 
@@ -92,7 +95,7 @@ public class PaymentController {
 		vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
 		Calendar cldvnp_ExpireDate = Calendar.getInstance();
-		cldvnp_ExpireDate.add(Calendar.MINUTE,30 );
+		cldvnp_ExpireDate.add(Calendar.MINUTE,2);
 		Date vnp_ExpireDateD = cldvnp_ExpireDate.getTime();
 
 		System.out.println("expireDate: "+vnp_ExpireDateD);
@@ -143,6 +146,8 @@ public class PaymentController {
 				null , null ,Double.parseDouble(String.valueOf(amount))/100 ,
 				null, 01, vnp_OrderInfo, paymentUrl , formatter.parse(vnp_ExpireDate)));
 
+		String email = SecurityUtils.getCurrentUser().getUser().getEmail();
+//		sendEmail.sendingPayment(email);
 		resp.sendRedirect(paymentUrl);
 	}
 }

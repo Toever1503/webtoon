@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.services.IUserService;
 import webtoon.payment.dtos.OrderDto;
+import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.enums.EOrderType;
@@ -167,6 +168,11 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity entity = this.getById(id);
         entity.setDeletedAt(Calendar.getInstance().getTime());
         this.orderRepository.saveAndFlush(entity);
+    }
+
+    @Override
+    public List<OrderPendingDTO> getPendingPaymentByUserId(Long userId) {
+        return this.orderRepository.getPendingPaymentByUserId(userId);
     }
 
 

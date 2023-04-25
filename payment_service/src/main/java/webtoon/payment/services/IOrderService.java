@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import webtoon.payment.dtos.OrderDto;
+import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.models.OrderModel;
@@ -29,4 +30,6 @@ public interface IOrderService {
     OrderDto updateOrder(OrderInput input);
 
     void deleteById(Long id);
+
+    List<OrderPendingDTO> getPendingPaymentByUserId(Long userId);
 }

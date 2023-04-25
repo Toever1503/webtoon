@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
+import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EOrderType;
 import webtoon.payment.enums.EPaymentMethod;
@@ -74,6 +75,15 @@ public class OrderController {
         System.out.println("order: "+order);
         model.addAttribute("order", order);
         return "payments/userOrder";
+    }
+
+    @GetMapping("/pending-payment/{id}")
+    public String pendingPayment(@PathVariable Long id,Model model) {
+        Long userId = SecurityUtils.getCurrentUser().getUser().getId();
+        List<OrderPendingDTO> order = orderService.getPendingPaymentByUserId(userId);
+        System.out.println("order: "+order);
+        model.addAttribute("order", order);
+        return "payments/pending-payment";
     }
 
 }
