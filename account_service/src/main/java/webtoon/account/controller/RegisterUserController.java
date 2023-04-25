@@ -17,7 +17,7 @@ public class RegisterUserController {
     @GetMapping
     public String index(Model model) {
         model.addAttribute("createModel",new CreateUserModel());
-        return "register";
+        return "account/register";
     }
 
     @PostMapping

@@ -27,7 +27,7 @@ export default {
                 'title-required': 'Tiêu đề không được để trống!',
                 'title-max': 'Tiêu đề không được quá 255 ký tự!',
                 'content-required': 'Vui lòng nhập nội dung',
-                'genres-required': 'GVui lòng chọn thể loại',
+                'genres-required': 'Vui lòng chọn thể loại',
                 'authors-required': 'Vui lòng chọn tác giả',
                 'tags-required': 'Vui lòng chọn thẻ',
                 'featured-image-required': 'Vui lòng chọn ảnh',
