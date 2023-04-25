@@ -177,14 +177,19 @@
                                                         return response.json();
                                                     })
                                                     .then(result => {
+                                                        // Nếu review được tạo thành công, ta có thể cập nhật trang web để chứa đánh giá mới
+                                                        // Ví dụ: thêm đánh giá vào danh sách đánh giá hoặc hiển thị nó trên trang chi tiết sản phẩm
                                                         console.log('Success:', result);
+                                                        const res = result.rate;
+                                                        console.log(res + ' điểm đánh giá')
                                                         alert('Bạn đã đánh giá ' + newRatingValue + ' sao cho truyện!');
                                                         $('#rating-result').html(result || 5);
+                                                        // Load lại trang sau khi đánh giá thành công
+                                                        location.reload();
                                                     })
                                                     .catch(error => {
                                                         console.error('Error:', error);
                                                     });
-                                                window.location.reload();
                                             }
                                         });
 
@@ -244,55 +249,6 @@
                                                 }
                                             });
                                         });
-                                        // Sự kiện khi người dùng thay đổi đánh giá sao
-                                        ratingContainer.find('.rating-input').on('change', function() {
-                                            // Lấy giá trị đánh giá sao mới
-                                            const newRatingValue = $(this).val();
-
-                                            // Gửi lời yêu cầu đến server để cập nhật đánh giá sao
-                                            fetch('http://localhost:8080/rating/update/' + model, {
-                                                method: 'PUT',
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body: JSON.stringify({ rate: newRatingValue, mangaEntity: model })
-                                            })
-                                                .then(response => {
-                                                    if (!response.ok) {
-                                                        throw new Error('Network response was not ok');
-                                                    }
-                                                    return response.json();
-                                                })
-                                                .then(data => {
-                                                    // Thành công: cập nhật giá trị đánh giá sao mới lên phần tử HTML
-                                                    ratingContainer.attr('data-rating', newRatingValue);
-                                                // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
-                                                    ratingContainer.on('mouseenter', function() {
-                                                        // Xóa lựa chọn rating trên tất cả các phần tử input
-                                                        ratingContainer.find('.rating-star').prop('checked', false);
-                                                        // Xóa tất cả các icon đã được đánh giá 'rated'
-                                                        // Hiển thị tất cả các icon sao tương ứng với giá trị đánh giá của phần tử rating
-                                                        ratingContainer.find('.rating-star').addClass('rated');
-                                                    });
-
-                                                // Thiết lập sự kiện khi con trỏ được rời khỏi phần tử rating
-                                                    ratingContainer.on('mouseleave', function() {
-                                                        // Hiển thị các icon sao tương ứng với giá trị đánh giá sao mới
-                                                        ratingContainer.find('.rating-input').each(function() {
-                                                            const ratingValue = ratingContainer.attr('data-rating');
-                                                            if ($(this).val() > ratingValue) {
-                                                                $(this).next('.rating-star').removeClass('rated');
-                                                            } else {
-                                                                $(this).next('.rating-star').addClass('rated');
-                                                            }
-                                                        });
-                                                    });
-                                                    window.location.reload();
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
-                                                });
-                                        });
                                     });
                                     /*]]>*/
                                 </script>
@@ -301,7 +257,7 @@
                             <div class=" w-1/3 flex justify-center   ">
                                 <div class="flex justify-end w-full">
                                     <div class="mr-6 ">
-                                        <p th:text="${'Trạng thái: ' +  model.mangaStatus}"></p>
+                                        <p th:text="${'Trạng thái: ' +  trangThai}"></p>
                                     </div>
                                 </div>
                             </div>
@@ -372,7 +328,7 @@
                                        class=" save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
                                         text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] 
                                         hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
-                                        th:text="'Đọc truyện'">
+                                        th:text="'Đọc mới'">
                                     </a>
                                     <a th:if="chapterHistory != null"
                                        th:each="history : ${chapterHistory}"
@@ -395,7 +351,7 @@
                                        class="save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
                                        duration-300 ease-in rounded-[10px]"
-                                       th:text="'Đọc truyện'">
+                                       th:text="'Đọc mới'">
                                     </a>
                                     <a
                                         th:if="chapterHistory != null"
@@ -434,7 +390,7 @@
                                                     // Thiết lập href mới cho thẻ a mới
                                                     newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
                                                     // Thiết lập nội dung cho thẻ a mới (nếu muốn)
-                                                    newLink.textContent = 'Đọc truyện tiếp';
+                                                    newLink.textContent = 'Đọc tiếp';
 
                                                     // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
                                                     oldLink.parentNode.appendChild(newLink);

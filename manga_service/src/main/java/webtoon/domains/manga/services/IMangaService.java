@@ -24,7 +24,7 @@ public interface IMangaService {
 
     MangaEntity getByIdAndCb(Long mangaId, Long createId);
 
-    Double getRating(Long id, HttpSession session);
+    Double getRating(Long id);
 
     boolean deleteById(java.lang.Long id);
 

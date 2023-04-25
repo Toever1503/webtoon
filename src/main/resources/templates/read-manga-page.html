@@ -247,9 +247,8 @@
             // Kiểm tra xem trang đã được truy cập thông qua một liên kết chưa
             const referrer = document.referrer;
 
-            console.log(referrer + ' referrer')
             const urlPath = window.location.pathname; // lấy đường dẫn của trang
-            console.log(urlPath); // "/manga/truungsinh/chapter/1"
+
 
             // tách giá trị của mangaId và chapterId từ đường dẫn URL
             const splittedUrlPath = urlPath.split('/');

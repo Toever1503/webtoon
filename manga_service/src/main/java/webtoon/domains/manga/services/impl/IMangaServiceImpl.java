@@ -142,15 +142,10 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public Double getRating(Long id, HttpSession session){
-        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
-        if (user != null){
+    public Double getRating(Long id){
+//        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
+            return  this.mangaRepository.getRatingManga(id);
 
-            return  this.mangaRepository.getRatingManga(id,user.getId());
-
-        }else {
-            return null;
-        }
     }
 
 

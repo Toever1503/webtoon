@@ -56,8 +56,8 @@ public class MangaResource {
 	}
 
     @GetMapping("/getRating/{id}")
-    public Double getRating(@PathVariable Long id , HttpSession session){
-        return this.iMangaService.getRating(id,session);
+    public Double getRating(@PathVariable Long id ){
+        return this.iMangaService.getRating(id);
     }
 
 }
