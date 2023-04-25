@@ -18,6 +18,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                 "webtoon.payment",
                 "webtoon.comment",
                 "webtoon.account",
+
+                "webtoon.storage.domain",
         }
 )
 @EnableJpaRepositories(
@@ -25,14 +27,16 @@ import org.springframework.security.crypto.password.PasswordEncoder;
                 "webtoon.domains",
                 "webtoon.comment",
                 "webtoon.payment",
-                "webtoon.account"
+                "webtoon.account",
+
+                "webtoon.storage.domain",
         }
 )
 @ComponentScan(
         basePackages = {
                 "webtoon.domains",
 
-                "webtoon.account.configs",
+                "webtoon.account.configs.security",
                 "webtoon.account.controller",
                 "webtoon.account.services",
 
@@ -41,6 +45,10 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
                 "webtoon.payment.services",
                 "webtoon.payment.controllers",
+                "webtoon.payment.resources",
+
+                "webtoon.storage.api",
+                "webtoon.storage.domain",
         }
 )
 public class ComponentLoaderConfiguration {

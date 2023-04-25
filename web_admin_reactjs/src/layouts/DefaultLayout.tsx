@@ -1,13 +1,17 @@
 import React, { useState } from 'react';
 import {
-    TeamOutlined,
+    LogoutOutlined,
     UserOutlined,
 } from '@ant-design/icons';
-import { MenuProps, notification } from 'antd';
+import { Divider, MenuProps, notification } from 'antd';
 import { Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AppstoreOutlined, AreaChartOutlined, CommentOutlined, DashboardOutlined, FormOutlined, ShoppingCartOutlined, TagsOutlined } from '@ant-design/icons/lib/icons';
 import NotificationComponent from '../components/NotificationComponent';
+import { eraseCookie } from '../plugins/cookieUtil';
+import { showNofification } from '../stores/features/notification/notificationSlice';
+import { useTranslation } from 'react-i18next';
+import { useDispatch } from 'react-redux';
 
 const { Header, Content, Footer, Sider } = Layout;
 
@@ -32,16 +36,16 @@ const items: MenuItem[] = [
     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
     getItem('Đơn hàng', '/orders', <ShoppingCartOutlined />),
     getItem('Thống kê', '/stats', <AreaChartOutlined />),
-    getItem('Gói đọc', '/subscription-pack', <AppstoreOutlined />),
-    getItem('Manga', 'parent-mangas',<FormOutlined />, [
+    getItem('Gói đọc', '/subscription-packs', <AppstoreOutlined />),
+    getItem('Manga', 'parent-mangas', <FormOutlined />, [
         getItem('All mangas', '/mangas'),
         getItem('Manga genres', '/mangas/genres'),
         getItem('Manga authors', '/mangas/authors')
     ]),
-    getItem('Tin tức', 'parent-posts', <FormOutlined />, [
-        getItem('All Posts', 'posts'),
-        getItem('Categories', 'categories')
-    ]),
+    // getItem('Tin tức', 'parent-posts', <FormOutlined />, [
+    //     getItem('All Posts', 'posts'),
+    //     getItem('Categories', 'categories')
+    // ]),
     getItem('Thẻ', '/tag', <TagsOutlined />),
     getItem('Bình luận', 'comments', <CommentOutlined />),
     getItem('Người dùng', 'parent-users', <UserOutlined />, [
@@ -57,6 +61,8 @@ const onSubMenuClick = (item: MenuItem) => {
 }
 
 const App: React.FC = () => {
+    const { t } = useTranslation();
+    const dispatch = useDispatch();
     const navigate = useNavigate();
     const [collapsed, setCollapsed] = useState(false);
     const {
@@ -70,6 +76,20 @@ const App: React.FC = () => {
                 navigate(item.key.toString());
     }
 
+    const logout = () => {
+        console.log('logout');
+
+        eraseCookie('token');
+        setTimeout(() => {
+
+            dispatch(showNofification({
+                type: 'success',
+                message: t('login.logout-success'),
+            }))
+            navigate('/signin');
+        }, 200);
+    }
+
     return (
         <>
             <NotificationComponent />
@@ -80,12 +100,18 @@ const App: React.FC = () => {
                         <span className='font-bold text-2xl'>Admin</span>
                     </div>
                     <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={items} />
+
+                    <Divider />
+                    <a className='flex items-center justify-center space-x-2' onClick={logout}>
+                        <span>Đăng xuất</span>
+                        <LogoutOutlined />
+                    </a>
                 </Sider>
 
                 <Layout className="site-layout">
 
                     <Header style={{ padding: 0, background: colorBgContainer }} >
-                        fsafs
+                        header
                     </Header>
 
                     <Content style={{ margin: '0 16px' }}>

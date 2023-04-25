@@ -1,5 +1,23 @@
 export default {
     'test': 'Ví dụ',
+    dashboard: {
+        newOrderCount: 'Tổng đơn hàng mới',
+        totalRevenue: 'Tổng doanh thu',
+        paymentPending: 'Chờ thanh toán',
+        orderCompleted: 'Đã hoàn tất',
+        orderCancelledCount: 'Đã hủy',
+        recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
+
+        orderLatest: {
+            title: 'Đơn hàng mới nhất',
+            table: {
+                orderNo: 'Mã đơn hàng',
+                createdBy: 'Người mua',
+                subscriptionPack: 'Gói đăng ký',
+                price: 'Giá',
+            }
+        }
+    },
     manga: {
         form:
         {
@@ -66,6 +84,27 @@ export default {
                 }
 
             }
+        },
+        table: {
+            title: 'Tiêu đề',
+            mangaType: 'Loại truyện',
+            releaseStatus: 'Trạng thái phát hành',
+            genre: 'Thể loại',
+            author: 'Tác giả',
+            tag: 'Thẻ',
+            action: 'Hành động',
+        },
+        eReleaseStatus: {
+            'COMING': 'Sắp ra mắt',
+            'ONGOING': 'Đang ra',
+            'COMPLETED': 'Đã hoàn thành',
+            'CANCELLED': 'Đã hủy',
+            'ON_STOPPING': 'Tạm ngừng',
+            'STOPPED': 'Đã ngừng',
+        },
+        eMangaType: {
+            'IMAGE': 'Truyện tranh',
+            'TEXT': 'Truyện chữ',
         }
     },
     comment: {
@@ -193,26 +232,167 @@ export default {
     },
     order: {
         'page-title': 'Danh sách đơn hàng',
+        addBtn: 'Thêm mới',
+        'delete-success': 'Xóa thành công!',
+        'delete-failed': 'Xóa thất bại!',
+        table: {
+            'orderNumber': 'Mã đơn hàng',
+            'subscription': 'Gói đăng ký',
+            'finalPrice': 'Giá tiền',
+            'paymentMethod': 'Phương thức thanh toán',
+            'status': 'Trạng thái',
+            'phone': 'Số điện thoại',
+            'orderType': 'Loại đơn hàng',
+            'createdAt': 'Ngày tạo',
+            'updatedAt': 'Ngày sửa',
+            'createdBy': 'Người tạo',
+            'modifiedBy': 'Người sửa',
+            'expireDate': 'Ngày hết hạn đọc',
+            'upgrade': 'Nâng cấp',
+            viewDetail: 'Chi tiết',
+            upgradeSubs: 'Nâng cấp gói',
+            originalOrderNumber: 'Mã đơn hàng gốc',
+
+        },
+        modal: {
+            addTitle: 'Thêm mới',
+            editTitle: 'Chỉnh sửa thông tin',
+            form: {
+                labels: {
+                    'orderNumber': 'Mã đơn hàng',
+                    subscriptionPack: 'Gói đăng ký',
+                    choosePack: 'Chọn gói đăng ký',
+                    price: 'Giá tiền',
+                    paymentMethod: 'Phương thức thanh toán',
+                    choosePaymentMethod: 'Chọn phương thức thanh toán',
+                    'createdBy': 'Người mua',
+                    status: 'Trạng thái',
+                    chooseUser: 'Chọn người dùng',
+                }
+            },
+            actions: {
+                'add-success': 'Thêm thành công!',
+                'add-failed': 'Thêm thất bại!',
+                'edit-success': 'Sửa thành công!',
+                'edit-failed': 'Sửa thất bại!',
+            },
+            errors: {
+                'required-user': 'Vui lòng chọn người dùng!',
+                'required-subs': 'Vui lòng chọn gói đăng ký!',
+
+            }
+        },
+        upgradeModal: {
+            title: 'Nâng cấp gói đọc',
+            currentSubscriptionPack: 'Gói hiện tại',
+            chooseUpgradeSubscriptionPack: 'Chọn gói nâng cấp',
+            needPriceToPay: 'Số tiền cần thanh toán:',
+            createOrder: 'Tạo đơn hàng',
+            newPack: 'Gói mới',
+            oldPack: 'Gói cũ',
+            paymentMethod: 'Phương thức thanh toán:',
+            createSuccess: 'Tạo thành công!',
+            createFailed: 'Tạo thất bại!',
+        },
+        detailModal: {
+            title: 'Chi tiết đơn hàng',
+        },
+        eStatus: {
+            'ALL': 'Tất cả',
+            'PENDING_PAYMENT': 'Chờ thanh toán',
+            'PAID': 'Đã thanh toán',
+            'CANCELED': 'Đã hủy',
+            'COMPLETED': 'Hoàn tất',
+            'REFUND_CONFIRM_PENDING': 'Chờ xác nhận hoàn tiền',
+            'REFUNDING': 'Đang hoàn tiền',
+            'REFUNDED': 'Đã hoàn tiền',
+        }
     },
     'subscription-pack': {
         'page-title': 'Danh sách gói đọc',
+        addBtn: 'Thêm mới',
         table: {
             'name': 'Tên gói',
-            'desc': 'Mô tả',
-            'price': 'Giá',
+            'price': 'Giá gói',
             'limitedDayCount': 'Số ngày đọc',
             'createdAt': 'Ngày tạo',
             'modifiedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
-            'action': 'Hành động'
+            'action': 'Hành động',
+            'sure-delete': 'Bạn chắc chắn muốn xóa gói đọc này?',
+            'all': 'Tất cả',
+            'deleted': 'Xóa mềm',
+        },
+        modal: {
+            addTitle: "Thêm gói đọc mới",
+            editTitle: "Chỉnh sửa gói đọc",
+            month: "Tháng",
+            name: "Gói",
+            price: "Giá",
+            resetBtn: "Làm mới",
+            saveBtn: "Lưu",
+            dateCount: "Thời hạn gói",
+            form: {
+                'add-success': 'Thêm thành công!',
+                'add-failed': 'Thêm thất bại!',
+                'edit-success': 'Sửa thành công!',
+                'edit-failed': 'Sửa thất bại!',
+                'delete-success': 'Xóa thành công!',
+                'delete-failed': 'Xóa thất bại!',
+            },
+            placeholders: {
+                title: "Nhập tên gói",
+                price: "Nhập giá",
+                "choose-month": "Chọn thời hạn gói",
+            },
+            errors: {
+                "required-price": "Giá gói không được để trống",
+                "required-dateCount": "Vui lòng chọn hời hạn gói",
+                "min-price": "Giá gói tối thiểu phải là 10.000vnd",
+                "max-price": "Giá gói không được quá 100.000.000vnd",
+                "exceed-discount-price": 'Giá sau khi giảm không được lớn hơn giá gốc',
+                'check-input-again': 'Vui lòng kiểm tra lại thông tin!',
+            }
 
-        }
+        },
+    },
+    login: {
+        placeholders: {
+            username: 'Tên đăng nhập',
+            password: 'Mật khẩu',
+            remember: 'Nhớ mật khẩu',
+            forgot: 'Quên mật khẩu?',
+            email: 'Địa chỉ email',
+        },
+        buttons: {
+            login: 'Đăng nhập',
+            send: 'Gửi'
+        },
+        modal: {
+            title: 'Quên mật khẩu',
+            form: {
+                labels: {
+                    email: 'Nhập email của bạn để lấy lại mật khẩu:',
+                }
+            },
+            errors: {
+                'check-again': 'Vui lòng kiểm tra lại thông tin!',
+                email: 'Vui lòng nhập emai!',
+            },
+            'forgot-success': 'Mật khẩu mới đã được gửi vào email của bạn!',
+            'forgot-failed': 'Lỗi server!',
+        },
+        errors: {
+            'login-failed': 'Tên đăng nhập hoặc mật khẩu không đúng!',
+            'login-success': 'Đăng nhập thành công!',
+        },
+        'logout-success': 'Đăng xuất thành công!',
     },
     'confirm-yes': 'Có',
     'confirm-no': 'Không',
     'reset': 'Làm mới',
-    placholders: {
+    placeholders: {
         'search': 'Tìm kiếm...',
     },
     response: {
@@ -221,5 +401,19 @@ export default {
             'code-11': 'Tên đăng nhập đã tồn tại!',
             'code-12': 'Email đã tồn tại!',
         }
+    },
+    table: {
+        col: {
+            edit: 'Sửa',
+            delete: 'Xóa',
+        }
+    },
+    buttons: {
+        add: 'Thêm mới',
+        save: 'Lưu',
+        cancel: 'Hủy',
+        edit: 'Sửa',
+        delete: 'Xóa',
+        reset: 'Làm mới',
     }
 }

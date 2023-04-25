@@ -109,7 +109,7 @@ const UserPage: React.FC = () => {
             title: t('user.table.sex'),
             dataIndex: 'sex',
             key: 'sex',
-            render: (text) => <>{t(`user.form.sex-radio.${text.toLowerCase()}`)}</>,
+            render: (text) => <>{text && t(`user.form.sex-radio.${text.toLowerCase()}`)}</>,
         },
         {
             title: t('user.table.accountType'),
@@ -285,7 +285,7 @@ const UserPage: React.FC = () => {
             </div>
             <AddEditUserModal visible={addEditUserModal.visible} authorityOptions={authorityOptions} cancel={addEditUserModal.cancel} onOk={addEditUserModal.onOk} title={addEditUserModal.title} userInput={addEditUserModal.userInput} />
             <div className="flex justify-end items-center">
-                <Input.Search placeholder={`${t('placholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
+                <Input.Search placeholder={`${t('placeholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
             </div>
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} rowKey={(() => Math.random())} pagination={pageConfig} />

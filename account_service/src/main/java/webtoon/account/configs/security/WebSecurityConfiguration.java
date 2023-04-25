@@ -24,12 +24,8 @@ import org.springframework.security.web.util.matcher.RequestMatcher;
 import webtoon.account.configs.security.jwt.JwtFilter;
 import webtoon.account.services.IUserService;
 
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+
 
 @Configuration
 @EnableWebSecurity
@@ -39,8 +35,8 @@ public class WebSecurityConfiguration {
     private RequestMatcher PRIVATE_URLS;
 
 
-    public WebSecurityConfiguration(List<AntPathRequestMatcher> publics) {
-        this.PUBLIC_URLS = new OrRequestMatcher(publics.toArray(new AntPathRequestMatcher[0]));
+    public WebSecurityConfiguration(OrRequestMatcher publics) {
+        this.PUBLIC_URLS = publics;
         this.PRIVATE_URLS = new NegatedRequestMatcher(PUBLIC_URLS);
         System.out.println("SecurityConfiguration");
     }
@@ -63,21 +59,18 @@ public class WebSecurityConfiguration {
     }
 
     @Bean
-    public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers(PUBLIC_URLS);
-    }
-
-    @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
 
         http.httpBasic().disable();
         http.cors().and().csrf().disable();
-
-        http.authorizeRequests()
-                .requestMatchers(PRIVATE_URLS).authenticated();
         http.formLogin().disable()
                 .logout().disable();
+
+        http.authorizeRequests()
+                .requestMatchers(PUBLIC_URLS).permitAll()
+                .requestMatchers(PRIVATE_URLS).authenticated();
+
         //OAuth2 - Đăng nhập từ mạng xã hội
         http
                 .oauth2Login()
@@ -88,11 +81,11 @@ public class WebSecurityConfiguration {
                 .authorizationEndpoint()
                 .baseUri("/oauth2/authorization");
 
-        http.addFilterBefore(new JwtFilter(this.userService), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtFilter(this.userService, this.PUBLIC_URLS), org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter.class);
 
 
         // for redirect to login page
-        PortMapperImpl portMapper = new PortMapperImpl();
+       PortMapperImpl portMapper = new PortMapperImpl();
         portMapper.setPortMappings(Collections.singletonMap(serverPort, serverPort));
         PortResolverImpl portResolver = new PortResolverImpl();
         portResolver.setPortMapper(portMapper);

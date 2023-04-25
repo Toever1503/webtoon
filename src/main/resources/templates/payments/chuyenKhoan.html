@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
   <head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
@@ -14,7 +15,7 @@
     <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
   </head>
   <body>
-    <div class="w-[1100px] m-auto">
+    <div class="w-[1100px] m-auto" layout:fragment="content">
       <div class="flex flex-row justify-center">
         <div class="basis-1/5 mx-16 ">
           <h2>Mã đơn hàng:</h2>

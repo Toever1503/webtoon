@@ -25,7 +25,7 @@ public class LoginController {
     @RequestMapping("/signin")
     public String loginForm(Model model) {
         model.addAttribute("loginModel", new LoginModel());
-        return "login-form";
+        return "account/login-form";
     }
 
     @ResponseBody
@@ -60,6 +60,6 @@ public class LoginController {
     @RequestMapping(value = "oauth2-failed")
     public String onOauth2Failed(Model model) {
         model.addAttribute("message", "Đăng nhập thất bại. Vui lòng thử lại sau!");
-        return "login-form";
+        return "account/login-form";
     }
 }

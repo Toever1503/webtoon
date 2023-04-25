@@ -1,8 +1,10 @@
 package webtoon.payment.entities;
 
 import lombok.*;
+import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.format.annotation.DateTimeFormat;
+import webtoon.account.entities.UserEntity;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -21,20 +23,36 @@ public class SubscriptionPackEntity {
     private Long id;
     @Column(name = "subs_name")
     private String name;
-    @Column(name = "description")
-    private String desc;
+
     @Column(name = "day_count")
     private Integer dayCount;
-    @Column(name = "price")
-    private Double price;
+
+    @Column(name = "month_count")
+    private Integer monthCount;
+
     @Column
-    @Temporal(TemporalType.DATE)
+    private Double price;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @CreationTimestamp
     private Date createdAt;
 
     @Column
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date modifiedAt;
 
-    // private UserEntity created_by
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
+
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private UserEntity createdBy;
+
+    @ManyToOne
+    @JoinColumn(name = "updated_by")
+    private UserEntity updatedBy;
+
 }

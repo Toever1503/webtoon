@@ -30,6 +30,7 @@ public class UserDto {
     private Set<AuthorityEntity> authorities;
 
     public static UserDto toDto(UserEntity entity) {
+        if(entity == null) return  null;
         return UserDto.builder()
                 .id(entity.getId())
                 .fullName(entity.getFullName())
