@@ -384,10 +384,37 @@
                                     </a>
                                 </span>
                                 </div>
-                                <!--    script lưu lịch sử đọc truyện-->
+                            </li>
+                            </ul>
+                            <!--  for display chapter by chap -->
+                            <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
+                                <li class="gap-[5px] flex" th:each="chapter,iter: ${model.chapters}"
+                                    th:if="${iter.index < 1}"
+                                >
+                                    <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
+                                       class="save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
+                                       text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
+                                       duration-300 ease-in rounded-[10px]"
+                                       th:text="'Đọc truyện'">
+                                    </a>
+                                    <a
+                                        th:if="chapterHistory != null"
+                                        th:each="history : ${chapterHistory}"
+                                        th:href="@{'/manga/'+${model.title}+'/chapter/'+${history.id}}"
+                                       class=" block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
+                                       text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
+                                       duration-300 ease-in rounded-[10px]"
+                                       th:text="'Đọc tiếp'">
+                                    </a>
 
-                                <script th:inline="javascript">
-                                    /*<![CDATA[*/
+                                </li>
+                            </ul>
+                            <!--    script lưu lịch sử đọc truyện-->
+
+                            <script th:inline="javascript">
+                                /*<![CDATA[*/
+                                const logger = /*[[${logger}]]*/ 'default';
+                                if (typeof logger === "undefined" || logger === null) {
                                     var saveLocalStorageLinks = document.getElementsByClassName("save-local-storage");
                                     for (var i = 0; i < saveLocalStorageLinks.length; i++) {
                                         var link = saveLocalStorageLinks[i];
@@ -398,7 +425,6 @@
                                             localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
                                         });
                                     }
-
                                     // Đọc thông tin từ Local Storage
                                     const loggedUserJson = localStorage.getItem("loggedUser");
                                     const loggedUser = JSON.parse(loggedUserJson);
@@ -426,81 +452,11 @@
                                             oldLink.parentNode.appendChild(newLink);
                                         }
                                     }
-                                    /*]]>*/
-                                </script>
-                                <!--    kết thúc lưu -->
-                            </li>
-                            </ul>
-                            <!--  for display chapter by chap -->
-                            <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
-                                <li class="gap-[5px] flex" th:each="chapter,iter: ${model.chapters}"
-                                    th:if="${iter.index < 1}"
-                                >
-                                    <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                                       class="save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
-                                       text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
-                                       duration-300 ease-in rounded-[10px]"
-                                       th:text="'Đọc truyện'">
-                                    </a>
-                                    <a
-                                        th:if="chapterHistory != null"
-                                        th:each="history : ${chapterHistory}"
-                                        th:href="@{'/manga/'+${model.title}+'/chapter/'+${history.id}}"
-                                       class=" block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
-                                       text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
-                                       duration-300 ease-in rounded-[10px]"
-                                       th:text="'Đọc tiếp'">
-                                    </a>
-                                    <!--    script lưu lịch sử đọc truyện-->
 
-                                    <script th:inline="javascript">
-                                        /*<![CDATA[*/
-                                        const logger = /*[[${logger}]]*/ 'default';
-                                        if (typeof logger === "undefined" || logger === null) {
-                                            var saveLocalStorageLinks = document.getElementsByClassName("save-local-storage");
-                                            for (var i = 0; i < saveLocalStorageLinks.length; i++) {
-                                                var link = saveLocalStorageLinks[i];
-                                                link.addEventListener('click', function() {
-                                                    const mangaId = /*[[${model.getId()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
-                                                    const chapterId = /*[[${chapter.getId()}]]*/ 'default'; /* lấy giá trị mã chap ở đây */;
-                                                    const loggedUser = { "mangaId": mangaId, "chapterId": chapterId };
-                                                    localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
-                                                });
-                                            }
-                                            // Đọc thông tin từ Local Storage
-                                            const loggedUserJson = localStorage.getItem("loggedUser");
-                                            const loggedUser = JSON.parse(loggedUserJson);
-
-                                            // Sử dụng thông tin được lưu trữ
-                                            var saveLocalStorageLinks = document.getElementsByClassName("get-local-storage");
-                                            if (loggedUserJson != null){
-                                                const mangaText = /*[[${model.getTitle()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
-                                                const chapterId = loggedUser.chapterId;
-                                                // Tạo một thẻ a mới
-                                                const newLink = document.createElement('a');
-                                                const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
-                                                if (oldLink) {
-                                                    // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
-                                                    for (let i = 0; i < oldLink.attributes.length; i++) {
-                                                        const attr = oldLink.attributes[i];
-                                                        newLink.setAttribute(attr.name, attr.value);
-                                                    }
-                                                    // Thiết lập href mới cho thẻ a mới
-                                                    newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
-                                                    // Thiết lập nội dung cho thẻ a mới (nếu muốn)
-                                                    newLink.textContent = 'Đọc truyện tiếp';
-
-                                                    // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
-                                                    oldLink.parentNode.appendChild(newLink);
-                                                }
-                                            }
-
-                                        }
-                                        /*]]>*/
-                                    </script>
-                                    <!--    kết thúc lưu -->
-                                </li>
-                            </ul>
+                                }
+                                /*]]>*/
+                            </script>
+                            <!--    kết thúc lưu -->
                         </div>
                     </div>
                   </div>
