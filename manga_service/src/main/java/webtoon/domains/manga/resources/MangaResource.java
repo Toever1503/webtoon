@@ -18,8 +18,10 @@ import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.models.MangaModel;
 import webtoon.domains.manga.services.IMangaService;
 
+import javax.servlet.http.HttpSession;
+
 @RestController
-@RequestMapping("/mangatest")
+@RequestMapping("/mangaTest")
 public class MangaResource {
 
     @Autowired
@@ -49,7 +51,12 @@ public class MangaResource {
 
 	@GetMapping("/filter")
 	public Page<MangaEntity> filter(@RequestParam String s, Pageable page){
-		
 		return this.iMangaService.filterBy(s, page);
 	}
+
+    @GetMapping("/getRating/{id}")
+    public Double getRating(@PathVariable Long id , HttpSession session){
+        return this.iMangaService.getRating(id,session);
+    }
+
 }

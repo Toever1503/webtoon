@@ -35,13 +35,9 @@
                 .detail-genres-list:hover {
                     display: flex;
                 }
-
-
-
         </style>
 
         <script>
-
                 const detailGenresList = document.querySelectorAll('.detail-genres-list')[0];
 
                 document.querySelector('.view-detail-genes').addEventListener('mouseover', () => {
@@ -61,12 +57,9 @@
 
     <style>
             .latest-popular-managas .carousel-item {
-                width: 450px !important;
-                height: 250px;
+                width: 350px !important;
+                height: 220px;
             }
-
-
-
     </style>
 
     <div class="border" style="background-image: url(../static/images/homepage/gplaypattern.png);">
@@ -77,41 +70,24 @@
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                     <!-- Slides -->
-                    <div class="swiper-slide carousel-item p-[5px] border shadow-sm bg-white">
+                    <div class="swiper-slide carousel-item p-[5px] border shadow-sm bg-white" th:each="item : ${mangaSlider}">
                         <a href=""
                            class="block w-full h-full m-0 bg-red-500 relative z-[10] hover:scale-[0.95] ease-in-out duration-200">
                             <img class="block w-full h-full border border-neutral-200"
-                                 src="https://blog.logrocket.com/wp-content/uploads/2022/04/Basic-swiper-slide-markup.png">
+                                 th:src="${item.featuredImage}">
 
                             <div class="absolute top-0 right-0 w-full h-full"
                                  style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.9));">
                             </div>
-                            <h2
-                                    class="absolute bottom-2 hover:bottom-3 left-3 text-2xl font-bold text-[#fff] ease-in-out duration-200">
-                                Hello world</h2>
-                        </a>
-                    </div>
-                    <div class="swiper-slide carousel-item p-[5px] border shadow-sm bg-white">
-                        <a href=""
-                           class="block w-full h-full m-0 bg-red-500 relative z-[10] hover:scale-[0.95] ease-in-out duration-200">
-                            <img class="block w-full h-full border border-neutral-200"
-                                 src="https://swiperjs.com/images/sponsors/bluechip.png">
-
-                            <div class="absolute top-0 right-0 w-full h-full"
-                                 style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.9));">
-                            </div>
-                            <h2
-                                    class="absolute bottom-2 hover:bottom-3 left-3 text-2xl font-bold text-[#fff] ease-in-out duration-200">
-                                Hello world</h2>
+                            <h2 class="absolute bottom-2 hover:bottom-3 left-3 text-xl font-bold text-[#fff] ease-in-out duration-200"
+                            th:text="${item.title}">
+                                </h2>
                         </a>
                     </div>
 
-
-                    <div class="swiper-slide">Slide 3</div>
-                    ...
                 </div>
                 <!-- If we need pagination -->
-                <div class="swiper-pagination h-[50px] bottom-[-20px] z-[1000] bg-red-200"></div>
+                <div class="swiper-pagination h-[50px] bottom-[-20px] z-[1000]"></div>
 
                 <!-- If we need navigation buttons -->
                 <!-- <div class="swiper-button-prev"></div> -->
@@ -215,7 +191,7 @@
                                 </span>
                             <span th:if="${!manga.isFree}"
                                   class="manga-title-badget inline-block bg-[#eb3349] w-[40px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                    Có phí
+                                    Trả phí
                                 </span>
                         </div>
                     </li>

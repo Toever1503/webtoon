@@ -35,8 +35,6 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
         if (isSubmitting) return;
 
         setIsSubmitting(true);
-
-
         const authorities: any = [];
         form.getFieldValue('authorities').forEach((e: string | {
             label: string;

@@ -12,8 +12,10 @@ import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EOrderType;
 import webtoon.payment.inputs.OrderInput;
+import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.services.IOrderService;
@@ -130,6 +132,8 @@ public class OrderServiceImpl implements IOrderService {
 
         entity.setMaDonHang(orderNumber);
         entity.setUser_id(userService.getById(input.getUser_id()));
+        entity.setMonthCount(subscriptionPack.getMonthCount());
+        entity.setDayCount(subscriptionPack.getDayCount());
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
@@ -151,6 +155,8 @@ public class OrderServiceImpl implements IOrderService {
             Calendar calendar = Calendar.getInstance();
             calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
             entity.setExpiredSubsDate(calendar.getTime());
+            entity.setMonthCount(subscriptionPack.getMonthCount());
+            entity.setDayCount(subscriptionPack.getDayCount());
         }
 
         entity.setOrderType(input.getOrderType());
@@ -158,7 +164,6 @@ public class OrderServiceImpl implements IOrderService {
         entity.setPaymentMethod(input.getPaymentMethod());
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
-
         this.orderRepository.saveAndFlush(entity);
         return OrderDto.toDto(entity);
     }
@@ -167,12 +172,47 @@ public class OrderServiceImpl implements IOrderService {
     public void deleteById(Long id) {
         OrderEntity entity = this.getById(id);
         entity.setDeletedAt(Calendar.getInstance().getTime());
+        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
     }
 
     @Override
     public List<OrderPendingDTO> getPendingPaymentByUserId(Long userId) {
         return this.orderRepository.getPendingPaymentByUserId(userId);
+    }
+
+    @Override
+    public OrderDto upgradeOrder(UpgradeOrderInput input) {
+        OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
+
+        String orderNumber = UUID.randomUUID().toString();
+        while (this.orderRepository.getByMaDonHang(orderNumber) != null) {
+            orderNumber = UUID.randomUUID().toString();
+        }
+
+        OrderEntity upgradeOrder = OrderEntity.builder()
+                .fromOrder(originalOrder)
+                .orderType(EOrderType.UPGRADE)
+                .maDonHang(orderNumber)
+                .subs_pack_id(subscriptionPack)
+                .paymentMethod(input.getPaymentMethod())
+                .status(EOrderStatus.PENDING_PAYMENT)
+                .finalPrice(subscriptionPack.getPrice() - originalOrder.getSubs_pack_id().getPrice())
+                .content("Upgrade order")
+                .user_id(SecurityUtils.getCurrentUser().getUser())
+                .modifiedBy(SecurityUtils.getCurrentUser().getUser())
+                .monthCount(subscriptionPack.getMonthCount() - originalOrder.getSubs_pack_id().getMonthCount())
+                .dayCount(subscriptionPack.getDayCount() - originalOrder.getSubs_pack_id().getDayCount())
+                .build();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, upgradeOrder.getMonthCount());
+        upgradeOrder.setExpiredSubsDate(calendar.getTime());
+
+        this.orderRepository.saveAndFlush(upgradeOrder);
+        return OrderDto.toDto(upgradeOrder);
+
     }
 
 

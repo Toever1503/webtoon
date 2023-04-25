@@ -1,5 +1,7 @@
 package webtoon.domains.manga.resources;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -8,10 +10,15 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.dtos.MangaChapterDto;
 import webtoon.domains.manga.entities.*;
 import webtoon.domains.manga.services.*;
 
+import javax.script.ScriptEngine;
+import javax.script.ScriptEngineManager;
+import javax.script.ScriptException;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 import java.util.Map;
 
@@ -29,17 +36,18 @@ public class MangaController {
 	@Autowired
 	private IMangaChapterService mangaChapterService;
 
+	@Autowired
+	@Lazy
+	private IReadHistoryService  historyService;
+
 
 	private final IMangaRatingService ratingService;
 
-	private final IReadHistoryService historyService;
-
 	private final IMangaGenreService mangaGenreService;
 
-	public MangaController( IMangaRatingService ratingService, IReadHistoryService historyService, IMangaGenreService mangaGenreService) {
+	public MangaController( IMangaRatingService ratingService,  IMangaGenreService mangaGenreService) {
 
 		this.ratingService = ratingService;
-		this.historyService = historyService;
 		this.mangaGenreService = mangaGenreService;
 	}
 
@@ -54,22 +62,28 @@ public class MangaController {
 	}
 
 	@GetMapping("{name}/{id}")
-	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
+	public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name,Model model, HttpSession session) {
 		MangaEntity mangaEntity =this.mangaService.getById(id);
 
-		List<MangaChapterEntity> mangaChapter = this.mangaChapterService.findAllByMangaId(id);
-
-//		hiển thị số sao và sô bản ghi rating
-		List<Map> list = this.ratingService.getRating(id);
-
-		model.addAttribute("modelchapter",mangaChapter);
+		UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+		if(userEntity != null){
+			ReadHistory readHistory  =  this.historyService.findByCBAndMG(userEntity.getId(),mangaEntity.getId());
+			if(readHistory != null){
+				MangaChapterEntity mangaChapterEntity = this.mangaChapterService.getById(readHistory.getChapterEntity());
+				model.addAttribute("chapterHistory",mangaChapterEntity);
+				System.out.println(mangaChapterEntity);
+			}
+		}
+//		hiển thị số sao và sô bản ghi ratingy
+		List<Map> list = this.ratingService.getRating(mangaEntity.getId());
 		model.addAttribute("model",mangaEntity);
 		model.addAttribute("rating",list);
+		model.addAttribute("logger",userEntity);
 			return "trangtruyen";
 	}
 
 	@GetMapping("{name}/chapter/{id}")
-	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model) {
+	public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name,Model model,HttpSession session) {
 		MangaChapterEntity chapterEntity = this.mangaChapterService.getById(id);
 		MangaEntity mangaEntity = null;
 		if(chapterEntity.getMangaVolume() == null){ // display type chap
@@ -82,6 +96,7 @@ public class MangaController {
 
 			model.addAttribute("prevChapter",prevNextChapters[0]);
 			model.addAttribute("nextChapter",prevNextChapters[1]);
+
 		}
 		else { // display type vol
 			MangaVolumeEntity volumeEntity = chapterEntity.getMangaVolume();
@@ -96,20 +111,43 @@ public class MangaController {
 			model.addAttribute("prevChapter",prevNextChapter[0]);
 			model.addAttribute("nextChapter",prevNextChapter[1]);
 		}
-//		ReadHistory readHistory = new ReadHistory();
-//		readHistory = historyService.findByCBAndMG(null,mangaEntity.getId());
-//		if(readHistory != null){
-//			readHistory.setChapterEntity(id);
-//		} else {
-//			readHistory.setMangaEntity(mangaEntity.getId());
-//			readHistory.setChapterEntity(id);
-//			readHistory.setCreatedBy(null);
-//		}
-//		historyService.save(readHistory);
+		ReadHistory readHistory = new ReadHistory();
 
+		UserEntity logger = (UserEntity) session.getAttribute("loggedUser");
+		if(logger != null){
+			readHistory = historyService.findByCBAndMG(logger.getId(), mangaEntity.getId());
+			if(readHistory != null){
+
+				readHistory.setChapterEntity(chapterEntity.getId());
+				historyService.save(readHistory);
+			} else {
+				ReadHistory readHistory1 = new ReadHistory();
+				readHistory1.setMangaEntity(mangaEntity.getId());
+				readHistory1.setChapterEntity(chapterEntity.getId());
+				readHistory1.setCreatedBy(logger.getId());
+				historyService.save(readHistory1);
+			}
+		}
+//		else {
+//			// Sử dụng đối tượng ScriptEngine để thực thi mã JavaScript lưu trữ tên người dùng vào Local Storage
+//			ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
+//			ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
+//			String script = "var localStorage = { " +
+//					"getItem: function(key) { return this[key]; }, " +
+//					"setItem: function(key, value) { this[key] = value; } " +
+//					"};\n" +
+//					"localStorage.setItem('loggedUser', JSON.stringify({ 'mangaId': '" + mangaEntity.getId() + "', 'chapterId': '" + chapterEntity.getId() + "' }));";
+//			try {
+//				scriptEngine.eval(script);
+//			} catch (ScriptException e) {
+//				e.printStackTrace();
+//			}
+//
+//		}
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);
+		model.addAttribute("logger",logger);
 		return "read-manga-page";
 	}
 

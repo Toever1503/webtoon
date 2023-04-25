@@ -10,6 +10,8 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import webtoon.account.entities.UserEntity;
+import webtoon.account.configs.security.SecurityUtils;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
@@ -25,6 +27,8 @@ import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.utils.ASCIIConverter;
 
+import javax.servlet.http.HttpSession;
+import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,6 +79,8 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setGenres(genreRepository.findAllById(model.getGenres()).stream().collect(Collectors.toSet()));
         mangaEntity.setAuthors(authorRepository.findAllById(model.getAuthors()).stream().collect(Collectors.toSet()));
 
+        mangaEntity.setCreatedBy(SecurityUtils.getCurrentUser().getUser());
+        mangaEntity.setModifiedBy(mangaEntity.getCreatedBy());
         this.mangaRepository.saveAndFlush(mangaEntity);
         if (model.getTags() != null)
             mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.POST));
@@ -98,6 +104,7 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setMangaType(model.getMangaType());
         mangaEntity.setCreatedAt(model.getCreatedAt());
         mangaEntity.setModifiedAt(model.getModifiedAt());
+        mangaEntity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         mangaRepository.saveAndFlush(mangaEntity);
         return MangaDto.builder()
                 .title(mangaEntity.getTitle())
@@ -126,25 +133,40 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
 
-    public MangaEntity getById(java.lang.Long id) {
+    public MangaEntity getById(java.lang.Long id ) {
         MangaEntity entity = this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 
         entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
         return entity;
     }
 
+    @Override
+    public MangaEntity getByIdAndCb(Long mangaId, Long createId){
+        MangaEntity entity = this.mangaRepository.getByIdAndCb(mangaId, createId);
+        return entity;
+    }
+
+    @Override
+    public Double getRating(Long id, HttpSession session){
+        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
+        if (user != null){
+
+            return  this.mangaRepository.getRatingManga(id,user.getId());
+
+        }else {
+            return null;
+        }
+    }
+
+
 
     @Override
     public boolean deleteById(java.lang.Long id) {
         try {
-            this.mangaRepository.deleteById(id);
-            /*
-             task:
-               1.need remove image on storage service
-               2. need remove chapter and volume
-               3. need remove tag relation
-             */
-
+            MangaEntity entity = this.getById(id);
+            entity.setDeletedAt(Calendar.getInstance().getTime());
+            entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+            this.mangaRepository.saveAndFlush(entity);
             return true;
         } catch (Exception e) {
             // TODO: handle exception

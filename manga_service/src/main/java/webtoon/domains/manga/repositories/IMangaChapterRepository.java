@@ -55,4 +55,8 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
 
     @Query("select p from MangaChapterEntity p where p.manga.id = ?1")
     List<MangaChapterEntity> findByMangaId(@Param("id") Long id);
+
+    //tìm kiếm object manga
+    @Query("select p from MangaChapterEntity p where p.manga.id = ?1 order by p.chapterIndex asc ")
+    MangaChapterEntity findByMangId(Long id);
 }

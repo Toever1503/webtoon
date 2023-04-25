@@ -7,6 +7,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+import webtoon.storage.domain.utils.FileUploadProvider;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -18,17 +19,9 @@ import java.util.concurrent.TimeUnit;
 @EnableWebMvc
 @Configuration
 public class BeanConfiguration implements WebMvcConfigurer {
-
-    public static String DOMAIN;
-    public static String ROOT_CONTENT_SYS;
-    BeanConfiguration(@Value("${app.root-content-path}") String ROOT_CONTENT_SYS, @Value("${app.domain}") String HOST) {
-        BeanConfiguration.DOMAIN = HOST;
-        BeanConfiguration.ROOT_CONTENT_SYS = ROOT_CONTENT_SYS;
-    }
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        registry.addResourceHandler("/uploads/**").addResourceLocations("file:///".concat(ROOT_CONTENT_SYS));
+        registry.addResourceHandler("/uploads/**").addResourceLocations("file:///".concat(FileUploadProvider.ROOT_CONTENT_SYS));
     }
 
     //WebMvcConfigurer bean

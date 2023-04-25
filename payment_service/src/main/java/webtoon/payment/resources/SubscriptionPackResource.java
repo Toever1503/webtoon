@@ -7,6 +7,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.dtos.SubscriptionPackMetadataDto;
+import webtoon.payment.entities.SubscriptionPackEntity_;
 import webtoon.payment.inputs.SubscriptionPackFilterInput;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.entities.SubscriptionPackEntity;
@@ -27,11 +28,13 @@ public class SubscriptionPackResource {
     }
 
     @PostMapping("filter")
-    public Page<SubscriptionPackDto> filter(@RequestBody SubscriptionPackFilterInput input, Pageable pageable){
+    public Page<SubscriptionPackDto> filter(@RequestBody SubscriptionPackFilterInput input, Pageable pageable) {
         Specification<SubscriptionPackEntity> spec = null;
-        if(input.getQ() != null)
-            spec = Specification.where(((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + input.getQ() + "%")));
-        return this.subscriptionPackService.filter(pageable, spec);
+        if (input.getQ() != null)
+            spec = ((root, query, criteriaBuilder) -> criteriaBuilder.like(root.get("name"), "%" + input.getQ() + "%"));
+
+        Specification finalSpec = Specification.where(spec).and((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(SubscriptionPackEntity_.DELETED_AT)));
+        return this.subscriptionPackService.filter(pageable, finalSpec);
     }
     @PostMapping
     public SubscriptionPackDto add(@RequestBody SubscriptionPackModel subscriptionPackModel) {

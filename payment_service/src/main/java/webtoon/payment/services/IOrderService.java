@@ -7,6 +7,7 @@ import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.inputs.OrderInput;
+import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 
 import java.util.List;
@@ -30,6 +31,8 @@ public interface IOrderService {
     OrderDto updateOrder(OrderInput input);
 
     void deleteById(Long id);
+
+    OrderDto upgradeOrder(UpgradeOrderInput input);
 
     List<OrderPendingDTO> getPendingPaymentByUserId(Long userId);
 }

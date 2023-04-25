@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EStatus;
@@ -33,6 +34,7 @@ public class MangaModel {
 	private EMangaDisplayType displayType;
 	private Date createdAt;
 	private Date modifiedAt;
+	private UserEntity createdBy;
 	private Boolean isFree;
 	private List<Long> authors;
 	private List<Long> genres;

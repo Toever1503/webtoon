@@ -38,6 +38,7 @@ public class MangaResource2 {
     public Page<MangaDto> filter(@RequestBody MangaFilterInput input, Pageable page) {
         List<Specification> specs = new ArrayList<>();
         specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not());
+        specs.add((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
         if (input.getStatus() != null)
             if (!input.getStatus().equals(EStatus.ALL))

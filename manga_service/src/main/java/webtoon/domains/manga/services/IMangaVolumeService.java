@@ -34,4 +34,6 @@ public interface IMangaVolumeService {
     Page<MangaVolumeDto> filterVolume(Pageable pageable, MangaVolumeFilterInput input);
 
 	MangaVolumeDto getLastVolIndex(Long mangaId);
+
+	MangaVolumeEntity finByMangaId(Long mangaId);
 }
