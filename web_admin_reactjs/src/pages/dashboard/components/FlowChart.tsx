@@ -1,60 +1,87 @@
 import React, { useState, useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { Area } from '@ant-design/plots';
+import { Line } from '@ant-design/plots';
+import { useTranslation } from 'react-i18next';
 
 const FlowChart: React.FC = () => {
-    const [data, setData] = useState([
-        {
-            "country": "demo1",
-            "date": 1965,
-            "value": 1390.5
-        },
-        {
-            "country": "demo1",
-            "date": 1966,
-            "value": 1069.5
-        },
-        {
-            "country": "demo1",
-            "date": 1967,
-            "value": 1521.7
-        },
-        {
-            "country": "demo1",
-            "date": 1968,
-            "value": 1215.9
-        },
-        {
-            "country": "中南美",
-            "date": 1965,
-            "value": 1009.2
-        },
-        {
-            "country": "中南美",
-            "date": 1966,
-            "value":805.7
-        },
-        {
-            "country": "中南美",
-            "date": 1967,
-            "value": 700.5
-        },
-        {
-            "country": "中南美",
-            "date": 1968,
-            "value": 1280
-        }
+    const {t} = useTranslation();
 
-    ]);
-
+    const data = [
+        {
+            year: '1991',
+            value: 3,
+        },
+        {
+            year: '1992',
+            value: 4,
+        },
+        {
+            year: '1993',
+            value: 3.5,
+        },
+        {
+            year: '1994',
+            value: 5,
+        },
+        {
+            year: '1995',
+            value: 4.9,
+        },
+        {
+            year: '1996',
+            value: 6,
+        },
+        {
+            year: '1997',
+            value: 7,
+        },
+        {
+            year: '1998',
+            value: 9,
+        },
+        {
+            year: '1999',
+            value: 13,
+        },
+    ];
     const config = {
         data,
-        xField: 'date',
+        xField: 'year',
         yField: 'value',
-        seriesField: 'country'
+        label: {},
+        point: {
+            size: 5,
+            shape: 'diamond',
+            style: {
+                fill: 'white',
+                stroke: '#5B8FF9',
+                lineWidth: 2,
+            },
+        },
+        tooltip: {
+            showMarkers: false,
+        },
+        state: {
+            active: {
+                style: {
+                    shadowBlur: 4,
+                    stroke: '#000',
+                    fill: 'red',
+                },
+            },
+        },
+        interactions: [
+            {
+                type: 'marker-active',
+            },
+        ],
     };
-
-    return <Area {...config} />;
+    return <div className='p-[10px]'>
+        <h3 className='mb-[50px] text-xl'>
+            {t('dashboard.recentRevenueIn7Days')}
+        </h3>
+        <Line {...config} />
+    </div>;
 
 }
 

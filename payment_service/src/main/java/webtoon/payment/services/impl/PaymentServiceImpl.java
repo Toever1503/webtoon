@@ -31,16 +31,16 @@ public class PaymentServiceImpl implements IPaymentService {
     }
 
     @Override
-    public PaymentDto update(PaymentModel paymentModel) {
-        PaymentEntity paymentEntity = this.getById(paymentModel.getId());
-        paymentEntity.setOrderId(paymentModel.getOrderId());
-        paymentEntity.setTransId(paymentModel.getTransId());
-        paymentEntity.setTransTrackNumber(paymentModel.getTransTrackNumber());
-        paymentEntity.setPayMoney(paymentModel.getPayMoney());
-        paymentEntity.setBank(paymentModel.getBank());
-        paymentEntity.setPaymentContent(paymentModel.getPaymentContent());
-        paymentEntity.setPayUrl(paymentModel.getPayUrl());
-        paymentEntity.setExpired_date(paymentModel.getExpired_date());
+    public PaymentDto update(PaymentEntity PaymentEntity) {
+        PaymentEntity paymentEntity = this.getById(PaymentEntity.getId());
+        paymentEntity.setOrderId(PaymentEntity.getOrderId());
+        paymentEntity.setTransId(PaymentEntity.getTransId());
+        paymentEntity.setTransTrackNumber(PaymentEntity.getTransTrackNumber());
+        paymentEntity.setPayMoney(PaymentEntity.getPayMoney());
+        paymentEntity.setBank(PaymentEntity.getBank());
+        paymentEntity.setPaymentContent(PaymentEntity.getPaymentContent());
+        paymentEntity.setPayUrl(PaymentEntity.getPayUrl());
+        paymentEntity.setExpired_date(PaymentEntity.getExpired_date());
         this.paymentRepository.saveAndFlush(paymentEntity);
 
         return PaymentDto.builder()
@@ -57,6 +57,11 @@ public class PaymentServiceImpl implements IPaymentService {
     @Override
     public List<PaymentEntity> getAll() {
         return this.paymentRepository.findAll();
+    }
+
+    @Override
+    public Long getIdByOrderId(Long id) {
+        return this.paymentRepository.getIdByOrderId(id);
     }
 
     public PaymentEntity getById(Long id){

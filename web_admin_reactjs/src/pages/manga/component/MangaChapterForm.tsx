@@ -118,7 +118,7 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             {
                 currentStep === 1 &&
                 <section className='manga-type-choice px-[10px] text-center py-[15px] h-full pt-[30px]'>
-                    <p className='text-[16px] font-bold mb-1'>Chọn loại hiển thị truyện:</p>
+                    <p className='text-[16px] font-bold mb-1'>Chọn kiểu hiển thị truyện:</p>
                     <span className="text-[12px] text-neutral-500">
                         Bạn sẽ không thể thay đổi sau khi chọn.
                     </span>

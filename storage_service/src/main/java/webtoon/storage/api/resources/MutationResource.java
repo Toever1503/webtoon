@@ -18,7 +18,7 @@ import webtoon.storage.domain.dtos.FileDto;
 import webtoon.storage.domain.services.IFileService;
 
 @RestController
-@RequestMapping("mutations")
+@RequestMapping("storage/mutations")
 public class MutationResource {
 
 

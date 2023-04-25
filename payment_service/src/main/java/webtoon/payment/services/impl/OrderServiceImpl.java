@@ -1,15 +1,30 @@
 package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webtoon.account.configs.security.SecurityUtils;
+import webtoon.account.services.IUserService;
 import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.entities.OrderEntity;
+import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EOrderStatus;
+import webtoon.payment.enums.EOrderType;
+import webtoon.payment.inputs.OrderInput;
+import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.services.IOrderService;
+import webtoon.payment.services.ISubscriptionPackService;
+import webtoon.utils.exception.CustomHandleException;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional
@@ -18,56 +33,51 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IOrderRepository orderRepository;
 
+    @Autowired
+    private ISubscriptionPackService subscriptionPackService;
+
+    @Autowired
+    private IUserService userService;
+
     @Override
     public OrderDto add(OrderModel orderModel) {
-      OrderEntity orderEntity = OrderEntity.builder()
-              .created_at(orderModel.getCreated_at())
-              .gioLap(orderModel.getGioLap())
-              .finalPrice(orderModel.getFinalPrice())
-              .status(orderModel.getStatus())
-              .content(orderModel.getContent())
-              .ipAddr(orderModel.getIpAddr())
-              .maDonHang(orderModel.getMaDonHang())
+        OrderEntity orderEntity = OrderEntity.builder()
+                .created_at(orderModel.getCreated_at())
+                .gioLap(orderModel.getGioLap())
+                .finalPrice(orderModel.getFinalPrice())
+                .orderType(orderModel.getEstatus())
+//              .status(orderModel.getStatus())
+                .content(orderModel.getContent())
+                .ipAddr(orderModel.getIpAddr())
+                .maDonHang(orderModel.getMaDonHang())
                 .subs_pack_id(orderModel.getSubs_pack_id())
-              .build();
-      this.orderRepository.saveAndFlush(orderEntity);
-      return OrderDto.builder()
-              .created_at(orderEntity.getCreated_at())
-              .gioLap(orderEntity.getGioLap())
-              .finalPrice(orderEntity.getFinalPrice())
-              .status(orderEntity.getStatus())
-              .content(orderEntity.getContent())
-              .ipAddr(orderEntity.getIpAddr())
-              .maDonHang(orderEntity.getMaDonHang())
-              .subs_pack_id(orderEntity.getSubs_pack_id())
-              .build();
+                .user_id(orderModel.getUser_id())
+                .paymentMethod(orderModel.getPayment_method())
+                .build();
+        this.orderRepository.saveAndFlush(orderEntity);
+        return OrderDto.toDto(orderEntity);
     }
-//
+
+    //
     @Override
     public OrderDto update(OrderModel orderModel) {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
-        orderEntity.setStatus(orderModel.getStatus());
+        orderEntity.setOrderType(orderModel.getEstatus());
+//        orderEntity.setStatus(orderModel.getStatus());
         orderEntity.setContent(orderModel.getContent());
         orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
         orderEntity.setSubs_pack_id(orderModel.getSubs_pack_id());
+        orderEntity.setUser_id(orderModel.getUser_id());
+        orderEntity.setPaymentMethod(orderModel.getPayment_method());
         this.orderRepository.saveAndFlush(orderEntity);
-        return OrderDto.builder()
-                .created_at(orderEntity.getCreated_at())
-                .gioLap(orderEntity.getGioLap())
-                .finalPrice(orderEntity.getFinalPrice())
-                .status(orderEntity.getStatus())
-                .content(orderEntity.getContent())
-                .ipAddr(orderEntity.getIpAddr())
-                .maDonHang(orderEntity.getMaDonHang())
-                .subs_pack_id(orderEntity.getSubs_pack_id())
-                .build();
+        return OrderDto.toDto(orderEntity);
     }
 
-//    @Override
+    //    @Override
 //    public Page<OrderDto> getAll(Pageable pageable, Specification<OrderEntity> specification) {
 //        return orderRepository.findAll(specification, pageable).map(OrderDto::toDto);
 //    }
@@ -78,13 +88,125 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public OrderEntity getById(Long id){
-        return this.orderRepository.findById(id).get();
+    public OrderEntity getById(Long id) {
+        return this.orderRepository.findById(id).orElseThrow(() -> new CustomHandleException(12));
     }
 
     @Override
     public OrderEntity getMaDonHang(String maDonHang) {
         return this.orderRepository.getByMaDonHang(maDonHang);
+    }
+
+    @Override
+    public Page<OrderDto> filter(Pageable pageable, Specification<OrderEntity> finalSpec) {
+        return this.orderRepository.findAll(finalSpec, pageable).map(OrderDto::toDto);
+    }
+
+    public List<OrderEntity> getByUserId(Long userId) {
+        return orderRepository.getByUserId(userId);
+    }
+
+    @Override
+    public Long getIdByMaDonHang(String maDonHang) {
+        return orderRepository.getIdByMaDonHang(maDonHang);
+    }
+
+    @Override
+    public OrderDto addNewOrder(OrderInput input) {
+        OrderEntity entity = OrderInput.toEntity(input);
+
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPack());
+
+        String orderNumber = UUID.randomUUID().toString();
+        while (this.orderRepository.getByMaDonHang(orderNumber) != null) {
+            orderNumber = UUID.randomUUID().toString();
+        }
+        entity.setSubs_pack_id(subscriptionPack);
+        entity.setFinalPrice(subscriptionPack.getPrice());
+
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
+        entity.setExpiredSubsDate(calendar.getTime());
+
+        entity.setMaDonHang(orderNumber);
+        entity.setUser_id(userService.getById(input.getUser_id()));
+        entity.setMonthCount(subscriptionPack.getMonthCount());
+        entity.setDayCount(subscriptionPack.getDayCount());
+
+        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+        this.orderRepository.saveAndFlush(entity);
+
+        return OrderDto.toDto(entity);
+    }
+
+    @Override
+    public OrderDto updateOrder(OrderInput input) {
+        OrderEntity entity = this.getById(input.getId());
+
+
+        if (!entity.getSubs_pack_id().getId().equals(input.getSubscriptionPack())) {
+            SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPack());
+
+            entity.setSubs_pack_id(subscriptionPack);
+            entity.setFinalPrice(subscriptionPack.getPrice());
+
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
+            entity.setExpiredSubsDate(calendar.getTime());
+            entity.setMonthCount(subscriptionPack.getMonthCount());
+            entity.setDayCount(subscriptionPack.getDayCount());
+        }
+
+        entity.setOrderType(input.getOrderType());
+        entity.setStatus(input.getStatus());
+        entity.setPaymentMethod(input.getPaymentMethod());
+
+        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+        this.orderRepository.saveAndFlush(entity);
+        return OrderDto.toDto(entity);
+    }
+
+    @Override
+    public void deleteById(Long id) {
+        OrderEntity entity = this.getById(id);
+        entity.setDeletedAt(Calendar.getInstance().getTime());
+        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+        this.orderRepository.saveAndFlush(entity);
+    }
+
+    @Override
+    public OrderDto upgradeOrder(UpgradeOrderInput input) {
+        OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
+
+        String orderNumber = UUID.randomUUID().toString();
+        while (this.orderRepository.getByMaDonHang(orderNumber) != null) {
+            orderNumber = UUID.randomUUID().toString();
+        }
+
+        OrderEntity upgradeOrder = OrderEntity.builder()
+                .fromOrder(originalOrder)
+                .orderType(EOrderType.UPGRADE)
+                .maDonHang(orderNumber)
+                .subs_pack_id(subscriptionPack)
+                .paymentMethod(input.getPaymentMethod())
+                .status(EOrderStatus.PENDING_PAYMENT)
+                .finalPrice(subscriptionPack.getPrice() - originalOrder.getSubs_pack_id().getPrice())
+                .content("Upgrade order")
+                .user_id(SecurityUtils.getCurrentUser().getUser())
+                .modifiedBy(SecurityUtils.getCurrentUser().getUser())
+                .monthCount(subscriptionPack.getMonthCount() - originalOrder.getSubs_pack_id().getMonthCount())
+                .dayCount(subscriptionPack.getDayCount() - originalOrder.getSubs_pack_id().getDayCount())
+                .build();
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MONTH, upgradeOrder.getMonthCount());
+        upgradeOrder.setExpiredSubsDate(calendar.getTime());
+
+        this.orderRepository.saveAndFlush(upgradeOrder);
+        return OrderDto.toDto(upgradeOrder);
+
     }
 
 

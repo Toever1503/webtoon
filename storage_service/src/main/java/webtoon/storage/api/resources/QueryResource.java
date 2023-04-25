@@ -15,7 +15,7 @@ import webtoon.storage.domain.services.IFileService;
 import webtoon.storage.infras.jpa.PageableBean;
 
 @RestController
-@RequestMapping("queries")
+@RequestMapping("storage/queries")
 public class QueryResource {
 
 	@Autowired

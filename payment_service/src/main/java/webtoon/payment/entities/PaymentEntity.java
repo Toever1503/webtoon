@@ -34,6 +34,9 @@ public class PaymentEntity {
     @Column(name = "bank")
     private String bank;
 
+    @Column(name = "status")
+    private int status;
+
     @Column(name = "payment_content")
     private String paymentContent;
 

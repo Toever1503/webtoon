@@ -1,12 +1,25 @@
-import { Input, PaginationProps, Popconfirm, Space, Table } from "antd";
+import { Button, Input, PaginationProps, Popconfirm, Space, Table } from "antd";
 import { ColumnsType } from "antd/es/table";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
-import ISubscriptionPackType from "./types/ISubscriptionPackType";
+import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
+import AddEditSubscriptionPackModal, { AddEditSubscriptionPackModalProps } from "./components/AddEditSubscriptionPackModal";
+import { SubscriptionPackState, addSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData, updateSubscriptionPack } from "../../stores/features/subscription-pack/subscriptionPackSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../../stores";
+import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
+import { AxiosResponse } from "axios";
+import { reIndexTbl } from "../../utils/indexData";
+import formatVnCurrency from "../../utils/formatVnCurrency";
+import { showNofification } from "../../stores/features/notification/notificationSlice";
+import IUserType from "../user/types/IUserType";
+import { dateTimeFormat } from "../../utils/dateFormat";
 
 const SubscriptionPackPage: React.FC = () => {
     const { t } = useTranslation();
+    const dispatch = useDispatch();
+
+    const subscriptionPackState: SubscriptionPackState = useSelector((state: RootState) => state.subscriptionPack);
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState<any[]>();
@@ -16,8 +29,7 @@ const SubscriptionPackPage: React.FC = () => {
         total: 0,
         showSizeChanger: false
     });
-
-    const columns: ColumnsType<ISubscriptionPackType> = [
+    const columns: ColumnsType<ISubscriptionPack> = [
         {
             title: 'STT',
             dataIndex: 'index',
@@ -30,58 +42,62 @@ const SubscriptionPackPage: React.FC = () => {
             render: (text) => <>{text}</>,
         },
         {
-            title: t('subscription-pack.table.desc'),
-            dataIndex: 'desc',
-            key: 'desc',
-            render: (text) => <>{text}</>,
-        },
-        {
             title: t('subscription-pack.table.price'),
             dataIndex: 'price',
             key: 'price',
-            render: (text) => <>{text}</>,
+            render: (text, record) => <>
+                {
+                    formatVnCurrency(record.price)
+                }
+            </>,
         },
         {
             title: t('subscription-pack.table.limitedDayCount'),
-            dataIndex: 'dayCount',
-            key: 'dayCount',
-            render: (text) => <>{text}</>,
+            dataIndex: 'monthCount',
+            key: 'monthCount',
+            render: (text) => <>
+                {text} {t('subscription-pack.modal.month')}
+            </>,
         },
         {
             title: t('subscription-pack.table.createdAt'),
             dataIndex: 'createdAt',
             key: 'createdAt',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{dateTimeFormat(text)}</>,
         },
         {
             title: t('subscription-pack.table.modifiedAt'),
             dataIndex: 'modifiedAt',
             key: 'modifiedAt',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{
+                dateTimeFormat(text)
+            }</>,
         },
         {
             title: t('subscription-pack.table.createdBy'),
             dataIndex: 'createdBy',
             key: 'createdBy',
-            render: (text) => <>{text}</>,
+            render: (text: IUserType) => <>{
+                text ? text.fullName : '-'
+            }</>,
         },
         {
             title: t('subscription-pack.table.modifiedBy'),
-            dataIndex: 'modifiedBy',
+            dataIndex: 'updatedBy',
             key: 'modifiedBy',
-            render: (text) => <>{text}</>,
+            render: (text: IUserType) => <>{
+                text ? text.fullName : '-'
+            }</>,
         },
         {
             title: 'Action',
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <Link to={`/mangas/edit/${record.id}`}>Edit</Link>
+                    <a onClick={() => showAddEditModal(record)}>Edit</a>
                     <Popconfirm
-                        title={t('manga.form.sure-delete')}
-                        onConfirm={(e) => {
-                            e?.stopPropagation();
-                        }}
+                        title={t('subscription-pack.table.sure-delete')}
+                        onConfirm={() => onDelete(record.id || 0)}
                         okText={t('confirm-yes')}
                         cancelText={t('confirm-no')}
                     >
@@ -93,18 +109,138 @@ const SubscriptionPackPage: React.FC = () => {
         },
     ];
 
+
+    const onTblChange = (pagination: PaginationProps) => {
+        pageConfig.current = pagination.current;
+        setPageConfig({
+            ...pageConfig,
+        });
+        onCallApiFilter();
+    };
+    const [addEditSubscriptionPackModal, setAddEditSubscriptionPackModal] = useState<AddEditSubscriptionPackModalProps>({
+        visible: false,
+        title: '',
+        onCancel: () => {
+            console.log('Cancel');
+
+            setAddEditSubscriptionPackModal({
+                ...addEditSubscriptionPackModal,
+                visible: false,
+                title: t('subscription-pack.modal.addTitle'),
+                input: undefined
+            })
+        },
+        onOk: (record: ISubscriptionPack) => {
+            if (addEditSubscriptionPackModal.input) { // for edit
+                dispatch(updateSubscriptionPack(record));
+            } else // for add
+                dispatch(addSubscriptionPack({
+                    data: record,
+                    pageSize: pageConfig.pageSize || 10,
+                }));
+            addEditSubscriptionPackModal.onCancel();
+        },
+        input: undefined
+    });
+
+    const showAddEditModal = (input?: ISubscriptionPack) => {
+        addEditSubscriptionPackModal.input = input;
+
+        setAddEditSubscriptionPackModal({
+            ...addEditSubscriptionPackModal,
+            visible: true,
+            title: t('subscription-pack.modal.editTitle'),
+            input: input
+        });
+    };
+
+    const onDelete = (id: number | string) => {
+        if (tableLoading) return;
+        setTableLoading(true);
+
+        subscriptionPackService.deleteSubscriptionPack(id)
+            .then(() => {
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('subscription-pack.modal.form.delete-success')
+                }));
+                dispatch(deleteSubscriptionPackById({ id }));
+            })
+            .catch(err => {
+                console.log('delete subs pack failed: ', err);
+
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('subscription-pack.modal.form.delete-failed')
+                }))
+            })
+            .finally(() => setTableLoading(false));
+
+    }
+
+    const onCallApiFilter = () => {
+        if (tableLoading) return;
+        setTableLoading(true);
+        subscriptionPackService.filterSubscriptionPack({
+            q: undefined
+        }, (pageConfig.current || 1) - 1, pageConfig.pageSize)
+            .then((res: AxiosResponse<{
+                content: ISubscriptionPack[],
+                totalElements: number
+            }>) => {
+                console.log('get all subscriptions: ', res.data);
+
+                dispatch(setSubscriptionPackData(
+                    res.data.content
+                ));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements
+                });
+            })
+            .catch(err => {
+                console.log('err: ', err);
+            })
+            .finally(() => setTableLoading(false))
+    };
+
+    const [hasInitialized, setHasInitialized] = useState(false);
+    useEffect(() => {
+        if (!hasInitialized) {
+            onCallApiFilter();
+
+            setHasInitialized(true);
+        };
+
+
+        setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, subscriptionPackState.data))
+
+    }, [subscriptionPackState]);
+
+
     return (<>
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('subscription-pack.page-title')}
                 </h1>
-            </div>
-            <div className="flex justify-end items-center">
-                <Input.Search placeholder="input search text" style={{ width: 200 }} />
+                <Button type="primary" className="flex items-center" onClick={() => {
+                    setAddEditSubscriptionPackModal({
+                        ...addEditSubscriptionPackModal,
+                        visible: true,
+                        title: t('subscription-pack.modal.addTitle'),
+                        input: undefined
+                    })
+                }}>
+                    <span className="mr-2">{t('subscription-pack.addBtn')}</span>
+                </Button>
             </div>
 
-            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
+            <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} pagination={pageConfig} />
+            <AddEditSubscriptionPackModal visible={addEditSubscriptionPackModal.visible} title={addEditSubscriptionPackModal.title}
+                onCancel={addEditSubscriptionPackModal.onCancel}
+                onOk={addEditSubscriptionPackModal.onOk}
+                input={addEditSubscriptionPackModal.input} />
         </div>
     </>)
 };

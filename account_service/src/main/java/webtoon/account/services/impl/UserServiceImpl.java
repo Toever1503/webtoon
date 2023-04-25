@@ -5,13 +5,16 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import webtoon.account.configs.security.CustomUserDetail;
 import webtoon.account.configs.security.jwt.JwtProvider;
+import webtoon.account.dtos.LoginResponseDto;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
+import webtoon.account.inputs.LoginInput;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.IUserService;
 import webtoon.account.dtos.UserDto;
@@ -313,12 +316,41 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public void forgotPassword(String email) {
+
+        UserEntity userEntity = this.findByUsername(email);
+        // task: need send mail
+    }
+
+    @Override
+    public LoginResponseDto signin(LoginInput input) {
+        String email = input.getUsername();
+        UserEntity userEntity = this.findByUsername(email);
+
+        if (!BCrypt.checkpw(input.getPassword(), userEntity.getPassword())) {
+            throw new CustomHandleException(2);
+        }
+
+        long validTimeIn = input.isRememberMe() ? 86400 : 3600;
+        String token = this.jwtProvider.generateToken(
+                userEntity.getUsername(),
+                validTimeIn
+        );
+
+        return LoginResponseDto.builder()
+                .token(token)
+                .validTimeIn(validTimeIn)
+                .build();
+    }
+
+    @Override
     public List<AuthorityEntity> getAllAuthorities() {
         return this.authorityRepository.findAll();
     }
 
     private UserEntity findByUsername(String username) {
-        return null;
+        return this.userRepository.findByUsernameOrEmail(username, username)
+                .orElseThrow(() -> new CustomHandleException(22));
     }
 
     @Override

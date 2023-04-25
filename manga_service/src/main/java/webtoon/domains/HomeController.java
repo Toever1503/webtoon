@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.post.service.ICategoryService;
@@ -17,6 +18,7 @@ import webtoon.domains.manga.services.IMangaGenreService;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.post.entities.PostEntity;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 @Controller
 public class HomeController {
@@ -37,7 +39,7 @@ public class HomeController {
     private IPostService postService;
 
     @RequestMapping("/index")
-    public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged) {
+    public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, null);
 
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
@@ -57,6 +59,8 @@ public class HomeController {
             else
                 model.addAttribute("hasLogged", "Đăng nhập thành công!");
         }
+
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         return "homepage";
     }
 }

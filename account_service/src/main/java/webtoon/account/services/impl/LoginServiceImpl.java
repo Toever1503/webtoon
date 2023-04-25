@@ -89,7 +89,7 @@ public class LoginServiceImpl implements ILoginService {
                     .fullName(oAuth2User.getAttribute("name"))
                     .hasBlocked(false)
                     .numberOfFailedSignIn(1)
-                    .status(EStatus.NOT_ENABLED)
+                    .status(EStatus.ACTIVED)
                     .password(this.passwordEncoder.encode(username))
                     .authorities(Set.of(this.authorityRepository.findByAuthorityName(EAuthorityConstants.ROLE_USER)))
                     .build();

@@ -88,12 +88,15 @@ public class MangaEntity {
     @Column(name = "view_count")
     private Integer viewCount;
 
-    @JoinColumn(name = "created_by")
     @ManyToOne
+    @JoinColumn(name = "created_by")
     private UserEntity createdBy;
-//
-//private modified_by;
-    @OneToMany(mappedBy = "manga" , fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+
+    @ManyToOne
+    @JoinColumn(name = "modified_by")
+    private UserEntity modifiedBy;
+
+    @OneToMany(mappedBy = "manga", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private Set<MangaVolumeEntity> volumeEntities;
 
 
@@ -118,4 +121,8 @@ public class MangaEntity {
 
     @Transient
     private List<TagEntity> tags;
+
+    @Column(name = "deleted_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date deletedAt;
 }
