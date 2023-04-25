@@ -9,6 +9,7 @@ import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EPaymentMethod;
 
 import java.util.Date;
+import java.util.Optional;
 
 @Getter
 @Setter
@@ -17,7 +18,6 @@ import java.util.Date;
 @Builder
 public class OrderDto {
     private Long id;
-
     private Date expiredSubsDate;
     private Date created_at;
     private Date modifiedAt;
@@ -34,8 +34,22 @@ public class OrderDto {
     private UserDto user_id;
     private UserDto modifiedBy;
 
+    private OrderDto fromOrder;
+    private boolean hasUpgradingOrder;
+
     public static OrderDto toDto(OrderEntity orderEntity) {
-        if(orderEntity == null) return null;
+        if (orderEntity == null) return null;
+
+        boolean hasUpgradingOrder = false;
+        if (orderEntity.getOtherOrders() != null) {
+
+            Optional<OrderEntity> upgradeOrder = orderEntity.getOtherOrders().stream()
+                    .filter(order -> order.getOrderType().equals(EOrderType.UPGRADE) && order.getDeletedAt() == null)
+                    .filter(order -> order.getStatus().equals(EOrderStatus.PENDING_PAYMENT) || order.getStatus().equals(EOrderStatus.COMPLETED))
+                    .findFirst();
+            if (upgradeOrder.isPresent())
+                hasUpgradingOrder = true;
+        }
 
         return OrderDto.builder()
                 .id(orderEntity.getId())
@@ -53,6 +67,8 @@ public class OrderDto {
                 .subs_pack_id(orderEntity.getSubs_pack_id())
                 .user_id(UserDto.toDto(orderEntity.getUser_id()))
                 .modifiedBy(UserDto.toDto(orderEntity.getModifiedBy()))
+                .hasUpgradingOrder(hasUpgradingOrder)
+                .fromOrder(OrderDto.toDto(orderEntity.getFromOrder()))
                 .build();
     }
 }

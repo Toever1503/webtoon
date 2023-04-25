@@ -9,7 +9,7 @@ import {
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
-import IOrder, { EORDER_STATUS } from '../../../services/order/types/IOrder';
+import IOrder, { EORDER_STATUS, EPAYMENT_METHOD } from '../../../services/order/types/IOrder';
 import ISubscriptionPack from '../../../services/subscription_pack/types/ISubscriptionPack';
 import formatVnCurrency from '../../../utils/formatVnCurrency';
 import debounce from '../../../utils/debounce';
@@ -35,10 +35,39 @@ const UpgradeOrderModal: React.FC<UpgradeOrderModalProps> = (props: UpgradeOrder
 
     const [selectedUpgradeSubscriptionPack, setSelectedUpgradeSubscriptionPack] = useState<number | string>();
     const [upgradeSubscriptionPack, setUpgradeSubscriptionPack] = useState<ISubscriptionPack>();
-    const [paymentMethodVal, setPaymentMethodVal] = useState<'ATM' | 'VN_PAY'>('ATM');
+    const [paymentMethodVal, setPaymentMethodVal] = useState<EPAYMENT_METHOD>('ATM');
 
     const createUpgradeOrder = () => {
-        if (isSubmitting) return;
+        if (isSubmitting || !props.input) return;
+
+        setIsSubmitting(true);
+
+        const originalOrderId: any = props.input.id;
+        const subscriptionPackId: any = selectedUpgradeSubscriptionPack;
+
+        orderService
+            .upgradeOrder({
+                paymentMethod: paymentMethodVal,
+                originalOrderId,
+                subscriptionPackId
+            })
+            .then((res: AxiosResponse<IOrder>) => {
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('order.upgradeModal.createSuccess'),
+                }));
+
+                props.onOk(res.data);
+             })
+            .catch(err => {
+                console.log('create error: ', err);
+                dispatch(showNofification({
+                    type: 'error',
+                    message: t('order.upgradeModal.createFailed'),
+                }));
+                console.log(err);
+            })
+            .finally(() => setIsSubmitting(false));
     }
 
     useEffect(() => {

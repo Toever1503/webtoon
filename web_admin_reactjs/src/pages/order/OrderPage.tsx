@@ -1,4 +1,4 @@
-import { Button, Input, PaginationProps, Popconfirm, Select, Space, Table } from "antd";
+import { Button, Input, PaginationProps, Popconfirm, Select, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,7 +10,7 @@ import IOrder, { EORDER_STATUS } from "../../services/order/types/IOrder";
 import { reIndexTbl } from "../../utils/indexData";
 import { RootState } from "../../stores";
 import { useDispatch, useSelector } from "react-redux";
-import { IOrderState, addOrder, setOrderData, updateOrder } from "../../stores/features/order/orderSlice";
+import { IOrderState, addOrder, deleteOrderById, setOrderData, updateOrder } from "../../stores/features/order/orderSlice";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import AddEditOrderModal, { AddEditOrderModalProps } from "./components/AddEditOrderModal";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
@@ -19,6 +19,8 @@ import IUserType from "../user/types/IUserType";
 import formatVnCurrency from "../../utils/formatVnCurrency";
 import { dateTimeFormat } from "../../utils/dateFormat";
 import UpgradeOrderModal, { UpgradeOrderModalProps } from "./components/UpgradeOrderModal";
+import { showNofification } from "../../stores/features/notification/notificationSlice";
+import DetailOrderModal, { DetailOrderModalProps } from "./components/DetailOrderModal";
 
 const OrderPage: React.FC = () => {
     const { t } = useTranslation();
@@ -26,7 +28,7 @@ const OrderPage: React.FC = () => {
 
     const orderState: IOrderState = useSelector((state: RootState) => state.order);
     const [tableLoading, setTableLoading] = useState<boolean>(false);
-    const [dataSource, setDataSource] = useState<IOrder[]>();
+    const [dataSource, setDataSource] = useState<IOrder[]>([]);
     const [pageConfig, setPageConfig] = useState<PaginationProps>({
         current: 1,
         pageSize: 10,
@@ -50,7 +52,12 @@ const OrderPage: React.FC = () => {
             title: t('order.table.subscription'),
             dataIndex: 'subs_pack_id',
             key: 'subscription',
-            render: (text: ISubscriptionPack) => <>{text?.name}</>,
+            render: (text: ISubscriptionPack, record: IOrder) => <>
+                {text?.name} <br />
+                {
+                    record.orderType === 'UPGRADE' && <span className="text-red-400"> ({t('order.table.upgrade')})</span>
+                }
+            </>,
         },
         {
             title: t('order.table.finalPrice'),
@@ -67,12 +74,20 @@ const OrderPage: React.FC = () => {
             render: (text) => <>{text}</>,
         },
         {
+            title: 'Email',
+            dataIndex: 'email',
+            key: 'email',
+            render: (_, record: IOrder) => <>{
+                record.user_id.email
+            }</>,
+        },
+        {
             title: t('order.table.status'),
             dataIndex: 'status',
             key: 'status',
-            render: (text) => <>{
+            render: (text) => <Tag>{
                 t('order.eStatus.' + text)
-            }</>,
+            }</Tag>,
         },
         {
             title: t('order.table.expireDate'),
@@ -120,11 +135,17 @@ const OrderPage: React.FC = () => {
             render: (_, record: IOrder) => (
                 <>
                     <Space size="small">
-                        <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
+                        {
+                            <a onClick={() => viewDetailOrder(record)}>{t('order.table.viewDetail')}</a>
+                        }
+                        {
+                            record.status !== 'COMPLETED' && record.status !== 'CANCELED' && <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
+                        }
                         <Popconfirm
                             title={t('manga.form.sure-delete')}
                             onConfirm={(e) => {
                                 e?.stopPropagation();
+                                handleDeleteOrder(record);
                             }}
                             okText={t('confirm-yes')}
                             cancelText={t('confirm-no')}
@@ -137,8 +158,8 @@ const OrderPage: React.FC = () => {
                     </Space>
                     <br />
                     {
-                        subscriptionPackList[subscriptionPackList.length - 1].id !== record.subs_pack_id.id &&
-                        <a onClick={() => showUpgradeModal(record)}>{t('order.upgradeSubs')}</a>
+                        record.status === 'COMPLETED' && !record.hasUpgradingOrder && record.orderType !== 'UPGRADE' && subscriptionPackList[subscriptionPackList.length - 1]?.id !== record.subs_pack_id.id &&
+                        <a onClick={() => showUpgradeModal(record)}>{t('order.table.upgradeSubs')}</a>
                     }
                 </>
             ),
@@ -206,7 +227,21 @@ const OrderPage: React.FC = () => {
             upgradeOrderModal.input = undefined;
             setUpgradeOrderModal(upgradeOrderModal);
         },
-        onOk: (record: IOrder) => { },
+        onOk: (record: IOrder) => {
+            dispatch(addOrder({
+                data: record,
+                pageSize: pageConfig.pageSize,
+            }));
+
+            const orders: IOrder[] = dataSource.map<IOrder>((item: IOrder) => {
+                if (item.id === upgradeOrderModal.input?.id) {
+                    item.hasUpgradingOrder = true;
+                }
+                return item;
+            });
+            setDataSource(orders);
+            upgradeOrderModal.onCancel();
+        },
         input: undefined,
         subscriptionPackList: []
     });
@@ -220,6 +255,49 @@ const OrderPage: React.FC = () => {
     }
 
     // end upgrade modal
+
+    const handleDeleteOrder = (record: IOrder) => {
+        if (tableLoading) return;
+
+        setTableLoading(true);
+        orderService.deleteById(record.id || 0)
+            .then(() => {
+                dispatch(deleteOrderById({
+                    id: record.id || 0,
+                }));
+
+                dispatch(showNofification({
+                    type: 'success',
+                    message: t('order.delete-success'),
+                }));
+            })
+            .catch(err => {
+                console.log('delete order failed: ', err);
+
+                dispatch(showNofification({
+                    type: 'error',
+                    message: t('order.delete-failed'),
+                }));
+            })
+            .finally(() => setTableLoading(false));
+    };
+
+
+    // begin detail modal
+    const [detailOrderModal, setDetailOrderModal] = useState<DetailOrderModalProps>({
+        visible: false,
+        onCancel: () => {
+            detailOrderModal.visible = false;
+            setDetailOrderModal(detailOrderModal);
+        },
+    });
+    const viewDetailOrder = (record: IOrder) => {
+        detailOrderModal.input = record;
+        setDetailOrderModal({
+            ...detailOrderModal,
+            visible: true,
+        });
+    };
 
     const onSearch = debounce(() => {
         onCallApi();
@@ -244,7 +322,7 @@ const OrderPage: React.FC = () => {
                 console.log('filter error: ', err);
             })
             .finally(() => setTableLoading(false));
-    }
+    };
 
     const [hasInitialized, setHasInitialized] = useState(false);
     useEffect(() => {
@@ -317,6 +395,8 @@ const OrderPage: React.FC = () => {
             onCancel={upgradeOrderModal.onCancel}
             onOk={upgradeOrderModal.onOk} subscriptionPackList={subscriptionPackList}
             input={upgradeOrderModal.input} />
+
+        <DetailOrderModal visible={detailOrderModal.visible} onCancel={detailOrderModal.onCancel} input={detailOrderModal.input} />
     </>)
 };
 

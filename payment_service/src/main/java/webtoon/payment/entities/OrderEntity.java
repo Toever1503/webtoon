@@ -3,6 +3,7 @@ package webtoon.payment.entities;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.annotations.Where;
 import org.springframework.format.annotation.DateTimeFormat;
 import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EPaymentMethod;
@@ -11,6 +12,7 @@ import webtoon.payment.enums.EOrderType;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 @Entity(name = "tbl_order")
 @Table
@@ -84,7 +86,12 @@ public class OrderEntity {
 
     @ManyToOne
     @JoinColumn(name = "from_order_id")
+    @Where(clause = "deleted_at is null")
     private OrderEntity fromOrder;
+
+    @OneToMany(mappedBy = "fromOrder")
+    @Where(clause = "deleted_at is null")
+    private List<OrderEntity> otherOrders;
 
     @Override
     public String toString() {

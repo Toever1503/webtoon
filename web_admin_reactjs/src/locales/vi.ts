@@ -233,20 +233,26 @@ export default {
     order: {
         'page-title': 'Danh sách đơn hàng',
         addBtn: 'Thêm mới',
-        upgradeSubs: 'Nâng cấp gói',
+        'delete-success': 'Xóa thành công!',
+        'delete-failed': 'Xóa thất bại!',
         table: {
             'orderNumber': 'Mã đơn hàng',
             'subscription': 'Gói đăng ký',
             'finalPrice': 'Giá tiền',
             'paymentMethod': 'Phương thức thanh toán',
             'status': 'Trạng thái',
-            'note': 'Ghi chú',
+            'phone': 'Số điện thoại',
             'orderType': 'Loại đơn hàng',
             'createdAt': 'Ngày tạo',
             'updatedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'expireDate': 'Ngày hết hạn đọc',
+            'upgrade': 'Nâng cấp',
+            viewDetail: 'Chi tiết',
+            upgradeSubs: 'Nâng cấp gói',
+            originalOrderNumber: 'Mã đơn hàng gốc',
+
         },
         modal: {
             addTitle: 'Thêm mới',
@@ -285,6 +291,11 @@ export default {
             newPack: 'Gói mới',
             oldPack: 'Gói cũ',
             paymentMethod: 'Phương thức thanh toán:',
+            createSuccess: 'Tạo thành công!',
+            createFailed: 'Tạo thất bại!',
+        },
+        detailModal: {
+            title: 'Chi tiết đơn hàng',
         },
         eStatus: {
             'ALL': 'Tất cả',
