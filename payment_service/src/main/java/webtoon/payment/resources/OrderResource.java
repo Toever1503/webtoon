@@ -9,6 +9,7 @@ import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.OrderEntity_;
 import webtoon.payment.inputs.OrderFilterInput;
 import webtoon.payment.inputs.OrderInput;
+import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.services.IOrderService;
 
 import java.util.ArrayList;
@@ -54,6 +55,11 @@ public class OrderResource {
         input.setId(id);
 
         return this.orderService.updateOrder(input);
+    }
+
+    @PostMapping("upgrade-order")
+    public OrderDto upgradeOrder(@RequestBody UpgradeOrderInput input){
+        return this.orderService.upgradeOrder(input);
     }
 
     @PostMapping

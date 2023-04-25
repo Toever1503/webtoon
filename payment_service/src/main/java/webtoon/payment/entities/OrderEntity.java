@@ -44,6 +44,12 @@ public class OrderEntity {
     @Column(name = "expired_subs_date")
     private Date expiredSubsDate;
 
+    @Column(name = "month_count")
+    private Integer monthCount;
+
+    @Column(name = "day_count")
+    private Integer dayCount;
+
     @Column
     private Double finalPrice;
 
@@ -75,6 +81,10 @@ public class OrderEntity {
     @JoinColumn(name ="user_id")
     @ManyToOne
     private UserEntity user_id;
+
+    @ManyToOne
+    @JoinColumn(name = "from_order_id")
+    private OrderEntity fromOrder;
 
     @Override
     public String toString() {
