@@ -44,8 +44,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
         }
 )
 public class ComponentLoaderConfiguration {
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
-    }
+//    @Bean
+//    public PasswordEncoder passwordEncoder() {
+//        return new BCryptPasswordEncoder();
+//    }
 }
