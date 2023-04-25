@@ -21,6 +21,9 @@ public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaS
             "GROUP BY status", nativeQuery = true)
     List<Object[]> calculateTotalMangaEachStatus(@Param(value = "q") String q);
 
-    @Query("select p from MangaEntity p where p.id =?1 and p.createdBy.id = ?1")
+    @Query("select p from MangaEntity p where p.id =?1 and p.createdBy.id = ?2")
     MangaEntity getByIdAndCb(Long id , Long createId );
+
+    @Query("select p.rating from MangaEntity p where  p.id =?1 and p.createdBy.id = ?2")
+    Double getRatingManga(Long id, Long createId);
 }

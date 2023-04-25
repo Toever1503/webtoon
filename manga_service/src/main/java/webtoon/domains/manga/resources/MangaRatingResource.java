@@ -24,13 +24,13 @@ public class MangaRatingResource {
 //            model.setCreatedBy(user.getId());
 //        }
         model.setId(null);
-        return ResponseDto.of(this.ratingService.add(model));
+        return ResponseDto.of(this.ratingService.add(model,session));
     }
 
     @PutMapping("/update/{id}")
     public ResponseDto update(@PathVariable Long id, @RequestBody MangaRatingModel model, HttpSession session){
         model.setId(id);
-        return ResponseDto.of(this.ratingService.update(model));
+        return ResponseDto.of(this.ratingService.update(model,session));
     }
 
     @DeleteMapping("/delete/{id}")

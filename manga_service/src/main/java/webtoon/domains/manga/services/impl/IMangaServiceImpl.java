@@ -10,6 +10,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
@@ -25,6 +26,7 @@ import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.utils.ASCIIConverter;
 
+import javax.servlet.http.HttpSession;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -138,6 +140,19 @@ public class IMangaServiceImpl implements IMangaService {
         MangaEntity entity = this.mangaRepository.getByIdAndCb(mangaId, createId);
         return entity;
     }
+
+    @Override
+    public Double getRating(Long id, HttpSession session){
+        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
+        if (user != null){
+
+            return  this.mangaRepository.getRatingManga(id,user.getId());
+
+        }else {
+            return null;
+        }
+    }
+
 
 
     @Override
