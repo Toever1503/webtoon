@@ -406,57 +406,48 @@
                                        duration-300 ease-in rounded-[10px]"
                                        th:text="'Đọc tiếp'">
                                     </a>
+                                    <!--    script lưu lịch sử đọc truyện-->
 
+                                    <script th:inline="javascript">
+                                        /*<![CDATA[*/
+                                        const logger = /*[[${logger}]]*/ 'default';
+                                        if (typeof logger === "undefined" || logger === null) {
+
+                                            // Đọc thông tin từ Local Storage
+                                            const loggedUserJson = localStorage.getItem("loggedUser");
+                                            const loggedUser = JSON.parse(loggedUserJson);
+
+                                            // Sử dụng thông tin được lưu trữ
+                                            var saveLocalStorageLinks = document.getElementsByClassName("get-local-storage");
+                                            if (loggedUserJson != null){
+                                                const mangaText = /*[[${model.getTitle()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
+                                                const chapterId = loggedUser.chapterId;
+                                                // Tạo một thẻ a mới
+                                                const newLink = document.createElement('a');
+                                                const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
+                                                if (oldLink) {
+                                                    // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
+                                                    for (let i = 0; i < oldLink.attributes.length; i++) {
+                                                        const attr = oldLink.attributes[i];
+                                                        newLink.setAttribute(attr.name, attr.value);
+                                                    }
+                                                    // Thiết lập href mới cho thẻ a mới
+                                                    newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
+                                                    // Thiết lập nội dung cho thẻ a mới (nếu muốn)
+                                                    newLink.textContent = 'Đọc truyện tiếp';
+
+                                                    // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
+                                                    oldLink.parentNode.appendChild(newLink);
+                                                }
+                                            }
+
+                                        }
+                                        /*]]>*/
+                                    </script>
+                                    <!--    kết thúc lưu -->
                                 </li>
                             </ul>
-                            <!--    script lưu lịch sử đọc truyện-->
 
-                            <script th:inline="javascript">
-                                /*<![CDATA[*/
-                                const logger = /*[[${logger}]]*/ 'default';
-                                if (typeof logger === "undefined" || logger === null) {
-                                    var saveLocalStorageLinks = document.getElementsByClassName("save-local-storage");
-                                    for (var i = 0; i < saveLocalStorageLinks.length; i++) {
-                                        var link = saveLocalStorageLinks[i];
-                                        link.addEventListener('click', function() {
-                                            const mangaId = /*[[${model.getId()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
-                                            const chapterId = /*[[${chapter.getId()}]]*/ 'default'; /* lấy giá trị mã chap ở đây */;
-                                            const loggedUser = { "mangaId": mangaId, "chapterId": chapterId };
-                                            localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
-                                        });
-                                    }
-                                    // Đọc thông tin từ Local Storage
-                                    const loggedUserJson = localStorage.getItem("loggedUser");
-                                    const loggedUser = JSON.parse(loggedUserJson);
-
-                                    // Sử dụng thông tin được lưu trữ
-                                    var saveLocalStorageLinks = document.getElementsByClassName("get-local-storage");
-                                    if (loggedUserJson != null){
-                                        const mangaText = /*[[${model.getTitle()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
-                                        const chapterId = loggedUser.chapterId;
-                                        // Tạo một thẻ a mới
-                                        const newLink = document.createElement('a');
-                                        const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
-                                        if (oldLink) {
-                                            // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
-                                            for (let i = 0; i < oldLink.attributes.length; i++) {
-                                                const attr = oldLink.attributes[i];
-                                                newLink.setAttribute(attr.name, attr.value);
-                                            }
-                                            // Thiết lập href mới cho thẻ a mới
-                                            newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
-                                            // Thiết lập nội dung cho thẻ a mới (nếu muốn)
-                                            newLink.textContent = 'Đọc truyện tiếp';
-
-                                            // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
-                                            oldLink.parentNode.appendChild(newLink);
-                                        }
-                                    }
-
-                                }
-                                /*]]>*/
-                            </script>
-                            <!--    kết thúc lưu -->
                         </div>
                     </div>
                   </div>
