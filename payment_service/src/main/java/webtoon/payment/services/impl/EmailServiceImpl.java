@@ -14,6 +14,10 @@ import javax.mail.internet.MimeMessage;
 
 @Service
 public class EmailServiceImpl implements ISendEmail {
+    @Override
+    public void sendingPayment(String email) {
+
+    }
 //    @Autowired
 ////    private  JavaMailSender mailSender;
 
