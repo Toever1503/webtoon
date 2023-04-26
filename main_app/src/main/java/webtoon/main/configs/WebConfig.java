@@ -46,7 +46,7 @@ public class WebConfig implements WebMvcConfigurer {
                 , new AntPathRequestMatcher("/")
                 , new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name()),
                 new AntPathRequestMatcher("/rating/**")
-                ,new AntPathRequestMatcher("/rating/getRating/**")
+                ,new AntPathRequestMatcher("/mangaTest/getRating/**")
                 , new AntPathRequestMatcher("/manga/**")
                 , new AntPathRequestMatcher("/post/**")
                 , new AntPathRequestMatcher("/signin/**")

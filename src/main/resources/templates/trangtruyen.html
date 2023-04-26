@@ -71,7 +71,7 @@
             font-size: 2rem;
             color: #ccc;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: color 0.2s ease-in-out;
         }
 
         .rating-star:hover,
@@ -127,19 +127,19 @@
                                 <div class=" flex flex-row ">
                                     <div class="rating ml-4" data-rating="2" id="myElement"  >
                                         <input class="rating-input"   type="radio" name="rating" value="5" id="rating-5">
-                                        <label class="rating-star"  for="rating-5">&#9733;</label>
+                                        <label class="rating-star"  for="rating-5">★</label>
     
                                         <input class="rating-input"  type="radio" name="rating" value="4" id="rating-4">
-                                        <label class="rating-star"  for="rating-4">&#9733;</label>
+                                        <label class="rating-star"  for="rating-4">★</label>
     
                                         <input class="rating-input"  type="radio" name="rating" value="3" id="rating-3">
-                                        <label class="rating-star"  for="rating-3">&#9733;</label>
+                                        <label class="rating-star"  for="rating-3">★</label>
     
                                         <input class="rating-input"  type="radio" name="rating" value="2" id="rating-2">
-                                        <label class="rating-star"   for="rating-2">&#9733;</label>
+                                        <label class="rating-star"   for="rating-2">★</label>
     
                                         <input class="rating-input"  type="radio" name="rating" value="1" id="rating-1">
-                                        <label class="rating-star"   for="rating-1">&#9733;</label>
+                                        <label class="rating-star"   for="rating-1">★</label>
                                     </div>
                                 </div>
 
@@ -147,7 +147,6 @@
                                 <script th:inline="javascript">
                                     /*<![CDATA[*/
                                     // console.log(model + ' model id');
-
                                     $(document).ready(function() {
                                         // Lấy phần tử HTML chứa đánh giá sao
                                         const ratingContainer = $('.rating');
@@ -155,11 +154,6 @@
                                         // Endpoint của REST API để gửi đánh giá sao lên server
                                         const apiUrl = "http://localhost:8080/rating/add";
 
-                                        // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
-                                        ratingContainer.on('mouseenter', function() {
-                                            // Thay đổi giá trị title của phần tử h3 thành "Your rating"
-                                            $(this).parent().find('h3').eq(1).attr('title', 'Your rating');
-                                        });
 
                                         // Thiết lập sự kiện khi người dùng thay đổi đánh giá sao
                                         ratingContainer.find('.rating-input').on('change', function() {
@@ -201,45 +195,6 @@
                                                     });
                                             }
                                         });
-
-                                        // Lấy đánh giá sao từ REST API và hiển thị lên phần tử HTML
-                                        // const url = ;
-
-                                            const getUrl = 'http://localhost:8080/mangaTest/getRating/'+ model;
-                                            // Tạo đối tượng Request
-                                            const request = new Request(getUrl, {
-                                                method: 'GET'
-                                            });
-                                            fetch(getUrl)
-                                                .then(data => {
-                                                    if (!data.ok) {
-                                                        throw new Error('Network response was not ok');
-                                                    }
-                                                    return data.json();
-                                                })
-                                                .then(result => {
-                                                    console.log(result + 'result');
-                                                    // Thiết lập giá trị đánh giá sao lên phần tử HTML
-                                                    ratingContainer.attr('data-rating', result );
-
-                                                    // Hiển thị các icon sao tương ứng với giá trị đánh giá
-                                                    const ratingValue = ratingContainer.attr('data-rating');
-                                                    ratingContainer.find('.rating-input').each(function() {
-                                                        if ($(this).val() > ratingValue) {
-                                                            $(this).next('.rating-star').removeClass('rated');
-                                                        } else {
-                                                            $(this).next('.rating-star').addClass('rated');
-                                                        }
-                                                    });
-                                                    // Cập nhật giá trị hiển thị trên phần tử HTML có id là rating-result
-
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
-                                                    // Nếu giá trị trả về là null, thiết lập giá trị mặc định là 5
-                                                    // ratingContainer.attr('data-rating', 5);
-                                                });
-
 
                                         // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
                                         ratingContainer.on('mouseenter', function() {
@@ -490,8 +445,56 @@
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        // Lấy phần tử HTML chứa đánh giá sao
+        const ratingContainer = $('.rating');
+        const model = /*[[${model.getId()}]]*/ 'default';
+        // get dữ liệu
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('bắt đầu')
+            // Lấy đánh giá sao từ REST API và hiển thị lên phần tử HTM
+            const getUrl = 'http://localhost:8080/mangaTest/getRating/'+ model;
+            // Tạo đối tượng Request
+            const request = new Request(getUrl, {
+                method: 'GET'
+            });
+            fetch(request)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    console.log(result + 'result');
+                    // Thiết lập giá trị đánh giá sao lên phần tử HTML
+                    ratingContainer.attr('data-rating', result );
+
+                    // Hiển thị các icon sao tương ứng với giá trị đánh giá
+                    const ratingValue = parseFloat(ratingContainer.attr('data-rating'));
+                    ratingContainer.find('.rating-input').each(function() {
+                        if (parseFloat($(this).val()) > ratingValue) {
+                            $(this).next('.rating-star').removeClass('rated');
+                        } else {
+                            $(this).next('.rating-star').addClass('rated');
+                        }
+                    });
+                    // Cập nhật giá trị hiển thị trên phần tử HTML có id là rating-result
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Nếu giá trị trả về là null, thiết lập giá trị mặc định là 5
+                    // ratingContainer.attr('data-rating', 5);
+                });
+        });
+        // kết thúc get dữ liệu
+
+        /*]]>*/
+    </script>
 </div>
     
 </body>

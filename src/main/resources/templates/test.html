@@ -13,58 +13,80 @@
     <link href="../static/main.css" rel="stylesheet"/>
      <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .rating .rating-input:checked ~ .rating-star:before {
-  content: "\2605";
+     <style>
+      .rating-container {
+  position: fixed;
+  left: 0;
+  top: 0;
+}
+      .star-rating {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: flex-start;
+  align-items: center;
 }
 
-.rating .rating-input:not(:checked) ~ .rating-star:before {
-  content: "\2606";
+.star-rating input {
+  display: none;
 }
 
-.rating .rating-input:checked ~ .rating-star {
-  color: #f5c518;
+.star-rating label {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  margin: 0;
+  padding: 0;
+  font-size: 30px;
+  line-height: 30px;
+  text-align: center;
+  color: #c4c4c4;
+  transition: color 0.2s ease-in-out;
+  cursor: pointer;
 }
 
-.rating .rating-input:not(:checked) ~ .rating-star {
-  color: #e4e4e4;
+.star-rating input:checked ~ label,
+.star-rating input:checked ~ label ~ label {
+  color: #ffca08;
 }
+
 
     </style>
 </head>
 
 <body>
-    <div class="rating">
-        <input class="rating-input" type="radio" name="rating" value="5" id="rating-5">
-        <label class="rating-star" for="rating-5">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="4" id="rating-4">
-        <label class="rating-star" for="rating-4">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="3" id="rating-3">
-        <label class="rating-star" for="rating-3">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="2" id="rating-2">
-        <label class="rating-star" for="rating-2">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="1" id="rating-1">
-        <label class="rating-star" for="rating-1">★</label>
-      </div>
-      
-    <script>
-        var rating = 4; // Giá trị đánh giá trung bình
+  <div class="rating-container">
+    <div class="star-rating">
+      <input id="star-5" type="radio" name="rating" value="5">
+      <label for="star-5">&#9733;</label>
+      <input id="star-4" type="radio" name="rating" value="4">
+      <label for="star-4">&#9733;</label>
+      <input id="star-3" type="radio" name="rating" value="3">
+      <label for="star-3">&#9733;</label>
+      <input id="star-2" type="radio" name="rating" value="2">
+      <label for="star-2">&#9733;</label>
+      <input id="star-1" type="radio" name="rating" value="1">
+      <label for="star-1">&#9733;</label>
+    </div>
+  </div>
 
-// Sử dụng điểm đánh giá để thiết lập icon đánh giá
-for (var i = 0; i < ratingInputs.length; i++) {
-  var value = ratingInputs[i].value;
+  <script th:inline="javascript">
+      /*<![CDATA[*/
+      const getUrl = 'http://localhost:8080/mangaTest/getRating/' + model;
 
-  // Nếu giá trị input radio trùng với điểm đánh giá:
-  if (value == rating) {
-    ratingInputs[i].checked = true; // Thiết lập checked cho input radio này
-    break; // Dừng lặp
-  }
-}
-
-    </script>
+      fetch(getUrl)
+          .then(response => {
+              if (!response.ok) {
+                  throw new Error('Network response was not ok');
+              }
+              return response.json();
+          })
+          .then(data => {
+              // Xử lý dữ liệu đánh giá ở đây
+          })
+          .catch(error => {
+              console.error('Error:', error);
+              // Xử lý lỗi ở đây
+          });
+  </script>
 </body>
 </html>

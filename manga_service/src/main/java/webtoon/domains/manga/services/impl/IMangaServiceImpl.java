@@ -148,9 +148,7 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public Double getRating(Long id){
-//        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
             return  this.mangaRepository.getRatingManga(id);
-
     }
 
 
