@@ -147,73 +147,86 @@
                                 <script th:inline="javascript">
                                     /*<![CDATA[*/
                                     // console.log(model + ' model id');
-                                    $(document).ready(function() {
-                                        // Lấy phần tử HTML chứa đánh giá sao
-                                        const ratingContainer = $('.rating');
-                                        const model = /*[[${model.getId()}]]*/ 'default';
-                                        // Endpoint của REST API để gửi đánh giá sao lên server
-                                        const apiUrl = "http://localhost:8080/rating/add";
+
+                                    const logger = /*[[${logger}]]*/ 'default';
 
 
-                                        // Thiết lập sự kiện khi người dùng thay đổi đánh giá sao
-                                        ratingContainer.find('.rating-input').on('change', function() {
-                                            const newRatingValue = $(this).val(); // Lấy giá trị đánh giá sao mới
-                                            // Gọi API để gửi đánh giá sao lên server
-                                            addReview({ rate: newRatingValue, mangaEntity: model });
+                                        $(document).ready(function() {
+                                            // Lấy phần tử HTML chứa đánh giá sao
+                                            const ratingContainer = $('.rating');
+                                            const model = /*[[${model.getId()}]]*/ 'default';
+                                            const modelTitle = /*[[${model.getTitle()}]]*/ 'default';
+                                            // Endpoint của REST API để gửi đánh giá sao lên server
+                                            const apiUrl = "http://localhost:8080/rating/add";
 
-                                            function addReview(review) {
-                                                // Tạo đối tượng Request
-                                                const request = new Request(apiUrl, {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                    },
-                                                    body: JSON.stringify(review)
-                                                });
+                                            // Thiết lập sự kiện khi người dùng thay đổi đánh giá sao
+                                            ratingContainer.find('.rating-input').on('change', function() {
+                                                if (typeof logger === "undefined" || logger === null) {
+                                                    alert('Bạn cần đăng nhập để đánh giá!');
+                                                    window.location.href = `/signin?redirectTo=/manga/${modelTitle}/${model}`; // chuyển hướng sang trang đăng nhập
+                                                }else {
+                                                    const newRatingValue = $(this).val(); // Lấy giá trị đánh giá sao mới
+                                                    // Gọi API để gửi đánh giá sao lên server
+                                                    addReview({ rate: newRatingValue, mangaEntity: model });
 
-                                                // Gửi request sử dụng fetch API
-                                                fetch(request)
-                                                    .then(response => {
-                                                        if (!response.ok) {
-                                                            throw new Error('Network response was not ok');
-                                                        }
-                                                        return response.json();
-                                                    })
-                                                    .then(result => {
-                                                        // Nếu review được tạo thành công, ta có thể cập nhật trang web để chứa đánh giá mới
-                                                        // Ví dụ: thêm đánh giá vào danh sách đánh giá hoặc hiển thị nó trên trang chi tiết sản phẩm
-                                                        console.log('Success:', result);
-                                                        const res = result.rate;
-                                                        console.log(res + ' điểm đánh giá')
-                                                        alert('Bạn đã đánh giá ' + newRatingValue + ' sao cho truyện!');
-                                                        $('#rating-result').html(result || 5);
-                                                        // Load lại trang sau khi đánh giá thành công
-                                                        location.reload();
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error:', error);
-                                                    });
-                                            }
-                                        });
+                                                    function addReview(review) {
+                                                        // Tạo đối tượng Request
+                                                        const request = new Request(apiUrl, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify(review)
+                                                        });
 
-                                        // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
-                                        ratingContainer.on('mouseenter', function() {
-                                            ratingContainer.find('.rating-star').removeClass('rated');
-                                        });
+                                                        // Gửi request sử dụng fetch API
+                                                        fetch(request)
+                                                            .then(response => {
+                                                                if (!response.ok) {
+                                                                    throw new Error('Network response was not ok');
+                                                                }
+                                                                return response.json();
+                                                            })
+                                                            .then(result => {
+                                                                // Nếu review được tạo thành công, ta có thể cập nhật trang web để chứa đánh giá mới
+                                                                // Ví dụ: thêm đánh giá vào danh sách đánh giá hoặc hiển thị nó trên trang chi tiết sản phẩm
+                                                                console.log('Success:', result);
+                                                                const res = result.rate;
+                                                                console.log(res + ' điểm đánh giá')
+                                                                alert('Bạn đã đánh giá ' + newRatingValue + ' sao cho truyện!');
+                                                                $('#rating-result').html(result || 5);
+                                                                // Load lại trang sau khi đánh giá thành công
+                                                                location.reload();
+                                                            })
+                                                            .catch(error => {
+                                                                console.error('Error:', error);
+                                                            });
+                                                }
 
-                                        // Thiết lập sự kiện khi con trỏ được rời khỏi phần tử rating
-                                        ratingContainer.on('mouseleave', function() {
-                                            // Hiển thị các icon sao tương ứng với giá trị đánh giá sao mới
-                                            ratingContainer.find('.rating-input').each(function() {
-                                                const ratingValue = ratingContainer.attr('data-rating');
-                                                if ($(this).val() > ratingValue) {
-                                                    $(this).next('.rating-star').removeClass('rated');
-                                                } else {
-                                                    $(this).next('.rating-star').addClass('rated');
                                                 }
                                             });
+
+                                            // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
+                                            ratingContainer.on('mouseenter', function() {
+                                                ratingContainer.find('.rating-star').removeClass('rated');
+                                            });
+
+                                            // Thiết lập sự kiện khi con trỏ được rời khỏi phần tử rating
+                                            ratingContainer.on('mouseleave', function() {
+                                                // Hiển thị các icon sao tương ứng với giá trị đánh giá sao mới
+                                                ratingContainer.find('.rating-input').each(function() {
+                                                    const ratingValue = ratingContainer.attr('data-rating');
+                                                    if ($(this).val() > ratingValue) {
+                                                        $(this).next('.rating-star').removeClass('rated');
+                                                    } else {
+                                                        $(this).next('.rating-star').addClass('rated');
+                                                    }
+                                                });
+                                            });
                                         });
-                                    });
+
+
+
                                     /*]]>*/
                                 </script>
                                 <!-- Kết thúc javascript sự kiện đánh giá sao-->
@@ -234,7 +247,7 @@
 
                                 <h5 th:if="${avg.xh == null}" th:text="${'Trung bình 5/5 '}"></h5>
 
-                                <h5 th:unless="${avg.xh == null}" th:text="${'Trung bình '+ avg.xh + '/ 5 out of ' + avg.tongso }"></h5>
+                                <h5 th:unless="${avg.xh == null}" th:text="${'Trung bình '+ avg.xh + '/ 5 - ' + avg.tongso + ' lượt đánh giá' }"></h5>
                             </div>
                         </div>
                         <div class="flex  justify-center flex-row pl-6">
@@ -330,34 +343,41 @@
 
                                     <script th:inline="javascript">
                                         /*<![CDATA[*/
-                                        const logger = /*[[${logger}]]*/ 'default';
+                                        // const logger = /*[[${logger}]]*/ 'default';
                                         if (typeof logger === "undefined" || logger === null) {
 
                                             // Đọc thông tin từ Local Storage
-                                            const loggedUserJson = localStorage.getItem("loggedUser");
-                                            const loggedUser = JSON.parse(loggedUserJson);
-
+                                            const loggedUserJson = localStorage.getItem("users");
+                                            const loggedUser = JSON.parse(loggedUserJson) || [];
                                             // Sử dụng thông tin được lưu trữ
-                                            var saveLocalStorageLinks = document.getElementsByClassName("get-local-storage");
                                             if (loggedUserJson != null){
                                                 const mangaText = /*[[${model.getTitle()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
                                                 const chapterId = loggedUser.chapterId;
-                                                // Tạo một thẻ a mới
-                                                const newLink = document.createElement('a');
-                                                const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
-                                                if (oldLink) {
-                                                    // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
-                                                    for (let i = 0; i < oldLink.attributes.length; i++) {
-                                                        const attr = oldLink.attributes[i];
-                                                        newLink.setAttribute(attr.name, attr.value);
-                                                    }
-                                                    // Thiết lập href mới cho thẻ a mới
-                                                    newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
-                                                    // Thiết lập nội dung cho thẻ a mới (nếu muốn)
-                                                    newLink.textContent = 'Đọc tiếp';
 
-                                                    // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
-                                                    oldLink.parentNode.appendChild(newLink);
+                                                // Lặp qua từng phần tử (object) trong mảng users
+                                                for (let i = 0; i < loggedUser.length; i++) {
+                                                    const user = loggedUser[i];
+                                                    const chapterId = user.chapterId;
+                                                    const model = /*[[${model.getId()}]]*/ 'default';
+                                                    if (user.mangaId == model){
+                                                        // Tạo một thẻ a mới
+                                                        const newLink = document.createElement('a');
+                                                        const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
+                                                        if (oldLink) {
+                                                            // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
+                                                            for (let i = 0; i < oldLink.attributes.length; i++) {
+                                                                const attr = oldLink.attributes[i];
+                                                                newLink.setAttribute(attr.name, attr.value);
+                                                            }
+                                                            // Thiết lập href mới cho thẻ a mới
+                                                            newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
+                                                            // Thiết lập nội dung cho thẻ a mới (nếu muốn)
+                                                            newLink.textContent = 'Đọc tiếp';
+
+                                                            // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
+                                                            oldLink.parentNode.appendChild(newLink);
+                                                        }
+                                                    }
                                                 }
                                             }
 
@@ -449,13 +469,15 @@
     </div>
     <script th:inline="javascript">
         /*<![CDATA[*/
+
         // Lấy phần tử HTML chứa đánh giá sao
         const ratingContainer = $('.rating');
         const model = /*[[${model.getId()}]]*/ 'default';
+
         // get dữ liệu
         document.addEventListener('DOMContentLoaded', function() {
-            console.log('bắt đầu')
             // Lấy đánh giá sao từ REST API và hiển thị lên phần tử HTM
+
             const getUrl = 'http://localhost:8080/mangaTest/getRating/'+ model;
             // Tạo đối tượng Request
             const request = new Request(getUrl, {

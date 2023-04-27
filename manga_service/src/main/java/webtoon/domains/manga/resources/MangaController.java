@@ -140,22 +140,6 @@ public class MangaController {
 				historyService.save(readHistory1);
 			}
 		}
-//		else {
-//			// Sử dụng đối tượng ScriptEngine để thực thi mã JavaScript lưu trữ tên người dùng vào Local Storage
-//			ScriptEngineManager scriptEngineManager = new ScriptEngineManager();
-//			ScriptEngine scriptEngine = scriptEngineManager.getEngineByName("JavaScript");
-//			String script = "var localStorage = { " +
-//					"getItem: function(key) { return this[key]; }, " +
-//					"setItem: function(key, value) { this[key] = value; } " +
-//					"};\n" +
-//					"localStorage.setItem('loggedUser', JSON.stringify({ 'mangaId': '" + mangaEntity.getId() + "', 'chapterId': '" + chapterEntity.getId() + "' }));";
-//			try {
-//				scriptEngine.eval(script);
-//			} catch (ScriptException e) {
-//				e.printStackTrace();
-//			}
-//
-//		}
 		model.addAttribute("mangaData",mangaEntity);
 		model.addAttribute("mangaType",mangaEntity.getMangaType().name());
 		model.addAttribute("chapterData",chapterEntity);

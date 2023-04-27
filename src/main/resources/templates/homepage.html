@@ -201,6 +201,32 @@
 
             <div class="w-[300px] border mx-auto mt-2 divide-y">
 
+                <div class="sidebar-section px-[10px] py-[10px]">
+                    <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
+                        Lịch sử đọc truyện
+                    </h3>
+
+                    <ul class="sidebar-posts divide-y mt-[10px]">
+                        <li>
+
+                           <a id="thea" class="w-full h-full flex gap-x-[5px] py-3">
+                               <div id="thediv1" class="w-[90px] h-[100px] post_feature_image">
+                                   <!-- <img class="w-[90px] h-[100px]"
+                                        th:src="${item.featuredImage}"> -->
+                               </div>
+                               <div id="thediv2" class="post-infor w-[200px]">
+                                   <!-- <h2
+                                       class="post-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
+                                       HELLO
+                                   </h2> -->
+                               </div>
+                           </a>
+
+
+                        </li>
+                    </ul>
+                </div>
+
                 <div class="sidebar-section px-[10px] py-[10px]" th:if="${postList != null}">
                     <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
                         Bài viết mới nhất
@@ -452,6 +478,66 @@
 
     </div>
 
+    <!--sự kiện đọc lịch sử từ localstorage-->
+
+    <script>
+        document.addEventListener('DOMContentLoaded',function () {
+            console.log('hello');
+            alert('hello');
+        })
+    </script>
+
+<!--    <script th:inline="javascript">-->
+<!--        /*<![CDATA[*/-->
+<!--        console.log('hello');-->
+<!--        const logger = /*[[${logger}]]*/ 'default';-->
+<!--        document.addEventListener('DOMContentLoaded',function () {-->
+<!--            if (typeof logger === "undefined" || logger === null) {-->
+<!--                // Đọc thông tin từ Local Storage-->
+<!--                const loggedUserJson = localStorage.getItem("users");-->
+<!--                const loggedUser = JSON.parse(loggedUserJson) || [];-->
+<!--                // for (let i = 0; i < loggedUser.length; i++) {-->
+<!--                //     const user = loggedUser[i];-->
+<!--                //     const chapterId = user.chapterId;-->
+<!--                //     const model = /*[[${model.getId()}]]*/ 'default';-->
+<!--                //     const mangaId = user.mangaId;-->
+<!--                //     //call api manga theo mangaId-->
+<!--                //     const getManga = 'http://localhost:8080/mangaTest/getRating/'${mangaId};-->
+<!--                //     let listManga = [];-->
+<!--                //     const request = new Request(getManga,-->
+<!--                //         {method: 'GET'});-->
+<!--                //     fetch(request)-->
+<!--                //         .then(res =>{-->
+<!--                //             if(!res.ok){-->
+<!--                //                 throw new Error('Network response was not ok');-->
+<!--                //             }-->
+<!--                //             return res.text();-->
+<!--                //         })-->
+<!--                //         .then(data =>{-->
+<!--                //             console.log(data + ' data');-->
+<!--                //             listManga = data;-->
+<!--                //             listManga.forEach(item =>{-->
+<!--                //-->
+<!--                //                 let image = document.createElement("img");-->
+<!--                //                 image.src = item.featuredImage; // Thay URL ảnh bằng đường dẫn của ảnh muốn đặt vào.-->
+<!--                //                 // Append to another element:-->
+<!--                //                 document.getElementById("thediv1").appendChild(image);-->
+<!--                //-->
+<!--                //-->
+<!--                //             })-->
+<!--                //         })-->
+<!--                //         .catch(error =>{-->
+<!--                //             console.error('Error: ',error);-->
+<!--                //         });-->
+<!--                //-->
+<!--                //-->
+<!--                // }-->
+<!--            }-->
+<!--        })-->
+<!--        /*]]>*/-->
+<!--    </script>-->
+
+    <!--Kết thúc sự kiện đọc lịch sử từ localstorage-->
 </div>
 
 </body>
