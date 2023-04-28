@@ -17,9 +17,11 @@
 
         <div class="login-signup">
             <a href="/signin"
-               class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Đăng nhập</a>
+               class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Đăng
+                nhập</a>
             <a href="/signup"
-               class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Đăng ký</a>
+               class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Đăng
+                ký</a>
         </div>
 
         <ul class="detail-genres-list hidden absolute w-full bg-[#f3f3f3] top-[55px] z-[1000] left-0 px-[15px]
@@ -35,6 +37,7 @@
                 .detail-genres-list:hover {
                     display: flex;
                 }
+
         </style>
 
         <script>
@@ -52,6 +55,7 @@
 
 
 
+
         </script>
     </section>
 
@@ -60,6 +64,7 @@
                 width: 350px !important;
                 height: 220px;
             }
+
     </style>
 
     <div class="border" style="background-image: url(../static/images/homepage/gplaypattern.png);">
@@ -70,7 +75,8 @@
                 <!-- Additional required wrapper -->
                 <div class="swiper-wrapper">
                     <!-- Slides -->
-                    <div class="swiper-slide carousel-item p-[5px] border shadow-sm bg-white" th:each="item : ${mangaSlider}">
+                    <div class="swiper-slide carousel-item p-[5px] border shadow-sm bg-white"
+                         th:each="item : ${mangaSlider}">
                         <a href=""
                            class="block w-full h-full m-0 bg-red-500 relative z-[10] hover:scale-[0.95] ease-in-out duration-200">
                             <img class="block w-full h-full border border-neutral-200"
@@ -80,8 +86,8 @@
                                  style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.9));">
                             </div>
                             <h2 class="absolute bottom-2 hover:bottom-3 left-3 text-xl font-bold text-[#fff] ease-in-out duration-200"
-                            th:text="${item.title}">
-                                </h2>
+                                th:text="${item.title}">
+                            </h2>
                         </a>
                     </div>
 
@@ -115,6 +121,7 @@
                             spaceBetween: 20
                         });
                     });
+
 
 
 
@@ -186,7 +193,7 @@
 
                         <div class="absolute w-fit h-fit top-[-14px] right-0">
                             <span th:if="${manga.isFree}"
-                                    class="manga-title-badget inline-block bg-[#37b7da] w-[50px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                  class="manga-title-badget inline-block bg-[#37b7da] w-[50px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
                                     Miễn phí
                                 </span>
                             <span th:if="${!manga.isFree}"
@@ -208,7 +215,8 @@
 
                     <ul class="sidebar-posts divide-y mt-[10px]" th:each="item : ${postList}">
                         <li>
-                            <a th:href="@{'/post/' + ${item.title} + '/' + ${item.id}}" class="w-full h-full flex gap-x-[5px] py-3">
+                            <a th:href="@{'/post/' + ${item.title} + '/' + ${item.id}}"
+                               class="w-full h-full flex gap-x-[5px] py-3">
                                 <div class="w-[90px] h-[100px] post_feature_image">
                                     <img class="w-[90px] h-[100px]"
                                          th:src="${item.featuredImage}">
