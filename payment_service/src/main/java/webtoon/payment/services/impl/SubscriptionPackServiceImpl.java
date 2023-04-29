@@ -63,7 +63,10 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     @Override
     public void deleteById(Long id) {
         try {
-            this.subscriptionPackRepository.deleteById(id);
+            SubscriptionPackEntity entity =  this.getById(id);
+            entity.setDeletedAt(Calendar.getInstance().getTime());
+            entity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
+            this.subscriptionPackRepository.saveAndFlush(entity);
         } catch (Exception e) {
             e.printStackTrace();
             throw e;

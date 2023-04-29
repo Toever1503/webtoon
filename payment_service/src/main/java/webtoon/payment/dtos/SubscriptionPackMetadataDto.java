@@ -14,12 +14,15 @@ public class SubscriptionPackMetadataDto {
 
     private Double price;
 
+    private int monthCount;
+
     public static SubscriptionPackMetadataDto toDto(SubscriptionPackEntity subscriptionPackEntity) {
         if (subscriptionPackEntity == null) return null;
         return SubscriptionPackMetadataDto.builder()
                 .id(subscriptionPackEntity.getId())
                 .name(subscriptionPackEntity.getName())
                 .price(subscriptionPackEntity.getPrice())
+                .monthCount(subscriptionPackEntity.getMonthCount())
                 .build();
     }
 }

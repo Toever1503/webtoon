@@ -10,7 +10,7 @@ const DatePattern = {
     monthDayTime: 'MM-DD HH:mm:ss',
 };
 
-const dateTimeFormat = (date: string | Date) => {
+const dateTimeFormat = (date: string | Date | undefined) => {
     return dayjs(date).format(DatePattern.dateTime);
 };
 const dateCustomFormat = (date: string | Date, pattern: string) => dayjs(date).format(pattern);

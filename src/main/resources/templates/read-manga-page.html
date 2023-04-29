@@ -84,11 +84,7 @@
                 <div class="flex justify-between " >
                     <div class=" p-4">
                         <div class="flex items-center select-auto">
-                            <!-- <select name="select1" id="select1" class="mr-2 shadow-md">
-                              <option value="option1">Lựa chọn 1</option>
-                              <option value="option2">Lựa chọn 2</option>
-                              <option value="option3">Lựa chọn 3</option>
-                            </select> -->
+
                             <select
                                     th:if="${mangaData.displayType.name == 'VOL'}"
                                     id="volume"
@@ -146,7 +142,9 @@
                                     </svg>
                                 </a>
                             </div>
-                            <div class="p-2 rounded-full bg-red-500 text-white">Thông tin chương</div>
+                            <div class="p-2 rounded-full bg-red-500 text-white">
+                                <a th:href="@{'/manga/'+ ${mangaData.mangaName} + '/' + ${mangaData.id}}">Thông tin chương</a>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -241,6 +239,28 @@
             </div>
         </div>
     </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        const mangaId = /*[[${mangaData.getId()}]]*/ 'default';
+
+        window.addEventListener('load', function() {
+            // Kiểm tra xem trang đã được truy cập thông qua một liên kết chưa
+            const referrer = document.referrer;
+
+            console.log(referrer + ' referrer')
+            const urlPath = window.location.pathname; // lấy đường dẫn của trang
+            console.log(urlPath); // "/manga/truungsinh/chapter/1"
+
+            // tách giá trị của mangaId và chapterId từ đường dẫn URL
+            const splittedUrlPath = urlPath.split('/');
+            // const mangaText = splittedUrlPath[2]; // "truungsinh"
+            const chapterId = splittedUrlPath[4]; // "1"
+            // lưu thông tin về chương truyện vào Local Storage
+            const loggedUser = { "mangaId": mangaId, "chapterId": chapterId };
+            localStorage.setItem("loggedUser", JSON.stringify(loggedUser));
+        });
+        /*]]>*/
+    </script>
 </div>
 
 </body>

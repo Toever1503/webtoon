@@ -1,6 +1,7 @@
 package webtoon.domains.manga.entities;
 
 import lombok.*;
+import webtoon.account.entities.UserEntity;
 
 import javax.persistence.*;
 @Entity
@@ -19,9 +20,12 @@ public class MangaRatingEntity {
     @Column(name = "manga_id")
     private Long mangaId;
 
-    @Transient
-    private String createdBy;
+    @Column(name = "created_by")
+//    @ManyToOne
+    private Long createdBy;
 
     @Column(name = "rate")
     private Float rate;
+
+
 }

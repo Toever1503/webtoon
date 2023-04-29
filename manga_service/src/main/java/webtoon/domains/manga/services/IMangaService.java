@@ -12,6 +12,7 @@ import webtoon.domains.manga.enums.EMangaType;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.models.MangaModel;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 public interface IMangaService {
@@ -20,6 +21,10 @@ public interface IMangaService {
 
     MangaEntity getById(java.lang.Long id);
 
+
+    MangaEntity getByIdAndCb(Long mangaId, Long createId);
+
+    Double getRating(Long id, HttpSession session);
 
     boolean deleteById(java.lang.Long id);
 

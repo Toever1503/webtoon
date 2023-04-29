@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html
+        lang="en"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+        layout:decorate="~{layout.html}"
+>
+<head>
+    <meta charset="UTF-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Document</title>
+    <link href="../static/main.css" rel="stylesheet"/>
+     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .rating .rating-input:checked ~ .rating-star:before {
+  content: "\2605";
+}
+
+.rating .rating-input:not(:checked) ~ .rating-star:before {
+  content: "\2606";
+}
+
+.rating .rating-input:checked ~ .rating-star {
+  color: #f5c518;
+}
+
+.rating .rating-input:not(:checked) ~ .rating-star {
+  color: #e4e4e4;
+}
+
+    </style>
+</head>
+
+<body>
+    <div class="rating">
+        <input class="rating-input" type="radio" name="rating" value="5" id="rating-5">
+        <label class="rating-star" for="rating-5">★</label>
+      
+        <input class="rating-input" type="radio" name="rating" value="4" id="rating-4">
+        <label class="rating-star" for="rating-4">★</label>
+      
+        <input class="rating-input" type="radio" name="rating" value="3" id="rating-3">
+        <label class="rating-star" for="rating-3">★</label>
+      
+        <input class="rating-input" type="radio" name="rating" value="2" id="rating-2">
+        <label class="rating-star" for="rating-2">★</label>
+      
+        <input class="rating-input" type="radio" name="rating" value="1" id="rating-1">
+        <label class="rating-star" for="rating-1">★</label>
+      </div>
+      
+    <script>
+        var rating = 4; // Giá trị đánh giá trung bình
+
+// Sử dụng điểm đánh giá để thiết lập icon đánh giá
+for (var i = 0; i < ratingInputs.length; i++) {
+  var value = ratingInputs[i].value;
+
+  // Nếu giá trị input radio trùng với điểm đánh giá:
+  if (value == rating) {
+    ratingInputs[i].checked = true; // Thiết lập checked cho input radio này
+    break; // Dừng lặp
+  }
+}
+
+    </script>
+</body>
+</html>

@@ -96,6 +96,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
             <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                <span className='text-red-500'>*</span>
                 <span> Thể loại:</span>
             </label>
             <Select
@@ -113,7 +114,7 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                         <Divider style={{ margin: '8px 0' }} />
                         <Space style={{ padding: '0 8px 4px' }}>
                             <Input
-                            className=''
+                                className=''
                                 placeholder="nhập tên"
                                 value={genreSearchVal}
                                 onChange={val => setGenreSearchVal(val.target.value)}
@@ -132,7 +133,11 @@ const GenreSelect: React.FC<GenreSelectProps> = ({ mangaInput, mangaInputError }
                 }}
                 options={selectOptions ? selectOptions.map((item: GenreInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />
-
+            {
+                <p className='text-[12px] text-red-500 px-[5px] m-0'>
+                    {mangaInputError.genres && t(mangaInputError.genres)}
+                </p>
+            }
 
         </div>
     )

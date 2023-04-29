@@ -1,5 +1,23 @@
 export default {
     'test': 'Ví dụ',
+    dashboard: {
+        newOrderCount: 'Tổng đơn hàng mới',
+        totalRevenue: 'Tổng doanh thu',
+        paymentPending: 'Chờ thanh toán',
+        orderCompleted: 'Đã hoàn tất',
+        orderCancelledCount: 'Đã hủy',
+        recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
+
+        orderLatest: {
+            title: 'Đơn hàng mới nhất',
+            table: {
+                orderNo: 'Mã đơn hàng',
+                createdBy: 'Người mua',
+                subscriptionPack: 'Gói đăng ký',
+                price: 'Giá',
+            }
+        }
+    },
     manga: {
         form:
         {
@@ -9,7 +27,7 @@ export default {
                 'title-required': 'Tiêu đề không được để trống!',
                 'title-max': 'Tiêu đề không được quá 255 ký tự!',
                 'content-required': 'Vui lòng nhập nội dung',
-                'genres-required': 'GVui lòng chọn thể loại',
+                'genres-required': 'Vui lòng chọn thể loại',
                 'authors-required': 'Vui lòng chọn tác giả',
                 'tags-required': 'Vui lòng chọn thẻ',
                 'featured-image-required': 'Vui lòng chọn ảnh',
@@ -215,20 +233,26 @@ export default {
     order: {
         'page-title': 'Danh sách đơn hàng',
         addBtn: 'Thêm mới',
-        upgradeSubs: 'Nâng cấp gói',
+        'delete-success': 'Xóa thành công!',
+        'delete-failed': 'Xóa thất bại!',
         table: {
             'orderNumber': 'Mã đơn hàng',
             'subscription': 'Gói đăng ký',
             'finalPrice': 'Giá tiền',
             'paymentMethod': 'Phương thức thanh toán',
             'status': 'Trạng thái',
-            'note': 'Ghi chú',
+            'phone': 'Số điện thoại',
             'orderType': 'Loại đơn hàng',
             'createdAt': 'Ngày tạo',
             'updatedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'expireDate': 'Ngày hết hạn đọc',
+            'upgrade': 'Nâng cấp',
+            viewDetail: 'Chi tiết',
+            upgradeSubs: 'Nâng cấp gói',
+            originalOrderNumber: 'Mã đơn hàng gốc',
+
         },
         modal: {
             addTitle: 'Thêm mới',
@@ -257,6 +281,21 @@ export default {
                 'required-subs': 'Vui lòng chọn gói đăng ký!',
 
             }
+        },
+        upgradeModal: {
+            title: 'Nâng cấp gói đọc',
+            currentSubscriptionPack: 'Gói hiện tại',
+            chooseUpgradeSubscriptionPack: 'Chọn gói nâng cấp',
+            needPriceToPay: 'Số tiền cần thanh toán:',
+            createOrder: 'Tạo đơn hàng',
+            newPack: 'Gói mới',
+            oldPack: 'Gói cũ',
+            paymentMethod: 'Phương thức thanh toán:',
+            createSuccess: 'Tạo thành công!',
+            createFailed: 'Tạo thất bại!',
+        },
+        detailModal: {
+            title: 'Chi tiết đơn hàng',
         },
         eStatus: {
             'ALL': 'Tất cả',

@@ -66,7 +66,7 @@ public class IReadHistoryServiceImpl implements IReadHistoryService {
 
     @Override
     public ReadHistory findByCBAndMG(Long idCreatBy, Long idManga) {
-        return this.historyRepository.findAllByManga(idManga);
+        return this.historyRepository.findAllByCBAndMG(idCreatBy,idManga);
     }
 
     @Override

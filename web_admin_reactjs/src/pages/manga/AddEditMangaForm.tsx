@@ -25,6 +25,9 @@ export interface MangaInputError {
     title: string;
     description: string;
     featuredImage: string;
+    authors: string;
+    genres: string;
+    tags: string;
 }
 
 let isAutoSavingMangaInfo = false;
@@ -60,8 +63,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
     // manga info
     const [mangaInput, setMangaInput] = useState<MangaInput>({
         id: '',
-        title: 'test',
-        description: 'The Rich Text Editor component is WYSIWYG ("what you see is what you get") editor that provides the best user experience to create and update the content. Users can format their content using standard toolbar commands.',
+        title: '',
+        description: '',
         excerpt: '',
         mangaName: '',
         status: 'DRAFTED',
@@ -88,11 +91,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
         const mangaContent = mangaContentEditorRef?.getHtml() || '';
         const mangaExcerpt = mangaContentEditorRef?.getText().slice(0, 160 || '') || '';
-        setMangaInput({
-            ...mangaInput,
-            description: mangaContent,
-            excerpt: mangaExcerpt,
-        });
+        mangaInput.description = mangaContent;
+        mangaInput.excerpt = mangaExcerpt;
 
         console.log('mangaInput', mangaInput);
 
@@ -108,6 +108,24 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
             mangaInputError.description = 'manga.form.errors.content-required';
         }
         else mangaInputError.description = '';
+
+        if (mangaInput.genres.length === 0) {
+            errorCount++;
+            mangaInputError.genres = 'manga.form.errors.genres-required';
+        }
+        else mangaInputError.genres = '';
+
+        if (mangaInput.authors.length === 0) {
+            errorCount++;
+            mangaInputError.authors = 'manga.form.errors.authors-required';
+        }
+        else mangaInputError.authors = '';
+
+        if (mangaInput.tags.length === 0) {
+            errorCount++;
+            mangaInputError.tags = 'manga.form.errors.tags-required';
+        }
+        else mangaInputError.tags = '';
 
 
         if (!mangaInput.featuredImage) {
@@ -170,6 +188,9 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         title: '',
         description: '',
         featuredImage: '',
+        authors: '',
+        genres: '',
+        tags: '',
     });
 
     let { id } = useParams();
@@ -232,8 +253,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
             {
                 !isFetchingMangaInfo &&
                 <div className='flex gap-[15px]'>
-                    <div className=''>
-                        <section className='border max-w-[1000px] h-fit'>
+                    <div className='w-[1400px]'>
+                        <section className='border h-fit'>
                             <label htmlFor="mangaTitle" className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                                 <span className='text-red-500'>*</span>
                                 <span> Tên truyện:</span>
@@ -245,7 +266,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                 </p>
                             }
 
-                            <div className=''>
+                            <div className='w-full'>
                                 <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                                     <span className='text-red-500'>*</span>
                                     <span>Nội dung:</span>
@@ -268,7 +289,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
                             <div className='flex gap-x-[15px] px-[10px] mt-[10px]'>
                                 <span className='text-[14px] font-bold'>Truyện có phí?</span>
-                                <Checkbox defaultChecked={mangaInput.isFree} onChange={e => mangaInput.isFree = e.target.checked}/>
+                                <Checkbox defaultChecked={mangaInput.isFree} onChange={e => mangaInput.isFree = e.target.checked} />
                             </div>
 
 
@@ -294,7 +315,6 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                     options={[
                                         { value: 'COMING', label: 'Sắp ra mắt' },
                                         { value: 'GOING', label: 'Đang ra' },
-                                        { value: 'STOPPED', label: 'Đã tạm dừng' },
                                         { value: 'CANCELLED', label: 'Đã hủy' },
                                         { value: 'COMPLETED', label: 'Đã hoàn thành' },
                                     ]}

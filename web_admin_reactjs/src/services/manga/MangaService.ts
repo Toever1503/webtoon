@@ -25,7 +25,7 @@ export interface MangaInput {
 }
 
 export type MangaStatus = 'ALL' | 'PUBLISHED' | 'DELETED' | 'DRAFTED';
-export type ReleaseStatus = 'COMING' | 'ONGOING' | 'STOPPED' | 'ON_STOPPING' | 'CANCELLED' | 'COMPLETED';
+export type ReleaseStatus = 'COMING' | 'ONGOING' | 'ON_STOPPING' | 'CANCELLED' | 'COMPLETED';
 export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 
 // export type MangaChapterInput = {
