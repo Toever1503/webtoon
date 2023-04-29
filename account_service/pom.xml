@@ -101,11 +101,6 @@
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-jpamodelgen</artifactId>
 		</dependency>
-		<dependency>
-			<groupId>webtoon.payment</groupId>
-			<artifactId>payment-service</artifactId>
-		</dependency>
-
 
 	</dependencies>
 

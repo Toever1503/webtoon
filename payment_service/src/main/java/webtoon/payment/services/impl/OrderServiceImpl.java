@@ -45,6 +45,7 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = OrderEntity.builder()
                 .created_at(orderModel.getCreated_at())
                 .gioLap(orderModel.getGioLap())
+                .expiredSubsDate(orderModel.getExpiredSubsDate())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
@@ -65,6 +66,7 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
+        orderEntity.setExpiredSubsDate(orderModel.getExpiredSubsDate());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());

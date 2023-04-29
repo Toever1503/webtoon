@@ -10,8 +10,6 @@ import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.services.IUserService;
-import webtoon.payment.entities.OrderEntity;
-import webtoon.payment.services.IOrderService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -24,8 +22,6 @@ public class UserController {
     @Autowired
     private IUserService userService;
 
-    @Autowired
-    private IOrderService orderService;
 
     @GetMapping("/profile")
     public String profile( Model model){
@@ -45,19 +41,5 @@ public class UserController {
         userService.update(user);
         System.out.println("Success");
         return "redirect:/";
-    }
-
-    @GetMapping("/userOrder")
-    public String userOrder(Model model , HttpSession session) {
-        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if(entity == null){
-            return "redirect:/signin";
-        }else {
-            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-            List<OrderEntity> order = orderService.getPaymentCompletedByUserId(userId);
-            System.out.println("order: " + order);
-            model.addAttribute("order", order);
-            return "payments/userOrder";
-        }
     }
 }

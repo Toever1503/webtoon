@@ -21,6 +21,7 @@ public class OrderModel {
     private Long id;
     private Date created_at;
     private Date gioLap;
+    private Date expiredSubsDate;
     private Double finalPrice;
     private EOrderType Estatus;
     private EOrderStatus status;

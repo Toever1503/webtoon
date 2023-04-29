@@ -83,7 +83,7 @@ public class OrderController {
             Double price = subscriptionPackEntity.getPrice();
             model.addAttribute("name", subscriptionPackEntity.getName());
             orderService.add(new OrderModel(
-                    Long.parseLong(maDonHang),createDate,createDate,price,EOrderType.EXTEND,EOrderStatus.USER_CONFIRMED_BANKING,"CHUYENKHOAN","0.0.0.0.1",maDonHang,subscriptionPackEntity,entity,EPaymentMethod.ATM));
+                    Long.parseLong(maDonHang),createDate,createDate, createDate,price,EOrderType.EXTEND,EOrderStatus.USER_CONFIRMED_BANKING,"CHUYENKHOAN","0.0.0.0.1",maDonHang,subscriptionPackEntity,entity,EPaymentMethod.ATM));
             return "payments/confirmed";
         }
     }
