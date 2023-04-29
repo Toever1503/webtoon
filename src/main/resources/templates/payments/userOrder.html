@@ -41,7 +41,7 @@
               </div>
               <div class="my-10 w-[250px] h-[154px]">
                 <div class="w-full text-gray-900 bg-white rounded-lg">
-                  <button
+                  <button  th:onclick="| window.location.href='http://localhost:8080/user/profile'|"
                     type="button"
                     class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
                   >
@@ -92,7 +92,7 @@
               <th scope="col" class="px-6 py-3">Gói truyện</th>
               <th scope="col" class="px-6 py-3">Giá</th>
               <th scope="col" class="px-6 py-3">Thời gian đọc</th>
-              <th scope="col" class="px-6 py-3">Ngày mua</th>
+              <!-- <th scope="col" class="px-6 py-3">Ngày mua</th> -->
             </tr>
           </thead>
           <tbody>
@@ -100,7 +100,7 @@
               <td class="px-6 py-4" th:text="${item.subs_pack_id.name}"></td>
               <td
                 class="px-6 py-4"
-                th:text="${#numbers.formatCurrency(item.finalPrice)}"
+                th:text="${#numbers.formatCurrency(item.subs_pack_id.price)}"
               ></td>
               <td
                 class="px-6 py-4"

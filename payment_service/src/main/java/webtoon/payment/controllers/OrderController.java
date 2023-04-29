@@ -18,6 +18,7 @@ import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.OrderModel;
 
+import javax.servlet.http.HttpSession;
 import java.util.Date;
 import java.util.List;
 
@@ -51,39 +52,68 @@ public class OrderController {
     }
 
     @GetMapping("/chuyenKhoan/{id}")
-    public String chuyenKhoan(@PathVariable Long id, Model model) {
+    public String chuyenKhoan(@PathVariable Long id, Model model , HttpSession session) {
 //        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(orderModel.getFinalPrice());
-        String maDonHang = VnPayConfig.getRandomNumber(8);
-        Date createDate = new Date();
-        SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
-        UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
+        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
+        if(entity == null){
+            return "redirect:/signin";
+        }else {
+
+            Date createDate = new Date();
+            SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
 //        System.out.println("price: "+subscriptionPackEntity.getPrice());
-        model.addAttribute("name", subscriptionPackEntity.getName());
-        Double price = subscriptionPackEntity.getPrice();
-        model.addAttribute("price", price);
-        model.addAttribute("maDonHang", maDonHang);
-
-        orderService.add(new OrderModel(id, createDate, createDate, price, EOrderType.NEW, EOrderStatus.PENDING_PAYMENT, "CHUYENKHOAN", "0:0:0:0:0:0:0:1", maDonHang, subscriptionPackEntity,userEntity, EPaymentMethod.ATM));
-
-        return "payments/chuyenKhoan";
+            model.addAttribute("name", subscriptionPackEntity.getName());
+            Double price = subscriptionPackEntity.getPrice();
+            model.addAttribute("price", price);
+            model.addAttribute("id",subscriptionPackEntity.getId());
+            return "payments/chuyenKhoan";
+        }
+    }
+    @GetMapping("/confirmed/{id}")
+    public String paypal(@PathVariable Long id, Model model , HttpSession session) {
+//        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(orderModel.getFinalPrice());
+        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
+        if(entity == null){
+            return "redirect:/signin";
+        }else {
+            String maDonHang = VnPayConfig.getRandomNumber(8);
+            Date createDate = new Date();
+            SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
+//        System.out.println("price: "+subscriptionPackEntity.getPrice());
+            Double price = subscriptionPackEntity.getPrice();
+            model.addAttribute("name", subscriptionPackEntity.getName());
+            orderService.add(new OrderModel(
+                    Long.parseLong(maDonHang),createDate,createDate,price,EOrderType.EXTEND,EOrderStatus.USER_CONFIRMED_BANKING,"CHUYENKHOAN","0.0.0.0.1",maDonHang,subscriptionPackEntity,entity,EPaymentMethod.ATM));
+            return "payments/confirmed";
+        }
     }
 
-    @GetMapping("/userOrder/{id}")
-    public String userOrder(@PathVariable Long id,Model model) {
-        Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-        List<OrderEntity> order = orderService.getByUserId(userId);
-        System.out.println("order: "+order);
-        model.addAttribute("order", order);
-        return "payments/userOrder";
-    }
+//    @GetMapping("/userOrder/{id}")
+//    public String userOrder(@PathVariable Long id,Model model , HttpSession session) {
+//        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
+//        if(entity == null){
+//            return "redirect:/signin";
+//        }else {
+//            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
+//            List<OrderEntity> order = orderService.getPaymentCompletedByUserId(userId);
+//            System.out.println("order: " + order);
+//            model.addAttribute("order", order);
+//            return "payments/userOrder";
+//        }
+//    }
 
-    @GetMapping("/pending-payment/{id}")
-    public String pendingPayment(@PathVariable Long id,Model model) {
-        Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-        List<OrderPendingDTO> order = orderService.getPendingPaymentByUserId(userId);
-        System.out.println("order: "+order);
-        model.addAttribute("order", order);
-        return "payments/pending-payment";
-    }
+//    @GetMapping("/pending-payment/{id}")
+//    public String pendingPayment(@PathVariable Long id,Model model, HttpSession session) {
+//        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
+//        if (entity == null) {
+//            return "redirect:/signin";
+//        } else {
+//            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
+//            List<OrderPendingDTO> order = orderService.getPendingPaymentByUserId(userId);
+//            System.out.println("order: " + order);
+//            model.addAttribute("order", order);
+//            return "payments/pending-payment";
+//        }
+//    }
 
 }

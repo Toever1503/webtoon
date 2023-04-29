@@ -589,10 +589,6 @@
   width: 75%
 }
 
-.w-3\/5 {
-  width: 60%
-}
-
 .w-32 {
   width: 8rem
 }
@@ -720,10 +716,6 @@
 
 .flex-grow {
   flex-grow: 1
-}
-
-.basis-1\/2 {
-  flex-basis: 50%
 }
 
 .basis-1\/3 {
@@ -1807,6 +1799,10 @@
 
 .ease-out {
   transition-timing-function: cubic-bezier(0, 0, 0.2, 1)
+}
+
+.first-letter\:font-normal::first-letter {
+  font-weight: 400
 }
 
 .hover\:bottom-3:hover {

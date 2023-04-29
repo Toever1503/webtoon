@@ -32,4 +32,5 @@ public interface IOrderService {
     void deleteById(Long id);
 
     List<OrderPendingDTO> getPendingPaymentByUserId(Long userId);
-}
+    List<OrderEntity> getPaymentCompletedByUserId(Long userId);
+ }

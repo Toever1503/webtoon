@@ -175,5 +175,10 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.getPendingPaymentByUserId(userId);
     }
 
+    @Override
+    public List<OrderEntity> getPaymentCompletedByUserId(Long userId) {
+        return this.orderRepository.getPaymentCompletedByUserId(userId);
+    }
+
 
 }
