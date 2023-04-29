@@ -182,6 +182,11 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public List<OrderEntity> getPaymentCompletedByUserId(Long userId) {
+        return this.orderRepository.getPaymentCompletedByUserId(userId);
+    }
+
+    @Override
     public OrderDto upgradeOrder(UpgradeOrderInput input) {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
