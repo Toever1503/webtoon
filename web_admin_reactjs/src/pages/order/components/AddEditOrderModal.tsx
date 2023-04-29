@@ -30,9 +30,7 @@ export interface AddEditOrderModalProps {
 };
 
 const FINAL_STATUSES: EORDER_STATUS[] = [
-    'PENDING_PAYMENT',
     'PAID',
-    'CANCELED',
     'COMPLETED',
     'REFUND_CONFIRM_PENDING',
     'REFUNDING',
