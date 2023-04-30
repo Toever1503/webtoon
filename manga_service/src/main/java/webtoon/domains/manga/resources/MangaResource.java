@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.dtos.ResponseDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.models.MangaModel;
@@ -57,6 +58,10 @@ public class MangaResource {
     @GetMapping("/getRating/{id}")
     public Double getRating(@PathVariable Long id ){
         return this.iMangaService.getRating(id);
+    }
+    @GetMapping("/getManga/{id}")
+    public MangaDto getManga(@PathVariable Long id){
+        return this.iMangaService.getByMangaId(id);
     }
 
 }

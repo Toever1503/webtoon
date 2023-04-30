@@ -26,4 +26,7 @@ public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaS
 
     @Query("select p.rating from MangaEntity p where  p.id =?1")
     Double getRatingManga(Long id);
+
+    @Query("select p from MangaEntity p where p.id =?1 ")
+    MangaEntity getByMangaId(Long id );
 }

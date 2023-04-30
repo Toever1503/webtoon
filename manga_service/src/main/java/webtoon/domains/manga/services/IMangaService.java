@@ -22,9 +22,13 @@ public interface IMangaService {
     MangaEntity getById(java.lang.Long id);
 
 
+
+
     MangaEntity getByIdAndCb(Long mangaId, Long createId);
 
     Double getRating(Long id);
+
+    MangaDto getByMangaId(Long id);
 
     boolean deleteById(java.lang.Long id);
 

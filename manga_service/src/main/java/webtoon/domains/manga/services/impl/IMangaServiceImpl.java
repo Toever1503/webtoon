@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import webtoon.account.entities.UserEntity;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
@@ -27,7 +26,6 @@ import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.utils.ASCIIConverter;
 
-import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -140,6 +138,8 @@ public class IMangaServiceImpl implements IMangaService {
         return entity;
     }
 
+
+
     @Override
     public MangaEntity getByIdAndCb(Long mangaId, Long createId){
         MangaEntity entity = this.mangaRepository.getByIdAndCb(mangaId, createId);
@@ -149,6 +149,19 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public Double getRating(Long id){
             return  this.mangaRepository.getRatingManga(id);
+    }
+
+
+    @Override
+    public MangaDto getByMangaId(Long id){
+        MangaEntity entity = this.mangaRepository.getByMangaId(id);
+        return MangaDto.builder()
+                .id(entity.getId())
+                .mangaName(entity.getMangaName())
+                .title(entity.getTitle())
+                .createdBy(entity.getCreatedBy())
+                .featuredImage(entity.getFeaturedImage())
+                .build();
     }
 
 
