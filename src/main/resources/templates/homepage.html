@@ -4,9 +4,9 @@
 <body>
 <div layout:fragment="content" >
     <section
-            class="manga-genres w-[1100px] h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-between items-center">
+            class="manga-genres w-full h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-between items-center">
         <div class="flex gap-[20px]">
-            <span>Thể loại: </span>
+            <span class="text-2xl font-semibold">Thể loại: </span>
             <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"
                th:each="item,iter : ${genreList}" th:if="${iter.index < 10}" th:text="${item.name}"></a>
             <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer view-detail-genes">Xem thêm
@@ -61,7 +61,7 @@
             }
     </style>
 
-    <div class="border" style="background-image: url(../static/images/homepage/gplaypattern.png);" >
+    <div style="background-image: url(../static/images/homepage/gplaypattern.png);" >
 
         <section class="latest-popular-managas max-w-[1100px] mx-auto pt-[50px] h-[300px]">
             <!-- Slider main container -->
@@ -120,7 +120,7 @@
             </script>
         </section>
 
-        <div class="main-layout flex max-w-[1100px] mx-auto py-[50px]">
+        <div class="main-layout flex max-w-[1100px] mx-auto py-[50px] bg-white px-[15px]">
 
             <section class="w-[800px]">
                 <h3 class="font-bold text-2xl">
@@ -131,7 +131,7 @@
 
                 <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-[15px] mt-[20px]">
 
-                    <li class="w-[250px] border bg-white min-h-[135px] flex relative" th:each="manga : ${mangalist}">
+                    <li class="w-[250px] bg-white min-h-[135px] flex relative shadow-sm" th:each="manga : ${mangalist}">
                         <a th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}">
                             <img class="h-full w-[80px] hover:scale-[1.05] ease-in-out duration-200"
                                  th:src="${manga.featuredImage}"/>
@@ -166,7 +166,7 @@
                                     </li>
                                 </ul>
                                 <!--  for display chapter by chap -->
-                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
+                                <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
                                     <li class="gap-[5px] flex" th:each="chapter,iter: ${manga.chapters}"
                                         th:if="${iter.index < 2}"
                                     >
@@ -198,21 +198,15 @@
                 </ul>
             </section>
 
-            <div class="w-[300px] border mx-auto mt-2 divide-y">
+            <div class="w-[300px] mx-auto mt-2 divide-y">
 
-                <div class="sidebar-section px-[5px] py-[10px]">
-                    <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
+                <div class="sidebar-section py-[10px] border px-[15px]" style="border: 1px solid #9e9e9e2e;">
+                    <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2 m-0 mb-[15px]">
                         Lịch sử đọc truyện
                     </h3>
 
-                    <ul class="sidebar-posts divide-y mt-[10px] pl-2px ">
-                        <li>
-                           <a class="w-full h-full flex gap-x-[2px] py-[2px] ps-0.5"  >
-                               <div id="card-list" class="card-container flex flex-wrap justify-center">
-                               </div>
-                           </a>
-                        </li>
-                    </ul>
+                    <div id="card-list" class="card-container manga-history-sidebar grid space-y-2">
+                    </div>
                     <!--sự kiện đọc lịch sử từ localstorage-->
 
                     <script th:inline="javascript">
@@ -243,18 +237,20 @@
 
                                             // Tạo thẻ card mới
                                             const cardContainer = document.createElement('div');
-                                            cardContainer.setAttribute('class', 'card-container w-full flex ');
+                                            cardContainer.setAttribute('class', 'card-container w-full flex gap-[10px] h-[90px]');
                                             const cardImage = document.createElement('div');
-                                            cardImage.setAttribute('class', 'card-image w-[70px] h-[50px]');
+                                            cardImage.setAttribute('class', 'card-image w-[90px] h-full');
                                             const img = document.createElement('img');
                                             img.setAttribute('src', data.featuredImage);
-                                            img.setAttribute('class','w-[70px] h-[50px]');
+                                            img.setAttribute('class','w-full h-full');
                                             cardImage.appendChild(img);
                                             const cardText = document.createElement('div');
                                             cardText.setAttribute('class', 'card-text ml-1');
                                             const cardTitle = document.createElement('h2');
-                                            cardTitle.setAttribute('class', 'card-title text-sm m-0 ');
+                                            cardTitle.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
                                             cardTitle.innerHTML = data.title;
+
+                                            /*
                                             const MAX_LENGTH = 14; // Tối đa chiều cao của thẻ card-title
                                             if (data.title.length > MAX_LENGTH) {
                                                 // Nếu tiêu đề vượt quá giới hạn, cắt giảm chiều dài và thêm dấu ba chấm
@@ -262,6 +258,7 @@
                                             } else {
                                                 cardTitle.innerHTML = data.title;
                                             }
+                                            */
                                             const cardLink  = document.createElement('a');
                                             console.log(data.title + ' title ')
                                             cardLink.setAttribute('class', 'card-link text-blue-500 hover:underline');

@@ -81,7 +81,7 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setModifiedBy(mangaEntity.getCreatedBy());
         this.mangaRepository.saveAndFlush(mangaEntity);
         if (model.getTags() != null)
-            mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.POST));
+            mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.MANGA));
         else
             mangaEntity.setTags(Collections.EMPTY_LIST);
         return this.mangaMapper.toDto(mangaEntity);
@@ -134,10 +134,18 @@ public class IMangaServiceImpl implements IMangaService {
     public MangaEntity getById(java.lang.Long id ) {
         MangaEntity entity = this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 
-        entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
+        entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.MANGA));
         return entity;
     }
 
+    @Override
+    public void increaseView(Long mangaId) {
+        MangaEntity mangaEntity = this.getById(mangaId);
+        if(mangaEntity.getViewCount() == null)
+            mangaEntity.setViewCount(0);
+        mangaEntity.setViewCount(mangaEntity.getViewCount() + 1);
+        this.mangaRepository.saveAndFlush(mangaEntity);
+    }
 
 
     @Override

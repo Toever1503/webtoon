@@ -85,7 +85,7 @@ public class MangaEntity {
     @Column(name = "rating")
     private Float rating;
 
-    @Column(name = "view_count")
+    @Column(name = "view_count", columnDefinition = "default 0")
     private Integer viewCount;
 
     @ManyToOne
@@ -103,7 +103,7 @@ public class MangaEntity {
     @OneToMany(mappedBy = "manga", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @Where(clause = "manga_volume_id is null")
     @OrderBy("chapter_index desc")
-    private List<MangaChapterEntity> chapters;
+    private Set<MangaChapterEntity> chapters;
 
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
     @JoinTable(name = "tbl_manga_genre_relation",

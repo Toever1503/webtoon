@@ -93,24 +93,33 @@
 <body>
 <div class="flex justify-center" layout:fragment="content" th:each="model : ${model}">
      <div class="max-w-[1100px] mx-auto " >
-<!--        <div class="w-full mx-auto " >-->
-        <div class="flex flex-col" >
-           <div class="p-2">
-                <nav class="flex items-center text-gray-500  font-light">
-                    <a href="/index">Home</a>
-                    
-                    <span>/</span>
-                    <a href="#">Manga</a>
-                    <span>/</span>
-                    <a th:href="@{'/manga/' + ${model.mangaName} + '/' + ${model.id}}"
-                               th:text="${'Truyện ' + model.mangaName}"></a>
-                    
-                </nav>
-           </div>
-        </div>
+
+         <div class="breadcrumb py-[10px]">
+             <nav class="w-full rounded-md">
+                 <ol class="list-reset flex">
+                     <li><a href="/"
+                            class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Trang chủ</a>
+                     </li>
+                     <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                     </li>
+                     <li><a
+                            class="text-sm text-neutral-500 transition duration-150 ease-in-out">Truyện</a>
+                     </li>
+                     <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                     </li>
+                     <li><a
+                             class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400" th:text="${model.title}">
+                     </a>
+                     </li>
+                 </ol>
+             </nav>
+         </div>
+
+
+
         <div class="flex flex-col  my-4" >
             <div class="p-2">
-                <h1 class="text-2xl" th:text="${'Manga ' + model.mangaName}" >
+                <h1 class="text-2xl" th:text="${'Truyện ' + model.title}" >
                     <!-- Manga Text Chapter -->
                 </h1>
             </div>
@@ -241,7 +250,7 @@
                         </div>
                         <div class="flex  justify-center flex-row pl-6 ">
                             <div class=" basis-1/4">
-                                <h5>Xếp hạng</h5>
+                                <h5>Đánh giá</h5>
                             </div>
                             <div class="basis-3/4 " th:each="avg : ${rating}"   >
 
@@ -252,24 +261,28 @@
                         </div>
                         <div class="flex  justify-center flex-row pl-6">
                             <div class=" basis-1/4 ">
-                                <h5>Thứ hạng</h5>
+                                <h5>Xếp hạng</h5>
                             </div>
                             <div class="basis-3/4">
-                                <h5>Thứ 6, nó có 552 lượt xem hàng tháng</h5>
+                                <h5>Thứ 6
+                                </h5>
                             </div>
                         </div>
+
                         <div class="flex  justify-center flex-row pl-6">
-                            <div class=" basis-1/4">
-                                <h5>Tên khác</h5>
+                            <div class=" basis-1/4 ">
+                                <h5>Lượt xem</h5>
                             </div>
                             <div class="basis-3/4">
-                                <h5 th:text="${model.alternativeTitle}"></h5>
+                                <h5>
+                                    <span th:text="${model.viewCount}"></span>
+                                </h5>
                             </div>
                         </div>
 
                         <div class="flex  justify-center flex-row  pl-6">
                             <div class=" basis-1/4 ">
-                                <h5>(Các) tác giả</h5>
+                                <h5>Tác giả</h5>
                             </div>
                             <div class="basis-3/4">
                                 <span th:each="item,iter : ${model.authors}">
@@ -291,8 +304,37 @@
                                     </span>
                                 </span>
                             </div>
-
                         </div>
+
+                        <div class="flex  justify-center flex-row pl-6">
+                            <div class=" basis-1/4 ">
+                                <h5>Thẻ</h5>
+                            </div>
+                            <div class="basis-3/4">
+                                <span th:inline="text">
+                                    <span th:each="item,iter : ${model.tags}">
+                                        <span th:text="${item.tagName}"></span>
+                                        <span th:if="${!iter.last}" th:text="','"></span>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex  justify-center flex-row pl-6">
+                            <div class=" basis-1/4 ">
+                                <h5>Thời lượng</h5>
+                            </div>
+                            <div class="basis-3/4">
+                                <h5>
+                                    <span th:if="${model.displayType.name == 'VOL'}" th:text="${totalVolCount + ' tập, '}">
+                                    </span>
+                                    <span th:text="${totalChapterCount + ' chương'}"></span>
+                                </h5>
+
+                            </div>
+                        </div>
+
+
                         <div class=" flex ml-3 pl-6">
                             <!--  for display chapter by VOL -->
                            <ul th:if="${model.volumeEntities.size() > 0 && volI.index < 1}"
@@ -302,16 +344,16 @@
 
                                 <div class="gap-[5px] flex items-center">
                                     <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                                       class=" save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
-                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] 
+                                       class=" save-local-storage block min-w-[80px] max-w-[120px] py-[5px] px-[10px] h-full text-center
+                                        text-[15px] text-[#666666] hover:text-white bg-[#ebebeb]
                                         hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
-                                        th:text="'Đọc mới'">
+                                        th:text="'Bắt đầu đọc'">
                                     </a>
                                     <a th:if="chapterHistory != null"
                                        th:each="history : ${chapterHistory}"
                                        th:href="@{'/manga/'+${model.title}+'/chapter/'+${history.id}}"
-                                       class=" block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
-                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb]
+                                       class=" block min-w-[80px] max-w-[120px] py-[5px] px-[10px] h-full text-center
+                                        text-[15px] text-[#666666] hover:text-white bg-[#ebebeb]
                                         hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
                                        th:text="'Đọc tiếp'">
                                     </a>
@@ -328,7 +370,7 @@
                                        class="save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
                                        duration-300 ease-in rounded-[10px]"
-                                       th:text="'Đọc mới'">
+                                       th:text="'Bắt đầu đọc'">
                                     </a>
                                     <a
                                         th:if="chapterHistory != null"
@@ -389,6 +431,12 @@
                             </ul>
 
                         </div>
+
+<!--                        for display alert to buy subscription-->
+                        <div th:if="${!model.isFree}" class="bg-orange-100 border-l-4 border-orange-500 p-4 w-fit m-[15px]" role="alert">
+                            <p class="text-orange-700">Bạn cần phải đăng ký gói đọc để mở khóa các chương bên dưới!</p>
+                            <a>Bấm vào <a href="/subscription_pack/load" class="text-blue-500 hover:text-blue-400">đây</a> để mua gói đọc</a>
+                        </div>
                     </div>
                   </div>
                 
@@ -412,7 +460,7 @@
             </div>
             <hr>
             <div class="p-2">
-                <!-- for display by type -->
+                <!-- for display by VOL type -->
                 <div class="mt-[10px] grid gap-y-[15px] mb-[50px]" th:if="${model.displayType.name} == 'VOL'">
                     <div class="vol-item px-[10px] rounded" th:if="${model.displayType.name} == 'VOL'"
                          th:each="itemvolume : ${model.volumeEntities}">
@@ -426,10 +474,20 @@
                         <ul th:else class="hidden latest-chapters grid mt-[10px] ml-[30px] gap-[5px] divide-y">
                             <li class="gap-[5px] flex justify-between"
                                 th:each="chapter,iter: ${itemvolume.chapterEntities}">
-                                <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
-                                   class="px-[16px] font-bold cursor-pointer text-[#666666] w-full hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                </a>
+                                <div class="flex justify-between items-center px-[10px] space-x-3 full">
+                                    <a th:href="@{${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}}"
+                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                    </a>
+                                    <span th:if="${chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
+                                        Vui lòng đăng ký gói để đọc chương này
+                                    </span>
+                                    <i th:if="${chapter.requiredVip}" class="fas fa-lock"></i>
+
+                                    <span th:if="${!chapter.requiredVip}" class="text-[12px] text-green-600">
+                                        Đọc thử miễn phí
+                                </span>
+                                </div>
                                 <span th:text="${chapter.createdAt}"></span>
                             </li>
                         </ul>
@@ -452,10 +510,20 @@
                 <div th:if="${model.displayType.name} == 'CHAP'">
                     <ul th:else class="latest-chapters grid mt-[10px] ml-[15px] gap-[5px] divide-y">
                         <li class="gap-[5px] flex justify-between" th:each="chapter,iter: ${model.chapters}">
-                            <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                               th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
-                               class="font-bold cursor-pointer text-[#666666] w-full hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                            </a>
+                            <div class="flex justify-between items-center px-[10px] space-x-3 full">
+                                <a th:href="@{${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}}"
+                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                </a>
+                                <span th:if="${chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
+                                    Vui lòng đăng ký gói để đọc chương này
+                                </span>
+                                <i th:if="${chapter.requiredVip}" class="fas fa-lock"></i>
+
+                                <span th:if="${!chapter.requiredVip}" class="text-[12px] text-green-600">
+                                        Đọc thử miễn phí
+                                </span>
+                            </div>
                             <span th:text="${chapter.createdAt}"></span>
                         </li>
                     </ul>

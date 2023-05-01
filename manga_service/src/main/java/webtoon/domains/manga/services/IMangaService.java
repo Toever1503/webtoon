@@ -21,6 +21,7 @@ public interface IMangaService {
 
     MangaEntity getById(java.lang.Long id);
 
+    void increaseView(Long mangaId);
 
 
 

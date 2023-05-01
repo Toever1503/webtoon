@@ -148,4 +148,9 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
         return mangaVolumeRepository.finByMangaId(mangaId);
     }
 
+    @Override
+    public Long countTotalVol(Long id) {
+        return this.mangaVolumeRepository.countByMangaId(id);
+    }
+
 }
