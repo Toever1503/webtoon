@@ -24,6 +24,7 @@ import webtoon.account.entities.UserEntity;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EOrderType;
 import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.services.IOrderService;
@@ -118,14 +119,19 @@ public class RefundController {
 
 	;
 
-
-		String vnp_SecureHash = request.getParameter("vnp_SecureHash");
 		if (fields.containsKey("vnp_SecureHashType")) {
 			fields.remove("vnp_SecureHashType");
 		}
 		if (fields.containsKey("vnp_SecureHash")) {
 			fields.remove("vnp_SecureHash");
 		}
+		StringBuilder hashData = new StringBuilder();
+		StringBuilder query = new StringBuilder();
+		String queryUrl = query.toString();
+		String vnp_SecureHash = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
+		System.out.println("hash: " + vnp_SecureHash);
+		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
+		String paymentUrl = VnPayConfig.vnp_RefundUrl + "?" + queryUrl;
 
 		String signValue = VnPayConfig.hashAllFields(fields);
 		String maDonHang = request.getParameter("vnp_TxnRef");
@@ -140,27 +146,33 @@ public class RefundController {
 		String thoiGianTT = request.getParameter("vnp_PayDate");
 		String ketQua = "";
 		amount = amount.substring(0, amount.length() - 2);
-		StringBuilder query = new StringBuilder();
-		StringBuilder hashData = new StringBuilder();
-		String queryUrl = query.toString();
-		String vnp_SecureHash1 = VnPayConfig.hmacSHA512(VnPayConfig.vnp_HashSecret, hashData.toString());
-		System.out.println("hash: " + vnp_SecureHash1);
-		queryUrl +="vnp_Amount="+amount+"vnp_TransactionNo="+maGD+"vnp_BankCode="+maNganHang+"vnp_PayDate="+thoiGianTT
-//				+"&vnp_SecureHash=" + vnp_SecureHash
-		;
+
 		UserEntity user = SecurityUtils.getCurrentUser().getUser();
-		String paymentUrl = VnPayConfig.vnp_Returnurl + "?" + queryUrl;
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
-			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.EXTEND,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
+			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.EXTEND, EOrderStatus.COMPLETED,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
 			OrderEntity order = orderService.getMaDonHang(maDonHang);
 //			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 			paymentService.update(new PaymentEntity(idPayment, order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, 00, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
 
-		}else {
-			ketQua = "Giao dịch không thành thành công";
-		}
+		}else if("15".equals(maPhanHoi)) {
+			ketQua = "Giao dịch không thành thành công vì quá thời gian chờ";
+			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.UPGRADE, EOrderStatus.CANCELED ,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
+			OrderEntity order = orderService.getMaDonHang(maDonHang);
+//			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
+			paymentService.update(new PaymentEntity(idPayment, order ,
+					null , maPhanHoi ,Double.parseDouble(amount) ,
+					null, 02, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
 
+		}else{
+			ketQua = "Giao dịch không thành thành công";
+			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.UPGRADE, EOrderStatus.CANCELED ,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
+			OrderEntity order = orderService.getMaDonHang(maDonHang);
+//			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
+			paymentService.update(new PaymentEntity(idPayment, order ,
+					null , maPhanHoi ,Double.parseDouble(amount) ,
+					null, 02, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
+		}
 //		System.out.println(signValue);
 		System.out.println(vnp_SecureHash);
 		model.addAttribute("maDonHang", maDonHang);

@@ -91,6 +91,7 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
             <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+                <span className='text-red-500'>*</span>
                 <span> Tác giả:</span>
             </label>
             <Select
@@ -127,6 +128,12 @@ const AuthorSelect: React.FC<AuthorSelectProps> = ({ mangaInput, mangaInputError
                 }}
                 options={selectOptions ? selectOptions.map((item: AuthorInput) => ({ label: item.name, value: item.id?.toString() })) : []}
             />
+
+            {
+                <p className='text-[12px] text-red-500 px-[5px] m-0'>
+                    {mangaInputError.authors && t(mangaInputError.authors)}
+                </p>
+            }
         </div>
     )
 };

@@ -94,9 +94,10 @@ const OrderPage: React.FC = () => {
             dataIndex: 'expiredSubsDate',
             key: 'expireDate',
             render: (_, record: IOrder) => <span>
-                {
+                {/* {
                     dateTimeFormat(record.expiredSubsDate)
-                }
+                } */}
+                -
             </span>,
         },
 
@@ -139,7 +140,7 @@ const OrderPage: React.FC = () => {
                             <a onClick={() => viewDetailOrder(record)}>{t('order.table.viewDetail')}</a>
                         }
                         {
-                            record.status !== 'COMPLETED' && record.status !== 'CANCELED' && <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
+                            record.status !== 'REFUNDED' && record.status !== 'COMPLETED' && record.status !== 'CANCELED' && <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
                         }
                         <Popconfirm
                             title={t('manga.form.sure-delete')}
@@ -172,9 +173,7 @@ const OrderPage: React.FC = () => {
 
 
     const FINAL_STATUSES: EORDER_STATUS[] = [
-        'PENDING_PAYMENT',
         'PAID',
-        'CANCELED',
         'COMPLETED',
         'REFUND_CONFIRM_PENDING',
         'REFUNDING',

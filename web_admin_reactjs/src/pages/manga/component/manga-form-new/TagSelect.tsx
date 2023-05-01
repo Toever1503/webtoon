@@ -91,6 +91,7 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
     return (
         <div className='grid gap-y-[5px] px-[10px]'>
             <label className='text-[14px] font-bold mb-[5px] flex items-center gap-[2px]'>
+            <span className='text-red-500'>*</span>
                 <span> Thẻ:</span>
             </label>
             <Select
@@ -131,6 +132,11 @@ const TagSelect: React.FC<TagSelectProps> = ({ mangaInput, mangaInputError }: Ta
                 }}
                 options={selectOptions ? selectOptions.map((item: TagInput) => ({ label: item.tagName, value: item.id?.toString() })) : []}
             />
+            {
+                <p className='text-[12px] text-red-500 px-[5px] m-0'>
+                    {mangaInputError.tags && t(mangaInputError.tags)}
+                </p>
+            }
 
 
         </div>

@@ -22,7 +22,7 @@ const mangaStatus: MangaStatus[] = [
 ];
 
 const releaseStatus: ReleaseStatus[] = [
-    'COMING', 'ONGOING', 'STOPPED', 'ON_STOPPING', 'CANCELLED', 'COMPLETED'
+    'COMING', 'ONGOING',  'ON_STOPPING', 'CANCELLED', 'COMPLETED'
 ];
 
 
