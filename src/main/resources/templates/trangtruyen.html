@@ -479,12 +479,12 @@
                                        th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
                                        class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                     </a>
-                                    <span th:if="${chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
-                                        Vui lòng đăng ký gói để đọc chương này
-                                    </span>
-                                    <i th:if="${chapter.requiredVip}" class="fas fa-lock"></i>
+                                    <span th:if="${!model.isFree && chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
+                                    Vui lòng đăng ký gói để đọc chương này
+                                </span>
+                                    <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
 
-                                    <span th:if="${!chapter.requiredVip}" class="text-[12px] text-green-600">
+                                    <span th:if="${!chapter.requiredVip && !model.isFree}" class="text-[12px] text-green-600">
                                         Đọc thử miễn phí
                                 </span>
                                 </div>
@@ -515,12 +515,12 @@
                                    th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
                                    class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                 </a>
-                                <span th:if="${chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
+                                <span th:if="${!model.isFree && chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
                                     Vui lòng đăng ký gói để đọc chương này
                                 </span>
-                                <i th:if="${chapter.requiredVip}" class="fas fa-lock"></i>
+                                <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
 
-                                <span th:if="${!chapter.requiredVip}" class="text-[12px] text-green-600">
+                                <span th:if="${!chapter.requiredVip && model.isFree}" class="text-[12px] text-green-600">
                                         Đọc thử miễn phí
                                 </span>
                             </div>
