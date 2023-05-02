@@ -139,7 +139,7 @@
                                 <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
                                     class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
                                     th:each="volume,volI : ${manga.volumeEntities}">
-                                    <lith:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
                                         <div class="gap-[5px] flex items-center">
                                             <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
