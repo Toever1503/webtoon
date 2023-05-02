@@ -139,10 +139,15 @@ public class RefundController {
 		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
 		String paymentUrl = VnPayConfig.vnp_RefundUrl + "?" + queryUrl;
 
+
+
 		String signValue = VnPayConfig.hashAllFields(fields);
 		String maDonHang = request.getParameter("vnp_TxnRef");
 		String amount = request.getParameter("vnp_Amount");
 		SubscriptionPackEntity subscriptionPack = subscriptionPackService.getByPrice(Double.parseDouble(amount)/100);
+		Calendar cldvnp_ExpireDate = Calendar.getInstance();
+		cldvnp_ExpireDate.add(Calendar.DAY_OF_MONTH,subscriptionPack.getDayCount());
+		Date subExpireDate = cldvnp_ExpireDate.getTime();
 		Long id = orderService.getIdByMaDonHang(maDonHang);
 		Long idPayment = paymentService.getIdByOrderId(id);
 		String noiDungTT = request.getParameter("vnp_OrderInfo");
@@ -157,7 +162,7 @@ public class RefundController {
 		String email = user.getEmail();
 		if ("00".equals(maPhanHoi)) {
 			ketQua = "Giao dịch thành công";
-			orderService.add(new OrderModel(Long.parseLong(maDonHang),formatter.parse(thoiGianTT),formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble((amount)), EOrderType.NEW, EOrderStatus.COMPLETED ,"thanh toán", vnp_IpAddr,maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
+			orderService.add(new OrderModel(Long.parseLong(maDonHang),formatter.parse(thoiGianTT),formatter.parse(thoiGianTT) , subExpireDate, Double.parseDouble((amount)), EOrderType.NEW, EOrderStatus.COMPLETED ,"thanh toán", vnp_IpAddr,maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
 			OrderEntity order = orderService.getMaDonHang(maDonHang);
 //			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, 00, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
@@ -510,7 +515,10 @@ public class RefundController {
 					"                                                                        <td style=\"padding-right: 0px;padding-left: 0px;\"\n" +
 					"                                                                            align=\"left\">\n" +
 					"                                                                            <div>\n" +
-					"                                                                              Bạn đã mua gói: \n" + subscriptionPack.getName() +
+					"                                                                              <strong><span\n" +
+					"                                                                            style=\"font-family: Montserrat, sans-serif; font-size: 14px; line-height: 19.6px;\">Bạn\n" +
+					"                                                                            đã mua gói: \n" + subscriptionPack.getName() +
+					"                                                                        </span></strong>\n" +
 					"                                                                            </div>\n" +
 					"\n" +
 					"                                                                        </td>\n" +
@@ -566,7 +574,8 @@ public class RefundController {
 					"                                                                    style=\"line-height: 140%; text-align: left; word-wrap: break-word;\">\n" +
 					"                                                                    <p style=\"font-size: 14px; line-height: 140%;\"><span\n" +
 					"                                                                            style=\"font-family: Montserrat, sans-serif;\"><strong>\n" +
-					"                                                                                Tổng tiền: </strong></span></p>\n" + amount +"VNĐ" +
+					"                                                                                Tổng tiền: " + amount +"VNĐ" +
+					"																				</strong></span></p>\n"  +
 					"                                                                    </strong></span></p>\n" +
 					"                                                                </div>\n" +
 					"                                                            </div>\n" +

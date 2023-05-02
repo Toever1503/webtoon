@@ -27,8 +27,10 @@ public class OrderHistoryController {
             return "redirect:/signin";
         } else {
             Long userId = SecurityUtils.getCurrentUser().getUser().getId();
+            UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
             List<OrderEntity> order = orderService.getPaymentCompletedByUserId(userId);
             System.out.println("order: " + order);
+            model.addAttribute("user", userEntity);
             model.addAttribute("order", order);
             return "account/userOrder";
         }

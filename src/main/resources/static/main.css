@@ -587,6 +587,10 @@
   height: 100%
 }
 
+.h-16 {
+  height: 4rem
+}
+
 .min-h-\[135px\] {
   min-height: 135px
 }
@@ -714,6 +718,14 @@
 
 .w-full {
   width: 100%
+}
+
+.w-36 {
+  width: 9rem
+}
+
+.w-16 {
+  width: 4rem
 }
 
 .min-w-\[80px\] {

@@ -85,6 +85,7 @@
                   <div
                     class="mx-auto w-[780px] h-auto border-solid border rounded-md border-gray-400 p-5"
                   >
+                  <h3>Lịch sử đơn hàng</h3>
       <div class="relative overflow-x-auto">
         <table class="w-full text-sm text-left text-gray-500 bg-gray-300">
           <thead class="text-xs text-gray-700 uppercase bg-red-400">
@@ -92,7 +93,9 @@
               <th scope="col" class="px-6 py-3">Gói truyện</th>
               <th scope="col" class="px-6 py-3">Giá</th>
               <th scope="col" class="px-6 py-3">Thời gian đọc</th>
-              <!-- <th scope="col" class="px-6 py-3">Ngày mua</th> -->
+              <th scope="col" class="px-6 py-3">Ngày mua</th>
+              <th scope="col" class="px-6 py-3">Ngày hết hạn</th>
+              <th scope="col" class="px-6 py-3">Thao tác</th>
             </tr>
           </thead>
           <tbody>
@@ -107,6 +110,8 @@
                 th:text="${item.subs_pack_id.dayCount + ' Ngày'}"
               ></td>
               <td class="px-6 py-4" th:text="${item.gioLap}"></td>
+              <td class="px-6 py-4" th:text="${item.expiredSubsDate}"></td>
+              <td class="text-center w-24"><p class="bg-red-400 hover:bg-red-500 border border-none w-16 h-7 mx-auto"> <a href="#" class=" text-white m-auto">Nâng cấp</a></p></td>
             </tr>
           </tbody>
         </table>
