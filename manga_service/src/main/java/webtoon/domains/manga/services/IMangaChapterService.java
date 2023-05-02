@@ -56,4 +56,6 @@ public interface IMangaChapterService {
     List<MangaChapterEntity> findAllByMangaId(Long id);
 
     MangaChapterEntity finByMangaId(Long id);
+
+    Long countTotalChapterForMangaTypeVol(Long id);
 }

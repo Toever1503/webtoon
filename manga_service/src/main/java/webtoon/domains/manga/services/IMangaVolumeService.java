@@ -36,4 +36,6 @@ public interface IMangaVolumeService {
 	MangaVolumeDto getLastVolIndex(Long mangaId);
 
 	MangaVolumeEntity finByMangaId(Long mangaId);
+
+    Long countTotalVol(Long id);
 }

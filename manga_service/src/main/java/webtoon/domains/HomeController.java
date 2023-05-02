@@ -70,6 +70,7 @@ public class HomeController {
         }
 
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        model.addAttribute("logger",loggedUser);
         return "homepage";
     }
 }

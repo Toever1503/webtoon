@@ -391,4 +391,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         return chapterRepository.findByMangId(id);
     }
 
+    @Override
+    public Long countTotalChapterForMangaTypeVol(Long id) {
+        return this.chapterRepository.countByMangaId(id);
+    }
+
 }

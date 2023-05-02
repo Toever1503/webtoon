@@ -71,6 +71,10 @@ public class UserEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
+    @Temporal(TemporalType.DATE)
+    @Column(name = "can_read_until_date")
+    private Date canReadUntilDate;
+
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_user_authority",
             joinColumns = @JoinColumn(name = "user_id"),
