@@ -25,7 +25,7 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile( Model model){
-        UserEntity user = SecurityUtils.getCurrentUser().getUser();
+        UserEntity user = userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
         model.addAttribute("user", user);
         return "account/profile";
     }
@@ -40,6 +40,6 @@ public class UserController {
         user.setId(userEntity.getId());
         userService.update(user);
         System.out.println("Success");
-        return "redirect:/";
+        return "redirect:/user/profile";
     }
 }

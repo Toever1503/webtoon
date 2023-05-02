@@ -4,7 +4,7 @@
                 layout:decorate="~{layout.html}">
   <head>
     <meta charset="UTF-8" />
-    <title>Title</title>
+    <title>Lịch sử mua hàng</title>
     <link href="/src/main/resources/static/main.css" rel="stylesheet" />
     <!-- <link href="/static/main.css" rel="stylesheet" /> -->
     <script
@@ -27,7 +27,7 @@
                       alt="Avatar" />
                 </div>
                 <div>
-                  <h2 class="text-center text-xl">Nguyễn Văn A</h2>
+                  <h2 class="text-center text-xl" th:text="${user.fullName}"></h2>
                 </div>
                 <div>
                   <div class="flex justify-center">

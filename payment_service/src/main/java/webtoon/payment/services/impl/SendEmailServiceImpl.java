@@ -1,8 +1,6 @@
 package webtoon.payment.services.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.springframework.core.io.ClassPathResource;
-import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -17,6 +15,7 @@ import java.nio.charset.StandardCharsets;
 @Service
 @RequiredArgsConstructor
 public class SendEmailServiceImpl implements ISendEmail {
+
     private final JavaMailSender javaMailSender;
 
     @Override
@@ -27,7 +26,7 @@ public class SendEmailServiceImpl implements ISendEmail {
         String body = "Thank you for your payment. Your payment is successful. Your email is " + emailUser;
         sendEmail(email, subject, body);
     }
-
+    @Override
     public void sendEmail(String email, String subject, String body) {
         MimeMessage message = javaMailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, StandardCharsets.UTF_8.name());
