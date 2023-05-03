@@ -32,7 +32,7 @@ public class SearchSpecification {
         });
     }
 
-    public static Specification<MangaEntity> byStatus(EStatus sts){
+    public static Specification<MangaEntity> byStatus(EMangaSTS sts){
         return (root, query, criteriaBuilder) ->
             criteriaBuilder.equal(root.get(MangaEntity_.MANGA_STATUS), sts.name());
     }
@@ -41,7 +41,8 @@ public class SearchSpecification {
         return (root, query, criteriaBuilder) -> {
             final String qq = "%" + q + "%";
             return criteriaBuilder.or(
-              criteriaBuilder.like(root.get(MangaEntity_.TITLE),qq)
+                criteriaBuilder.like(root.get(MangaEntity_.TITLE),qq),
+                criteriaBuilder.like(root.get(MangaEntity_.MANGA_NAME),qq)
             );
         };
     }
@@ -62,12 +63,12 @@ public class SearchSpecification {
         if(model.getStatus() != null){
             specs.add(byStatus(model.getStatus()));
         }
-        if (model.getGenerId() != null){
-            specs.add(byGener(model.getGenerId()));
-        }
-        if (model.getReleaseYear() != null){
-            specs.add(byYear(model.getReleaseYear()));
-        }
+//        if (model.getGenerId() != null){
+//            specs.add(byGener(model.getGenerId()));
+//        }
+//        if (model.getReleaseYear() != null){
+//            specs.add(byYear(model.getReleaseYear()));
+//        }
         Specification<MangaEntity> finalSpec = null;
         for (Specification<MangaEntity> spec : specs ){
             if (finalSpec == null){

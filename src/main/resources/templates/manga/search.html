@@ -13,7 +13,7 @@
 <body class="bg-[#f6f6f6]">
     <div layout:fragment="content"  class="max-w-[1100px] mx-auto flex bg-white pt-[20px]">
         <div class="form-search w-[300px] border-r">
-            <form th:action="@{'/search'}" method="POST" class="grid space-y-5 justify-center">
+            <form th:action="@{'/search'}" class="grid space-y-5 justify-center">
                 <div class="grid items-center">
                     <label for="keyword" class="block min-w-[180px] font-medium">Từ khóa:</label>
                     <input id="keyword" name="q" type="text" placeholder="tên truyện, tác giả..."
@@ -44,6 +44,7 @@
                     <label for="releaseYear" class="block min-w-[180px] font-medium">Năm phát hành:</label>
                     <select name="releaseYear" id="releaseYear" class="min-w-[200px] rounded"
                         style="border: 1px solid #ebebeb;">
+                        <option value="" th:text="'Chọn năm phát hành'"></option>
                         <option value="2023">2023</option>
                         <option value="2021">2021</option>
                         <option value="2020">2020</option>
@@ -67,7 +68,7 @@
             <hr class="border border-zinc-600">
             <div>
                 <!-- Cards 1 -->
-                <div class="flex justify-between" th:each="mangaE : ${mangaEntity}">
+                <div class="flex justify-between item" th:each="mangaE : ${mangaEntity}">
                     <div class="p-4">
                         <img class="w-56 h-70 border rounded"
                             th:src="${mangaE.featuredImage}" alt="">
@@ -106,7 +107,7 @@
                                             <h4 class="font-medium text-sm">Trạng thái <br /> phát hành</h4>
                                         </div>
                                         <div class="py-2">
-                                            <span>tes1,test</span>
+                                            <span th:text="${trangThai[mangaE.mangaStatus]}"></span>
                                         </div>
                                     </div>
 
@@ -129,45 +130,44 @@
                                     </div>
                                 </div>
 
+                                <!--                                  for display chapter by vol -->
+                                <ul th:if="${mangaE.volumeEntities.size() > 0 && volI.index < 1}"
+                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                    th:each="volume,volI : ${mangaE.volumeEntities}">
+                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
-<!--                                <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"-->
-<!--                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"-->
-<!--                                    th:each="volume,volI : ${manga.volumeEntities}">-->
-<!--                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">-->
+                                        <div class="gap-[5px] flex items-center">
+                                            <a th:href="@{'/manga/'+${mangaE.title}+'/chapter/'+${chapter.id}}"
+                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                style="border: 1px solid #ebebeb"
+                                                class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                ㄴㄴ</a>
+                                            <span class="text-[12px] text-[#666666]"
+                                                th:text="${'Tập ' + (volume.volumeIndex + 1)}">
+                                            </span>
+                                            <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">
+                                                2023-24-12</span>
+                                        </div>
 
-<!--                                        <div class="gap-[5px] flex items-center">-->
-<!--                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"-->
-<!--                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"-->
-<!--                                                style="border: 1px solid #ebebeb"-->
-<!--                                                class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">-->
-<!--                                                ㄴㄴ</a>-->
-<!--                                            <span class="text-[12px] text-[#666666]"-->
-<!--                                                th:text="${'Tập ' + (volume.volumeIndex + 1)}">ㄴㄴ-->
-<!--                                            </span>-->
-<!--                                            <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">-->
-<!--                                                2023-24-12</span>-->
-<!--                                        </div>-->
-<!--                                       -->
-<!--                                    </li>-->
-<!--                                </ul>-->
-                                <!--  for display chapter by chap -->
-<!--                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">-->
-<!--                                    <li class="gap-[5px] flex" th:each="chapter,iter: ${manga.chapters}"-->
-<!--                                        th:if="${iter.index < 2}">-->
-<!--                                        <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"-->
-<!--                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"-->
-<!--                                            style="border: 1px solid #ebebeb"-->
-<!--                                            class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">-->
-<!--                                       afaf </a>-->
-<!--                                        <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">-->
-<!--                                            2023-24-12</span>-->
-<!--                                    </li>-->
-<!--                                </ul>-->
+                                    </li>
+                                </ul>
+<!--                                  for display chapter by chap -->
+                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
+                                    <li class="gap-[5px] flex" th:each="chapter,iter: ${mangaE.chapters}"
+                                        th:if="${iter.index < 2}">
+                                        <a th:href="@{'/manga/'+${mangaE.title}+'/chapter/'+${chapter.id}}"
+                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                            style="border: 1px solid #ebebeb"
+                                            class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                       afaf </a>
+                                        <span class="text-[12px] text-[#666666] text-center" th:text="${chapter.createdAt}">
+                                            2023-24-12</span>
+                                    </li>
+                                </ul>
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- kết thúc card 1 -->
             </div>
         </div>
     </div>

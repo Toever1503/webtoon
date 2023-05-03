@@ -44,9 +44,11 @@ public class MangaGenreController {
 
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
 
+        MangaGenreEntity genre = this.genreService.getById(id);
         List<MangaGenreEntity> mangaGenre =  this.genreService.findAllGenre();
         model.addAttribute("mangaGenre",mangaGenre);
         model.addAttribute("mangaEntity", mangaEntity.getContent());
+        model.addAttribute("generId",genre);
         return "/manga/genre";
     }
 }

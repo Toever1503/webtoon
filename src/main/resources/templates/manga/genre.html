@@ -32,11 +32,11 @@
           </li>
           <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
           </li>
-<!--          <li><a class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400"-->
-<!--              th:text="${postModel.title}">-->
-<!--              fa-border-->
-<!--            </a>-->
-<!--          </li>-->
+          <li><a class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400"
+              th:text="${generId.name}">
+              fa-border
+            </a>
+          </li>
         </ol>
       </nav>
     </div>
@@ -53,15 +53,65 @@
             <div class="manga-info block m-0 h-full p-[10px]">
               <h4 class="leading-0 m-0 grid">
                 <a th:text="${manga.title}" th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
-                  class="hover:text-[#eb3349] text-base font-medium">fff</a>
+                  class="hover:text-[#eb3349] text-base font-medium"></a>
 
                 <div class="manga-rating">
-                  <div class="post-total-rating allow_vote"><i class="ion-ios-star ratings_stars rating_current"></i><i
-                      class="ion-ios-star ratings_stars rating_current"></i><i
-                      class="ion-ios-star ratings_stars rating_current"></i><i
-                      class="ion-ios-star ratings_stars rating_current"></i><i
-                      class="ion-ios-star-outline ratings_stars"></i><span
-                      class="score font-meta total_votes text-[12px]">4.1</span></div>
+                  <div class="post-total-rating allow_vote">
+                      <label class=" ratings_stars rating_current">★</label>
+                      <label class=" ratings_stars rating_current">★</label>
+                      <label class=" ratings_stars rating_current">★</label>
+                      <label class=" ratings_stars rating_current">★</label>
+                      <label class=" ratings_stars rating_current">★</label>
+                      <span class="score font-meta total_votes text-[12px]" th:text="${manga.rating}"></span>
+                  </div>
+                  <style>
+                    .ratings_stars {
+                      font-size: 15px;
+                      color: #ccc;
+                    }
+
+                    .ratings_stars label {
+                      display: inline-block;
+                      position: relative;
+                      z-index: 1;
+                      cursor: pointer;
+                    }
+
+                    .ratings_stars label:before {
+                      content: '\2605';
+                      font-size: inherit;
+                      position: absolute;
+                      left: 0;
+                      top: 0;
+                      z-index: -1;
+                    }
+
+                    .ratings_stars .rating_current:before, .ratings_stars .rating_current ~ label {
+                      color: gold;
+                    }
+                    .rating_current {
+                      color: gold !important;
+                      background-color: transparent !important;
+                    }
+                  </style>
+                  <!-- Sự kiện hiển thị đánh giá-->
+                  <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    document.addEventListener('DOMContentLoaded', function() {
+                      const rating = /*[[${manga.rating}]]*/ 0;
+                      const stars = document.querySelectorAll('.ratings_stars');
+                      for (let i = 0; i < stars.length; i++) {
+                        if (i < rating) {
+                          stars[i].classList.add('rating_current');
+                        } else {
+                          stars[i].classList.remove('rating_current');
+                        }
+                      }
+                    });
+                    /*]]>*/
+                  </script>
+                  <!-- Kết thúc sự kiện hiển thị đánh giá-->
+
                 </div>
               </h4>
 
@@ -76,9 +126,9 @@
                     <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
                       th:text="${'Chương ' + (chapter.chapterIndex + 1)}" style="border: 1px solid #ebebeb"
                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                      affffsfsafa </a>
+                    </a>
                     <span class="text-[12px] text-[#666666]" th:text="${'Tập ' + (volume.volumeIndex + 1)}">
-                      fff </span>
+                    </span>
                   </div>
                   <span class="text-[10px] text-[#666666] text-center" th:text="${volume.createdAt}">
                     2023-24-12</span>
@@ -97,7 +147,6 @@
                     2023-24-12</span>
                 </li>
               </ul>
-
             </div>
           </a>
 
@@ -121,7 +170,9 @@
         <ul class="grid grid-cols-2 space-x-2 mt-[20px]" th:each="gener : ${mangaGenre}">
           <li class="flex items-center space-x-2">
             <i class="fas fa-caret-right" style="color: #343537;"></i>
-             <a class="cursor-pointer hover:text-[#eb3349]" th:text="${gener.name}"></a>
+             <a class="cursor-pointer hover:text-[#eb3349]"
+                th:href="@{'/manga-gener/' + ${gener.name} + '/' + ${gener.id}}"
+                th:text="${gener.name}"></a>
           </li>
 
 <!--          <li class="flex items-center space-x-2">-->

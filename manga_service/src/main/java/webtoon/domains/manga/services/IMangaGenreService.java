@@ -24,5 +24,7 @@ public interface IMangaGenreService {
 
 	void deleteGenreByIds(List<Long> ids);
 
-    List<MangaGenreEntity> findAllGenre();
+	MangaGenreEntity getById(Long id);
+
+	List<MangaGenreEntity> findAllGenre();
 }

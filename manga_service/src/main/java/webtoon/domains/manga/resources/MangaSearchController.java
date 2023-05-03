@@ -46,7 +46,8 @@ public class MangaSearchController {
         mangaStatusMap.put(EMangaSTS.CANCELLED, "Bị hủy");
         mangaStatusMap.put(EMangaSTS.COMPLETED, "Đã hoàn thành");
 
-        
+
+
         model.addAttribute("mangaEntity",mangaEntity.getContent());
         model.addAttribute("mangaGenre",mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);
