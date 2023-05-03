@@ -1,52 +1,45 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}">
-  <head>
-    <meta charset="UTF-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
-    <link href="../static/main.css" rel="stylesheet" />
-    <script
-      src="https://kit.fontawesome.com/b86979ecfa.js"
-      crossorigin="anonymous"
-    ></script>
-    <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
-  </head>
-  <body>
-    <div class="w-[1100px] m-auto" layout:fragment="content">
-      <div class="flex flex-row justify-center">
-        <div class="basis-1/5 mx-16 ">
-          <h2>Mã đơn hàng:</h2>
-          <h2 class="font-medium" th:text="${maDonHang}"></h2>
-        </div>
-        <div class="basis-1/5 mx-16">
-          <h2>Tên đơn hàng:</h2>
-          <h2 class="font-medium" th:text="${name}"></h2>
-        </div>
-        <div class="basis-1/5 mx-16">
-            <h2>Tổng cộng:</h2>
-            <h2 class="font-medium" th:text="${#numbers.formatCurrency(price)}"></h2>
-          </div>
-        <div class="basis-1/5 mx-16">
-          <h2>Phương thức thanh toán:</h2>
-          <h2 class="font-medium">Chuyển khoản ngân hàng</h2>
-        </div>
-      </div>
+  layout:decorate="~{layout.html}">
 
-      <h2 class="text-center mt-10 text-xl">Mã QR chuyển khoản ngân hàng</h2>
-      <div class="flex flex-row ">
-        <div class="basis-1/2 mt-10 justify-center">
-          <img
-            src="https://bizweb.dktcdn.net/100/150/781/files/vnpayqr-code.jpg?v=1563855957237"
-            class="h-72 w-72"
-            alt=""
-          />
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="../../static/main.css" rel="stylesheet" />
+  <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
+  <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
+</head>
+
+<body>
+  <div class="w-[1100px] m-auto bg-white min-h-[500px] p-[15px]" layout:fragment="content">
+    <div class="flex flex-row justify-center">
+      <div class="basis-1/5 mx-16">
+        <h2>Tên đơn hàng:</h2>
+        <h2 class="font-medium" th:text="${name}"></h2>
       </div>
-        <h2 class="text-center mt-10 text-xl">Thông tin chuyển khoản</h2>
-        <h3 class="text-center mt-5 text-lg text-red-500 font-medium">Vui lòng chuyển đúng nội dung CHUYENKHOAN để chúng tôi có thể xác nhận thanh toán</h3>
-      <div class="flex justify-center mt-10">
+      <div class="basis-1/5 mx-16">
+        <h2>Số tiền thanh toán:</h2>
+        <h2 class="font-medium" th:text="${#numbers.formatDecimal(price, 0, 'POINT', 0, 'POINT') + ' vnd'}"></h2>
+      </div>
+      <div class="basis-1/5 mx-16">
+        <h2>Phương thức thanh toán:</h2>
+        <h2 class="font-medium">Chuyển khoản ngân hàng</h2>
+      </div>
+    </div>
+
+    <h2 class="text-center mt-10 text-xl">Mã QR chuyển khoản ngân hàng</h2>
+    <div class="flex justify-center pt-[20px]">
+      <img src="https://bizweb.dktcdn.net/100/150/781/files/vnpayqr-code.jpg?v=1563855957237" class="h-72 w-72"
+        alt="" />
+    </div>
+    <h2 class="text-center mt-10 text-xl">Thông tin chuyển khoản</h2>
+    <h3 class="text-center mt-5 text-lg text-red-500 font-medium">Vui lòng chuyển đúng nội dung
+      'THANH-TOAN-<span th:text="${maDonHang}"></span>'
+      để chúng tôi
+      có thể xác nhận đơn hàng của bạn.</h3>
+    <div class="flex justify-center mt-10">
       <table class="border-collapse border border-slate-500 w-125">
         <tbody>
           <tr>
@@ -63,7 +56,16 @@
           </tr>
         </tbody>
       </table>
+
     </div>
+
+    <div class="flex justify-center py-[20px]">
+      <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 text-base rounded">
+        <a th:href="@{'/order/chuyenKhoan/confirmed/'+${subscriptionPackId} + '?maDonHang='+${maDonHang} }">Xác nhận đã chuyển khoản</a>
+      </button>
     </div>
-  </body>
+
+  </div>
+</body>
+
 </html>

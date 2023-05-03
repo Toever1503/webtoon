@@ -299,12 +299,10 @@ export default {
         },
         eStatus: {
             'ALL': 'Tất cả',
-            'PENDING_PAYMENT': 'Chờ thanh toán',
-            'PAID': 'Đã thanh toán',
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
-            'REFUND_CONFIRM_PENDING': 'Chờ xác nhận hoàn tiền',
-            'REFUNDING': 'Đang hoàn tiền',
+            'USER_CONFIRMED_BANKING': 'Đã chuyển khoản',
+            'REFUNDING': 'Yêu cầu hoàn tiền',
             'REFUNDED': 'Đã hoàn tiền',
         }
     },

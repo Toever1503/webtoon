@@ -100,8 +100,6 @@
 			<groupId>webtoon.account</groupId>
 			<artifactId>webtoon-account-service</artifactId>
 		</dependency>
-
-
-    </dependencies>
+	</dependencies>
 
 </project>

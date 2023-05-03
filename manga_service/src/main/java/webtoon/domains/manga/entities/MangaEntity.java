@@ -33,9 +33,6 @@ public class MangaEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "alternative_title")
-    private String alternativeTitle;
-
     @Column(name = "excerpt")
     private String excerpt;
 

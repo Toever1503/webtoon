@@ -54,7 +54,7 @@ public class MangaController {
         this.mangaGenreService = mangaGenreService;
     }
 
-    @GetMapping
+    @GetMapping("list-manga")
     public String mangaList(Model model, Pageable pageable) {
         Page<MangaEntity> mangaEntities = this.mangaService.filterEntities(pageable, null);
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
