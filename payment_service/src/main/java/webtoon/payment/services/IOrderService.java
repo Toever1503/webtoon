@@ -47,4 +47,8 @@ public interface IOrderService {
     OrderEntity changeStatus(Long orderId, EOrderStatus status);
 
     void saveOrderEntity(OrderEntity orderEntity);
+
+    void cancelOrder(Long id);
+
+    void returnOrder(Long id);
 }

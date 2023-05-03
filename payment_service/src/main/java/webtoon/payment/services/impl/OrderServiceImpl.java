@@ -240,6 +240,24 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public void cancelOrder(Long id) {
+        OrderEntity orderEntity = this.getById(id);
+        if(!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+            throw new CustomHandleException(42);
+        orderEntity.setStatus(EOrderStatus.CANCELED);
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
+    public void returnOrder(Long id) {
+        OrderEntity orderEntity = this.getById(id);
+        if(!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+            throw new CustomHandleException(43);
+        orderEntity.setStatus(EOrderStatus.REFUNDING);
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
     public OrderDto upgradeOrder(UpgradeOrderInput input) {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());

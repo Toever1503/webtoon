@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
 import webtoon.payment.dtos.OrderPendingDTO;
@@ -91,6 +92,28 @@ public class OrderController {
             this.orderService.userConfirmOrder(maDonHang);
             return "payments/confirmed";
         }
+    }
+
+
+    @RequestMapping("cancelOrder/{id}")
+    public String cancelOrder(@PathVariable Long id,
+                              @RequestParam(defaultValue = "0") Integer page,
+                              RedirectAttributes redirectAttributes) {
+        this.orderService.cancelOrder(id);
+
+        redirectAttributes.addAttribute("showNotification", true);
+        redirectAttributes.addAttribute("notificationMessage", "Hủy thành công!");
+        return "redirect:/user/userOrder" + (page == 0 ? "" : "?page=" + page);
+    }
+
+    @RequestMapping("returnOrder/{id}")
+    public String returnOrder(@PathVariable Long id,
+                              @RequestParam(defaultValue = "0") Integer page,
+                              RedirectAttributes redirectAttributes) {
+        this.orderService.returnOrder(id);
+        redirectAttributes.addAttribute("showNotification", true);
+        redirectAttributes.addAttribute("notificationMessage", "Đã gửi yêu cầu hoàn tiền!");
+        return "redirect:/user/userOrder" + (page == 0 ? "" : "?page=" + page);
     }
 
 //    @GetMapping("/userOrder/{id}")
