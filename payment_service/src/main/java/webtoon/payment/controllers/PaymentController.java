@@ -53,7 +53,13 @@ public class PaymentController {
 	private ISubscriptionPackService subscriptionPackService;
 
 	@GetMapping
-	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam Integer amount) throws IOException, ParseException {
+	public void test(HttpServletRequest req,
+					 HttpServletResponse resp,
+					 @RequestParam Long subscriptionPack) throws IOException, ParseException {
+
+		SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(subscriptionPack);
+		Integer amount = subscriptionPackEntity.getPrice().intValue();
+
 		String vnp_OrderInfo = "order info";
 		String vnp_TxnRef = VnPayConfig.getRandomNumber(8);
 		String bank_code = ""; // edit later
@@ -95,7 +101,7 @@ public class PaymentController {
 		vnp_Params.put("vnp_CreateDate", vnp_CreateDate);
 
 		Calendar cldvnp_ExpireDate = Calendar.getInstance();
-		cldvnp_ExpireDate.add(Calendar.MINUTE,30);
+		cldvnp_ExpireDate.add(Calendar.MINUTE,2);
 		Date vnp_ExpireDateD = cldvnp_ExpireDate.getTime();
 
 		System.out.println("expireDate: "+vnp_ExpireDateD);
@@ -134,6 +140,17 @@ public class PaymentController {
 		System.out.println("hash: " + vnp_SecureHash);
 		queryUrl += "&vnp_SecureHash=" + vnp_SecureHash;
 		String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
+
+
+		UserEntity user = SecurityUtils.getCurrentUser().getUser();
+
+		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW, EOrderStatus.PENDING_PAYMENT ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPackEntity, user, EPaymentMethod.VN_PAY));
+		OrderEntity order = orderService.getMaDonHang(vnp_TxnRef);
+		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order ,
+				null , null ,Double.parseDouble(String.valueOf(amount))/100 ,
+				null, 01, vnp_OrderInfo, formatter.parse(vnp_ExpireDate)));
+
+		String email = SecurityUtils.getCurrentUser().getUser().getEmail();
 //		sendEmail.sendingPayment(email);
 		resp.sendRedirect(paymentUrl);
 	}

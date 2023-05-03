@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
 import org.springframework.stereotype.Controller;
@@ -23,17 +24,22 @@ public class LoginController {
 
 
     @RequestMapping("/signin")
-    public String loginForm(Model model) {
+    public String loginForm(Model model, @RequestParam(required = false, defaultValue = "") String redirectTo, HttpSession session) {
         model.addAttribute("loginModel", new LoginModel());
+        session.setAttribute("redirectTo", redirectTo.isEmpty() ? null : redirectTo);
         return "account/login-form";
     }
 
     @ResponseBody
     @PostMapping("signin")
-    public String loginHandle(LoginModel model, HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public String loginHandle(LoginModel model, HttpSession session, HttpServletRequest req, HttpServletResponse res) throws IOException {
         try {
             this.loginService.login(model, req);
-            res.sendRedirect("/");
+
+            String redirectTo = (String) session.getAttribute("redirectTo");
+            if (session != null)
+                session.removeAttribute("redirectTo");
+            res.sendRedirect("/" + (redirectTo.isEmpty() ? "" : "/" + redirectTo));
         } catch (CustomHandleException e) {
             if (e.getCode() == 0) {
                 return "login error";
@@ -47,12 +53,20 @@ public class LoginController {
     @RequestMapping(value = "oauth2-success")
     public String onOauth2Success(OAuth2AuthenticationToken token,
                                   HttpServletRequest req,
-                                  HttpServletResponse res) throws IOException {
+                                  HttpServletResponse res,
+                                  HttpSession session) throws IOException {
         if (token == null)
             return "redirect:/oauth2-failed";
         else {
             int result = this.loginService.loginViaOAuth2(token, req, res);
-            return "redirect:/index?login-type=" + result;
+            String redirectTo = (String) session.getAttribute("redirectTo");
+            if (session != null)
+                session.removeAttribute("redirectTo");
+
+            if (redirectTo != null)
+                return "redirect:/" + redirectTo + "?login-type=" + result;
+            else
+                return "redirect:/index?login-type=" + result;
         }
 
     }

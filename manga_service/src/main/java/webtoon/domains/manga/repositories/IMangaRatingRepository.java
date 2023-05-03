@@ -33,4 +33,6 @@ public interface IMangaRatingRepository extends JpaRepository<MangaRatingEntity,
     MangaRatingEntity findByMangaIdAndCB(Long mangaId ,Long createBy);
 
 
+
+
 }

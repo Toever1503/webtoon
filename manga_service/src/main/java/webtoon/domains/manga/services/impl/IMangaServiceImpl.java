@@ -10,7 +10,6 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import webtoon.account.entities.UserEntity;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
@@ -27,7 +26,6 @@ import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
 import webtoon.utils.ASCIIConverter;
 
-import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
@@ -83,7 +81,7 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setModifiedBy(mangaEntity.getCreatedBy());
         this.mangaRepository.saveAndFlush(mangaEntity);
         if (model.getTags() != null)
-            mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.POST));
+            mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.MANGA));
         else
             mangaEntity.setTags(Collections.EMPTY_LIST);
         return this.mangaMapper.toDto(mangaEntity);
@@ -94,7 +92,6 @@ public class IMangaServiceImpl implements IMangaService {
 
         MangaEntity mangaEntity = this.getById(model.getId());
         mangaEntity.setTitle(model.getTitle());
-        mangaEntity.setAlternativeTitle(model.getAlternativeTitle());
         mangaEntity.setExcerpt(model.getExcerpt());
         mangaEntity.setDescription(model.getDescription());
         mangaEntity.setMangaName(model.getMangaName());
@@ -108,7 +105,6 @@ public class IMangaServiceImpl implements IMangaService {
         mangaRepository.saveAndFlush(mangaEntity);
         return MangaDto.builder()
                 .title(mangaEntity.getTitle())
-                .alternativeTitle(mangaEntity.getAlternativeTitle())
                 .excerpt(mangaEntity.getExcerpt())
                 .description(mangaEntity.getDescription())
                 .mangaName(mangaEntity.getMangaName())
@@ -136,9 +132,19 @@ public class IMangaServiceImpl implements IMangaService {
     public MangaEntity getById(java.lang.Long id ) {
         MangaEntity entity = this.mangaRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
 
-        entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
+        entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.MANGA));
         return entity;
     }
+
+    @Override
+    public void increaseView(Long mangaId) {
+        MangaEntity mangaEntity = this.getById(mangaId);
+        if(mangaEntity.getViewCount() == null)
+            mangaEntity.setViewCount(0);
+        mangaEntity.setViewCount(mangaEntity.getViewCount() + 1);
+        this.mangaRepository.saveAndFlush(mangaEntity);
+    }
+
 
     @Override
     public MangaEntity getByIdAndCb(Long mangaId, Long createId){
@@ -147,15 +153,21 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public Double getRating(Long id, HttpSession session){
-        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
-        if (user != null){
+    public Double getRating(Long id){
+            return  this.mangaRepository.getRatingManga(id);
+    }
 
-            return  this.mangaRepository.getRatingManga(id,user.getId());
 
-        }else {
-            return null;
-        }
+    @Override
+    public MangaDto getByMangaId(Long id){
+        MangaEntity entity = this.mangaRepository.getByMangaId(id);
+        return MangaDto.builder()
+                .id(entity.getId())
+                .mangaName(entity.getMangaName())
+                .title(entity.getTitle())
+                .createdBy(entity.getCreatedBy())
+                .featuredImage(entity.getFeaturedImage())
+                .build();
     }
 
 

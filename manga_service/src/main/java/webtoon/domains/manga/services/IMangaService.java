@@ -21,10 +21,15 @@ public interface IMangaService {
 
     MangaEntity getById(java.lang.Long id);
 
+    void increaseView(Long mangaId);
+
+
 
     MangaEntity getByIdAndCb(Long mangaId, Long createId);
 
-    Double getRating(Long id, HttpSession session);
+    Double getRating(Long id);
+
+    MangaDto getByMangaId(Long id);
 
     boolean deleteById(java.lang.Long id);
 
