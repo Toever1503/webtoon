@@ -21,7 +21,7 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
     @Query("SELECT o.id FROM tbl_order o where o.maDonHang = ?1")
     Long getIdByMaDonHang(String maDonHang);
 
-    @Query("SELECT new webtoon.payment.dtos.OrderPendingDTO(o.id,p.payUrl,o.user_id,o.maDonHang, o.subs_pack_id) FROM tbl_order o join tbl_payment p on o.id = p.orderId.id where o.user_id.id = ?1 and o.status = 'PENDING_PAYMENT' and o.paymentMethod='VN_PAY'")
+    @Query("SELECT new webtoon.payment.dtos.OrderPendingDTO(o.id,o.user_id,o.maDonHang, o.subs_pack_id) FROM tbl_order o join tbl_payment p on o.id = p.orderId.id where o.user_id.id = ?1 and o.status = 'PENDING_PAYMENT' and o.paymentMethod='VN_PAY'")
     List<OrderPendingDTO> getPendingPaymentByUserId(Long userId);
 
 

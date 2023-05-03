@@ -25,7 +25,6 @@ public class PaymentServiceImpl implements IPaymentService {
                 .bank(paymentModel.getBank())
                 .status(paymentModel.getStatus())
                 .paymentContent(paymentModel.getPaymentContent())
-                .payUrl(paymentModel.getPayUrl())
                 .expired_date(paymentModel.getExpired_date())
                 .build();
         return this.paymentRepository.saveAndFlush(paymentEntity);
@@ -41,7 +40,6 @@ public class PaymentServiceImpl implements IPaymentService {
         paymentEntity.setBank(PaymentEntity.getBank());
         paymentEntity.setStatus(PaymentEntity.getStatus());
         paymentEntity.setPaymentContent(PaymentEntity.getPaymentContent());
-        paymentEntity.setPayUrl(PaymentEntity.getPayUrl());
         paymentEntity.setExpired_date(PaymentEntity.getExpired_date());
         this.paymentRepository.saveAndFlush(paymentEntity);
 
@@ -52,7 +50,6 @@ public class PaymentServiceImpl implements IPaymentService {
                 .bank(paymentEntity.getBank())
                 .status(paymentEntity.getStatus())
                 .paymentContent(paymentEntity.getPaymentContent())
-                .payUrl(paymentEntity.getPayUrl())
                 .expired_date(paymentEntity.getExpired_date())
                 .build();
     }

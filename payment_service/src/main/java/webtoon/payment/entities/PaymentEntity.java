@@ -40,8 +40,6 @@ public class PaymentEntity {
     @Column(name = "payment_content")
     private String paymentContent;
 
-    @Column(name = "pay_url")
-    private String payUrl;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)

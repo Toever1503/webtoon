@@ -34,7 +34,6 @@ public class PaymentDto {
                 .payMoney(paymentEntity.getPayMoney())
                 .bank(paymentEntity.getBank())
                 .paymentContent(paymentEntity.getPaymentContent())
-                .payUrl(paymentEntity.getPayUrl())
                 .expired_date(paymentEntity.getExpired_date())
                 .build();
     }

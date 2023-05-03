@@ -53,7 +53,13 @@ public class PaymentController {
 	private ISubscriptionPackService subscriptionPackService;
 
 	@GetMapping
-	public void test(HttpServletRequest req, HttpServletResponse resp, @RequestParam Integer amount) throws IOException, ParseException {
+	public void test(HttpServletRequest req,
+					 HttpServletResponse resp,
+					 @RequestParam Long subscriptionPack) throws IOException, ParseException {
+
+		SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(subscriptionPack);
+		Integer amount = subscriptionPackEntity.getPrice().intValue();
+
 		String vnp_OrderInfo = "order info";
 		String vnp_TxnRef = VnPayConfig.getRandomNumber(8);
 		String bank_code = ""; // edit later
@@ -136,15 +142,13 @@ public class PaymentController {
 		String paymentUrl = VnPayConfig.vnp_PayUrl + "?" + queryUrl;
 
 
-		SubscriptionPackEntity subscriptionPack = subscriptionPackService.getByPrice(Double.parseDouble(String.valueOf(amount))/100);
-
 		UserEntity user = SecurityUtils.getCurrentUser().getUser();
 
-		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW, EOrderStatus.PENDING_PAYMENT ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPack, user, EPaymentMethod.VN_PAY));
+		orderService.add(new OrderModel(Long.parseLong(vnp_TxnRef), formatter.parse(vnp_CreateDate) , formatter.parse(vnp_CreateDate), Double.parseDouble(String.valueOf(amount))/100, EOrderType.NEW, EOrderStatus.PENDING_PAYMENT ,"thanh toán", vnp_IpAddr, vnp_TxnRef,subscriptionPackEntity, user, EPaymentMethod.VN_PAY));
 		OrderEntity order = orderService.getMaDonHang(vnp_TxnRef);
 		paymentService.add(new PaymentEntity(Long.parseLong(vnp_TxnRef), order ,
 				null , null ,Double.parseDouble(String.valueOf(amount))/100 ,
-				null, 01, vnp_OrderInfo, paymentUrl , formatter.parse(vnp_ExpireDate)));
+				null, 01, vnp_OrderInfo, formatter.parse(vnp_ExpireDate)));
 
 		String email = SecurityUtils.getCurrentUser().getUser().getEmail();
 //		sendEmail.sendingPayment(email);

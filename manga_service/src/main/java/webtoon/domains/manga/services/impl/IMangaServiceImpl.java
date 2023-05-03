@@ -92,7 +92,6 @@ public class IMangaServiceImpl implements IMangaService {
 
         MangaEntity mangaEntity = this.getById(model.getId());
         mangaEntity.setTitle(model.getTitle());
-        mangaEntity.setAlternativeTitle(model.getAlternativeTitle());
         mangaEntity.setExcerpt(model.getExcerpt());
         mangaEntity.setDescription(model.getDescription());
         mangaEntity.setMangaName(model.getMangaName());
@@ -106,7 +105,6 @@ public class IMangaServiceImpl implements IMangaService {
         mangaRepository.saveAndFlush(mangaEntity);
         return MangaDto.builder()
                 .title(mangaEntity.getTitle())
-                .alternativeTitle(mangaEntity.getAlternativeTitle())
                 .excerpt(mangaEntity.getExcerpt())
                 .description(mangaEntity.getDescription())
                 .mangaName(mangaEntity.getMangaName())

@@ -153,7 +153,7 @@ public class RefundController {
 			orderService.update(new OrderModel(id, formatter.parse(thoiGianTT) , formatter.parse(thoiGianTT), Double.parseDouble(amount), EOrderType.EXTEND, EOrderStatus.COMPLETED,"thanh toán", vnp_IpAddr, maDonHang,subscriptionPack, user, EPaymentMethod.VN_PAY));
 			OrderEntity order = orderService.getMaDonHang(maDonHang);
 //			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
-			paymentService.update(new PaymentEntity(idPayment, order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, 00, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
+			paymentService.update(new PaymentEntity(idPayment, order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, 00, maNganHang , formatter.parse(vnp_ExpireDate)));
 
 		}else if("15".equals(maPhanHoi)) {
 			ketQua = "Giao dịch không thành thành công vì quá thời gian chờ";
@@ -162,7 +162,7 @@ public class RefundController {
 //			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 			paymentService.update(new PaymentEntity(idPayment, order ,
 					null , maPhanHoi ,Double.parseDouble(amount) ,
-					null, 02, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
+					null, 02, maNganHang , formatter.parse(vnp_ExpireDate)));
 
 		}else{
 			ketQua = "Giao dịch không thành thành công";
@@ -171,7 +171,7 @@ public class RefundController {
 //			paymentService.add(new PaymentEntity(Long.parseLong(maDonHang), order , maGD , maPhanHoi ,Double.parseDouble(amount) , maNganHang, noiDungTT,paymentUrl, formatter.parse(vnp_ExpireDate)));
 			paymentService.update(new PaymentEntity(idPayment, order ,
 					null , maPhanHoi ,Double.parseDouble(amount) ,
-					null, 02, maNganHang, paymentUrl , formatter.parse(vnp_ExpireDate)));
+					null, 02, maNganHang , formatter.parse(vnp_ExpireDate)));
 		}
 //		System.out.println(signValue);
 		System.out.println(vnp_SecureHash);
