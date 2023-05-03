@@ -22,27 +22,29 @@ public class PaymentEntity {
     @OneToOne
     private OrderEntity orderId;
 
-    @Column(name = "trans_id")
-    private String transId;
+    @Column(name = "trans_no")
+    private String transNo;
 
-    @Column(name = "trans_track_number")
-    private String transTrackNumber;
+    @Column(name = "order_info")
+    private String orderInfo;
+
+    @Column(name = "card_type")
+    private String cardType;
 
     @Column(name = "pay_money")
     private Double payMoney;
 
-    @Column(name = "bank")
-    private String bank;
+    @Column(name = "bank_code")
+    private String bankCode;
 
     @Column(name = "status")
     private int status;
 
-    @Column(name = "payment_content")
-    private String paymentContent;
 
-
+    @Column(name = "bank_trans_no") // ma giao dich cua ngan hang
+    private String bankTranNo;
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
-    private Date expired_date;
+    private Date paidDate;
 }

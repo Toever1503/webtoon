@@ -10,6 +10,7 @@ import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -43,8 +44,9 @@ public class SubscriptionPackController {
     }
 
     @GetMapping("/load")
-    public String Payment(Model model) {
-//        SecurityUtils.getCurrentUser().getUser();
+    public String Payment(Model model, HttpSession session) {
+        if(session.getAttribute("loggedUser") == null)
+            return "redirect:/signin?redirectTo=/subscription_pack/load";
         List<SubscriptionPackDto> subscriptionPackEntities = this.subscriptionPackService.getAll();
         System.out.println(subscriptionPackEntities + "test");
         model.addAttribute("items", subscriptionPackEntities);

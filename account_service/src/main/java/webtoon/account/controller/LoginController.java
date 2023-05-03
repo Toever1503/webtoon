@@ -64,7 +64,7 @@ public class LoginController {
                 session.removeAttribute("redirectTo");
 
             if (redirectTo != null)
-                return "redirect:/" + redirectTo + "?login-type=" + result;
+                return "redirect:" + redirectTo + "?login-type=" + result;
             else
                 return "redirect:/index?login-type=" + result;
         }
