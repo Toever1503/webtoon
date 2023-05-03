@@ -173,9 +173,8 @@ const OrderPage: React.FC = () => {
 
 
     const FINAL_STATUSES: EORDER_STATUS[] = [
-        'PAID',
         'COMPLETED',
-        'REFUND_CONFIRM_PENDING',
+        'USER_CONFIRMED_BANKING',
         'REFUNDING',
         'REFUNDED',
     ];

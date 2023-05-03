@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.OrderEntity_;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.inputs.OrderFilterInput;
 import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.inputs.UpgradeOrderInput;
@@ -30,6 +31,8 @@ public class OrderResource {
     public Page<OrderDto> filter(@RequestBody OrderFilterInput input, Pageable pageable) {
         List<Specification<OrderEntity>> specs = new ArrayList<>();
         specs.add((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(OrderEntity_.DELETED_AT)));
+        specs.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not());
+        
         if (input.getQ() != null) {
             input.setQ("%" + input.getQ() + "%");
             specs.add((root, query, cb) -> cb.or(
