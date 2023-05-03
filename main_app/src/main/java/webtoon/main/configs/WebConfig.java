@@ -44,18 +44,27 @@ public class WebConfig implements WebMvcConfigurer {
                 new AntPathRequestMatcher("/signin"),
                 new AntPathRequestMatcher("/static/**")
                 , new AntPathRequestMatcher("/")
-                , new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name()),
-                new AntPathRequestMatcher("/rating/**")
-                ,new AntPathRequestMatcher("/mangaTest/**")
-                , new AntPathRequestMatcher("/manga/**")
+                , new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())
+
                 , new AntPathRequestMatcher("/post/**")
                 , new AntPathRequestMatcher("/signin/**")
                 , new AntPathRequestMatcher("/signup/**")
                 , new AntPathRequestMatcher("/subscription_pack/**")
-                , new AntPathRequestMatcher("/mangas/**")
+
                 , new AntPathRequestMatcher("/payment/**")
                 , new AntPathRequestMatcher("/order/**")
                 ,new AntPathRequestMatcher("/user/**")
+
+
+                //for manga module
+                ,new AntPathRequestMatcher("/rating/**")
+                ,new AntPathRequestMatcher("/mangaTest/**")
+                , new AntPathRequestMatcher("/manga/**")
+                , new AntPathRequestMatcher("/mangas/**")
+                , new AntPathRequestMatcher("/manga-search/**")
+                , new AntPathRequestMatcher("/manga-gener/**")
+                , new AntPathRequestMatcher("/search/**")
+
                 // for account module
                 , new AntPathRequestMatcher("/api/users/forgot-password")
                 , new AntPathRequestMatcher("/api/users/signin")

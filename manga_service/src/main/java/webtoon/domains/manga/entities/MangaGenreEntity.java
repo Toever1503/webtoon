@@ -2,15 +2,11 @@ package webtoon.domains.manga.entities;
 
 import javax.persistence.*;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
 @Table(name ="tbl_manga_genre")
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PRIVATE,force = true)
 @AllArgsConstructor
 @Getter
 @Setter

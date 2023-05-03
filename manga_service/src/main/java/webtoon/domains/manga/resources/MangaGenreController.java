@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.entities.MangaGenreEntity;
+import webtoon.domains.manga.entities.MangaGenreEntity_;
 import webtoon.domains.manga.enums.EStatus;
 import webtoon.domains.manga.services.IMangaGenreService;
 import webtoon.domains.manga.services.IMangaService;
@@ -33,11 +34,13 @@ public class MangaGenreController {
 
     @GetMapping("{name}/{id}")
     public String mangaGener(@PathVariable Long id, @PathVariable String name, Model model, Pageable pageable){
-
         Specification mangaSpec = Specification.where(
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()
-        ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
-//                .and(((root, query, criteriaBuilder) -> cb.));
+        ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)))
+                .and((root, query, criteriaBuilder)
+                        -> criteriaBuilder.equal(root.join(MangaEntity_.GENRES)
+                .get(MangaGenreEntity_.ID),id)
+                );
 
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
 

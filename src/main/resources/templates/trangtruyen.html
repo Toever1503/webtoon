@@ -475,7 +475,7 @@
                             <li class="gap-[5px] flex justify-between"
                                 th:each="chapter,iter: ${itemvolume.chapterEntities}">
                                 <div class="flex justify-between items-center px-[10px] space-x-3 full">
-                                    <a th:href="@{${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}}"
+                                    <a th:href="${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}"
                                        th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
                                        class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                     </a>
@@ -511,18 +511,18 @@
                     <ul th:else class="latest-chapters grid mt-[10px] ml-[15px] gap-[5px] divide-y">
                         <li class="gap-[5px] flex justify-between" th:each="chapter,iter: ${model.chapters}">
                             <div class="flex justify-between items-center px-[10px] space-x-3 full">
-                                <a th:href="@{${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}}"
-                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
-                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                </a>
+<!--                                <a th:href="${chapter.requiredVip ? '#' : '/manga/' + model.title + '/chapter/' + chapter.id}"-->
+<!--                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"-->
+<!--                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">-->
+<!--                                </a>-->
                                 <span th:if="${!model.isFree && chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
                                     Vui lòng đăng ký gói để đọc chương này
                                 </span>
                                 <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
 
-                                <span th:if="${!chapter.requiredVip && model.isFree}" class="text-[12px] text-green-600">
-                                        Đọc thử miễn phí
-                                </span>
+<!--                                <span th:if="${!chapter.requiredVip && model.isFree}" class="text-[12px] text-green-600">-->
+<!--                                        Đọc thử miễn phí-->
+<!--                                </span>-->
                             </div>
                             <span th:text="${chapter.createdAt}"></span>
                         </li>

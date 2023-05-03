@@ -10,5 +10,10 @@ import webtoon.domains.manga.enums.EStatus;
 @Data
 public class MangaFilterInput {
     private EStatus status;
+
     private String q;
+
+    private Long generId;
+
+    private String releaseYear;
 }

@@ -11,9 +11,9 @@
 </head>
 
 <body class="bg-[#f6f6f6]">
-    <div class="max-w-[1100px] mx-auto flex bg-white pt-[20px]">
+    <div layout:fragment="content"  class="max-w-[1100px] mx-auto flex bg-white pt-[20px]">
         <div class="form-search w-[300px] border-r">
-            <form class="grid space-y-5 justify-center">
+            <form th:action="@{'/search'}" method="POST" class="grid space-y-5 justify-center">
                 <div class="grid items-center">
                     <label for="keyword" class="block min-w-[180px] font-medium">Từ khóa:</label>
                     <input id="keyword" name="q" type="text" placeholder="tên truyện, tác giả..."
@@ -22,31 +22,21 @@
 
                 <div class="grid  items-center">
                     <label for="genres" class="block min-w-[180px] font-medium">Thể loại:</label>
-                    <select name="genres" id="genres" class="min-w-[200px] rounded" style="border: 1px solid #ebebeb;">
-                        <option value="volvo">Volvo</option>
-                        <option value="saab">Saab</option>
-                        <option value="opel">Opel</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
-                        <option value="audi">Audi</option>
+                    <select name="generId" id="genres" class="min-w-[200px] rounded"
+
+                            style="border: 1px solid #ebebeb;">
+                        <option value="" th:text="'Chọn thể loại'"> </option>
+                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" ></option>
                     </select>
                 </div>
 
                 <div class="grid  items-center">
                     <label for="releaseStatus" class="block min-w-[180px] font-medium">Tình trạng phát hành:</label>
-                    <select name="releaseStatus" id="releaseStatus" class="min-w-[200px] rounded"
+                    <select name="status" id="releaseStatus" class="min-w-[200px] rounded"
                         style="border: 1px solid #ebebeb;">
-                        <option value="volvo">Sắp ra</option>
-                        <option value="volvo">Đang ra</option>
-                        <option value="volvo">Hoàn tất</option>
+                        <option value="" th:text="'Chọn trạng thái'"></option>
+                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey()}" ></option>
+
                     </select>
                 </div>
 
@@ -54,9 +44,9 @@
                     <label for="releaseYear" class="block min-w-[180px] font-medium">Năm phát hành:</label>
                     <select name="releaseYear" id="releaseYear" class="min-w-[200px] rounded"
                         style="border: 1px solid #ebebeb;">
-                        <option value="volvo">2023</option>
-                        <option value="volvo">2021</option>
-                        <option value="volvo">2020</option>
+                        <option value="2023">2023</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
                     </select>
                 </div>
 
@@ -69,32 +59,36 @@
                     </button> -->
                 </div>
             </form>
-        </div>
 
-        <div class="mx-2 p-4">
-            <h1 class="mb-5 font-bold text-xl">20 kết quả tìm kiếm</h1>
+        </div>
+        <h3 th:if="${mangaEntity == null}">Không có dữ liệu!</h3>
+        <div th:else class="mx-2 p-4">
+            <h1 class="mb-5 font-bold text-xl" th:text="${mangaEntity.size() + ' kết quả tìm kiếm'}"></h1>
             <hr class="border border-zinc-600">
             <div>
                 <!-- Cards 1 -->
-                <div class="flex justify-between">
+                <div class="flex justify-between" th:each="mangaE : ${mangaEntity}">
                     <div class="p-4">
                         <img class="w-56 h-70 border rounded"
-                            src="https://i.pinimg.com/736x/89/73/4f/89734f2e8d5a975fb2e533a59bf1e98f.jpg" alt="">
+                            th:src="${mangaE.featuredImage}" alt="">
                     </div>
                     <div class="px-4 ">
                         <div class="flex justify-center">
                             <div class="min-w-[400px] mx-2 text-sm">
                                 <!-- content here -->
                                 <div class="py-4">
-                                    <h3 class="font-medium text-xl">Manga chapter</h3>
+                                    <h3 class="font-medium text-xl" th:text="${mangaE.title}"></h3>
                                 </div>
                                 <div class="p-4 bg-[#f6f6f6] w-full gap-x-[40px] grid grid-cols-2">
                                     <div class="flex  justify-between">
                                         <div class="py-2">
                                             <h4 class="font-medium text-sm">Thể loại</h4>
                                         </div>
-                                        <div class="py-2">
-                                            <span>tes1,test</span>
+                                        <div class="py-2" th:inline="text">
+                                            <span th:each="itemgenre,iter : ${mangaE.genres}">
+                                            <span th:text="${itemgenre.name}"></span>
+                                            <span th:if="${!iter.last}" th:text="','"></span>
+                                    </span>
                                         </div>
                                     </div>
 
@@ -121,7 +115,7 @@
                                             <h4 class="font-medium text-sm">Năm phát hành</h4>
                                         </div>
                                         <div class="py-2">
-                                            <span>2023</span>
+                                            <span th:text="${mangaE.releaseYear}"></span>
                                         </div>
                                     </div>
 
@@ -136,39 +130,39 @@
                                 </div>
 
 
-                                <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
-                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
-                                    th:each="volume,volI : ${manga.volumeEntities}">
-                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+<!--                                <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"-->
+<!--                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"-->
+<!--                                    th:each="volume,volI : ${manga.volumeEntities}">-->
+<!--                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">-->
 
-                                        <div class="gap-[5px] flex items-center">
-                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
-                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
-                                                style="border: 1px solid #ebebeb"
-                                                class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                ㄴㄴ</a>
-                                            <span class="text-[12px] text-[#666666]"
-                                                th:text="${'Tập ' + (volume.volumeIndex + 1)}">ㄴㄴ
-                                            </span>
-                                            <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">
-                                                2023-24-12</span>
-                                        </div>
-                                       
-                                    </li>
-                                </ul>
+<!--                                        <div class="gap-[5px] flex items-center">-->
+<!--                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"-->
+<!--                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"-->
+<!--                                                style="border: 1px solid #ebebeb"-->
+<!--                                                class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">-->
+<!--                                                ㄴㄴ</a>-->
+<!--                                            <span class="text-[12px] text-[#666666]"-->
+<!--                                                th:text="${'Tập ' + (volume.volumeIndex + 1)}">ㄴㄴ-->
+<!--                                            </span>-->
+<!--                                            <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">-->
+<!--                                                2023-24-12</span>-->
+<!--                                        </div>-->
+<!--                                       -->
+<!--                                    </li>-->
+<!--                                </ul>-->
                                 <!--  for display chapter by chap -->
-                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
-                                    <li class="gap-[5px] flex" th:each="chapter,iter: ${manga.chapters}"
-                                        th:if="${iter.index < 2}">
-                                        <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
-                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
-                                            style="border: 1px solid #ebebeb"
-                                            class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                       afaf </a>
-                                        <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">
-                                            2023-24-12</span>
-                                    </li>
-                                </ul>
+<!--                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">-->
+<!--                                    <li class="gap-[5px] flex" th:each="chapter,iter: ${manga.chapters}"-->
+<!--                                        th:if="${iter.index < 2}">-->
+<!--                                        <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"-->
+<!--                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"-->
+<!--                                            style="border: 1px solid #ebebeb"-->
+<!--                                            class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">-->
+<!--                                       afaf </a>-->
+<!--                                        <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">-->
+<!--                                            2023-24-12</span>-->
+<!--                                    </li>-->
+<!--                                </ul>-->
                             </div>
                         </div>
                     </div>
