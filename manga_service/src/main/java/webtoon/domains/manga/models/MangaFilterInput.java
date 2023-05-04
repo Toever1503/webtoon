@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import webtoon.domains.manga.enums.EMangaSTS;
-import webtoon.domains.manga.enums.EStatus;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -13,5 +12,7 @@ public class MangaFilterInput {
     private EMangaSTS status;
 
     private String q;
+
+    private Long generId;
 
 }

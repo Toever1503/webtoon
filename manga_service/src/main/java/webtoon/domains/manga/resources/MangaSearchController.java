@@ -36,7 +36,7 @@ public class MangaSearchController {
 
     @GetMapping("/search")
     public String getSearch(Model model, Pageable pageable,@ModelAttribute MangaFilterInput filterInput){
-        Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, SearchSpecification.filter(filterInput));
+        Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable,SearchSpecification.filter(filterInput));
         List<MangaGenreEntity> mangaGenre =  this.genreService.findAllGenre();
 
         HashMap<EMangaSTS, String> mangaStatusMap = new HashMap<>();
@@ -48,7 +48,7 @@ public class MangaSearchController {
 
 
 
-        model.addAttribute("mangaEntity",mangaEntity.getContent());
+        model.addAttribute("mangaEntity",mangaEntity);
         model.addAttribute("mangaGenre",mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);
         return "/manga/search";
