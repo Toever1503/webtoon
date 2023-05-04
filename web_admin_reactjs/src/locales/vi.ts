@@ -3,7 +3,7 @@ export default {
     dashboard: {
         newOrderCount: 'Tổng đơn hàng mới',
         totalRevenue: 'Tổng doanh thu',
-        paymentPending: 'Chờ thanh toán',
+        paymentPending: 'Chờ xác nhận thanh toán',
         orderCompleted: 'Đã hoàn tất',
         orderCancelledCount: 'Đã hủy',
         recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
@@ -15,6 +15,7 @@ export default {
                 createdBy: 'Người mua',
                 subscriptionPack: 'Gói đăng ký',
                 price: 'Giá',
+                createdAt: 'Ngày tạo',
             }
         }
     },

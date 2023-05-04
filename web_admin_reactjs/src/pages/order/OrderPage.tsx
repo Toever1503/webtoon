@@ -167,7 +167,10 @@ const OrderPage: React.FC = () => {
         },
     ];
 
-    const [filterInput, setFilterInput] = useState<IOrderFilterInput>({
+    const [filterInput, setFilterInput] = useState<{
+        q?: string,
+        status?: string,
+    }>({
         status: '',
     });
 
@@ -307,7 +310,7 @@ const OrderPage: React.FC = () => {
         orderService
             .filterOrder({
                 q: filterInput.q ? filterInput.q : undefined,
-                status: filterInput.status ? filterInput.status : undefined,
+                status: filterInput.status ? [filterInput.status] : undefined,
             })
             .then((res: AxiosResponse<{
                 content: IOrder[],

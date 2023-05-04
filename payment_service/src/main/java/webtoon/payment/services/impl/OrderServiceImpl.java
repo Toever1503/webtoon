@@ -25,7 +25,6 @@ import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.utils.exception.CustomHandleException;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,14 +32,18 @@ import java.util.UUID;
 @Transactional
 public class OrderServiceImpl implements IOrderService {
 
-    @Autowired
-    private IOrderRepository orderRepository;
+
+    private final IOrderRepository orderRepository;
 
     @Autowired
     private ISubscriptionPackService subscriptionPackService;
 
     @Autowired
     private IUserService userService;
+
+    public OrderServiceImpl(IOrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
 
     @Override
     public OrderDto add(OrderModel orderModel) {
@@ -251,10 +254,40 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void returnOrder(Long id) {
         OrderEntity orderEntity = this.getById(id);
-        if(!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+        if (!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
             throw new CustomHandleException(43);
         orderEntity.setStatus(EOrderStatus.REFUNDING);
         this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
+    public Long countTotalOrderInToday() {
+        return this.orderRepository.countTotalOrderInToday();
+    }
+
+    @Override
+    public Long sumTotalRevenueInToday() {
+        return this.orderRepository.sumTotalRevenueInToday();
+    }
+
+    @Override
+    public Long countTotalPaymentPendingInToday() {
+        return this.orderRepository.countTotalPaymentPendingInToday();
+    }
+
+    @Override
+    public Long countTotalCompletedOrderInToday() {
+        return this.orderRepository.countTotalCompletedOrderInToday();
+    }
+
+    @Override
+    public Long countTotalCanceledOrderInToday() {
+        return this.orderRepository.countTotalCanceledOrderInToday();
+    }
+
+    @Override
+    public List<Object[]> sumTotalRevenueInLast7Days() {
+        return this.orderRepository.sumTotalRevenueInLast7Days();
     }
 
     @Override
