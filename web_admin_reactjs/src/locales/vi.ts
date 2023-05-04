@@ -302,7 +302,7 @@ export default {
             'ALL': 'Tất cả',
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
-            'USER_CONFIRMED_BANKING': 'Đã chuyển khoản',
+            'USER_CONFIRMED_BANKING': 'Chờ xác nhận thanh toán',
             'REFUNDING': 'Yêu cầu hoàn tiền',
             'REFUNDED': 'Đã hoàn tiền',
         }

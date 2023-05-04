@@ -356,7 +356,7 @@ const OrderPage: React.FC = () => {
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
                     <label className="font-bold">{t('order.table.status')}: </label>
-                    <Select className="min-w-[150px]"
+                    <Select className="min-w-[200px]"
                         onChange={val => {
                             filterInput.status = val;
                             setFilterInput(filterInput);
