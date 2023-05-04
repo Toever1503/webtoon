@@ -167,7 +167,10 @@ const OrderPage: React.FC = () => {
         },
     ];
 
-    const [filterInput, setFilterInput] = useState<IOrderFilterInput>({
+    const [filterInput, setFilterInput] = useState<{
+        q?: string,
+        status?: string,
+    }>({
         status: '',
     });
 
@@ -307,7 +310,7 @@ const OrderPage: React.FC = () => {
         orderService
             .filterOrder({
                 q: filterInput.q ? filterInput.q : undefined,
-                status: filterInput.status ? filterInput.status : undefined,
+                status: filterInput.status ? [filterInput.status] : undefined,
             })
             .then((res: AxiosResponse<{
                 content: IOrder[],
@@ -353,7 +356,7 @@ const OrderPage: React.FC = () => {
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
                     <label className="font-bold">{t('order.table.status')}: </label>
-                    <Select className="min-w-[150px]"
+                    <Select className="min-w-[200px]"
                         onChange={val => {
                             filterInput.status = val;
                             setFilterInput(filterInput);

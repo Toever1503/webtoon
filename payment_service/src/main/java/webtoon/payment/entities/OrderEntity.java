@@ -52,10 +52,10 @@ public class OrderEntity {
     @Column(name = "day_count")
     private Integer dayCount;
 
-    @Column
+    @Column(name = "final_price")
     private Double finalPrice;
 
-    @Column
+    @Column(name = "order_type")
     @Enumerated(EnumType.STRING)
     private EOrderType orderType;
 

@@ -51,4 +51,16 @@ public interface IOrderService {
     void cancelOrder(Long id);
 
     void returnOrder(Long id);
+
+    Long countTotalOrderInToday();
+
+    Long sumTotalRevenueInToday();
+
+    Long countTotalPaymentPendingInToday();
+
+    Long countTotalCompletedOrderInToday();
+
+    Long countTotalCanceledOrderInToday();
+
+    List<Object[]> sumTotalRevenueInLast7Days();
 }
