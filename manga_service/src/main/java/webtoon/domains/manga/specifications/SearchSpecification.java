@@ -63,9 +63,9 @@ public class SearchSpecification {
         if(model.getStatus() != null){
             specs.add(byStatus(model.getStatus()));
         }
-//        if (model.getGenerId() != null){
-//            specs.add(byGener(model.getGenerId()));
-//        }
+        if (model.getGenerId() != null){
+            specs.add(byGener(model.getGenerId()));
+        }
 //        if (model.getReleaseYear() != null){
 //            specs.add(byYear(model.getReleaseYear()));
 //        }

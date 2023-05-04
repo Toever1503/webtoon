@@ -62,13 +62,13 @@
             </form>
 
         </div>
-        <h3 th:if="${mangaEntity == null}">Không có dữ liệu!</h3>
+        <h3 th:if="${mangaEntity.content == null}">Không có dữ liệu!</h3>
         <div th:else class="mx-2 p-4">
-            <h1 class="mb-5 font-bold text-xl" th:text="${mangaEntity.size() + ' kết quả tìm kiếm'}"></h1>
+            <h1 class="mb-5 font-bold text-xl" th:text="${mangaEntity.content.size() + ' kết quả tìm kiếm'}"></h1>
             <hr class="border border-zinc-600">
-            <div>
+            <div class="manga-list">
                 <!-- Cards 1 -->
-                <div class="flex justify-between item" th:each="mangaE : ${mangaEntity}">
+                <div class="flex justify-between manga-item" th:each="mangaE : ${mangaEntity.content}">
                     <div class="p-4">
                         <img class="w-56 h-70 border rounded"
                             th:src="${mangaE.featuredImage}" alt="">
@@ -141,7 +141,7 @@
                                                 th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                 style="border: 1px solid #ebebeb"
                                                 class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                                ㄴㄴ</a>
+                                                </a>
                                             <span class="text-[12px] text-[#666666]"
                                                 th:text="${'Tập ' + (volume.volumeIndex + 1)}">
                                             </span>
@@ -159,7 +159,7 @@
                                             th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                             style="border: 1px solid #ebebeb"
                                             class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                       afaf </a>
+                                        </a>
                                         <span class="text-[12px] text-[#666666] text-center" th:text="${chapter.createdAt}">
                                             2023-24-12</span>
                                     </li>
@@ -168,6 +168,20 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="flex justify-center mt-2">
+                    <div class="pagination">
+                        <a class="prev"
+
+                        >Prev</a>
+                        <span th:text="'Page '"></span>
+                        <a class="next"
+
+
+                        >Next</a>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

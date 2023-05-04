@@ -47,7 +47,7 @@ public class MangaSearchController {
 
 
 
-        model.addAttribute("mangaEntity",mangaEntity.getContent());
+        model.addAttribute("mangaEntity",mangaEntity);
         model.addAttribute("mangaGenre",mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);
         return "/manga/search";
