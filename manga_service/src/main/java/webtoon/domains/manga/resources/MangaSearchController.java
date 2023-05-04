@@ -35,15 +35,14 @@ public class MangaSearchController {
     private IMangaService mangaService;
 
     @GetMapping("/search")
-    public String getSearch(Model model, Pageable pageable,@ModelAttribute MangaFilterInput filterInput){
+    public String getSearch(Model model, Pageable pageable, MangaFilterInput filterInput){
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, SearchSpecification.filter(filterInput));
         List<MangaGenreEntity> mangaGenre =  this.genreService.findAllGenre();
 
         HashMap<EMangaSTS, String> mangaStatusMap = new HashMap<>();
         mangaStatusMap.put(EMangaSTS.COMING, "Đang bắt đầu");
         mangaStatusMap.put(EMangaSTS.GOING, "Đang thực hiện");
-        mangaStatusMap.put(EMangaSTS.STOPPED, "Đã dừng");
-        mangaStatusMap.put(EMangaSTS.CANCELLED, "Bị hủy");
+        mangaStatusMap.put(EMangaSTS.ON_STOPPING, "Đang tạm dừng");
         mangaStatusMap.put(EMangaSTS.COMPLETED, "Đã hoàn thành");
 
 

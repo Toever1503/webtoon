@@ -296,7 +296,7 @@
                             </div>
                             <div class="basis-3/4">
                                 <span th:each="item,iter : ${model.authors}">
-                                    <span th:text="${item.name}"></span>
+                                    <a class="text-blue-500 hover:text-blue-400" th:href="@{'/author/' + ${item.name} + '/' +${item.id}}" th:text="${item.name}"></a>
                                     <span th:if="${!iter.last}" th:text="','"></span>
                                 </span>
                             </div>
@@ -323,7 +323,7 @@
                             <div class="basis-3/4">
                                 <span th:inline="text">
                                     <span th:each="item,iter : ${model.tags}">
-                                        <span th:text="${item.tagName}"></span>
+                                        <a th:text="${item.tagName}"></a>
                                         <span th:if="${!iter.last}" th:text="','"></span>
                                     </span>
                                 </span>
