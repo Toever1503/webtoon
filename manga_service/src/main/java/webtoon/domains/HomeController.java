@@ -1,6 +1,7 @@
 package webtoon.domains;
 
 
+import com.mysql.cj.callback.MysqlCallbackHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -13,7 +14,9 @@ import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.entities.MangaGenreEntity;
+import webtoon.domains.manga.entities.ReadHistory;
 import webtoon.domains.manga.enums.EStatus;
+import webtoon.domains.manga.services.IReadHistoryService;
 import webtoon.domains.post.service.ICategoryService;
 import webtoon.domains.post.service.IPostService;
 import webtoon.domains.manga.services.IMangaChapterService;
@@ -23,6 +26,8 @@ import webtoon.domains.post.entities.PostEntity;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -41,6 +46,9 @@ public class HomeController {
 
     @Autowired
     private IPostService postService;
+
+    @Autowired
+    private IReadHistoryService historyService;
 
     @RequestMapping("/index")
     public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
@@ -70,6 +78,13 @@ public class HomeController {
         }
 
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+
+        if (loggedUser != null){
+            List<ReadHistory> readHistoryList = this.historyService.getByCreatBy(loggedUser.getId());
+
+            model.addAttribute("readHistoryList",readHistoryList);
+        }
+
         model.addAttribute("logger",loggedUser);
         return "homepage";
     }

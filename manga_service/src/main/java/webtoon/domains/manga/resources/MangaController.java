@@ -141,7 +141,7 @@ public class MangaController {
 
         UserEntity logger = (UserEntity) session.getAttribute("loggedUser");
         if (logger != null) {
-            readHistory = historyService.findByCBAndMG(logger.getId(), mangaEntity.getId());
+            readHistory = historyService.findByCBAndMG( mangaEntity.getId(),logger.getId());
             if (readHistory != null) {
 
                 readHistory.setChapterEntity(chapterEntity.getId());
