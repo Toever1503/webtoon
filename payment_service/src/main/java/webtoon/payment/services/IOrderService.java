@@ -63,4 +63,6 @@ public interface IOrderService {
     Long countTotalCanceledOrderInToday();
 
     List<Object[]> sumTotalRevenueInLast7Days();
+
+    void changeStatusOrder(Long id, EOrderStatus status);
 }

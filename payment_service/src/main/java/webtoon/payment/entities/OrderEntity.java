@@ -43,9 +43,6 @@ public class OrderEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     private Date gioLap;
 
-    @Column(name = "expired_subs_date")
-    private Date expiredSubsDate;
-
     @Column(name = "month_count")
     private Integer monthCount;
 

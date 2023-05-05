@@ -30,10 +30,10 @@ export interface AddEditOrderModalProps {
 };
 
 const FINAL_STATUSES: EORDER_STATUS[] = [
-    'COMPLETED',
+    'PAYMENT_PENDING',
     'USER_CONFIRMED_BANKING',
-    'REFUNDING',
-    'REFUNDED',
+    'COMPLETED',
+    'CANCELED'
 ];
 
 

@@ -50,7 +50,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = OrderEntity.builder()
                 .created_at(orderModel.getCreated_at())
                 .gioLap(orderModel.getGioLap())
-                .expiredSubsDate(orderModel.getExpiredSubsDate())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
@@ -71,7 +70,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
-        orderEntity.setExpiredSubsDate(orderModel.getExpiredSubsDate());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());
@@ -132,11 +130,6 @@ public class OrderServiceImpl implements IOrderService {
         entity.setSubs_pack_id(subscriptionPack);
         entity.setFinalPrice(subscriptionPack.getPrice());
 
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
-        entity.setExpiredSubsDate(calendar.getTime());
-
         entity.setMaDonHang(orderNumber);
         entity.setUser_id(userService.getById(input.getUser_id()));
         entity.setMonthCount(subscriptionPack.getMonthCount());
@@ -159,9 +152,6 @@ public class OrderServiceImpl implements IOrderService {
             entity.setSubs_pack_id(subscriptionPack);
             entity.setFinalPrice(subscriptionPack.getPrice());
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
-            entity.setExpiredSubsDate(calendar.getTime());
             entity.setMonthCount(subscriptionPack.getMonthCount());
             entity.setDayCount(subscriptionPack.getDayCount());
         }
@@ -291,6 +281,13 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public void changeStatusOrder(Long id, EOrderStatus status) {
+        OrderEntity orderEntity = this.getById(id);
+        orderEntity.setStatus(status);
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
     public OrderDto upgradeOrder(UpgradeOrderInput input) {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
@@ -317,7 +314,6 @@ public class OrderServiceImpl implements IOrderService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, upgradeOrder.getMonthCount());
-        upgradeOrder.setExpiredSubsDate(calendar.getTime());
 
         this.orderRepository.saveAndFlush(upgradeOrder);
         return OrderDto.toDto(upgradeOrder);

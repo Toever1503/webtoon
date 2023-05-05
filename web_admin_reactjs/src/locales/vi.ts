@@ -3,7 +3,7 @@ export default {
     dashboard: {
         newOrderCount: 'Tổng đơn hàng mới',
         totalRevenue: 'Tổng doanh thu',
-        paymentPending: 'Chờ xác nhận thanh toán',
+        paymentPending: 'Chờ thanh toán',
         orderCompleted: 'Đã hoàn tất',
         orderCancelledCount: 'Đã hủy',
         recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
@@ -248,7 +248,6 @@ export default {
             'updatedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
-            'expireDate': 'Ngày hết hạn đọc',
             'upgrade': 'Nâng cấp',
             viewDetail: 'Chi tiết',
             upgradeSubs: 'Nâng cấp gói',
@@ -269,6 +268,8 @@ export default {
                     'createdBy': 'Người mua',
                     status: 'Trạng thái',
                     chooseUser: 'Chọn người dùng',
+                    'sure-complete': 'Bạn chắc chắn muốn hoàn tất đơn hàng này?',
+                    'mark-complete': 'Cập nhật hoàn tất',
                 }
             },
             actions: {
@@ -276,6 +277,8 @@ export default {
                 'add-failed': 'Thêm thất bại!',
                 'edit-success': 'Sửa thành công!',
                 'edit-failed': 'Sửa thất bại!',
+                'update-status-success': 'Cập nhật trạng thái thành công!',
+                'update-status-failed': 'Cập nhật trạng thái thất bại!',
             },
             errors: {
                 'required-user': 'Vui lòng chọn người dùng!',
@@ -300,11 +303,10 @@ export default {
         },
         eStatus: {
             'ALL': 'Tất cả',
+            'PAYMENT_PENDING': 'Chờ thanh toán',
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
-            'USER_CONFIRMED_BANKING': 'Chờ xác nhận thanh toán',
-            'REFUNDING': 'Yêu cầu hoàn tiền',
-            'REFUNDED': 'Đã hoàn tiền',
+            'USER_CONFIRMED_BANKING': 'Chờ kiểm tra CK',
         }
     },
     'subscription-pack': {

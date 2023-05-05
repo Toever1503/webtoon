@@ -152,7 +152,6 @@ public class PaymentController {
 
             Calendar currentDate = Calendar.getInstance();
             currentDate.add(Calendar.MONTH, orderEntity.getSubs_pack_id().getMonthCount());
-            orderEntity.setExpiredSubsDate(currentDate.getTime());
             this.orderService.saveOrderEntity(orderEntity);
 
             PaymentEntity paymentEntity = PaymentEntity.builder()

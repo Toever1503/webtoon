@@ -78,6 +78,10 @@ public class OrderResource {
     }
 
 
+    @PatchMapping("{id}/change-status")
+    public void changeStatusOrder (@PathVariable Long id, @RequestParam EOrderStatus status) {
+        this.orderService.changeStatusOrder(id, status);
+    };
     @RequestMapping("dashboard")
     public Object dashboardToday() {
         Map<String, Object> map = new HashMap<>();
