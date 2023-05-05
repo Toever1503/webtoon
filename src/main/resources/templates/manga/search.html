@@ -17,7 +17,7 @@
                 <div class="grid items-center">
                     <label for="keyword" class="block min-w-[180px] font-medium">Từ khóa:</label>
                     <input id="keyword" name="q" type="text" placeholder="tên truyện, tác giả..."
-                        class="rounded px-[5px]" style="border: 1px solid #ebebeb;" />
+                        class="rounded px-[5px]" style="border: 1px solid #ebebeb;" th:value="${filterInput.q}"/>
                 </div>
 
                 <div class="grid  items-center">
@@ -26,7 +26,7 @@
 
                             style="border: 1px solid #ebebeb;">
                         <option value="" th:text="'Chọn thể loại'"> </option>
-                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" ></option>
+                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" th:checked="${filterInput.generId}"></option>
                     </select>
                 </div>
 
@@ -35,7 +35,7 @@
                     <select name="status" id="releaseStatus" class="min-w-[200px] rounded"
                         style="border: 1px solid #ebebeb;">
                         <option value="" th:text="'Chọn trạng thái'"></option>
-                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey()}" ></option>
+                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey().name()}"  th:checked="${filterInput.status}"></option>
 
                     </select>
                 </div>

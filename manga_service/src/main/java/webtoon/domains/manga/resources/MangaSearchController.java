@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.entities.MangaGenreEntity;
@@ -35,7 +36,16 @@ public class MangaSearchController {
     private IMangaService mangaService;
 
     @GetMapping("/search")
-    public String getSearch(Model model, Pageable pageable, MangaFilterInput filterInput){
+    public String getSearch(Model model, Pageable pageable, @RequestParam(required = false) String q,
+                            @RequestParam(required = false) Long generId,
+                            @RequestParam(required = false) EMangaSTS status,
+                            @RequestParam(required = false) Integer releaseYear ){
+        MangaFilterInput filterInput = new MangaFilterInput();
+        filterInput.setQ(q);
+        filterInput.setGenerId(generId);
+        filterInput.setReleaseYear(releaseYear);
+        filterInput.setStatus(status);
+        model.addAttribute("filterInput",filterInput);
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, SearchSpecification.filter(filterInput));
         List<MangaGenreEntity> mangaGenre =  this.genreService.findAllGenre();
 
@@ -50,6 +60,7 @@ public class MangaSearchController {
         model.addAttribute("mangaEntity",mangaEntity);
         model.addAttribute("mangaGenre",mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);
+
         return "/manga/search";
     }
 

@@ -15,4 +15,6 @@ public class MangaFilterInput {
 
     private Long generId;
 
+    private Integer releaseYear;
+
 }
