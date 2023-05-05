@@ -1,7 +1,6 @@
 package webtoon.domains;
 
 
-import com.mysql.cj.callback.MysqlCallbackHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -11,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import webtoon.account.entities.UserEntity;
+import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.entities.MangaGenreEntity;
@@ -25,9 +25,8 @@ import webtoon.domains.manga.services.IMangaService;
 import webtoon.domains.post.entities.PostEntity;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.stream.Collectors;
 
 @Controller
 public class HomeController {
@@ -81,7 +80,12 @@ public class HomeController {
 
         if (loggedUser != null){
             List<ReadHistory> readHistoryList = this.historyService.getByCreatBy(loggedUser.getId());
-
+            List<MangaDto> recentMangaList = new ArrayList<>();
+            readHistoryList.forEach(s -> {
+                MangaDto mangaDto = this.mangaService.getByMangaId(s.getMangaEntity());
+                recentMangaList.add(mangaDto);
+            });
+            model.addAttribute("mangaHistory",recentMangaList);
             model.addAttribute("readHistoryList",readHistoryList);
         }
 
