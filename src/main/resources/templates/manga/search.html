@@ -22,11 +22,10 @@
 
                 <div class="grid  items-center">
                     <label for="genres" class="block min-w-[180px] font-medium">Thể loại:</label>
-                    <select name="generId" id="genres" class="min-w-[200px] rounded"
-
+                    <select name="genreId" id="genres" class="min-w-[200px] rounded"
                             style="border: 1px solid #ebebeb;">
                         <option value="" th:text="'Chọn thể loại'"> </option>
-                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" th:checked="${filterInput.generId}"></option>
+                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" th:selected="${filterInput.genreId == gener.id}"></option>
                     </select>
                 </div>
 
@@ -35,7 +34,7 @@
                     <select name="status" id="releaseStatus" class="min-w-[200px] rounded"
                         style="border: 1px solid #ebebeb;">
                         <option value="" th:text="'Chọn trạng thái'"></option>
-                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey().name()}"  th:checked="${filterInput.status}"></option>
+                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey().name()}"  th:selected="${filterInput.status != null && filterInput.status.equals(trangthai.getKey())}"></option>
 
                     </select>
                 </div>

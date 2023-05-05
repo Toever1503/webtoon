@@ -1,4 +1,4 @@
-package webtoon.domains.manga.resources;
+package webtoon.domains.manga.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

@@ -1,4 +1,4 @@
-package webtoon.domains.manga.resources;
+package webtoon.domains.manga.controllers;
 
 import org.json.JSONException;
 import org.json.JSONObject;

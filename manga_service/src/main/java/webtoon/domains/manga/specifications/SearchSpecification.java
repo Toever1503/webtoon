@@ -34,7 +34,7 @@ public class SearchSpecification {
 
     public static Specification<MangaEntity> byStatus(EMangaSTS sts){
         return (root, query, criteriaBuilder) ->
-            criteriaBuilder.equal(root.get(MangaEntity_.MANGA_STATUS),sts.name());
+            criteriaBuilder.equal(root.get(MangaEntity_.MANGA_STATUS),sts);
     }
 
     public static Specification<MangaEntity> like(String q){
@@ -56,8 +56,8 @@ public class SearchSpecification {
         if(model.getStatus() != null){
             specs.add(byStatus(model.getStatus()));
         }
-        if (model.getGenerId() != null){
-            specs.add(byGener(model.getGenerId()));
+        if (model.getGenreId() != null){
+            specs.add(byGener(model.getGenreId()));
         }
 //        if (model.getReleaseYear() != null){
 //            specs.add(byYear(model.getReleaseYear()));

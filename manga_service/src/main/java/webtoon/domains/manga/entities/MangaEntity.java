@@ -56,6 +56,7 @@ public class MangaEntity {
     @Column(name = "comment_count")
     private Integer commentCount;
 
+    // nam phat hanh
     @Column(name = "release_year")
     private Integer releaseYear;
 

@@ -1,4 +1,4 @@
-package webtoon.domains.manga.resources;
+package webtoon.domains.manga.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -37,15 +37,14 @@ public class MangaSearchController {
 
     @GetMapping("/search")
     public String getSearch(Model model, Pageable pageable, @RequestParam(required = false) String q,
-                            @RequestParam(required = false) Long generId,
+                            @RequestParam(required = false) Long genreId,
                             @RequestParam(required = false) EMangaSTS status,
                             @RequestParam(required = false) Integer releaseYear ){
         MangaFilterInput filterInput = new MangaFilterInput();
         filterInput.setQ(q);
-        filterInput.setGenerId(generId);
+        filterInput.setGenreId(genreId);
         filterInput.setReleaseYear(releaseYear);
         filterInput.setStatus(status);
-        model.addAttribute("filterInput",filterInput);
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, SearchSpecification.filter(filterInput));
         List<MangaGenreEntity> mangaGenre =  this.genreService.findAllGenre();
 
@@ -56,7 +55,7 @@ public class MangaSearchController {
         mangaStatusMap.put(EMangaSTS.COMPLETED, "Đã hoàn thành");
 
 
-
+        model.addAttribute("filterInput",filterInput);
         model.addAttribute("mangaEntity",mangaEntity);
         model.addAttribute("mangaGenre",mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);

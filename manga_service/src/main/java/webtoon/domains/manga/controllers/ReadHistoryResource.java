@@ -1,4 +1,4 @@
-package webtoon.domains.manga.resources;
+package webtoon.domains.manga.controllers;
 
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.ResponseDto;
