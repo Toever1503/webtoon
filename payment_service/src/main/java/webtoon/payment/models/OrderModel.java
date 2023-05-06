@@ -31,4 +31,6 @@ public class OrderModel {
     private SubscriptionPackEntity subs_pack_id;
     private UserEntity user_id;
     private EPaymentMethod payment_method;
+
+
 }

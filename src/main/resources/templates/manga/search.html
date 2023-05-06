@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../../static/main.css" rel="stylesheet">
+</head>
+
+<body class="bg-[#f6f6f6]">
+    <div class="max-w-[1100px] mx-auto flex bg-white pt-[20px]">
+        <div class="form-search w-[300px] border-r">
+            <form class="grid space-y-5 justify-center">
+                <div class="grid items-center">
+                    <label for="keyword" class="block min-w-[180px] font-medium">Từ khóa:</label>
+                    <input id="keyword" name="q" type="text" placeholder="tên truyện, tác giả..."
+                        class="rounded px-[5px]" style="border: 1px solid #ebebeb;" />
+                </div>
+
+                <div class="grid  items-center">
+                    <label for="genres" class="block min-w-[180px] font-medium">Thể loại:</label>
+                    <select name="genres" id="genres" class="min-w-[200px] rounded" style="border: 1px solid #ebebeb;">
+                        <option value="volvo">Volvo</option>
+                        <option value="saab">Saab</option>
+                        <option value="opel">Opel</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                        <option value="audi">Audi</option>
+                    </select>
+                </div>
+
+                <div class="grid  items-center">
+                    <label for="releaseStatus" class="block min-w-[180px] font-medium">Tình trạng phát hành:</label>
+                    <select name="releaseStatus" id="releaseStatus" class="min-w-[200px] rounded"
+                        style="border: 1px solid #ebebeb;">
+                        <option value="volvo">Sắp ra</option>
+                        <option value="volvo">Đang ra</option>
+                        <option value="volvo">Hoàn tất</option>
+                    </select>
+                </div>
+
+                <div class="grid  items-center">
+                    <label for="releaseYear" class="block min-w-[180px] font-medium">Năm phát hành:</label>
+                    <select name="releaseYear" id="releaseYear" class="min-w-[200px] rounded"
+                        style="border: 1px solid #ebebeb;">
+                        <option value="volvo">2023</option>
+                        <option value="volvo">2021</option>
+                        <option value="volvo">2020</option>
+                    </select>
+                </div>
+
+                <div class="flex space-x-5 justify-center items-center text-sm">
+                    <button type="submit" class="border py-[5px] px-[10px] rounded hover:bg-neutral-100">
+                        Tìm kiếm
+                    </button>
+                    <!-- <button type="reset" class="border py-[5px] px-[10px] rounded hover:bg-neutral-100">
+                        Làm mới
+                    </button> -->
+                </div>
+            </form>
+        </div>
+
+        <div class="mx-2 p-4">
+            <h1 class="mb-5 font-bold text-xl">20 kết quả tìm kiếm</h1>
+            <hr class="border border-zinc-600">
+            <div>
+                <!-- Cards 1 -->
+                <div class="flex justify-between">
+                    <div class="p-4">
+                        <img class="w-56 h-70 border rounded"
+                            src="https://i.pinimg.com/736x/89/73/4f/89734f2e8d5a975fb2e533a59bf1e98f.jpg" alt="">
+                    </div>
+                    <div class="px-4 ">
+                        <div class="flex justify-center">
+                            <div class="min-w-[400px] mx-2 text-sm">
+                                <!-- content here -->
+                                <div class="py-4">
+                                    <h3 class="font-medium text-xl">Manga chapter</h3>
+                                </div>
+                                <div class="p-4 bg-[#f6f6f6] w-full gap-x-[40px] grid grid-cols-2">
+                                    <div class="flex  justify-between">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Thể loại</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>tes1,test</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Tác giả</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>tes1,test</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Trạng thái <br /> phát hành</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>tes1,test</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between space-x-2">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Năm phát hành</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>2023</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between space-x-2">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Lượt đánh giá</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>5/1</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
+                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                    th:each="volume,volI : ${manga.volumeEntities}">
+                                    <lith:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+
+                                        <div class="gap-[5px] flex items-center">
+                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
+                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                style="border: 1px solid #ebebeb"
+                                                class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                ㄴㄴ</a>
+                                            <span class="text-[12px] text-[#666666]"
+                                                th:text="${'Tập ' + (volume.volumeIndex + 1)}">ㄴㄴ
+                                            </span>
+                                            <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">
+                                                2023-24-12</span>
+                                        </div>
+                                       
+                                    </li>
+                                </ul>
+                                <!--  for display chapter by chap -->
+                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
+                                    <li class="gap-[5px] flex" th:each="chapter,iter: ${manga.chapters}"
+                                        th:if="${iter.index < 2}">
+                                        <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
+                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                            style="border: 1px solid #ebebeb"
+                                            class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                       afaf </a>
+                                        <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">
+                                            2023-24-12</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- kết thúc card 1 -->
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

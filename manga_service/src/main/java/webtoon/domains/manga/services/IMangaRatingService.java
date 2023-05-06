@@ -16,14 +16,7 @@ public interface IMangaRatingService {
 
     MangaRatingDto add(MangaRatingModel model, HttpSession session);
 
-    MangaRatingDto update(MangaRatingModel model, HttpSession session);
-
-    MangaRatingEntity getById(Long id, Long createId);
-
-    boolean deleteById(Long id);
-
     Page<MangaDto> findAllById(Long id);
-
 
     List<Map> getRating(Long id);
 

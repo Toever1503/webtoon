@@ -1,70 +1,53 @@
 <!DOCTYPE html>
-<html
-        lang="en"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout.html}"
->
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout.html}">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Document</title>
-    <link href="../static/main.css" rel="stylesheet"/>
-     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <style>
-        .rating .rating-input:checked ~ .rating-star:before {
-  content: "\2605";
-}
+  <meta charset="UTF-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Document</title>
+  <link href="../static/main.css" rel="stylesheet" />
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+    crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-.rating .rating-input:not(:checked) ~ .rating-star:before {
-  content: "\2606";
-}
-
-.rating .rating-input:checked ~ .rating-star {
-  color: #f5c518;
-}
-
-.rating .rating-input:not(:checked) ~ .rating-star {
-  color: #e4e4e4;
-}
-
-    </style>
 </head>
 
 <body>
-    <div class="rating">
-        <input class="rating-input" type="radio" name="rating" value="5" id="rating-5">
-        <label class="rating-star" for="rating-5">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="4" id="rating-4">
-        <label class="rating-star" for="rating-4">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="3" id="rating-3">
-        <label class="rating-star" for="rating-3">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="2" id="rating-2">
-        <label class="rating-star" for="rating-2">★</label>
-      
-        <input class="rating-input" type="radio" name="rating" value="1" id="rating-1">
-        <label class="rating-star" for="rating-1">★</label>
+  <header class="py-[20px]" th:fragment="header" style="background: linear-gradient(to right, #eb3349 40%, #f45c43)">
+    <div class="main-header-layout max-w-[1100px] mx-auto flex gap-[50px] justify-between items-center">
+
+      <div class="logo">
+        <a href="/">
+          <img src="https://live.mangabooth.com/wp-content/themes/madara/images/logo.png" alt="logo">
+        </a>
       </div>
-      
-    <script>
-        var rating = 4; // Giá trị đánh giá trung bình
 
-// Sử dụng điểm đánh giá để thiết lập icon đánh giá
-for (var i = 0; i < ratingInputs.length; i++) {
-  var value = ratingInputs[i].value;
+      <div class="flex items-center gap-[20px]">
+        <ul class="menu-nav-bar flex gap-[30px] text-[18px]">
+          <li><a class="text-white font-bold hover:text-yellow-200" href="/">Trang chủ</a></li>
+          <li><a class="text-white font-bold hover:text-yellow-200" href="/mangas">Danh sách truyện</a></li>
+          <li><a class="text-white font-bold hover:text-yellow-200" href="/subscription_pack/load">Mua gói</a></li>
+          <li><a class="text-white font-bold hover:text-yellow-200" href="/contact">Liên hệ</a></li>
+        </ul>
 
-  // Nếu giá trị input radio trùng với điểm đánh giá:
-  if (value == rating) {
-    ratingInputs[i].checked = true; // Thiết lập checked cho input radio này
-    break; // Dừng lặp
-  }
-}
+        <!--  seach button -->
+        <div id="search_modal" class="h-[30px]">
+          <form action="/search" method="get" class="flex space-x-2 text-sm h-full">
+            <input name="q" class="rounded py-1 px-2 h-full" placeholder="Nhập tên truyện, tác giả,..."
+              style="border: 1px solid gainsboro;" />
+            <button type="submit">
+              <i class="fas fa-search text-white hover:text-neutral-200"></i>
+            </button>
+          </form>
+        </div>
+      </div>
 
-    </script>
+    </div>
+  </header>
 </body>
+
 </html>

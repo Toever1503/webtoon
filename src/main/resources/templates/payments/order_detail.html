@@ -1,6 +1,8 @@
-<!DOCTYPE >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<!DOCTYPE>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout.html}">
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,40 +10,55 @@
     <link href="/src/main/resources/static/main.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
     <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
-  </head>
+</head>
 
-  <body>
-    <div class="w-[1100px] m-auto">
+<body>
+    <div class="w-[700px] m-auto bg-white min-h-[500px] p-[15px]" layout:fragment="content">
         <div class="flex flex-row justify-center">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbNMldGQUUZRNFdqnNfVQ852WndHtHfKpRA&usqp=CAU" />
-</div>  
-<h4 class="text-xl text-green-700 font-medium uppercase text-center " th:text="${ketQua}"></h4>
-<div class="flex justify-center mt-10">
-<table class="border-collapse w-125 justify-center">
-  <tbody>
-    <tr>
-      <td class="h-12 text-green-600  font-medium uppercase ">Mã đơn hàng</td>
-      <td class="h-12 text-green-600 font-medium text-center uppercase"><p th:text="${maDonHang}"></p></td>
-    </tr>
-    <tr>
-      <td class="h-12 w-72 text-green-600 font-medium uppercase ">Mã giao dịch</td>
-      <td class="h-12 w-72  font-medium text-center uppercase"> <p th:text="${maGD}"></p></td>
-    </tr>
-    <tr>
-      <td class="h-12 text-green-600 font-medium uppercase ">Ngân hàng </td>
-      <td class="h-12 text-green-600 font-medium text-center  uppercase"><p th:text="${maNganHang}"></p></td>
-    </tr>
-    <tr>
-      <td class="h-12 text-green-600 font-medium uppercase ">Thời gian thanh toán</td>
-      <td class="h-12 text-green-600 font-medium text-center uppercase "><p th:text="${thoiGianTT}"></p></td>
-    </tr>
-    <tr>
-      <td class="h-12 text-green-600 font-medium uppercase ">Nội dung thanh toán</td>
-      <td class="h-12 text-green-600 font-medium text-center uppercase"><p th:text="${noiDungTT}"></p></td>
-    </tr>
-  </tbody>
-</table>
-</div>
-</div>
+            <img th:if="${isSuccess}" class="w-[200px] h-[200px]" src="/static/payment/success.png" />
+            <img th:if="${!isSuccess}" class="w-[200px] h-[200px]" src="/static/payment/failed.jpg" />
+        </div>
+        <h4 class="text-xl text-green-700 font-medium uppercase text-center " th:text="${ketQua}"></h4>
+        <div class="mt-10">
+            <table class="border-collapse w-125 justify-center">
+                <tbody>
+                    <tr>
+                        <td class="h-12 text-green-600  font-medium uppercase ">Mã đơn hàng</td>
+                        <td class="h-12 text-green-600 font-medium text-center uppercase">
+                            <p th:text="${maDonHang}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 w-72 text-green-600 font-medium uppercase ">Mã giao dịch</td>
+                        <td class="h-12 w-72 text-green-600 font-medium text-center uppercase">
+                            <p th:text="${maGD}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 text-green-600 font-medium uppercase ">Ngân hàng</td>
+                        <td class="h-12 text-green-600 font-medium text-center  uppercase">
+                            <p th:text="${maNganHang}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 text-green-600 font-medium uppercase ">Thời gian thanh toán</td>
+                        <td class="h-12 text-green-600 font-medium text-center uppercase ">
+                            <p th:text="${#dates.format(thoiGianTT, 'dd-MMM-yyyy')}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 text-green-600 font-medium uppercase ">Nội dung thanh toán</td>
+                        <td class="h-12 text-green-600 font-medium text-center uppercase">
+                            <p th:text="${noiDungTT}"></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-center">
+                <a href="/" class="text-blue-400 hover:text-blue-500">Về trang chủ</a>
+            </p>
+        </div>
+    </div>
 </body>
+
 </html>

@@ -19,6 +19,7 @@ import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.OrderModel;
 
 import javax.servlet.http.HttpSession;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -36,13 +37,14 @@ public class OrderController {
         super();
         this.orderService = orderService;
     }
+
     @PostMapping("/add")
     public ResponseEntity<?> addOrder(@RequestBody OrderModel orderModel) {
         return ResponseEntity.ok(orderService.add(orderModel));
     }
 
     @PutMapping("/update")
-    public ResponseEntity<?> updateOrder(@RequestBody OrderModel orderModel){
+    public ResponseEntity<?> updateOrder(@RequestBody OrderModel orderModel) {
         return ResponseEntity.ok(orderService.update(orderModel));
     }
 
@@ -52,38 +54,41 @@ public class OrderController {
     }
 
     @GetMapping("/chuyenKhoan/{id}")
-    public String chuyenKhoan(@PathVariable Long id, Model model , HttpSession session) {
+    public String chuyenKhoan(@PathVariable Long id, Model model, HttpSession session) {
 //        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(orderModel.getFinalPrice());
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if(entity == null){
+        if (entity == null) {
             return "redirect:/signin";
-        }else {
+        } else {
 
-            Date createDate = new Date();
             SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
-//        System.out.println("price: "+subscriptionPackEntity.getPrice());
             model.addAttribute("name", subscriptionPackEntity.getName());
             Double price = subscriptionPackEntity.getPrice();
             model.addAttribute("price", price);
-            model.addAttribute("id",subscriptionPackEntity.getId());
+            model.addAttribute("id", subscriptionPackEntity.getId());
+            model.addAttribute("subscriptionPackId", subscriptionPackEntity.getId());
+
+            OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, EPaymentMethod.ATM);
+            model.addAttribute("maDonHang", orderEntity.getMaDonHang());
             return "payments/chuyenKhoan";
         }
     }
-    @GetMapping("/confirmed/{id}")
-    public String paypal(@PathVariable Long id, Model model , HttpSession session) {
-//        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(orderModel.getFinalPrice());
+
+    @GetMapping("chuyenKhoan/confirmed/{id}")
+    public String paypal(@PathVariable Long id, Model model, HttpSession session,
+                         @RequestParam String maDonHang) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if(entity == null){
+        if (entity == null) {
             return "redirect:/signin";
-        }else {
-            String maDonHang = VnPayConfig.getRandomNumber(8);
+        } else {
             Date createDate = new Date();
             SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
-//        System.out.println("price: "+subscriptionPackEntity.getPrice());
             Double price = subscriptionPackEntity.getPrice();
             model.addAttribute("name", subscriptionPackEntity.getName());
-            orderService.add(new OrderModel(
-                    Long.parseLong(maDonHang),createDate,createDate, createDate,price,EOrderType.EXTEND,EOrderStatus.USER_CONFIRMED_BANKING,"CHUYENKHOAN","0.0.0.0.1",maDonHang,subscriptionPackEntity,entity,EPaymentMethod.ATM));
+//            orderService.add(new OrderModel(
+//                    Long.parseLong(maDonHang), createDate, createDate, createDate, price, EOrderType.NEW, EOrderStatus.USER_CONFIRMED_BANKING, "CHUYENKHOAN", "0.0.0.0.1", maDonHang, subscriptionPackEntity, entity, EPaymentMethod.ATM));
+
+            this.orderService.userConfirmOrder(maDonHang);
             return "payments/confirmed";
         }
     }

@@ -19,30 +19,7 @@ public class MangaRatingResource {
 
     @PostMapping("/add")
     public ResponseDto add(@RequestBody MangaRatingModel model ,HttpSession session){
-//        UserEntity user = (UserEntity) session.getAttribute("loggedUser");
-//        if (user != null){
-//            model.setCreatedBy(user.getId());
-//        }
-        model.setId(null);
         return ResponseDto.of(this.ratingService.add(model,session));
     }
-
-    @PutMapping("/update/{id}")
-    public ResponseDto update(@PathVariable Long id, @RequestBody MangaRatingModel model, HttpSession session){
-        model.setId(id);
-        return ResponseDto.of(this.ratingService.update(model,session));
-    }
-
-    @DeleteMapping("/delete/{id}")
-    public void delete(@PathVariable Long id){
-        this.ratingService.deleteById(id);
-    }
-
-
-    @GetMapping("/getRating/{id}")
-    public Double getAll(@PathVariable Long id){
-        return this.ratingService.findRatingByMangaId(id);
-    }
-
 
 }

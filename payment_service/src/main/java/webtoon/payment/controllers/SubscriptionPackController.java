@@ -48,9 +48,11 @@ public class SubscriptionPackController {
             return "payments/chonPTTT";
         }
     }
+
     @GetMapping("/load")
-    public String Payment(Model model) {
-//        SecurityUtils.getCurrentUser().getUser();
+    public String Payment(Model model, HttpSession session) {
+        if(session.getAttribute("loggedUser") == null)
+            return "redirect:/signin?redirectTo=/subscription_pack/load";
         List<SubscriptionPackDto> subscriptionPackEntities = this.subscriptionPackService.getAll();
         System.out.println(subscriptionPackEntities + "test");
         model.addAttribute("items", subscriptionPackEntities);

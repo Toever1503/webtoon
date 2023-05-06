@@ -55,14 +55,23 @@
 
         .rating {
             display: flex;
+            flex-direction: row-reverse;
+            justify-content: flex-start;
             align-items: center;
         }
 
         .rating-star {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            margin: 0;
+            padding: 0;
+            line-height: 30px;
+            text-align: center;
             font-size: 2rem;
             color: #ccc;
             cursor: pointer;
-            transition: all 0.2s ease;
+            transition: color 0.2s ease-in-out;
         }
 
         .rating-star:hover,
@@ -84,24 +93,33 @@
 <body>
 <div class="flex justify-center" layout:fragment="content" th:each="model : ${model}">
      <div class="max-w-[1100px] mx-auto " >
-<!--        <div class="w-full mx-auto " >-->
-        <div class="flex flex-col" >
-           <div class="p-2">
-                <nav class="flex items-center text-gray-500  font-light">
-                    <a href="/index">Home</a>
-                    
-                    <span>/</span>
-                    <a href="#">Manga</a>
-                    <span>/</span>
-                    <a th:href="@{'/manga/' + ${model.mangaName} + '/' + ${model.id}}"
-                               th:text="${'Truyện ' + model.mangaName}"></a>
-                    
-                </nav>
-           </div>
-        </div>
+
+         <div class="breadcrumb py-[10px]">
+             <nav class="w-full rounded-md">
+                 <ol class="list-reset flex">
+                     <li><a href="/"
+                            class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Trang chủ</a>
+                     </li>
+                     <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                     </li>
+                     <li><a
+                            class="text-sm text-neutral-500 transition duration-150 ease-in-out">Truyện</a>
+                     </li>
+                     <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+                     </li>
+                     <li><a
+                             class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400" th:text="${model.title}">
+                     </a>
+                     </li>
+                 </ol>
+             </nav>
+         </div>
+
+
+
         <div class="flex flex-col  my-4" >
             <div class="p-2">
-                <h1 class="text-2xl" th:text="${'Manga ' + model.mangaName}" >
+                <h1 class="text-2xl" th:text="${'Truyện ' + model.title}" >
                     <!-- Manga Text Chapter -->
                 </h1>
             </div>
@@ -139,196 +157,142 @@
                                     /*<![CDATA[*/
                                     // console.log(model + ' model id');
 
-                                    $(document).ready(function() {
-                                        // Lấy phần tử HTML chứa đánh giá sao
-                                        const ratingContainer = $('.rating');
-                                        const model = /*[[${model.getId()}]]*/ 'default';
-                                        // Endpoint của REST API để gửi đánh giá sao lên server
-                                        const apiUrl = "http://localhost:8080/rating/add";
-
-                                        // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
-                                        ratingContainer.on('mouseenter', function() {
-                                            // Thay đổi giá trị title của phần tử h3 thành "Your rating"
-                                            $(this).parent().find('h3').eq(1).attr('title', 'Your rating');
-                                        });
-
-                                        // Thiết lập sự kiện khi người dùng thay đổi đánh giá sao
-                                        ratingContainer.find('.rating-input').on('change', function() {
-                                            const newRatingValue = $(this).val(); // Lấy giá trị đánh giá sao mới
-                                            // Gọi API để gửi đánh giá sao lên server
-                                            addReview({ rate: newRatingValue, mangaEntity: model });
-
-                                            function addReview(review) {
-                                                // Tạo đối tượng Request
-                                                const request = new Request(apiUrl, {
-                                                    method: 'POST',
-                                                    headers: {
-                                                        'Content-Type': 'application/json'
-                                                    },
-                                                    body: JSON.stringify(review)
-                                                });
-
-                                                // Gửi request sử dụng fetch API
-                                                fetch(request)
-                                                    .then(response => {
-                                                        if (!response.ok) {
-                                                            throw new Error('Network response was not ok');
-                                                        }
-                                                        return response.json();
-                                                    })
-                                                    .then(result => {
-                                                        console.log('Success:', result);
-                                                        alert('Bạn đã đánh giá ' + newRatingValue + ' sao cho truyện!');
-                                                        $('#rating-result').html(result || 5);
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error:', error);
-                                                    });
-                                                window.location.reload();
-                                            }
-                                        });
-
-                                        // Lấy đánh giá sao từ REST API và hiển thị lên phần tử HTML
-                                        // const url = ;
-
-                                            const getUrl = 'http://localhost:8080/mangaTest/getRating/'+ model;
-                                            // Tạo đối tượng Request
-                                            const request = new Request(getUrl, {
-                                                method: 'GET'
-                                            });
-                                            fetch(getUrl)
-                                                .then(data => {
-                                                    if (!data.ok) {
-                                                        throw new Error('Network response was not ok');
-                                                    }
-                                                    return data.json();
-                                                })
-                                                .then(result => {
-                                                    console.log(result + 'result');
-                                                    // Thiết lập giá trị đánh giá sao lên phần tử HTML
-                                                    ratingContainer.attr('data-rating', result );
-
-                                                    // Hiển thị các icon sao tương ứng với giá trị đánh giá
-                                                    const ratingValue = ratingContainer.attr('data-rating');
-                                                    ratingContainer.find('.rating-input').each(function() {
-                                                        if ($(this).val() > ratingValue) {
-                                                            $(this).next('.rating-star').removeClass('rated');
-                                                        } else {
-                                                            $(this).next('.rating-star').addClass('rated');
-                                                        }
-                                                    });
-                                                    // Cập nhật giá trị hiển thị trên phần tử HTML có id là rating-result
-
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
-                                                    // Nếu giá trị trả về là null, thiết lập giá trị mặc định là 5
-                                                    // ratingContainer.attr('data-rating', 5);
-                                                });
+                                    const logger = /*[[${logger}]]*/ 'default';
 
 
-                                        // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
-                                        ratingContainer.on('mouseenter', function() {
-                                            ratingContainer.find('.rating-star').removeClass('rated');
-                                        });
+                                        $(document).ready(function() {
+                                            // Lấy phần tử HTML chứa đánh giá sao
+                                            const ratingContainer = $('.rating');
+                                            const model = /*[[${model.getId()}]]*/ 'default';
+                                            const modelTitle = /*[[${model.getTitle()}]]*/ 'default';
+                                            // Endpoint của REST API để gửi đánh giá sao lên server
+                                            const apiUrl = "http://localhost:8080/rating/add";
 
-                                        // Thiết lập sự kiện khi con trỏ được rời khỏi phần tử rating
-                                        ratingContainer.on('mouseleave', function() {
-                                            // Hiển thị các icon sao tương ứng với giá trị đánh giá sao mới
-                                            ratingContainer.find('.rating-input').each(function() {
-                                                const ratingValue = ratingContainer.attr('data-rating');
-                                                if ($(this).val() > ratingValue) {
-                                                    $(this).next('.rating-star').removeClass('rated');
-                                                } else {
-                                                    $(this).next('.rating-star').addClass('rated');
+                                            // Thiết lập sự kiện khi người dùng thay đổi đánh giá sao
+                                            ratingContainer.find('.rating-input').on('change', function() {
+                                                if (typeof logger === "undefined" || logger === null) {
+                                                    alert('Bạn cần đăng nhập để đánh giá!');
+                                                    window.location.href = `/signin?redirectTo=/manga/${modelTitle}/${model}`; // chuyển hướng sang trang đăng nhập
+                                                }else {
+                                                    const newRatingValue = $(this).val(); // Lấy giá trị đánh giá sao mới
+                                                    // Gọi API để gửi đánh giá sao lên server
+                                                    addReview({ rate: newRatingValue, mangaEntity: model });
+
+                                                    function addReview(review) {
+                                                        // Tạo đối tượng Request
+                                                        const request = new Request(apiUrl, {
+                                                            method: 'POST',
+                                                            headers: {
+                                                                'Content-Type': 'application/json'
+                                                            },
+                                                            body: JSON.stringify(review)
+                                                        });
+
+                                                        // Gửi request sử dụng fetch API
+                                                        fetch(request)
+                                                            .then(response => {
+                                                                if (!response.ok) {
+                                                                    throw new Error('Network response was not ok');
+                                                                }
+                                                                return response.json();
+                                                            })
+                                                            .then(result => {
+                                                                // Nếu review được tạo thành công, ta có thể cập nhật trang web để chứa đánh giá mới
+                                                                // Ví dụ: thêm đánh giá vào danh sách đánh giá hoặc hiển thị nó trên trang chi tiết sản phẩm
+                                                                console.log('Success:', result);
+                                                                const res = result.rate;
+                                                                console.log(res + ' điểm đánh giá')
+                                                                alert('Bạn đã đánh giá ' + newRatingValue + ' sao cho truyện!');
+                                                                $('#rating-result').html(result || 5);
+                                                                // Load lại trang sau khi đánh giá thành công
+                                                                location.reload();
+                                                            })
+                                                            .catch(error => {
+                                                                console.error('Error:', error);
+                                                            });
+                                                }
+
                                                 }
                                             });
-                                        });
-                                        // Sự kiện khi người dùng thay đổi đánh giá sao
-                                        ratingContainer.find('.rating-input').on('change', function() {
-                                            // Lấy giá trị đánh giá sao mới
-                                            const newRatingValue = $(this).val();
 
-                                            // Gửi lời yêu cầu đến server để cập nhật đánh giá sao
-                                            fetch('http://localhost:8080/rating/update/' + model, {
-                                                method: 'PUT',
-                                                headers: {
-                                                    'Content-Type': 'application/json'
-                                                },
-                                                body: JSON.stringify({ rate: newRatingValue, mangaEntity: model })
-                                            })
-                                                .then(response => {
-                                                    if (!response.ok) {
-                                                        throw new Error('Network response was not ok');
+                                            // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
+                                            ratingContainer.on('mouseenter', function() {
+                                                ratingContainer.find('.rating-star').removeClass('rated');
+                                            });
+
+                                            // Thiết lập sự kiện khi con trỏ được rời khỏi phần tử rating
+                                            ratingContainer.on('mouseleave', function() {
+                                                // Hiển thị các icon sao tương ứng với giá trị đánh giá sao mới
+                                                ratingContainer.find('.rating-input').each(function() {
+                                                    const ratingValue = ratingContainer.attr('data-rating');
+                                                    if ($(this).val() > ratingValue) {
+                                                        $(this).next('.rating-star').removeClass('rated');
+                                                    } else {
+                                                        $(this).next('.rating-star').addClass('rated');
                                                     }
-                                                    return response.json();
-                                                })
-                                                .then(data => {
-                                                    // Thành công: cập nhật giá trị đánh giá sao mới lên phần tử HTML
-                                                    ratingContainer.attr('data-rating', newRatingValue);
-                                                // Thiết lập sự kiện khi con trỏ được trỏ vào phần tử rating
-                                                    ratingContainer.on('mouseenter', function() {
-                                                        // Xóa lựa chọn rating trên tất cả các phần tử input
-                                                        ratingContainer.find('.rating-star').prop('checked', false);
-                                                        // Xóa tất cả các icon đã được đánh giá 'rated'
-                                                        // Hiển thị tất cả các icon sao tương ứng với giá trị đánh giá của phần tử rating
-                                                        ratingContainer.find('.rating-star').addClass('rated');
-                                                    });
-
-                                                // Thiết lập sự kiện khi con trỏ được rời khỏi phần tử rating
-                                                    ratingContainer.on('mouseleave', function() {
-                                                        // Hiển thị các icon sao tương ứng với giá trị đánh giá sao mới
-                                                        ratingContainer.find('.rating-input').each(function() {
-                                                            const ratingValue = ratingContainer.attr('data-rating');
-                                                            if ($(this).val() > ratingValue) {
-                                                                $(this).next('.rating-star').removeClass('rated');
-                                                            } else {
-                                                                $(this).next('.rating-star').addClass('rated');
-                                                            }
-                                                        });
-                                                    });
-                                                    window.location.reload();
-                                                })
-                                                .catch(error => {
-                                                    console.error('Error:', error);
                                                 });
+                                            });
                                         });
-                                    });
+
+
+
                                     /*]]>*/
                                 </script>
                                 <!-- Kết thúc javascript sự kiện đánh giá sao-->
                             </div>
                             <div class=" w-1/3 flex justify-center   ">
-                                <div class="flex justify-end w-full">
+                                <div class="flex w-full">
                                     <div class="mr-6 ">
-                                        <p th:text="${'Trạng thái: ' +  model.mangaStatus}"></p>
+                                        <p th:text="${'Năm phát hành: ' +  model.releaseYear}"></p>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="flex  justify-center flex-row pl-6 ">
-                            <div class=" basis-1/4">
-                                <h5>Xếp hạng</h5>
+                        <div class="flex  justify-center flex-row">
+                            <div class="w-2/3">
+                                <div class=" basis-1/4">
+                                    <h5>Đánh giá</h5>
+                                </div>
+                                <div class="basis-3/4 " th:each="avg : ${rating}"   >
+
+                                    <h5 th:if="${avg.xh == null}" th:text="${'Trung bình 5/5 '}"></h5>
+
+                                    <h5 th:unless="${avg.xh == null}" th:text="${'Trung bình '+ avg.xh + '/ 5 - ' + avg.tongso + ' lượt đánh giá' }"></h5>
+                                </div>
                             </div>
-                            <div class="basis-3/4 " th:each="avg : ${rating}"   >
-
-                                <h5 th:if="${avg.xh == null}" th:text="${'Trung bình 5/5 '}"></h5>
-
-                                <h5 th:unless="${avg.xh == null}" th:text="${'Trung bình '+ avg.xh + '/ 5 out of ' + avg.tongso }"></h5>
+                            <div class=" w-1/3 flex justify-center   ">
+                                <div class="flex w-full">
+                                    <div class="mr-6 ">
+                                        <p th:text="${'Trạng thái: ' +  trangThai}"></p>
+                                    </div>
+                                </div>
                             </div>
                         </div>
+
                         <div class="flex  justify-center flex-row pl-6">
                             <div class=" basis-1/4 ">
-                                <h5>Thứ hạng</h5>
+                                <h5>Xếp hạng</h5>
                             </div>
                             <div class="basis-3/4">
-                                <h5>Thứ 6, nó có 552 lượt xem hàng tháng</h5>
+                                <h5>Thứ 6
+                                </h5>
+                            </div>
+                        </div>
+
+                        <div class="flex  justify-center flex-row pl-6">
+                            <div class=" basis-1/4 ">
+                                <h5>Lượt xem</h5>
+                            </div>
+                            <div class="basis-3/4">
+                                <h5>
+                                    <span th:text="${model.viewCount}"></span>
+                                </h5>
                             </div>
                         </div>
 
                         <div class="flex  justify-center flex-row  pl-6">
                             <div class=" basis-1/4 ">
-                                <h5>(Các) tác giả</h5>
+                                <h5>Tác giả</h5>
                             </div>
                             <div class="basis-3/4">
                                 <span th:each="item,iter : ${model.authors}">
@@ -350,8 +314,37 @@
                                     </span>
                                 </span>
                             </div>
-
                         </div>
+
+                        <div class="flex  justify-center flex-row pl-6">
+                            <div class=" basis-1/4 ">
+                                <h5>Thẻ</h5>
+                            </div>
+                            <div class="basis-3/4">
+                                <span th:inline="text">
+                                    <span th:each="item,iter : ${model.tags}">
+                                        <span th:text="${item.tagName}"></span>
+                                        <span th:if="${!iter.last}" th:text="','"></span>
+                                    </span>
+                                </span>
+                            </div>
+                        </div>
+
+                        <div class="flex  justify-center flex-row pl-6">
+                            <div class=" basis-1/4 ">
+                                <h5>Thời lượng</h5>
+                            </div>
+                            <div class="basis-3/4">
+                                <h5>
+                                    <span th:if="${model.displayType.name == 'VOL'}" th:text="${totalVolCount + ' tập, '}">
+                                    </span>
+                                    <span th:text="${totalChapterCount + ' chương'}"></span>
+                                </h5>
+
+                            </div>
+                        </div>
+
+
                         <div class=" flex ml-3 pl-6">
                             <!--  for display chapter by VOL -->
                            <ul th:if="${model.volumeEntities.size() > 0 && volI.index < 1}"
@@ -361,16 +354,16 @@
 
                                 <div class="gap-[5px] flex items-center">
                                     <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                                       class=" save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
-                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] 
+                                       class=" save-local-storage block min-w-[80px] max-w-[120px] py-[5px] px-[10px] h-full text-center
+                                        text-[15px] text-[#666666] hover:text-white bg-[#ebebeb]
                                         hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
-                                        th:text="'Đọc truyện'">
+                                        th:text="'Bắt đầu đọc'">
                                     </a>
                                     <a th:if="chapterHistory != null"
                                        th:each="history : ${chapterHistory}"
                                        th:href="@{'/manga/'+${model.title}+'/chapter/'+${history.id}}"
-                                       class=" block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
-                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb]
+                                       class=" block min-w-[80px] max-w-[120px] py-[5px] px-[10px] h-full text-center
+                                        text-[15px] text-[#666666] hover:text-white bg-[#ebebeb]
                                         hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]"
                                        th:text="'Đọc tiếp'">
                                     </a>
@@ -387,7 +380,7 @@
                                        class="save-local-storage block min-w-[80px] max-w-[120px] py-[2px] h-full text-center
                                        text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349]
                                        duration-300 ease-in rounded-[10px]"
-                                       th:text="'Đọc truyện'">
+                                       th:text="'Bắt đầu đọc'">
                                     </a>
                                     <a
                                         th:if="chapterHistory != null"
@@ -402,34 +395,41 @@
 
                                     <script th:inline="javascript">
                                         /*<![CDATA[*/
-                                        const logger = /*[[${logger}]]*/ 'default';
+                                        // const logger = /*[[${logger}]]*/ 'default';
                                         if (typeof logger === "undefined" || logger === null) {
 
                                             // Đọc thông tin từ Local Storage
-                                            const loggedUserJson = localStorage.getItem("loggedUser");
-                                            const loggedUser = JSON.parse(loggedUserJson);
-
+                                            const loggedUserJson = localStorage.getItem("users");
+                                            const loggedUser = JSON.parse(loggedUserJson) || [];
                                             // Sử dụng thông tin được lưu trữ
-                                            var saveLocalStorageLinks = document.getElementsByClassName("get-local-storage");
                                             if (loggedUserJson != null){
                                                 const mangaText = /*[[${model.getTitle()}]]*/ 'default'; /* lấy giá trị mã manga ở đây */;
                                                 const chapterId = loggedUser.chapterId;
-                                                // Tạo một thẻ a mới
-                                                const newLink = document.createElement('a');
-                                                const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
-                                                if (oldLink) {
-                                                    // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
-                                                    for (let i = 0; i < oldLink.attributes.length; i++) {
-                                                        const attr = oldLink.attributes[i];
-                                                        newLink.setAttribute(attr.name, attr.value);
-                                                    }
-                                                    // Thiết lập href mới cho thẻ a mới
-                                                    newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
-                                                    // Thiết lập nội dung cho thẻ a mới (nếu muốn)
-                                                    newLink.textContent = 'Đọc truyện tiếp';
 
-                                                    // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
-                                                    oldLink.parentNode.appendChild(newLink);
+                                                // Lặp qua từng phần tử (object) trong mảng users
+                                                for (let i = 0; i < loggedUser.length; i++) {
+                                                    const user = loggedUser[i];
+                                                    const chapterId = user.chapterId;
+                                                    const model = /*[[${model.getId()}]]*/ 'default';
+                                                    if (user.mangaId == model){
+                                                        // Tạo một thẻ a mới
+                                                        const newLink = document.createElement('a');
+                                                        const oldLink = document.querySelector('a.save-local-storage'); // Lấy thẻ a cũ bằng cách sử dụng một lựa chọn truy vấn
+                                                        if (oldLink) {
+                                                            // Sao chép toàn bộ thuộc tính của thẻ a cũ sang thẻ a mới
+                                                            for (let i = 0; i < oldLink.attributes.length; i++) {
+                                                                const attr = oldLink.attributes[i];
+                                                                newLink.setAttribute(attr.name, attr.value);
+                                                            }
+                                                            // Thiết lập href mới cho thẻ a mới
+                                                            newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
+                                                            // Thiết lập nội dung cho thẻ a mới (nếu muốn)
+                                                            newLink.textContent = 'Đọc tiếp';
+
+                                                            // Chèn thẻ a mới vào phần tử cha của thẻ a cũ
+                                                            oldLink.parentNode.appendChild(newLink);
+                                                        }
+                                                    }
                                                 }
                                             }
 
@@ -440,6 +440,12 @@
                                 </li>
                             </ul>
 
+                        </div>
+
+<!--                        for display alert to buy subscription-->
+                        <div th:if="${!model.isFree}" class="bg-orange-100 border-l-4 border-orange-500 p-4 w-fit m-[15px]" role="alert">
+                            <p class="text-orange-700">Bạn cần phải đăng ký gói đọc để mở khóa các chương bên dưới!</p>
+                            <a>Bấm vào <a href="/subscription_pack/load" class="text-blue-500 hover:text-blue-400">đây</a> để mua gói đọc</a>
                         </div>
                     </div>
                   </div>
@@ -464,7 +470,7 @@
             </div>
             <hr>
             <div class="p-2">
-                <!-- for display by type -->
+                <!-- for display by VOL type -->
                 <div class="mt-[10px] grid gap-y-[15px] mb-[50px]" th:if="${model.displayType.name} == 'VOL'">
                     <div class="vol-item px-[10px] rounded" th:if="${model.displayType.name} == 'VOL'"
                          th:each="itemvolume : ${model.volumeEntities}">
@@ -478,10 +484,20 @@
                         <ul th:else class="hidden latest-chapters grid mt-[10px] ml-[30px] gap-[5px] divide-y">
                             <li class="gap-[5px] flex justify-between"
                                 th:each="chapter,iter: ${itemvolume.chapterEntities}">
-                                <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
-                                   class="px-[16px] font-bold cursor-pointer text-[#666666] w-full hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                </a>
+                                <div class="flex justify-between items-center px-[10px] space-x-3 full">
+                                    <a th:href="@{${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}}"
+                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                    </a>
+                                    <span th:if="${!model.isFree && chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
+                                    Vui lòng đăng ký gói để đọc chương này
+                                </span>
+                                    <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
+
+                                    <span th:if="${!chapter.requiredVip && !model.isFree}" class="text-[12px] text-green-600">
+                                        Đọc thử miễn phí
+                                </span>
+                                </div>
                                 <span th:text="${chapter.createdAt}"></span>
                             </li>
                         </ul>
@@ -504,10 +520,20 @@
                 <div th:if="${model.displayType.name} == 'CHAP'">
                     <ul th:else class="latest-chapters grid mt-[10px] ml-[15px] gap-[5px] divide-y">
                         <li class="gap-[5px] flex justify-between" th:each="chapter,iter: ${model.chapters}">
-                            <a th:href="@{'/manga/'+${model.title}+'/chapter/'+${chapter.id}}"
-                               th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
-                               class="font-bold cursor-pointer text-[#666666] w-full hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                            </a>
+                            <div class="flex justify-between items-center px-[10px] space-x-3 full">
+                                <a th:href="@{${chapter.requiredVip ? '#' : '/manga/'+model.title+'/chapter/'+chapter.id}}"
+                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                </a>
+                                <span th:if="${!model.isFree && chapter.requiredVip}" class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
+                                    Vui lòng đăng ký gói để đọc chương này
+                                </span>
+                                <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
+
+                                <span th:if="${!chapter.requiredVip && model.isFree}" class="text-[12px] text-green-600">
+                                        Đọc thử miễn phí
+                                </span>
+                            </div>
                             <span th:text="${chapter.createdAt}"></span>
                         </li>
                     </ul>
@@ -517,8 +543,58 @@
                 </div>
             </div>
         </div>
-    </div>
 
+    </div>
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+
+        // Lấy phần tử HTML chứa đánh giá sao
+        const ratingContainer = $('.rating');
+        const model = /*[[${model.getId()}]]*/ 'default';
+
+        // get dữ liệu
+        document.addEventListener('DOMContentLoaded', function() {
+            // Lấy đánh giá sao từ REST API và hiển thị lên phần tử HTM
+
+            const getUrl = 'http://localhost:8080/mangaTest/getRating/'+ model;
+            // Tạo đối tượng Request
+            const request = new Request(getUrl, {
+                method: 'GET'
+            });
+            fetch(request)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(result => {
+                    console.log(result + 'result');
+                    // Thiết lập giá trị đánh giá sao lên phần tử HTML
+                    ratingContainer.attr('data-rating', result );
+
+                    // Hiển thị các icon sao tương ứng với giá trị đánh giá
+                    const ratingValue = parseFloat(ratingContainer.attr('data-rating'));
+                    ratingContainer.find('.rating-input').each(function() {
+                        if (parseFloat($(this).val()) > ratingValue) {
+                            $(this).next('.rating-star').removeClass('rated');
+                        } else {
+                            $(this).next('.rating-star').addClass('rated');
+                        }
+                    });
+                    // Cập nhật giá trị hiển thị trên phần tử HTML có id là rating-result
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    // Nếu giá trị trả về là null, thiết lập giá trị mặc định là 5
+                    // ratingContainer.attr('data-rating', 5);
+                });
+        });
+        // kết thúc get dữ liệu
+
+        /*]]>*/
+    </script>
 </div>
     
 </body>

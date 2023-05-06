@@ -3,7 +3,9 @@ package webtoon.domains;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -48,8 +50,11 @@ public class HomeController {
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()
         ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
-        Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
 
+        List<MangaEntity> mangaSliders = this.mangaService.filterEntities(PageRequest.of(0, 10, Sort.Direction.DESC, MangaEntity_.VIEW_COUNT), mangaSpec).getContent();
+        model.addAttribute("mangaSlider", mangaSliders);
+
+        Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
 
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
@@ -59,7 +64,6 @@ public class HomeController {
         model.addAttribute("genreList", mangaGenreEntity);
 //        model.addAttribute("cateList", categoryEntity);
         model.addAttribute("mangalist", mangaEntity.getContent());
-        model.addAttribute("mangaSlider", mangaEntity.getContent());
         model.addAttribute("postList", postEntity);
 
         if (hasLogged != null) {
@@ -70,6 +74,7 @@ public class HomeController {
         }
 
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        model.addAttribute("logger",loggedUser);
         return "homepage";
     }
 }

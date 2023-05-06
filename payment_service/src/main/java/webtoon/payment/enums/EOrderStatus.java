@@ -8,5 +8,6 @@ public enum EOrderStatus {
       REFUND_CONFIRM_PENDING,
       USER_CONFIRMED_BANKING,
       REFUNDING,
-      REFUNDED
+      REFUNDED,
+      DRAFTED
 }
