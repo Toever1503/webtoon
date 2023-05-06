@@ -4,10 +4,15 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/src/main/resources/static/main.css" rel="stylesheet" />
     <title>Document</title>
 </head>
 <body>
-    Bạn đã confirm đã chuyển khoản vui lòng đợi admin checked!!!
-    <button>Về trang chủ</button>
+    <div class="flex justify-center">
+   <p> Bạn đã confirm đã chuyển khoản vui lòng đợi admin checked!!! </p>
+</div>
+<div class="flex justify-center">
+    <button class="bg-red-400 border border-none text-white h-6 hover:bg-red-500" th:onClick="| window.location.href='http://localhost:8080/'|">Về trang chủ</button>
+</div>
 </body>
 </html>

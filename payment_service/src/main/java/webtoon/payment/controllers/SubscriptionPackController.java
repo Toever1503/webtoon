@@ -5,11 +5,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import webtoon.account.entities.UserEntity;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
 
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Controller
@@ -34,12 +36,17 @@ public class SubscriptionPackController {
     }
 
     @GetMapping("/getByPrice/{price}")
-    public String getByPrice(@PathVariable Integer price, Model model) {
-        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(Double.parseDouble(price.toString()));
-        System.out.println(subscriptionPackEntity);
-        model.addAttribute("id", subscriptionPackEntity.getId());
-        model.addAttribute("items", subscriptionPackEntity.getPrice());
-        return "payments/chonPTTT";
+    public String getByPrice(@PathVariable Integer price, Model model, HttpSession session) {
+        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
+        if (entity == null) {
+            return "redirect:/signin";
+        } else {
+            SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(Double.parseDouble(price.toString()));
+            System.out.println(subscriptionPackEntity);
+            model.addAttribute("id", subscriptionPackEntity.getId());
+            model.addAttribute("items", subscriptionPackEntity.getPrice());
+            return "payments/chonPTTT";
+        }
     }
     @GetMapping("/load")
     public String Payment(Model model) {
