@@ -1,7 +1,5 @@
 package webtoon.domains.manga.controllers;
 
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
@@ -12,18 +10,14 @@ import org.springframework.web.bind.annotation.*;
 
 import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.dtos.MangaChapterDto;
+import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.*;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.services.*;
 
-import javax.script.ScriptEngine;
-import javax.script.ScriptEngineManager;
-import javax.script.ScriptException;
 import javax.servlet.http.HttpSession;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Controller
 @RequestMapping("manga")
@@ -68,6 +62,15 @@ public class MangaController {
     public String mangaDetail(@PathVariable java.lang.Long id, @PathVariable String name, Model model, HttpSession session) {
         this.mangaService.increaseView(id);// tang view
         MangaEntity mangaEntity = this.mangaService.getById(id);
+        List<MangaEntity> recentMangaList = new ArrayList<>();
+        for (MangaGenreEntity mangaGenre : mangaEntity.getGenres()){
+            List<MangaEntity> mangaDto = this.mangaService.getALLByGeners(mangaGenre.getId());
+            recentMangaList.addAll(mangaDto);
+        }
+        // Tạo một Set mới để đảm bảo không có sản phẩm nào bị trùng lặp
+        Set<MangaEntity> uniqueProducts = new LinkedHashSet<>(recentMangaList);
+        uniqueProducts.remove(mangaEntity);
+        List<MangaEntity> result = new ArrayList<>(uniqueProducts);
 
         UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
         if (userEntity != null) {
@@ -101,6 +104,7 @@ public class MangaController {
         model.addAttribute("rating", list);
         model.addAttribute("logger", userEntity);
         model.addAttribute("trangThai", mangaSTSMap);
+        model.addAttribute("mangaGe",result);
         return "trangtruyen";
     }
 

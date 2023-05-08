@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
@@ -29,6 +30,7 @@ import webtoon.utils.ASCIIConverter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 //import webtoon.utils.exception.CustomHandleException;
 
@@ -157,6 +159,12 @@ public class IMangaServiceImpl implements IMangaService {
             return  this.mangaRepository.getRatingManga(id);
     }
 
+
+    @Override
+    public List<MangaEntity> getALLByGeners(Long id){
+
+        return this.mangaRepository.findByGenresIn(id);
+    }
 
     @Override
     public MangaDto getByMangaId(Long id){

@@ -47,7 +47,7 @@ public class MangaGenreController {
         MangaGenreEntity genre = this.genreService.getById(id);
         List<MangaGenreEntity> mangaGenre =  this.genreService.findAllGenre();
         model.addAttribute("mangaGenre",mangaGenre);
-        model.addAttribute("mangaEntity", mangaEntity.getContent());
+        model.addAttribute("mangaEntity", mangaEntity);
         model.addAttribute("generId",genre);
         return "/manga/genre";
     }

@@ -103,7 +103,7 @@ public class MangaEntity {
     @OrderBy("chapter_index desc")
     private Set<MangaChapterEntity> chapters;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_manga_genre_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
