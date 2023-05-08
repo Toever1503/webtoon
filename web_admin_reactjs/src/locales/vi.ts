@@ -19,6 +19,28 @@ export default {
             }
         }
     },
+    statistic: {
+        revenue: {
+            title: 'Thống kê doanh thu',
+            totalRevenueThisMonth: 'Tổng doanh thu tháng này',
+            totalSubscriber: 'Tổng số người đăng ký',
+            totalSubscriberOnTrial: 'Tổng số người đăng ký dùng thử',
+            totalRevenueBySubsPack: 'Doanh thu theo gói đăng ký',
+            revenueByDay: 'Doanh thu theo ngày',
+            monthlyRevenue: 'Doanh thu hàng tháng',
+        },
+        registrationStatus: {
+            title: 'Trạng thái đăng ký',
+            table: {
+                'user': 'Người mua',
+                'subscriptionPack': 'Gói đăng ký',
+                'expiredDate': 'Ngày hết hạn', 
+                action: {
+                    sendEmail: 'Gửi email',
+                }
+            }
+        }
+    },
     manga: {
         form:
         {
@@ -416,5 +438,6 @@ export default {
         edit: 'Sửa',
         delete: 'Xóa',
         reset: 'Làm mới',
+        filter: 'Lọc',
     }
 }
