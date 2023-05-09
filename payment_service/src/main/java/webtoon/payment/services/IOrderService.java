@@ -39,6 +39,8 @@ public interface IOrderService {
 
     List<OrderPendingDTO> getPendingPaymentByUserId(Long userId);
     List<OrderEntity> getPaymentCompletedByUserId(Long userId);
+    List<OrderEntity> getPaymentConfirmByUserId(Long userId, EOrderStatus status);
+    List<OrderEntity> searchKeyWord(Long userId, EOrderStatus status, String search);
 
     OrderEntity createDraftedOrder(SubscriptionPackEntity subscriptionPackEntity, EPaymentMethod paymentMethod);
 

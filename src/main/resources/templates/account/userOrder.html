@@ -1,12 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-                xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-                layout:decorate="~{layout.html}">
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout.html}"
+>
   <head>
     <meta charset="UTF-8" />
     <title>Lịch sử mua hàng</title>
     <link href="/src/main/resources/static/main.css" rel="stylesheet" />
-    <!-- <link href="/static/main.css" rel="stylesheet" /> -->
     <script
       src="https://kit.fontawesome.com/b86979ecfa.js"
       crossorigin="anonymous"
@@ -15,128 +17,159 @@
   </head>
   <body>
     <div class="w-[1100px] mx-auto" layout:fragment="content">
-        <div class="grid grid-cols-4">
-            <div class="">
-              <div
-                class="w-[250px] h-auto border-solid border rounded-md border-gray-400"
-              >
-                <div class="pl-16 pt-14">
-                  <img
-                      src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                      class="w-32 rounded-full shadow-lg"
-                      alt="Avatar" />
-                </div>
-                <div>
-                  <h2 class="text-center text-xl" th:text="${user.fullName}"></h2>
-                </div>
-                <div>
-                  <div class="flex justify-center">
-                    <button
-                      class="bg-purple-900 hover:bg-purple-950 border-none text-white w-24 h-8 mb-2 rounded-lg"
-                    >
-                      Dashboard
-                    </button>
-                  </div>
-                </div>
-              </div>
-              <div class="my-10 w-[250px] h-[154px]">
-                <div class="w-full text-gray-900 bg-white rounded-lg">
-                  <button  th:onclick="| window.location.href='http://localhost:8080/user/profile'|"
-                    type="button"
-                    class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-4 h-4 mr-2 fill-current"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        fill-rule="evenodd"
-                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                        clip-rule="evenodd"
-                      ></path>
-                    </svg>
-                    Profile
-                  </button>
-                  <button 
-                    type="button" th:onclick="| window.location.href='http://localhost:8080/user/userOrder'|"
-                    class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-4 h-4 mr-2 fill-current"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"
-                      ></path>
-                    </svg>
-                   Lịch sử đơn hàng
-                  </button>
-                  <button 
-                    type="button" th:onclick="| window.location.href='http://localhost:8080/user/userOrder'|"
-                    class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
-                  >
-                    <svg
-                      aria-hidden="true"
-                      class="w-4 h-4 mr-2 fill-current"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <path
-                        d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"
-                      ></path>
-                    </svg>
-                   Đơn hàng đã confirm
-                  </button>
-                </div>
+      <div class="grid grid-cols-4">
+        <div class="">
+          <div
+            class="w-[250px] h-auto border-solid border rounded-md border-gray-400"
+          >
+            <div class="pl-16 pt-14">
+              <img
+                src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
+                class="w-32 rounded-full shadow-lg"
+                alt="Avatar"
+              />
+            </div>
+            <div>
+              <h2 class="text-center text-xl" th:text="${user.fullName}"></h2>
+            </div>
+            <div>
+              <div class="flex justify-center">
+                <button
+                  class="bg-purple-900 hover:bg-purple-950 border-none text-white w-24 h-8 mb-2 rounded-lg"
+                >
+                  Dashboard
+                </button>
               </div>
             </div>
-            <div class="col-span-3">
-                <div>
-                  <div
-                    class="mx-auto w-[780px] h-auto border-solid border rounded-md border-gray-400 p-5"
-                  >
-                  <h3>Lịch sử đơn hàng</h3>
-      <div class="relative overflow-x-auto">
-        <table class="w-full text-sm text-left text-gray-500 bg-gray-300">
-          <thead class="text-xs text-gray-700 uppercase bg-red-400">
-            <tr>
-              <th scope="col" class="px-6 py-3">Gói truyện</th>
-              <th scope="col" class="px-6 py-3">Giá</th>
-              <th scope="col" class="px-6 py-3">Thời gian đọc</th>
-              <th scope="col" class="px-6 py-3">Ngày mua</th>
-              <th scope="col" class="px-6 py-3">Ngày hết hạn</th>
-              <th scope="col" class="px-6 py-3">Thao tác</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr class="bg-white border-b" th:each="item: ${order}">
-              <td class="px-6 py-4" th:text="${item.subs_pack_id.name}"></td>
-              <td
-                class="px-6 py-4"
-                th:text="${#numbers.formatCurrency(item.subs_pack_id.price)}"
-              ></td>
-              <td
-                class="px-6 py-4"
-                th:text="${item.subs_pack_id.dayCount + ' Ngày'}"
-              ></td>
-              <td class="px-6 py-4" th:text="${item.gioLap}"></td>
-              <td class="px-6 py-4" th:text="${item.expiredSubsDate}"></td>
-              <td class="text-center w-24"><p class="bg-red-400 hover:bg-red-500 border border-none w-16 h-7 mx-auto"> <a href="#" class=" text-white m-auto">Nâng cấp</a></p></td>
-            </tr>
-          </tbody>
-        </table>
+          </div>
+          <div class="my-10 w-[250px] h-[154px]">
+            <div class="w-full text-gray-900 bg-white rounded-lg">
+              <button
+                th:onclick="| window.location.href='http://localhost:8080/user/profile'|"
+                type="button"
+                class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 mr-2 fill-current"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    fill-rule="evenodd"
+                    d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
+                    clip-rule="evenodd"
+                  ></path>
+                </svg>
+                Profile
+              </button>
+              <button
+                type="button"
+                th:onclick="| window.location.href='http://localhost:8080/user/order-history?status=COMPLETED&search='|"
+                class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
+              >
+                <svg
+                  aria-hidden="true"
+                  class="w-4 h-4 mr-2 fill-current"
+                  fill="currentColor"
+                  viewBox="0 0 20 20"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <path
+                    d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"
+                  ></path>
+                </svg>
+                Lịch sử đơn hàng
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="col-span-3">
+          <div>
+            <div
+              class="mx-auto w-[780px] h-auto border-solid border rounded-md border-gray-400 p-5"
+            >
+            <div class="rounded border w-full mx-auto mt-4">
+              <!-- Tabs -->
+              <ul id="tabs" class="inline-flex pt-2 px-1 w-full border-b">
+                <li class="px-4 text-gray-800 font-semibold py-2 rounded-t " th:classappend="${status == 'COMPLETED'} ? 'bg-white border-t border-r border-l -mb-px' : ''"><a href="/user/order-history?status=COMPLETED&search=">Đã thanh toán</a></li>
+                <li th:class="${status == 'USER_CONFIRMED_BANKING'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'"><a href="/user/order-history?status=USER_CONFIRMED_BANKING&search=">Đã chuyển khoản</a></li>
+                <li th:class="${status == 'PENDING_PAYMENT'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'"><a href="/user/order-history?status=PENDING_PAYMENT&search=">Chờ thanh toán</a></li>
+                <li th:class="${status == 'CANCELED'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'"><a href="/user/order-history?status=CANCELED&search=">Đã huỷ</a></li>
+              </ul>
+              <!-- Tab Contents -->
+              <div id="tab-contents">
+                <form th:action="@{/user/order-history}" method="GET">
+                  <div class="flex justify-end my-5">
+                    <input
+                      type="hidden"
+                      name="status"
+                      th:value="${status}"/>
+                    <input
+                      type="text"
+                      name="search"
+                      th:value="${search}"
+                      class="border border-red-400 text-sm h-8 w-56"
+                      placeholder="Tìm kiếm..."
+                    />
+                    <button
+                      class="bg-white border border-red-400 hover:bg-red-400 hover:text-white w-10 text-red-400" type="submit"
+                    >
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+    
+                  <div class="relative overflow-x-auto">
+                    <table
+                      class="w-full text-sm text-left text-gray-500 bg-gray-300"
+                    >
+                      <thead class="text-xs text-gray-700 uppercase bg-red-400">
+                        <tr>
+                          <th scope="col" class="px-6 py-3">Gói truyện</th>
+                          <th scope="col" class="px-6 py-3">Giá</th>
+                          <th scope="col" class="px-6 py-3">Thời gian đọc</th>
+                          <th scope="col" class="px-6 py-3">Ngày mua</th>
+                          <th scope="col" class="px-6 py-3">Ngày hết hạn</th>
+                          <th th:if="${status == 'COMPLETED'}" scope="col" class="px-6 py-3">Thao tác</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr class="bg-white border-b" th:each="item: ${order}">
+                          <td
+                            class="px-6 py-4"
+                            th:text="${item.subs_pack_id.name}"
+                          ></td>
+                          <td
+                            class="px-6 py-4"
+                            th:text="${#numbers.formatCurrency(item.subs_pack_id.price)}"
+                          ></td>
+                          <td
+                            class="px-6 py-4"
+                            th:text="${item.subs_pack_id.dayCount + ' Ngày'}"
+                          ></td>
+                          <td class="px-6 py-4" th:text="${item.gioLap}"></td>
+                          <td
+                            class="px-6 py-4"
+                            th:text="${item.expiredSubsDate}"
+                          ></td>
+                          <td class="text-center w-24">
+                            <p
+                              class="bg-red-400 hover:bg-red-500 border border-none w-16 h-7 mx-auto"
+                            >
+                              <a th:if="${status == 'COMPLETED'}" href="#" class="text-white m-auto">Nâng cấp</a>
+                            </p>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+              </div>
+            </div>
+            </div>
+          </div>
+        </div>
       </div>
-    </div>  
- </div>
- </div>
- </div>
-</div>
+    </div>
   </body>
 </html>

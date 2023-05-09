@@ -191,6 +191,16 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public List<OrderEntity> getPaymentConfirmByUserId(Long userId, EOrderStatus status) {
+        return this.orderRepository.getPaymentConfirmByUserId(userId, status);
+    }
+
+    @Override
+    public List<OrderEntity> searchKeyWord(Long userId, EOrderStatus status, String search) {
+        return this.orderRepository.searchByUserId(userId, status, search);
+    }
+
+    @Override
     public OrderEntity createDraftedOrder(SubscriptionPackEntity subscriptionPackEntity, EPaymentMethod paymentMethod) {
         String maDonHang = VnPayConfig.getRandomNumber(10);
 
