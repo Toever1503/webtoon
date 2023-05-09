@@ -25,7 +25,6 @@ import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.utils.exception.CustomHandleException;
 
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -33,8 +32,8 @@ import java.util.UUID;
 @Transactional
 public class OrderServiceImpl implements IOrderService {
 
-    @Autowired
-    private IOrderRepository orderRepository;
+
+    private final IOrderRepository orderRepository;
 
     @Autowired
     private ISubscriptionPackService subscriptionPackService;
@@ -42,12 +41,15 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IUserService userService;
 
+    public OrderServiceImpl(IOrderRepository orderRepository) {
+        this.orderRepository = orderRepository;
+    }
+
     @Override
     public OrderDto add(OrderModel orderModel) {
         OrderEntity orderEntity = OrderEntity.builder()
                 .created_at(orderModel.getCreated_at())
                 .gioLap(orderModel.getGioLap())
-                .expiredSubsDate(orderModel.getExpiredSubsDate())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
@@ -68,7 +70,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
-        orderEntity.setExpiredSubsDate(orderModel.getExpiredSubsDate());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());
@@ -129,11 +130,6 @@ public class OrderServiceImpl implements IOrderService {
         entity.setSubs_pack_id(subscriptionPack);
         entity.setFinalPrice(subscriptionPack.getPrice());
 
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
-        entity.setExpiredSubsDate(calendar.getTime());
-
         entity.setMaDonHang(orderNumber);
         entity.setUser_id(userService.getById(input.getUser_id()));
         entity.setMonthCount(subscriptionPack.getMonthCount());
@@ -156,9 +152,6 @@ public class OrderServiceImpl implements IOrderService {
             entity.setSubs_pack_id(subscriptionPack);
             entity.setFinalPrice(subscriptionPack.getPrice());
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
-            entity.setExpiredSubsDate(calendar.getTime());
             entity.setMonthCount(subscriptionPack.getMonthCount());
             entity.setDayCount(subscriptionPack.getDayCount());
         }
@@ -250,6 +243,61 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public void cancelOrder(Long id) {
+        OrderEntity orderEntity = this.getById(id);
+        if(!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+            throw new CustomHandleException(42);
+        orderEntity.setStatus(EOrderStatus.CANCELED);
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
+    public void returnOrder(Long id) {
+        OrderEntity orderEntity = this.getById(id);
+        if (!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+            throw new CustomHandleException(43);
+        orderEntity.setStatus(EOrderStatus.REFUNDING);
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
+    public Long countTotalOrderInToday() {
+        return this.orderRepository.countTotalOrderInToday();
+    }
+
+    @Override
+    public Long sumTotalRevenueInToday() {
+        return this.orderRepository.sumTotalRevenueInToday();
+    }
+
+    @Override
+    public Long countTotalPaymentPendingInToday() {
+        return this.orderRepository.countTotalPaymentPendingInToday();
+    }
+
+    @Override
+    public Long countTotalCompletedOrderInToday() {
+        return this.orderRepository.countTotalCompletedOrderInToday();
+    }
+
+    @Override
+    public Long countTotalCanceledOrderInToday() {
+        return this.orderRepository.countTotalCanceledOrderInToday();
+    }
+
+    @Override
+    public List<Object[]> sumTotalRevenueInLast7Days() {
+        return this.orderRepository.sumTotalRevenueInLast7Days();
+    }
+
+    @Override
+    public void changeStatusOrder(Long id, EOrderStatus status) {
+        OrderEntity orderEntity = this.getById(id);
+        orderEntity.setStatus(status);
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
     public OrderDto upgradeOrder(UpgradeOrderInput input) {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
@@ -276,7 +324,6 @@ public class OrderServiceImpl implements IOrderService {
 
         Calendar calendar = Calendar.getInstance();
         calendar.add(Calendar.MONTH, upgradeOrder.getMonthCount());
-        upgradeOrder.setExpiredSubsDate(calendar.getTime());
 
         this.orderRepository.saveAndFlush(upgradeOrder);
         return OrderDto.toDto(upgradeOrder);

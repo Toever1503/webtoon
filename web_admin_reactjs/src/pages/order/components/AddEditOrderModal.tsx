@@ -30,17 +30,16 @@ export interface AddEditOrderModalProps {
 };
 
 const FINAL_STATUSES: EORDER_STATUS[] = [
-    'PAID',
+    'PAYMENT_PENDING',
+    'USER_CONFIRMED_BANKING',
     'COMPLETED',
-    'REFUND_CONFIRM_PENDING',
-    'REFUNDING',
-    'REFUNDED',
+    'CANCELED'
 ];
 
 
 // STATUS that can change subscription pack
 const ALLOW_CHANGE_SUBS_PACK: EORDER_STATUS[] = [
-    'PENDING_PAYMENT',
+    'USER_CONFIRMED_BANKING',
 ];
 
 

@@ -49,4 +49,22 @@ public interface IOrderService {
     OrderEntity changeStatus(Long orderId, EOrderStatus status);
 
     void saveOrderEntity(OrderEntity orderEntity);
+
+    void cancelOrder(Long id);
+
+    void returnOrder(Long id);
+
+    Long countTotalOrderInToday();
+
+    Long sumTotalRevenueInToday();
+
+    Long countTotalPaymentPendingInToday();
+
+    Long countTotalCompletedOrderInToday();
+
+    Long countTotalCanceledOrderInToday();
+
+    List<Object[]> sumTotalRevenueInLast7Days();
+
+    void changeStatusOrder(Long id, EOrderStatus status);
 }

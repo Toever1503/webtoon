@@ -75,6 +75,7 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
         }
     }
 
+    @Override
     public MangaGenreEntity getById(Long id) {
         return this.genreRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }
@@ -91,5 +92,6 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
                             .build();
                 }).collect(Collectors.toList());
     }
+
 
 }

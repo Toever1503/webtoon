@@ -92,8 +92,7 @@ public class MangaController {
         Map<EMangaSTS, String> mangaStatusMap = new HashMap<>();
         mangaStatusMap.put(EMangaSTS.COMING, "Đang bắt đầu");
         mangaStatusMap.put(EMangaSTS.GOING, "Đang thực hiện");
-        mangaStatusMap.put(EMangaSTS.STOPPED, "Đã dừng");
-        mangaStatusMap.put(EMangaSTS.CANCELLED, "Bị hủy");
+        mangaStatusMap.put(EMangaSTS.ON_STOPPING, "Đang tạm dừng");
         mangaStatusMap.put(EMangaSTS.COMPLETED, "Đã hoàn thành");
 
         String mangaSTSMap = mangaStatusMap.get(mangaEntity.getMangaStatus());

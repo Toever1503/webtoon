@@ -204,6 +204,7 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public Page<MangaEntity> filterEntities(Pageable pageable, Specification<MangaEntity> specs) {
+
         return this.mangaRepository.findAll(specs, pageable);
     }
 

@@ -43,19 +43,16 @@ public class OrderEntity {
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     private Date gioLap;
 
-    @Column(name = "expired_subs_date")
-    private Date expiredSubsDate;
-
     @Column(name = "month_count")
     private Integer monthCount;
 
     @Column(name = "day_count")
     private Integer dayCount;
 
-    @Column
+    @Column(name = "final_price")
     private Double finalPrice;
 
-    @Column
+    @Column(name = "order_type")
     @Enumerated(EnumType.STRING)
     private EOrderType orderType;
 

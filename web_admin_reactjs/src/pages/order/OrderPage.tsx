@@ -45,7 +45,7 @@ const OrderPage: React.FC = () => {
             title: t('order.table.orderNumber'),
             dataIndex: 'maDonHang',
             key: 'orderNumber',
-            width: 200,
+            width: 100,
             render: (text) => <>{text}</>,
         },
         {
@@ -85,22 +85,11 @@ const OrderPage: React.FC = () => {
             title: t('order.table.status'),
             dataIndex: 'status',
             key: 'status',
-            render: (text) => <Tag>{
-                t('order.eStatus.' + text)
-            }</Tag>,
+            render: (text) => <span style={{ border: '1px solid #d9d9d9' }} className="block text-center w-[120px] break-all rounded px-[5px]">
+                {
+                    t('order.eStatus.' + text)
+                }</span>,
         },
-        {
-            title: t('order.table.expireDate'),
-            dataIndex: 'expiredSubsDate',
-            key: 'expireDate',
-            render: (_, record: IOrder) => <span>
-                {/* {
-                    dateTimeFormat(record.expiredSubsDate)
-                } */}
-                -
-            </span>,
-        },
-
 
         {
             title: t('order.table.createdBy'),
@@ -139,9 +128,6 @@ const OrderPage: React.FC = () => {
                         {
                             <a onClick={() => viewDetailOrder(record)}>{t('order.table.viewDetail')}</a>
                         }
-                        {
-                            record.status !== 'REFUNDED' && record.status !== 'COMPLETED' && record.status !== 'CANCELED' && <a onClick={() => showEditModal(record)}>{t('buttons.edit')}</a>
-                        }
                         <Popconfirm
                             title={t('manga.form.sure-delete')}
                             onConfirm={(e) => {
@@ -164,20 +150,23 @@ const OrderPage: React.FC = () => {
                     }
                 </>
             ),
+            width: 150
         },
     ];
 
-    const [filterInput, setFilterInput] = useState<IOrderFilterInput>({
+    const [filterInput, setFilterInput] = useState<{
+        q?: string,
+        status?: string,
+    }>({
         status: '',
     });
 
 
     const FINAL_STATUSES: EORDER_STATUS[] = [
-        'PAID',
+        'PAYMENT_PENDING',
+        'USER_CONFIRMED_BANKING',
         'COMPLETED',
-        'REFUND_CONFIRM_PENDING',
-        'REFUNDING',
-        'REFUNDED',
+        'CANCELED'
     ];
 
     // begin edit modal
@@ -207,7 +196,7 @@ const OrderPage: React.FC = () => {
         }
     });
 
-    const showEditModal = (record: IOrder) => {
+    const openEditModal = (record: IOrder) => {
         addEditOrderModal.input = record;
         setAddEditOrderModal({
             ...addEditOrderModal,
@@ -289,6 +278,12 @@ const OrderPage: React.FC = () => {
             detailOrderModal.visible = false;
             setDetailOrderModal(detailOrderModal);
         },
+        showEditModal: () => {
+            console.log('edit');
+
+            if (detailOrderModal.input)
+                openEditModal(detailOrderModal.input);
+        }
     });
     const viewDetailOrder = (record: IOrder) => {
         detailOrderModal.input = record;
@@ -308,7 +303,7 @@ const OrderPage: React.FC = () => {
         orderService
             .filterOrder({
                 q: filterInput.q ? filterInput.q : undefined,
-                status: filterInput.status ? filterInput.status : undefined,
+                status: filterInput.status ? [filterInput.status] : undefined,
             })
             .then((res: AxiosResponse<{
                 content: IOrder[],
@@ -354,7 +349,7 @@ const OrderPage: React.FC = () => {
             <div className="flex justify-between items-center">
                 <div className="flex items-center space-x-3">
                     <label className="font-bold">{t('order.table.status')}: </label>
-                    <Select className="min-w-[150px]"
+                    <Select className="min-w-[200px]"
                         onChange={val => {
                             filterInput.status = val;
                             setFilterInput(filterInput);
@@ -395,7 +390,12 @@ const OrderPage: React.FC = () => {
             onOk={upgradeOrderModal.onOk} subscriptionPackList={subscriptionPackList}
             input={upgradeOrderModal.input} />
 
-        <DetailOrderModal visible={detailOrderModal.visible} onCancel={detailOrderModal.onCancel} input={detailOrderModal.input} />
+        <DetailOrderModal
+            visible={detailOrderModal.visible}
+            onCancel={detailOrderModal.onCancel}
+            showEditModal={detailOrderModal.showEditModal}
+            input={detailOrderModal.input}
+        />
     </>)
 };
 

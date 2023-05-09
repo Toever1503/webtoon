@@ -1,10 +1,28 @@
 import { EyeOutlined } from "@ant-design/icons";
-import React from "react"
+import React, { useEffect } from "react"
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import IOrder from "../../../services/order/types/IOrder";
+import orderService from "../../../services/order/OrderService";
+import formatVnCurrency from "../../../utils/formatVnCurrency";
+import { dateTimeFormat } from "../../../utils/dateFormat";
 
 const OrderDashboard: React.FC = () => {
     const { t } = useTranslation();
+
+    const [latestOrder, setLatestOrder] = React.useState<IOrder[]>([]);
+
+
+    useEffect(() => {
+        orderService.filterOrder({
+            status: ['USER_CONFIRMED_BANKING', 'COMPLETED'],
+        })
+            .then((res) => {
+                console.log('latest order: ', res.data);
+
+                setLatestOrder(res.data.content);
+            })
+    }, []);
 
     return <>
         <div>
@@ -33,30 +51,48 @@ const OrderDashboard: React.FC = () => {
                                                 className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                                 {t('dashboard.orderLatest.table.price')}
                                             </th>
-                                            <th className="">
-                                                <div className="w-3 h-3 rounded-full bg-gray-200 mx-4"></div>
+                                            <th scope="col"
+                                                className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                                {t('dashboard.orderLatest.table.createdAt')}
                                             </th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr className="bg-white border-b border-gray-600 transition duration-300 ease-in-out hover:bg-gray-100" >
-                                            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">1</td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                Mark
-                                            </td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                Otto
-                                            </td>
-                                            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
-                                                @mdo
-                                            </td>
-                                            <td>
-                                                <Link to='/' className="text-center flex items-center justify-center">
-                                                    <EyeOutlined/>
-                                                </Link>
+                                        {
+                                            latestOrder.map((order: IOrder, index: number) =>
+                                                <tr key={index} className="bg-white border-b border-gray-600 transition duration-300 ease-in-out hover:bg-gray-100" >
+                                                    <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{index + 1}</td>
+                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        {
+                                                            order.user_id.fullName
+                                                        }
+                                                    </td>
+                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        {
+                                                            order.subs_pack_id.name
+                                                        }
+                                                    </td>
+                                                    <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+                                                        {
+                                                            formatVnCurrency(order.finalPrice)
+                                                        }
+                                                    </td>
+                                                    <td>
+                                                        {
+                                                            dateTimeFormat(order.created_at)
+                                                        }
+                                                    </td>
+                                                </tr>
+                                            )
+                                        }
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                <Link to='/orders'>
+                                                    Xem tất cả</Link>
                                             </td>
                                         </tr>
-                                  
+
+
                                     </tbody>
                                 </table>
                             </div>
