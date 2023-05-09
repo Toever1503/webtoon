@@ -328,7 +328,7 @@ export default {
         },
         eStatus: {
             'ALL': 'Tất cả',
-            'PAYMENT_PENDING': 'Chờ thanh toán',
+            'PENDING_PAYMENT': 'Chờ thanh toán',
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
             'USER_CONFIRMED_BANKING': 'Chờ kiểm tra CK',

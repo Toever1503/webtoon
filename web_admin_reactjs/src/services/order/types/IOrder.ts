@@ -18,7 +18,7 @@ export default interface IOrder {
     hasUpgradingOrder: boolean;
 }
 
-export type EORDER_STATUS =  'PAYMENT_PENDING' | 'CANCELED' | 'COMPLETED' | 'USER_CONFIRMED_BANKING';
+export type EORDER_STATUS =  'PENDING_PAYMENT' | 'CANCELED' | 'COMPLETED' | 'USER_CONFIRMED_BANKING';
 
 
 export type EORDER_TYPE = 'NEW' | 'UPGRADE' | 'RENEW';

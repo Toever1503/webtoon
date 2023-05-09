@@ -143,6 +143,10 @@ public class OrderServiceImpl implements IOrderService {
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
 
+        if(input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)){
+
+        }
+
         return OrderDto.toDto(entity);
     }
 
