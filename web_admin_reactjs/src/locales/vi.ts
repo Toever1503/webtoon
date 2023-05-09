@@ -39,6 +39,9 @@ export default {
                     sendEmail: 'Gửi email',
                 }
             }
+        },
+        registrationRate: {
+            title: 'Tỉ lệ đăng ký',
         }
     },
     manga: {
