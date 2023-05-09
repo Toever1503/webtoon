@@ -1,10 +1,30 @@
 import { Button, Card, Col, Divider, Row, Space, Statistic } from "antd";
 import { useTranslation } from "react-i18next";
 import BarChart from "./components/BarChart";
+import LineChart, { LineDataType } from "./components/LineChart";
+import { useState } from "react";
 
 
 const RevenueStatsPage: React.FC = () => {
     const { t } = useTranslation();
+
+
+    const [registrationRateData, setRegistrationRateData] = useState<LineDataType[]>([]);
+    let year = 1;
+    for (let i = 0; i < 31; i++) {
+        registrationRateData.push({
+            name: 'Tháng ' + String(year),
+            "value": Math.floor(Math.random() * 100),
+            "category": "Số người mua mới"
+        });
+
+        registrationRateData.push({
+            name: 'Tháng ' + String(year),
+            "value": Math.floor(Math.random() * 100),
+            "category": "Số người gia hạn"
+        });
+        year++;
+    }
 
     return <div className="py-3">
 
@@ -12,84 +32,101 @@ const RevenueStatsPage: React.FC = () => {
             {t('statistic.revenue.title')}
         </h1>
 
-        <div className="flex space-x-[15px] mt-[15px]">
-            <div className="w-[620px]">
-                <Card bordered={false} style={{ width: '100%' }}>
-                    <Col span={12}>
-                        <Statistic title={t('statistic.revenue.totalRevenueThisMonth')} value={112893} />
+        <div className="grid grid-cols-3 gap-[15px] mt-[15px]">
+            <Card bordered={false}>
+                <Statistic
+                    title={<h3 className="font-semibold text-xl">
+                        {t('statistic.revenue.totalRevenueThisMonth')}
+                    </h3>}
+                    value={11.28}
+                />
+            </Card>
+            <Card bordered={false}>
+                <Statistic
+                    title={<h3 className="font-semibold text-xl">
+                        {t('statistic.revenue.totalSubscriber')}
+                    </h3>}
+                    value={9.3}
+                />
+            </Card>
 
-                    </Col>
-                </Card>
+            <Card bordered={false}>
+                <Statistic
+                    title={<h3 className="font-semibold text-xl">
+                        {t('statistic.revenue.totalSubscriberOnTrial')}
+                    </h3>}
+                    value={9.3}
+                />
+            </Card>
+        </div>
 
-                <Card bordered={false} style={{ width: '100%', height: '140px', marginTop: '15px' }}>
-                    <Row gutter={16}>
-                        <Col span={12}>
-                            <Statistic title={t('statistic.revenue.totalSubscriber')} value={112893} />
+        <div className="grid grid-cols-2 gap-[15px] mt-[15px]">
+            <Card bordered={false} style={{ width: '100%' }}>
+                <Space className="mb-[15px]">
+                    <h3>
+                        {t('statistic.revenue.revenueByDay')}
+                    </h3>
+                    <Button>
+                        {t('buttons.filter')}
+                    </Button>
 
-                        </Col>
-                        <Col span={12}>
+                </Space>
 
-                            <Statistic title={t('statistic.revenue.totalSubscriberOnTrial')} value={112893} />
-                        </Col>
-                    </Row>
-                </Card>
+                <BarChart data={[{
+                    name: 'fsa',
+                    value: 27,
+                }]} />
+            </Card>
 
-                <Card bordered={false} style={{ width: '100%', marginTop: '15px' }}>
-                    <Space className="mb-[15px]">
-                        <h3>
-                            {t('statistic.revenue.totalRevenueBySubsPack')}
-                        </h3>
-                        <Button>
-                            {t('buttons.filter')}
-                        </Button>
-                    </Space>
+            <Card bordered={false} style={{ width: '100%' }}>
+                <Space className="mb-[15px]">
+                    <h3>
+                        {t('statistic.revenue.monthlyRevenue')}
+                    </h3>
+                    <Button>
+                        {t('buttons.filter')}
+                    </Button>
+                </Space>
 
-                    <BarChart data={[{
-                        name: 'fsa',
-                        value: 27,
-                    }]} />
+                <BarChart data={[{
+                    name: 'fsa',
+                    value: 27,
+                }, {
+                    name: 'fsafff',
+                    value: 517,
+                }]} />
+            </Card>
 
-                </Card>
-            </div>
+            <Card bordered={false} style={{ width: '100%' }}>
+                <Space className="mb-[15px]">
+                    <h3>
+                        {t('statistic.revenue.totalRevenueBySubsPack')}
+                    </h3>
+                    <Button>
+                        {t('buttons.filter')}
+                    </Button>
+                </Space>
 
-            <div className="w-[800px] grid space-y-[15px]">
+                <BarChart data={[{
+                    name: 'fsa',
+                    value: 27,
+                }]} />
 
-                <Card bordered={false} style={{ width: '100%' }}>
-                    <Space className="mb-[15px]">
-                        <h3>
-                            {t('statistic.revenue.revenueByDay')}
-                        </h3>
-                        <Button>
-                            {t('buttons.filter')}
-                        </Button>
+            </Card>
 
-                    </Space>
+            <Card bordered={false} style={{ width: '100%', height: '100%' }}>
+                <Space className="mb-[15px]">
+                    <h3>
+                    {t('statistic.registrationRate.title')}
+                    </h3>
+                    <Button>
+                        {t('buttons.filter')}
+                    </Button>
+                </Space>
 
-                    <BarChart data={[{
-                        name: 'fsa',
-                        value: 27,
-                    }]} />
-                </Card>
+                <LineChart data={registrationRateData} />
+            </Card>
 
-                <Card bordered={false} style={{ width: '100%' }}>
-                    <Space className="mb-[15px]">
-                        <h3>
-                            {t('statistic.revenue.monthlyRevenue')}
-                        </h3>
-                        <Button>
-                            {t('buttons.filter')}
-                        </Button>
-                    </Space>
-
-                    <BarChart data={[{
-                        name: 'fsa',
-                        value: 27,
-                    }, {
-                        name: 'fsafff',
-                        value: 517,
-                    }]} />
-                </Card>
-            </div>
         </div>
     </div>
 };
