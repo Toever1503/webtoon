@@ -35,7 +35,11 @@ function getItem(
 const items: MenuItem[] = [
     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
     getItem('Đơn hàng', '/orders', <ShoppingCartOutlined />),
-    getItem('Thống kê', '/stats', <AreaChartOutlined />),
+    getItem('Thống kê', '/stats', <AreaChartOutlined />, [
+        getItem('Doanh thu', '/stats/revenue'),
+        // getItem('Tỉ lệ đăng ký gói', '/stats/registration-rate'),
+        getItem('Trạng thái đăng ký', '/stats/registration-status'),
+    ]),
     getItem('Gói đọc', '/subscription-packs', <AppstoreOutlined />),
     getItem('Manga', 'parent-mangas', <FormOutlined />, [
         getItem('All mangas', '/mangas'),
@@ -111,7 +115,6 @@ const App: React.FC = () => {
                 <Layout className="site-layout">
 
                     <Header style={{ padding: 0, background: colorBgContainer }} >
-                        header
                     </Header>
 
                     <Content style={{ margin: '0 16px' }}>

@@ -13,6 +13,8 @@ public class MangaFilterInput {
 
     private String q;
 
-    private Long generId;
+    private Long genreId;
+
+    private Integer releaseYear;
 
 }

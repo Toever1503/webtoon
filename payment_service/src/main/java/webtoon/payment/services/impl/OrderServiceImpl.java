@@ -1,5 +1,7 @@
 package webtoon.payment.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +23,11 @@ import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.services.IOrderService;
+import webtoon.payment.services.ISendEmail;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.utils.exception.CustomHandleException;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -41,8 +42,12 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IUserService userService;
 
-    public OrderServiceImpl(IOrderRepository orderRepository) {
+    private final ISendEmail sendEmailService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public OrderServiceImpl(IOrderRepository orderRepository, ISendEmail sendEmailService) {
         this.orderRepository = orderRepository;
+        this.sendEmailService = sendEmailService;
     }
 
     @Override
@@ -138,6 +143,10 @@ public class OrderServiceImpl implements IOrderService {
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
 
+        if(input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)){
+
+        }
+
         return OrderDto.toDto(entity);
     }
 
@@ -161,6 +170,10 @@ public class OrderServiceImpl implements IOrderService {
         entity.setPaymentMethod(input.getPaymentMethod());
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+
+        // send order info to user's mail
+        if(entity.getStatus().equals(EOrderStatus.COMPLETED))
+            this.sendOrderInfoToMail(entity);
 
         this.orderRepository.saveAndFlush(entity);
         return OrderDto.toDto(entity);
@@ -294,7 +307,21 @@ public class OrderServiceImpl implements IOrderService {
     public void changeStatusOrder(Long id, EOrderStatus status) {
         OrderEntity orderEntity = this.getById(id);
         orderEntity.setStatus(status);
+        if (status.equals(EOrderStatus.COMPLETED)) { // need send mail
+            this.sendOrderInfoToMail(orderEntity);
+        }
         this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    private void sendOrderInfoToMail(OrderEntity orderEntity) {
+        Map<String, Object> context = new HashMap<>();
+        context.put("order", orderEntity);
+        try {
+            this.sendEmailService.sendMail("payments/mail-templates/order_info.html", orderEntity.getUser_id().getEmail(), "Thông tin đặt hàng", context);
+        } catch (Exception e) {
+            this.logger.error("Send mail failed~");
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -322,8 +349,8 @@ public class OrderServiceImpl implements IOrderService {
                 .dayCount(subscriptionPack.getDayCount() - originalOrder.getSubs_pack_id().getDayCount())
                 .build();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, upgradeOrder.getMonthCount());
+        // task: send mail notify to user
+//        this.sendOrderInfoToMail(upgradeOrder);
 
         this.orderRepository.saveAndFlush(upgradeOrder);
         return OrderDto.toDto(upgradeOrder);

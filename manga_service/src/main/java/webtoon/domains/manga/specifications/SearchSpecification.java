@@ -18,9 +18,9 @@ import java.util.List;
 public class SearchSpecification {
     public static Specification<MangaEntity> byYear(String year){
         return ((root, query, criteriaBuilder) -> {
-//           new Date()
+           new Date();
             return criteriaBuilder.like(
-                    root.get(MangaEntity_.CREATED_AT),year + "%"
+                    root.get(MangaEntity_.CREATED_AT),"%" + year + "%"
             );
         });
     }
@@ -34,7 +34,7 @@ public class SearchSpecification {
 
     public static Specification<MangaEntity> byStatus(EMangaSTS sts){
         return (root, query, criteriaBuilder) ->
-            criteriaBuilder.equal(root.get(MangaEntity_.MANGA_STATUS), sts.name());
+            criteriaBuilder.equal(root.get(MangaEntity_.MANGA_STATUS),sts);
     }
 
     public static Specification<MangaEntity> like(String q){
@@ -46,13 +46,6 @@ public class SearchSpecification {
             );
         };
     }
-//    public static Specification<MangaEntity> byCreatedBy(Long createdBy){
-//        return (root, query, criteriaBuilder) -> {
-//            Join<MangaEntity, UserEntity> join = root.join(MangaEntity_.createdBy);
-//            return criteriaBuilder.equal(join.get(U))
-//        }
-//    }
-
 
     public static Specification<MangaEntity> filter(MangaFilterInput model){
         List<Specification> specs = new ArrayList<>();
@@ -63,8 +56,8 @@ public class SearchSpecification {
         if(model.getStatus() != null){
             specs.add(byStatus(model.getStatus()));
         }
-        if (model.getGenerId() != null){
-            specs.add(byGener(model.getGenerId()));
+        if (model.getGenreId() != null){
+            specs.add(byGener(model.getGenreId()));
         }
 //        if (model.getReleaseYear() != null){
 //            specs.add(byYear(model.getReleaseYear()));

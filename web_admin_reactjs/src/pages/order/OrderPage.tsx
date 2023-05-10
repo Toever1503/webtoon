@@ -163,7 +163,7 @@ const OrderPage: React.FC = () => {
 
 
     const FINAL_STATUSES: EORDER_STATUS[] = [
-        'PAYMENT_PENDING',
+        'PENDING_PAYMENT',
         'USER_CONFIRMED_BANKING',
         'COMPLETED',
         'CANCELED'

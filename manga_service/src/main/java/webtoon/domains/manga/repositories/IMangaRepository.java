@@ -9,8 +9,10 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.dtos.MangaDto;
+import webtoon.domains.manga.entities.MangaGenreEntity;
 
 import java.util.List;
+import java.util.Set;
 
 public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaSpecificationExecutor<MangaEntity> {
 
@@ -29,4 +31,7 @@ public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaS
 
     @Query("select p from MangaEntity p where p.id =?1 ")
     MangaEntity getByMangaId(Long id );
+
+    @Query(value = "SELECT * FROM tbl_manga_entity a LEFT JOIN tbl_manga_genre_relation b ON b.manga_id = a.id WHERE b.genre_id = :id",nativeQuery = true)
+    List<MangaEntity> findByGenresIn(@Param("id") Long id);
 }

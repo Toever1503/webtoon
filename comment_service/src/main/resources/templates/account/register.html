@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+	<meta charset="UTF-8">
+	<title>Register</title>
+	<link href="/static/main.css" rel="stylesheet">
+	<link href="../static/main.css" rel="stylesheet">
+
+	<style>
+		html,
+		body {
+			width: 100%;
+			height: 100%;
+			margin: 0;
+			padding: 0;
+
+		}
+	</style>
+</head>
+
+<body>
+	<script>
+		const beforeSubmit = (e) => {
+			return false;
+		}
+	</script>
+
+	<section class="w-full h-full bg-gray-50 dark:bg-gray-900 pt-[20px]">
+		<div class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:py-0">
+			<a href="/" class="flex items-center mb-6 text-2xl font-semibold text-gray-900 dark:text-white">
+				Webtoon
+			</a>
+			<div
+				class="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+				<div class="p-6 space-y-4 md:space-y-6 sm:p-8">
+					<h1
+						class="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
+						Đăng ký tài khoản
+					</h1>
+					<form id="register-form" class="space-y-2 md:space-y-4" action="#">
+						<div>
+							<label for="fullName" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Họ và tên
+							</label>
+							<input name="fullName" id="fullName"
+								class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								placeholder="nhập tên của bạn" required="">
+						</div>
+						<div>
+							<label for="username" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Tên đăng nhập
+							</label>
+							<input type="username" name="username" id="username"
+								class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								placeholder="tên tài khoản để đăng nhập" required="">
+						</div>
+						<div>
+							<label for="email" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">
+								Email
+							</label>
+							<input type="email" name="email" id="email"
+								class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								placeholder="name@company.com" required="">
+						</div>
+						<div>
+							<label for="password"
+								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Password</label>
+							<input type="password" name="password" id="password" placeholder="••••••••"
+								class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								required="">
+						</div>
+						<div>
+							<label for="confirm-password"
+								class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Confirm
+								password</label>
+							<input type="confirm-password" name="confirm-password" id="confirm-password"
+								placeholder="••••••••"
+								class="bg-gray-50 border border-gray-300 text-gray-900 sm:text-sm rounded-lg focus:ring-primary-600 focus:border-primary-600 block w-full py-1 px-2 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+								required="">
+						</div>
+						<div class="flex items-start">
+							<div class="flex items-center h-5">
+								<input id="terms" aria-describedby="terms" type="checkbox"
+									class="w-4 h-4 border border-gray-300 rounded bg-gray-50 focus:ring-3 focus:ring-primary-300 dark:bg-gray-700 dark:border-gray-600 dark:focus:ring-primary-600 dark:ring-offset-gray-800"
+									required="">
+							</div>
+							<div class="ml-3 text-sm">
+								<label for="terms" class="font-light text-gray-500 dark:text-gray-300">Tôi đã đọc và
+									đồng ý <a class="font-medium text-primary-600 hover:underline dark:text-primary-500"
+										href="#">Điều khoản sử dụng</a></label>
+							</div>
+						</div>
+
+						<div class="mt-7">
+							<button type="submit"
+								class="cursor-pointer bg-blue-500 w-full py-3 rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+								Đăng ký
+							</button>
+						</div>
+
+						<!-- login by social -->
+						<div class="flex mt-7 items-center text-center">
+							<hr class="border-gray-300 border-1 w-full rounded-md">
+							<label class="block font-medium text-sm text-gray-600 w-full">
+								Hoặc đăng ký bằng
+							</label>
+							<hr class="border-gray-300 border-1 w-full rounded-md">
+						</div>
+						<div class="flex mt-7 justify-center w-full">
+							<a href="/oauth2/authorization/facebook"
+								class="mr-5 bg-blue-500 border-none px-4 py-2 rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+
+								Facebook
+							</a>
+
+							<a
+									href="/oauth2/authorization/google"
+								class="bg-red-500 border-none px-4 py-2 rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+								Google
+							</a>
+						</div>
+
+						<p class="text-sm font-light text-gray-500 dark:text-gray-400">
+							Đã có tài khoản? <a href="/signin"
+								class="font-medium text-primary-600 hover:underline dark:text-primary-500">Đăng nhập</a>
+						</p>
+					</form>
+				</div>
+			</div>
+		</div>
+	</section>
+
+</body>
+
+</html>

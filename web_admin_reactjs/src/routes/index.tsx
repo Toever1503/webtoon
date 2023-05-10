@@ -17,6 +17,9 @@ import CommentPage from "../pages/comment/CommentPage";
 import UserPage from "../pages/user/UserPage";
 import SubscriptionPackPage from "../pages/subscription-pack/SubscriptionPackPage";
 import LoginPage from "../pages/login/LoginPage";
+import RevenueStatsPage from "../pages/statistics/RevenueStatsPage";
+import RegistrationStatusStatsPage from "../pages/statistics/RegistrationStatusStatsPage";
+import RegistrationRateStatsPage from "../pages/statistics/RegistrationRateStatsPage";
 
 const router = createBrowserRouter([
     {
@@ -68,8 +71,16 @@ const router = createBrowserRouter([
                 element: <CommentPage />
             },
             {
-                path: "/stats",
-                element: <StatisticsPage />
+                path: "/stats/revenue",
+                element: <RevenueStatsPage />
+            },
+            {
+                path: "/stats/registration-rate",
+                element: <RegistrationRateStatsPage />
+            },
+            {
+                path: "/stats/registration-status",
+                element: <RegistrationStatusStatsPage />
             },
             {
                 path: "/users",
