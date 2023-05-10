@@ -1,4 +1,5 @@
 import { mangaAxios } from "../config/MangaAxios";
+import { EORDER_STATUS } from "./types/IOrder";
 import IOrderFilterInput from "./types/IOrderFilterInput";
 import IOrderInput from "./types/IOrderInput";
 import IUpgradeOrderInput from "./types/IUpgradeOrderInput";
@@ -8,7 +9,7 @@ const basePath: String = "/orders";
 
 const filterOrder = async (input: IOrderFilterInput) => mangaAxios.post(`${basePath}/filter?sort=id,desc`, input);
 
-const changeStatus = async (id: string, status: string) => mangaAxios.patch(`${basePath}/${id}/change-status?status=${status}`);
+const changeStatus = async (id: string | number, status: EORDER_STATUS) => mangaAxios.patch(`${basePath}/${id}/change-status?status=${status}`);
 
 const addOrder = async (input: IOrderInput) => mangaAxios.post(`${basePath}`, input);
 const updateOrder = async (input: IOrderInput) => mangaAxios.put(`${basePath}/${input.id}`, input);

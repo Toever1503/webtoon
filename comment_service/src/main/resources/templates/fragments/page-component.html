@@ -1,24 +1,30 @@
-<div style="display: none" class="page_component mt-[20px]"
+<div class="page_component mt-[20px]"
 	th:fragment="page-component">
 	<div class="flex justify-center">
 		<nav aria-label="Page navigation example">
-			<ul class="list-style-none flex">
-				<li><a
+			<ul class="list-style-none flex gap-x-[5px]">
+				<li th:if="${hasPrevPage}"><a
 					class="relative block rounded bg-transparent py-1.5 px-3 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
+					th:href="@{ '?page=' + ${currentPage-1} }" aria-label="Previous"> <span aria-hidden="true">&laquo;</span>
 				</a></li>
-				<li><a
+
+				<li th:each="i: ${#numbers.sequence(0, totalPage-1)}">
+					<a th:if="${currentPage == i}"
+							class="relative border block rounded bg-[#03a9f4] py-1.5 px-3 text-sm text-white transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+							href="#" th:text="${i + 1}">
+					</a>
+					<a th:if="${currentPage != i}"
+					class="relative border block rounded bg-transparent py-1.5 px-3 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
+						th:href="${'?page='+i }" th:text="${i + 1}">
+					</a>
+
+				</li>
+
+
+
+				<li th:if="${hasNextPage}"><a
 					class="relative block rounded bg-transparent py-1.5 px-3 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">1</a></li>
-				<li aria-current="page"><a
-					class="relative block rounded bg-transparent py-1.5 px-3 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">2</a></li>
-				<li><a
-					class="relative block rounded bg-transparent py-1.5 px-3 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#">3</a></li>
-				<li><a
-					class="relative block rounded bg-transparent py-1.5 px-3 text-sm text-neutral-600 transition-all duration-300 hover:bg-neutral-100 dark:text-white dark:hover:bg-neutral-700 dark:hover:text-white"
-					href="#" aria-label="Next"><span aria-hidden="true">&raquo;</span>
+					th:href="@{ '?page=' + ${currentPage+1} }" aria-label="Next"><span aria-hidden="true">&raquo;</span>
 				</a></li>
 			</ul>
 		</nav>

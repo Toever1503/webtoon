@@ -1,5 +1,7 @@
 package webtoon.payment.services.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,12 +23,11 @@ import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.services.IOrderService;
+import webtoon.payment.services.ISendEmail;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.utils.exception.CustomHandleException;
 
-import java.util.Calendar;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 @Service
 @Transactional
@@ -41,8 +42,12 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IUserService userService;
 
-    public OrderServiceImpl(IOrderRepository orderRepository) {
+    private final ISendEmail sendEmailService;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
+
+    public OrderServiceImpl(IOrderRepository orderRepository, ISendEmail sendEmailService) {
         this.orderRepository = orderRepository;
+        this.sendEmailService = sendEmailService;
     }
 
     @Override
@@ -50,7 +55,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = OrderEntity.builder()
                 .created_at(orderModel.getCreated_at())
                 .gioLap(orderModel.getGioLap())
-                .expiredSubsDate(orderModel.getExpiredSubsDate())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
@@ -71,7 +75,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
         orderEntity.setGioLap(orderModel.getGioLap());
-        orderEntity.setExpiredSubsDate(orderModel.getExpiredSubsDate());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());
@@ -132,11 +135,6 @@ public class OrderServiceImpl implements IOrderService {
         entity.setSubs_pack_id(subscriptionPack);
         entity.setFinalPrice(subscriptionPack.getPrice());
 
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
-        entity.setExpiredSubsDate(calendar.getTime());
-
         entity.setMaDonHang(orderNumber);
         entity.setUser_id(userService.getById(input.getUser_id()));
         entity.setMonthCount(subscriptionPack.getMonthCount());
@@ -144,6 +142,10 @@ public class OrderServiceImpl implements IOrderService {
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
+
+        if(input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)){
+
+        }
 
         return OrderDto.toDto(entity);
     }
@@ -159,9 +161,6 @@ public class OrderServiceImpl implements IOrderService {
             entity.setSubs_pack_id(subscriptionPack);
             entity.setFinalPrice(subscriptionPack.getPrice());
 
-            Calendar calendar = Calendar.getInstance();
-            calendar.add(Calendar.MONTH, subscriptionPack.getMonthCount());
-            entity.setExpiredSubsDate(calendar.getTime());
             entity.setMonthCount(subscriptionPack.getMonthCount());
             entity.setDayCount(subscriptionPack.getDayCount());
         }
@@ -171,6 +170,10 @@ public class OrderServiceImpl implements IOrderService {
         entity.setPaymentMethod(input.getPaymentMethod());
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+
+        // send order info to user's mail
+        if(entity.getStatus().equals(EOrderStatus.COMPLETED))
+            this.sendOrderInfoToMail(entity);
 
         this.orderRepository.saveAndFlush(entity);
         return OrderDto.toDto(entity);
@@ -291,6 +294,27 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
+    public void changeStatusOrder(Long id, EOrderStatus status) {
+        OrderEntity orderEntity = this.getById(id);
+        orderEntity.setStatus(status);
+        if (status.equals(EOrderStatus.COMPLETED)) { // need send mail
+            this.sendOrderInfoToMail(orderEntity);
+        }
+        this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    private void sendOrderInfoToMail(OrderEntity orderEntity) {
+        Map<String, Object> context = new HashMap<>();
+        context.put("order", orderEntity);
+        try {
+            this.sendEmailService.sendMail("payments/mail-templates/order_info.html", orderEntity.getUser_id().getEmail(), "Thông tin đặt hàng", context);
+        } catch (Exception e) {
+            this.logger.error("Send mail failed~");
+            e.printStackTrace();
+        }
+    }
+
+    @Override
     public OrderDto upgradeOrder(UpgradeOrderInput input) {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
@@ -315,9 +339,8 @@ public class OrderServiceImpl implements IOrderService {
                 .dayCount(subscriptionPack.getDayCount() - originalOrder.getSubs_pack_id().getDayCount())
                 .build();
 
-        Calendar calendar = Calendar.getInstance();
-        calendar.add(Calendar.MONTH, upgradeOrder.getMonthCount());
-        upgradeOrder.setExpiredSubsDate(calendar.getTime());
+        // task: send mail notify to user
+//        this.sendOrderInfoToMail(upgradeOrder);
 
         this.orderRepository.saveAndFlush(upgradeOrder);
         return OrderDto.toDto(upgradeOrder);

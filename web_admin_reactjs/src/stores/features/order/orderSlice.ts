@@ -1,5 +1,5 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
-import IOrder from '../../../services/order/types/IOrder';
+import IOrder, { EORDER_STATUS } from '../../../services/order/types/IOrder';
 
 export interface IOrderState {
     data: Array<IOrder>,
@@ -40,11 +40,26 @@ export const orderSlice = createSlice({
         },
         setOrderData: (state, { payload }) => {
             state.data = payload;
+        },
+        changeOrderStatus: (state, { payload }: PayloadAction<{
+            id: string | number,
+            status: EORDER_STATUS,
+        }>) => {
+            state.data = state.data.map((item) => {
+                if (item.id === payload.id) {
+                    return {
+                        ...item,
+                        status: payload.status,
+                    };
+                }
+                return item;
+            });
         }
+
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addOrder, updateOrder, deleteOrderById, setOrderData } = orderSlice.actions
+export const { addOrder, updateOrder, deleteOrderById, setOrderData, changeOrderStatus } = orderSlice.actions
 
 export default orderSlice.reducer

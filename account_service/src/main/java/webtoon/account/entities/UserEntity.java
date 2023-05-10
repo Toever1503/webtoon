@@ -71,13 +71,23 @@ public class UserEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
-    @Temporal(TemporalType.DATE)
-    @Column(name = "can_read_until_date")
-    private Date canReadUntilDate;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_user_authority",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<AuthorityEntity> authorities;
+
+    // count date
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "can_read_until_date")
+    private Date canReadUntilDate;
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "first_bought_subs_date")
+    private Date firstBoughtSubsDate;
+
+    @Column(name = "current_used_subs_id")
+    private Long currentUsedSubsId;
 }
