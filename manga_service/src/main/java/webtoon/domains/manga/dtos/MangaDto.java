@@ -54,7 +54,6 @@ public class MangaDto {
         return MangaDto.builder()
                 .id(mangaEntity.getId())
                 .title(mangaEntity.getTitle())
-                .alternativeTitle(mangaEntity.getAlternativeTitle())
                 .excerpt(mangaEntity.getExcerpt())
                 .description(mangaEntity.getDescription())
                 .mangaName(mangaEntity.getMangaName())

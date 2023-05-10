@@ -21,6 +21,7 @@ public class OrderModel {
     private Long id;
     private Date created_at;
     private Date gioLap;
+    private Date expiredSubsDate;
     private Double finalPrice;
     private EOrderType Estatus;
     private EOrderStatus status;
@@ -30,4 +31,6 @@ public class OrderModel {
     private SubscriptionPackEntity subs_pack_id;
     private UserEntity user_id;
     private EPaymentMethod payment_method;
+
+
 }

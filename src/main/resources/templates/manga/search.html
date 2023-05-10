@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout.html}">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link href="../../static/main.css" rel="stylesheet">
+</head>
+
+<body class="bg-[#f6f6f6]">
+    <div layout:fragment="content"  class="max-w-[1100px] mx-auto flex bg-white pt-[20px]">
+        <div class="form-search w-[300px] border-r">
+            <form th:action="@{'/search'}" class="grid space-y-5 justify-center">
+                <div class="grid items-center">
+                    <label for="keyword" class="block min-w-[180px] font-medium">Từ khóa:</label>
+                    <input id="keyword" name="q" type="text" placeholder="tên truyện, tác giả..."
+                        class="rounded px-[5px]" style="border: 1px solid #ebebeb;" th:value="${filterInput.q}"/>
+                </div>
+
+                <div class="grid  items-center">
+                    <label for="genres" class="block min-w-[180px] font-medium">Thể loại:</label>
+                    <select name="genreId" id="genres" class="min-w-[200px] rounded"
+                            style="border: 1px solid #ebebeb;">
+                        <option value="" th:text="'Chọn thể loại'"> </option>
+                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" th:selected="${filterInput.genreId == gener.id}"></option>
+                    </select>
+                </div>
+
+                <div class="grid  items-center">
+                    <label for="releaseStatus" class="block min-w-[180px] font-medium">Tình trạng phát hành:</label>
+                    <select name="status" id="releaseStatus" class="min-w-[200px] rounded"
+                        style="border: 1px solid #ebebeb;">
+                        <option value="" th:text="'Chọn trạng thái'"></option>
+                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey().name()}"  th:selected="${filterInput.status != null && filterInput.status.equals(trangthai.getKey())}"></option>
+
+                    </select>
+                </div>
+
+                <div class="grid  items-center">
+                    <label for="releaseYear" class="block min-w-[180px] font-medium">Năm phát hành:</label>
+                    <select name="releaseYear" id="releaseYear" class="min-w-[200px] rounded"
+                        style="border: 1px solid #ebebeb;">
+                        <option value="" th:text="'Chọn năm phát hành'"></option>
+                        <option value="2023">2023</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                    </select>
+                </div>
+
+                <div class="flex space-x-5 justify-center items-center text-sm">
+                    <button type="submit" class="border py-[5px] px-[10px] rounded hover:bg-neutral-100">
+                        Tìm kiếm
+                    </button>
+                    <!-- <button type="reset" class="border py-[5px] px-[10px] rounded hover:bg-neutral-100">
+                        Làm mới
+                    </button> -->
+                </div>
+            </form>
+
+        </div>
+        <h3 th:if="${mangaEntity.content == null}">Không có dữ liệu!</h3>
+        <div th:else class="mx-2 p-4">
+            <h1 class="mb-5 font-bold text-xl" th:text="${mangaEntity.content.size() + ' kết quả tìm kiếm'}"></h1>
+            <hr class="border border-zinc-600">
+            <div class="manga-list">
+                <!-- Cards 1 -->
+                <div class="flex justify-between manga-item" th:each="mangaE : ${mangaEntity.content}">
+                    <div class="p-4">
+                        <img class="w-56 h-70 border rounded"
+                            th:src="${mangaE.featuredImage}" alt="">
+                    </div>
+                    <div class="px-4 ">
+                        <div class="flex justify-center">
+                            <div class="min-w-[400px] mx-2 text-sm">
+                                <!-- content here -->
+                                <div class="py-4">
+                                    <h3 class="font-medium text-xl" th:text="${mangaE.title}"></h3>
+                                </div>
+                                <div class="p-4 bg-[#f6f6f6] w-full gap-x-[40px] grid grid-cols-2">
+                                    <div class="flex  justify-between">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Thể loại</h4>
+                                        </div>
+                                        <div class="py-2" th:inline="text">
+                                            <span th:each="itemgenre,iter : ${mangaE.genres}">
+                                            <span th:text="${itemgenre.name}"></span>
+                                            <span th:if="${!iter.last}" th:text="','"></span>
+                                    </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Tác giả</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>tes1,test</span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Trạng thái <br /> phát hành</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span th:text="${trangThai[mangaE.mangaStatus]}"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between space-x-2">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Năm phát hành</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span th:text="${mangaE.releaseYear}"></span>
+                                        </div>
+                                    </div>
+
+                                    <div class="flex  justify-between space-x-2">
+                                        <div class="py-2">
+                                            <h4 class="font-medium text-sm">Lượt đánh giá</h4>
+                                        </div>
+                                        <div class="py-2">
+                                            <span>5/1</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!--                                  for display chapter by vol -->
+                                <ul th:if="${mangaE.volumeEntities.size() > 0 && volI.index < 1}"
+                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                    th:each="volume,volI : ${mangaE.volumeEntities}">
+                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+
+                                        <div class="gap-[5px] flex items-center">
+                                            <a th:href="@{'/manga/'+${mangaE.title}+'/chapter/'+${chapter.id}}"
+                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                style="border: 1px solid #ebebeb"
+                                                class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                </a>
+                                            <span class="text-[12px] text-[#666666]"
+                                                th:text="${'Tập ' + (volume.volumeIndex + 1)}">
+                                            </span>
+                                            <span class="text-[12px] text-[#666666] text-center" th:text="${volume.createdAt}">
+                                                2023-24-12</span>
+                                        </div>
+
+                                    </li>
+                                </ul>
+<!--                                  for display chapter by chap -->
+                                <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
+                                    <li class="gap-[5px] flex" th:each="chapter,iter: ${mangaE.chapters}"
+                                        th:if="${iter.index < 2}">
+                                        <a th:href="@{'/manga/'+${mangaE.title}+'/chapter/'+${chapter.id}}"
+                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                            style="border: 1px solid #ebebeb"
+                                            class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                        </a>
+                                        <span class="text-[12px] text-[#666666] text-center" th:text="${chapter.createdAt}">
+                                            2023-24-12</span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-2">
+
+                    <nav aria-label="pagination navigation example">
+                        <ul class="inline-flex items-center -space-x-px">
+                            <li>
+                                <a th:if="${mangaEntity.pageable.pageNumber} <= 0"
+                                   th:href="@{'/search'}"
+                                   class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span class="sr-only">Previous</span>
+                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                </a>
+
+                                <a th:if="${mangaEntity.pageable.pageNumber} > 0"
+                                   th:href="@{'/search?page=' + ${mangaEntity.pageable.pageNumber - 1}}"
+                                   class="block px-3 py-2 ml-0 leading-tight text-gray-500 bg-white border border-gray-300 rounded-l-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span class="sr-only">Previous</span>
+                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clip-rule="evenodd"></path></svg>
+                                </a>
+                            </li>
+                            <li th:each="pageNumber : ${#numbers.sequence(0, mangaEntity.totalPages  - 1)}">
+                                <a th:href="@{'/search?page=' + ${pageNumber}}"
+
+                                   th:if="${pageNumber == mangaEntity.pageable.pageNumber}"
+                                   class="current-page"
+                                   th:text="${pageNumber + 1}"></a>
+
+                                <a th:href="@{'/search?page=' + ${pageNumber}}"
+                                   th:if="${pageNumber != mangaEntity.pageable.pageNumber}"
+                                   th:text="${pageNumber + 1}"></a>
+                            </li>
+                            <li>
+                                <a th:if="${mangaEntity.pageable.pageNumber < mangaEntity.totalPages}"
+                                   th:href="@{'/search?page=' + ${mangaEntity.pageable.pageNumber + 1}}"
+                                   class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span class="sr-only">Next</span>
+                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                                </a>
+                                <a th:if="${mangaEntity.pageable.pageNumber >= mangaEntity.totalPages}"
+                                   th:href="@{'/search?page=' + ${mangaEntity.totalPages - 1}}"
+                                   class="block px-3 py-2 leading-tight text-gray-500 bg-white border border-gray-300 rounded-r-lg hover:bg-gray-100 hover:text-gray-700 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-400 dark:hover:bg-gray-700 dark:hover:text-white">
+                                    <span class="sr-only">Next</span>
+                                    <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path></svg>
+                                </a>
+
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

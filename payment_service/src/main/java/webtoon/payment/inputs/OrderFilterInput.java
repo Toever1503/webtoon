@@ -6,10 +6,12 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import webtoon.payment.enums.EOrderStatus;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 public class OrderFilterInput {
     private String q;
-    private EOrderStatus status;
+    private List<EOrderStatus> status;
 }

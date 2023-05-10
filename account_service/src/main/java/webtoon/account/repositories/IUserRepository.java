@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 import webtoon.account.entities.UserEntity;
 
@@ -25,5 +26,6 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long>, JpaSpe
     Optional<UserEntity> findByUsernameOrEmail(String username, String email);
 
     Optional<UserEntity> findByUsername(String username);
+
 
 }

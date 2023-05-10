@@ -7,13 +7,16 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.OrderEntity_;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.inputs.OrderFilterInput;
 import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.services.IOrderService;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("api/orders")
@@ -30,6 +33,8 @@ public class OrderResource {
     public Page<OrderDto> filter(@RequestBody OrderFilterInput input, Pageable pageable) {
         List<Specification<OrderEntity>> specs = new ArrayList<>();
         specs.add((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(OrderEntity_.DELETED_AT)));
+        specs.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not());
+        
         if (input.getQ() != null) {
             input.setQ("%" + input.getQ() + "%");
             specs.add((root, query, cb) -> cb.or(
@@ -37,7 +42,7 @@ public class OrderResource {
             ));
         }
         if(input.getStatus() != null){
-            specs.add((root, query, cb) -> cb.equal(root.get(OrderEntity_.STATUS), input.getStatus()));
+            specs.add((root, query, cb) -> root.get(OrderEntity_.STATUS).in(input.getStatus()));
         }
         Specification<OrderEntity> finalSpec = null;
         for(Specification<OrderEntity> spec : specs){
@@ -63,14 +68,33 @@ public class OrderResource {
     }
 
     @PostMapping
-    public OrderDto addOrder(@RequestBody OrderInput input){
+    public OrderDto addOrder(@RequestBody OrderInput input) {
         return this.orderService.addNewOrder(input);
     }
 
     @DeleteMapping("{id}")
-    public void deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Long id) {
         this.orderService.deleteById(id);
     }
 
 
+    @PatchMapping("{id}/change-status")
+    public void changeStatusOrder (@PathVariable Long id, @RequestParam EOrderStatus status) {
+        this.orderService.changeStatusOrder(id, status);
+    };
+    @RequestMapping("dashboard")
+    public Object dashboardToday() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("totalNewOrder", this.orderService.countTotalOrderInToday());
+        map.put("totalRevenue", this.orderService.sumTotalRevenueInToday());
+        map.put("totalConfirmPending", this.orderService.countTotalPaymentPendingInToday());
+        map.put("totalCompleted", this.orderService.countTotalCompletedOrderInToday());
+        map.put("totalCanceled", this.orderService.countTotalCanceledOrderInToday());
+        return map;
+    }
+
+    @RequestMapping("sum-revenue-in-last-7-days")
+    public List<Object[]> sumRevenueInWeek() {
+        return this.orderService.sumTotalRevenueInLast7Days();
+    }
 }

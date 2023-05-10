@@ -15,7 +15,33 @@ export default {
                 createdBy: 'Người mua',
                 subscriptionPack: 'Gói đăng ký',
                 price: 'Giá',
+                createdAt: 'Ngày tạo',
             }
+        }
+    },
+    statistic: {
+        revenue: {
+            title: 'Thống kê doanh thu',
+            totalRevenueThisMonth: 'Tổng doanh thu tháng này',
+            totalSubscriber: 'Số người đăng ký tháng này',
+            totalSubscriberOnTrial: 'Số người đăng ký dùng thử tháng này',
+            totalRevenueBySubsPack: 'Doanh thu theo gói đăng ký',
+            revenueByDay: 'Doanh thu theo ngày',
+            monthlyRevenue: 'Doanh thu hàng tháng',
+        },
+        registrationStatus: {
+            title: 'Trạng thái đăng ký',
+            table: {
+                'user': 'Người mua',
+                'subscriptionPack': 'Gói đăng ký',
+                'expiredDate': 'Ngày hết hạn', 
+                action: {
+                    sendEmail: 'Gửi email',
+                }
+            }
+        },
+        registrationRate: {
+            title: 'Tỉ lệ đăng ký',
         }
     },
     manga: {
@@ -247,7 +273,6 @@ export default {
             'updatedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
-            'expireDate': 'Ngày hết hạn đọc',
             'upgrade': 'Nâng cấp',
             viewDetail: 'Chi tiết',
             upgradeSubs: 'Nâng cấp gói',
@@ -268,6 +293,8 @@ export default {
                     'createdBy': 'Người mua',
                     status: 'Trạng thái',
                     chooseUser: 'Chọn người dùng',
+                    'sure-complete': 'Bạn chắc chắn muốn hoàn tất đơn hàng này?',
+                    'mark-complete': 'Cập nhật hoàn tất',
                 }
             },
             actions: {
@@ -275,6 +302,8 @@ export default {
                 'add-failed': 'Thêm thất bại!',
                 'edit-success': 'Sửa thành công!',
                 'edit-failed': 'Sửa thất bại!',
+                'update-status-success': 'Cập nhật trạng thái thành công!',
+                'update-status-failed': 'Cập nhật trạng thái thất bại!',
             },
             errors: {
                 'required-user': 'Vui lòng chọn người dùng!',
@@ -300,12 +329,9 @@ export default {
         eStatus: {
             'ALL': 'Tất cả',
             'PENDING_PAYMENT': 'Chờ thanh toán',
-            'PAID': 'Đã thanh toán',
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
-            'REFUND_CONFIRM_PENDING': 'Chờ xác nhận hoàn tiền',
-            'REFUNDING': 'Đang hoàn tiền',
-            'REFUNDED': 'Đã hoàn tiền',
+            'USER_CONFIRMED_BANKING': 'Chờ kiểm tra CK',
         }
     },
     'subscription-pack': {
@@ -415,5 +441,6 @@ export default {
         edit: 'Sửa',
         delete: 'Xóa',
         reset: 'Làm mới',
+        filter: 'Lọc',
     }
 }

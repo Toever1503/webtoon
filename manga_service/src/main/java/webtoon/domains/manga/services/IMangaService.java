@@ -6,6 +6,7 @@ import org.springframework.data.jpa.domain.Specification;
 
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
@@ -14,6 +15,7 @@ import webtoon.domains.manga.models.MangaModel;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Set;
 
 public interface IMangaService {
 
@@ -28,6 +30,9 @@ public interface IMangaService {
     MangaEntity getByIdAndCb(Long mangaId, Long createId);
 
     Double getRating(Long id);
+
+
+    List<MangaEntity> getALLByGeners(Long id);
 
     MangaDto getByMangaId(Long id);
 

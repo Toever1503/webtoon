@@ -11,7 +11,6 @@ import webtoon.payment.entities.SubscriptionPackEntity;
 @Builder
 public class OrderPendingDTO {
     private Long id;
-    private String payUrl;
     private UserEntity user_id;
     private String maDonHang;
     private SubscriptionPackEntity subs_pack_id;
@@ -20,7 +19,6 @@ public class OrderPendingDTO {
     public String toString() {
         return "OrderPendingDTO{" +
                 "id=" + id +
-                ", payUrl='" + payUrl + '\'' +
                 ", user_id=" + user_id +
                 ", maDonHang='" + maDonHang + '\'' +
                 '}';

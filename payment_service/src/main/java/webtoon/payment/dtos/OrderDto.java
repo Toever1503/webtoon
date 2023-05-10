@@ -53,7 +53,6 @@ public class OrderDto {
 
         return OrderDto.builder()
                 .id(orderEntity.getId())
-                .expiredSubsDate(orderEntity.getExpiredSubsDate())
                 .created_at(orderEntity.getCreated_at())
                 .modifiedAt(orderEntity.getModifiedAt())
                 .gioLap(orderEntity.getGioLap())

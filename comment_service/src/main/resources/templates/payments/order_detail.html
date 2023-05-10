@@ -1,76 +1,64 @@
-<!DOCTYPE >
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
-  <head>
+<!DOCTYPE>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout.html}">
+
+<head>
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kết quả</title>
-    <link href="../static/main.css" rel="stylesheet" />
-    <link href="/static/main.css" rel="stylesheet" />
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js" integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous"></script>
+    <link href="/src/main/resources/static/main.css" rel="stylesheet" />
     <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
     <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
+</head>
 
-  </head>
-
-  <body>
-    <div class="w-[1100px] m-auto">
-        <div class="d-flex justify-content-center">
-    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRmbNMldGQUUZRNFdqnNfVQ852WndHtHfKpRA&usqp=CAU" />
-</div>  
-<h4 class="text-success text-center text-uppercase" th:text="${ketQua}"></h4>
-      
-<div class="row d-flex justify-content-center">
-  <div class="col-md-2 col-12">
-    <p class="text-start text-uppercase fw-bold text-danger">Mã giao dịch</p>
-  
-  </div>
-  <div class="col-md-4 col-12">
-    <p class="text-end fw-bold text-danger text-uppercase" th:text="${maGD}"></p>
-  </div>
-  <hr>
-</div>
-<div class="row d-flex justify-content-center">
-  <div class="col-md-2 col-12">
-    <p class="text-start text-uppercase fw-bold text-danger">Số tiền giao dịch</p>
-  
-  </div>
-  <div class="col-md-4 col-12">
-    <p class="text-end fw-bold text-danger text-uppercase" th:text="${#numbers.formatCurrency(soTien)}"></p>
-  </div>
-  <hr>
-</div>
-<div class="row d-flex justify-content-center">
-  <div class="col-md-2 col-12">
-    <p class="text-start text-uppercase fw-bold text-danger">Mã ngân hàng</p>
-  
-  </div>
-  <div class="col-md-4 col-12">
-    <p class="text-end fw-bold text-danger text-uppercase" th:text="${maNganHang}"></p>
-  </div>
-  <hr>
-</div>
-<div class="row d-flex justify-content-center">
-  <div class="col-md-2 col-12 fw-bold">
-    <p class="text-start text-uppercase fw-bold text-danger">Thời gian giao dịch:</p>
-  
-  </div>
-  <div class="col-md-4 col-12">
-    <p class="text-end fw-bold text-danger text-uppercase" th:text="${thoiGianTT}"></p>
-  </div>
-  <hr>
-</div>
-<div class="row d-flex justify-content-center">
-  <div class="col-md-2 col-12">
-    <p class="text-start text-uppercase fw-bold text-danger">Nội dung</p>
-  
-  </div>
-  <div class="col-md-4 col-12">
-    <p class="text-end fw-bold text-danger text-uppercase" th:text="${noiDungTT}"></p>
-  </div>
-</div>
-  
-</div>
+<body>
+    <div class="w-[700px] m-auto bg-white min-h-[500px] p-[15px]" layout:fragment="content">
+        <div class="flex flex-row justify-center">
+            <img th:if="${isSuccess}" class="w-[200px] h-[200px]" src="/static/payment/success.png" />
+            <img th:if="${!isSuccess}" class="w-[200px] h-[200px]" src="/static/payment/failed.jpg" />
+        </div>
+        <h4 class="text-xl text-green-700 font-medium uppercase text-center " th:text="${ketQua}"></h4>
+        <div class="mt-10">
+            <table class="border-collapse w-125 justify-center">
+                <tbody>
+                    <tr>
+                        <td class="h-12 text-green-600  font-medium uppercase ">Mã đơn hàng</td>
+                        <td class="h-12 text-green-600 font-medium text-center uppercase">
+                            <p th:text="${maDonHang}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 w-72 text-green-600 font-medium uppercase ">Mã giao dịch</td>
+                        <td class="h-12 w-72 text-green-600 font-medium text-center uppercase">
+                            <p th:text="${maGD}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 text-green-600 font-medium uppercase ">Ngân hàng</td>
+                        <td class="h-12 text-green-600 font-medium text-center  uppercase">
+                            <p th:text="${maNganHang}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 text-green-600 font-medium uppercase ">Thời gian thanh toán</td>
+                        <td class="h-12 text-green-600 font-medium text-center uppercase ">
+                            <p th:text="${#dates.format(thoiGianTT, 'dd-MMM-yyyy')}"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="h-12 text-green-600 font-medium uppercase ">Nội dung thanh toán</td>
+                        <td class="h-12 text-green-600 font-medium text-center uppercase">
+                            <p th:text="${noiDungTT}"></p>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <p class="text-center">
+                <a href="/" class="text-blue-400 hover:text-blue-500">Về trang chủ</a>
+            </p>
+        </div>
+    </div>
 </body>
+
 </html>

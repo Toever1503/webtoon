@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
@@ -29,6 +30,7 @@ import webtoon.utils.ASCIIConverter;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 //import webtoon.utils.exception.CustomHandleException;
 
@@ -92,7 +94,6 @@ public class IMangaServiceImpl implements IMangaService {
 
         MangaEntity mangaEntity = this.getById(model.getId());
         mangaEntity.setTitle(model.getTitle());
-        mangaEntity.setAlternativeTitle(model.getAlternativeTitle());
         mangaEntity.setExcerpt(model.getExcerpt());
         mangaEntity.setDescription(model.getDescription());
         mangaEntity.setMangaName(model.getMangaName());
@@ -106,7 +107,6 @@ public class IMangaServiceImpl implements IMangaService {
         mangaRepository.saveAndFlush(mangaEntity);
         return MangaDto.builder()
                 .title(mangaEntity.getTitle())
-                .alternativeTitle(mangaEntity.getAlternativeTitle())
                 .excerpt(mangaEntity.getExcerpt())
                 .description(mangaEntity.getDescription())
                 .mangaName(mangaEntity.getMangaName())
@@ -161,6 +161,12 @@ public class IMangaServiceImpl implements IMangaService {
 
 
     @Override
+    public List<MangaEntity> getALLByGeners(Long id){
+
+        return this.mangaRepository.findByGenresIn(id);
+    }
+
+    @Override
     public MangaDto getByMangaId(Long id){
         MangaEntity entity = this.mangaRepository.getByMangaId(id);
         return MangaDto.builder()
@@ -206,6 +212,7 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public Page<MangaEntity> filterEntities(Pageable pageable, Specification<MangaEntity> specs) {
+
         return this.mangaRepository.findAll(specs, pageable);
     }
 

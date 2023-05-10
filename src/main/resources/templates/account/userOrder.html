@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html
+  lang="en"
+  xmlns:th="http://www.thymeleaf.org"
+  xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+  layout:decorate="~{layout.html}"
+>
+  <head>
+    <meta charset="UTF-8" />
+    <title>Lịch sử mua</title>
+    <link href="/src/main/resources/static/main.css" rel="stylesheet" />
+    <script
+      src="https://kit.fontawesome.com/b86979ecfa.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
+  </head>
+  <body>
+    <div class="w-[1100px] mx-auto" layout:fragment="content">
+      <div class="grid grid-cols-4">
+        <div th:replace="account/fragments/sidebar :: user-sidebar"/>
+
+
+        <div class="col-span-3">
+          <div>
+            <div class="rounded border w-[780px] mx-auto mt-4">
+
+              <h1 class="text-2xl font-semibold px-[15px] pt-[15px] mt-[20px]">Lịch sử mua</h1>
+
+              <!-- Tabs -->
+              <ul id="tabs" class="inline-flex pt-2 px-1 w-full border-b">
+                <li th:class="${status == 'PENDING_PAYMENT'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'">
+                  <a href="/user/order-history?status=PENDING_PAYMENT&search=">Chờ thanh toán</a></li>
+
+                <li th:class="${status == 'USER_CONFIRMED_BANKING'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'">
+                  <a href="/user/order-history?status=USER_CONFIRMED_BANKING&search=">Chờ admin xác nhận</a></li>
+
+                <li class="px-4 text-gray-800 font-semibold py-2 rounded-t "
+                    th:classappend="${status == 'COMPLETED'} ? 'bg-white border-t border-r border-l -mb-px' : ''"><a
+                        href="/user/order-history?status=COMPLETED&search=">Đã thanh toán</a></li>
+
+                <li th:class="${status == 'CANCELED'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'">
+                  <a href="/user/order-history?status=CANCELED&search=">Đã huỷ</a></li>
+              </ul>
+              <!-- Tab Contents -->
+              <div id="tab-contents">
+                <form th:action="@{/user/order-history}" method="GET">
+                  <div class="flex justify-end my-5">
+                    <input
+                      type="hidden"
+                      name="status"
+                      th:value="${status}"/>
+                    <input
+                            type="text"
+                            name="search"
+                            th:value="${search}"
+                            class="border border-gray-200 text-sm h-8 w-56 px-[10px]"
+                            placeholder="Tìm kiếm..."
+                    />
+                    <button
+                      class="bg-white border border-gray-200 hover:bg-red-400 hover:text-white w-10 text-red-400" type="submit"
+                    >
+                      <i class="fas fa-search"></i>
+                    </button>
+                  </div>
+                </form>
+                  <div class="relative overflow-x-auto">
+                    <table
+                      class="w-full text-sm text-left text-gray-500 bg-gray-300"
+                    >
+                      <thead class="text-xs text-white uppercase font-semi-bold bg-[#eb3349]">
+                      <tr>
+                        <th scope="col" class="px-6 py-3">STT</th>
+                        <th scope="col" class="px-6 py-3">Mã đơn hàng</th>
+                        <th scope="col" class="px-6 py-3">Gói truyện</th>
+                        <th scope="col" class="px-6 py-3">Giá</th>
+                        <th scope="col" class="px-6 py-3">Thời gian đọc</th>
+                        <th scope="col" class="px-6 py-3">Ngày mua</th>
+                        <th scope="col" class="px-6 py-3">Thao tác</th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr class="bg-white border-b" th:each="item,iter: ${order}">
+                        <td
+                                class="px-6 py-4"
+                                th:text="${iter.index+1}"
+                        >
+                        </td>
+                        <td
+                                class="px-6 py-4"
+                                th:text="${item.maDonHang}"
+                        >
+                        </td>
+                        <td
+                                class="px-6 py-4"
+                                th:text="${item.subs_pack_id.name}"
+                        ></td>
+                        <td
+                                class="px-6 py-4"
+                                th:text="${#numbers.formatDecimal(item.finalPrice, 0, 'POINT', 0, 'POINT') + ' vnd' }"
+                        ></td>
+                        <td
+                                class="px-6 py-4"
+                                th:text="${item.subs_pack_id.monthCount + ' tháng'}"
+                        ></td>
+                        <td class="px-6 py-4" th:text="${#dates.format(item.created_at, 'dd-MM-yyyy HH:mm:ss')}">
+                        </td>
+
+                        <td th:switch="${status}">
+                          <a th:case="PENDING_PAYMENT" th:href="@{'/order/repay/' + ${item.id}}"
+                             class="underline text-blue-400 hover:text-blue-500">Thanh toán</a>
+                          <a th:case="USER_CONFIRMED_BANKING" th:href="@{'/order/cancelOrder/' + ${item.id}}"
+                             class="underline text-blue-400 hover:text-blue-500">Hủy</a>
+                          <div th:case="*" class="text-center">
+                            -
+                          </div>
+                        </td>
+
+                      </tr>
+                      </tbody>
+                    </table>
+
+                    <p th:if="${order.size() == 0}" class="text-center mt-[10px]">
+                      Hiện không có đơn hàng nào!
+                    </p>
+
+                    <div th:if="${order.size() > 0}" class="py-[10px]">
+                      <div th:replace="fragments/page-component :: page-component"/>
+                    </div>
+                  </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

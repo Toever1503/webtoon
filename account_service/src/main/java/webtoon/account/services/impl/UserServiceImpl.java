@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import webtoon.account.configs.security.CustomUserDetail;
 import webtoon.account.configs.security.jwt.JwtProvider;
 import webtoon.account.dtos.LoginResponseDto;
+import webtoon.account.entities.UserEntity_;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.LoginInput;
@@ -276,6 +277,14 @@ public class UserServiceImpl implements IUserService {
                 .orElseThrow(
                         () -> new CustomHandleException(0)
                 );
+    }
+
+    @Override
+    public Long countTotalRegisterTrialThisMonth() {
+        Specification spec = Specification
+                .where((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(UserEntity_.TRIAL_REGISTERED_DATE)).not())
+                .and((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(UserEntity_.DELETED_AT)));
+        return this.userRepository.count(spec);
     }
 
     @Override

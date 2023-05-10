@@ -33,9 +33,6 @@ public class MangaEntity {
     @Column(name = "title")
     private String title;
 
-    @Column(name = "alternative_title")
-    private String alternativeTitle;
-
     @Column(name = "excerpt")
     private String excerpt;
 
@@ -59,6 +56,7 @@ public class MangaEntity {
     @Column(name = "comment_count")
     private Integer commentCount;
 
+    // nam phat hanh
     @Column(name = "release_year")
     private Integer releaseYear;
 
@@ -105,7 +103,7 @@ public class MangaEntity {
     @OrderBy("chapter_index desc")
     private Set<MangaChapterEntity> chapters;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_manga_genre_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")

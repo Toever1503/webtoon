@@ -12,11 +12,12 @@ import ErrorPage from "../pages/ErrorPage";
 import Dashboard from "../pages/dashboard/Dashboard";
 import CategoryPage from "../pages/post/CategoryPage";
 import OrderPage from "../pages/order/OrderPage";
-import StatisticsPage from "../pages/stats/StatisticsPage";
 import CommentPage from "../pages/comment/CommentPage";
 import UserPage from "../pages/user/UserPage";
 import SubscriptionPackPage from "../pages/subscription-pack/SubscriptionPackPage";
 import LoginPage from "../pages/login/LoginPage";
+import RevenueStatsPage from "../pages/statistics/RevenueStatsPage";
+import RegistrationStatusStatsPage from "../pages/statistics/RegistrationStatusStatsPage";
 
 const router = createBrowserRouter([
     {
@@ -68,8 +69,12 @@ const router = createBrowserRouter([
                 element: <CommentPage />
             },
             {
-                path: "/stats",
-                element: <StatisticsPage />
+                path: "/stats/revenue",
+                element: <RevenueStatsPage />
+            },
+            {
+                path: "/stats/registration-status",
+                element: <RegistrationStatusStatsPage />
             },
             {
                 path: "/users",
