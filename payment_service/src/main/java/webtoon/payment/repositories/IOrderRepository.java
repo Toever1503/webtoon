@@ -3,10 +3,12 @@ package webtoon.payment.repositories;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import webtoon.account.entities.UserEntity;
 import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
+import webtoon.payment.enums.EOrderStatus;
 
 import java.util.List;
 
@@ -26,6 +28,12 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
 
     @Query("SELECT o FROM tbl_order o WHERE o.user_id.id = ?1 AND o.status = 'COMPLETED'")
     List<OrderEntity> getPaymentCompletedByUserId(Long userId);
+
+    @Query("select o From tbl_order o where o.user_id.id= ?1 AND o.status = ?2")
+    List<OrderEntity> getPaymentConfirmByUserId(Long userId,EOrderStatus status);
+
+    @Query("select o from tbl_order o where o.user_id.id = ?1 and o.status = ?2 and(?3 IS NULL OR o.maDonHang LIKE %?3% or o.subs_pack_id.name like %?3%) ")
+    List<OrderEntity> searchByUserId(Long userId,EOrderStatus status, String search);
 
     @Query("select count(o) from tbl_order o where o.status != 'DRAFTED' and function('date_format', o.created_at, '%Y, %m, %d') >= function('date_format', CURRENT_DATE, '%Y, %m, %d')")
     Long countTotalOrderInToday();
