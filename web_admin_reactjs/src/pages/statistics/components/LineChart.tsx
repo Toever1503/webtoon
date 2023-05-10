@@ -16,8 +16,6 @@ type LineChartProps = {
 const LineChart: React.FC<LineChartProps> = (props: LineChartProps) => {
     // const [data, setData] = useState<any>([]);
 
-   
-
 
     const config = {
         data: props.data || [{

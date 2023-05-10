@@ -25,6 +25,9 @@ public class UserController {
 
     @GetMapping("/profile")
     public String profile( Model model){
+        if(!SecurityUtils.isAuthenticated()){
+            return "redirect:/signin?redirectTo=/user/profile";
+        }
         UserEntity user = userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
         model.addAttribute("user", user);
         return "account/profile";

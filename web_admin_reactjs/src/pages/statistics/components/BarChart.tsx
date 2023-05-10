@@ -1,20 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import ReactDOM from 'react-dom';
 import { Column } from '@ant-design/plots';
 
 
 
-type BarDataType = {
+export type BarDataType = {
   name: string,
   value: number,
 };
 
 type BarChartProps = {
-  data: [BarDataType]
+  data: BarDataType[]
 }
 const BarChart: React.FC<BarChartProps> = (props: BarChartProps) => {
 
-  const config = {
+  const [config, setConfig] = useState<any>({
     data: props.data || [],
     xField: 'name',
     yField: 'value',
@@ -34,8 +34,22 @@ const BarChart: React.FC<BarChartProps> = (props: BarChartProps) => {
     },
     minColumnWidth: 20,
     maxColumnWidth: 20,
-  };
-  return <Column {...config} />;
+  });
+
+  const ref = useRef(null);
+
+  useEffect(() => {
+    config.data = props.data;
+    if (ref.current) {
+      // @ts-ignore
+      ref.current.getChart().update({ data: props.data })
+    }
+
+  }, [props]);
+
+  return <>
+    {<Column {...config} ref={ref} />}
+  </>;
 };
 
 

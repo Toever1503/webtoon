@@ -19,6 +19,7 @@ import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.OrderModel;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.Calendar;
 import java.util.Date;
@@ -54,41 +55,43 @@ public class OrderController {
         return ResponseEntity.ok(orderService.getAll());
     }
 
-    @GetMapping("/chuyenKhoan/{id}")
-    public String chuyenKhoan(@PathVariable Long id, Model model, HttpSession session) {
-//        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getByPrice(orderModel.getFinalPrice());
+
+    @GetMapping("create-order")
+    public String createOrder(@RequestParam Long subscriptionPack, @RequestParam EPaymentMethod paymentMethod) {
+        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(subscriptionPack);
+        OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, paymentMethod);
+
+        if (paymentMethod.equals(EPaymentMethod.VN_PAY)) {
+            return "redirect:/payment/pay?orderId=" + orderEntity.getId();
+        }
+        return "redirect:/order/bank-info/" + orderEntity.getId();
+    }
+
+    @GetMapping("/bank-info/{id}")
+    public String getBankInfoForOrder(@PathVariable Long id, Model model, HttpSession session) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if (entity == null) {
+        if (!SecurityUtils.isAuthenticated()) {
             return "redirect:/signin";
         } else {
-
-            SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
+            OrderEntity orderEntity = this.orderService.getById(id);
+            SubscriptionPackEntity subscriptionPackEntity = orderEntity.getSubs_pack_id();
             model.addAttribute("name", subscriptionPackEntity.getName());
             Double price = subscriptionPackEntity.getPrice();
             model.addAttribute("price", price);
             model.addAttribute("id", subscriptionPackEntity.getId());
             model.addAttribute("subscriptionPackId", subscriptionPackEntity.getId());
-
-            OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, EPaymentMethod.ATM);
             model.addAttribute("maDonHang", orderEntity.getMaDonHang());
             return "payments/chuyenKhoan";
         }
     }
 
-    @GetMapping("chuyenKhoan/confirmed/{id}")
-    public String paypal(@PathVariable Long id, Model model, HttpSession session,
+    @GetMapping("chuyenKhoan/confirmed")
+    public String paypal(Model model, HttpSession session,
                          @RequestParam String maDonHang) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
         if (entity == null) {
             return "redirect:/signin";
         } else {
-            Date createDate = new Date();
-            SubscriptionPackEntity subscriptionPackEntity = subscriptionPackService.getById(id);
-            Double price = subscriptionPackEntity.getPrice();
-            model.addAttribute("name", subscriptionPackEntity.getName());
-//            orderService.add(new OrderModel(
-//                    Long.parseLong(maDonHang), createDate, createDate, createDate, price, EOrderType.NEW, EOrderStatus.USER_CONFIRMED_BANKING, "CHUYENKHOAN", "0.0.0.0.1", maDonHang, subscriptionPackEntity, entity, EPaymentMethod.ATM));
-
             this.orderService.userConfirmOrder(maDonHang);
             return "payments/confirmed";
         }
@@ -100,48 +103,20 @@ public class OrderController {
                               @RequestParam(defaultValue = "0") Integer page,
                               RedirectAttributes redirectAttributes) {
         this.orderService.cancelOrder(id);
-
         redirectAttributes.addAttribute("showNotification", true);
         redirectAttributes.addAttribute("notificationMessage", "Hủy thành công!");
         return "redirect:/user/userOrder" + (page == 0 ? "" : "?page=" + page);
     }
 
-    @RequestMapping("returnOrder/{id}")
-    public String returnOrder(@PathVariable Long id,
-                              @RequestParam(defaultValue = "0") Integer page,
-                              RedirectAttributes redirectAttributes) {
-        this.orderService.returnOrder(id);
-        redirectAttributes.addAttribute("showNotification", true);
-        redirectAttributes.addAttribute("notificationMessage", "Đã gửi yêu cầu hoàn tiền!");
-        return "redirect:/user/userOrder" + (page == 0 ? "" : "?page=" + page);
+    @GetMapping("repay/{id}")
+    public String repay(@PathVariable Long id, Model model) {
+        OrderEntity orderEntity = this.orderService.getById(id);
+        if (orderEntity.getPaymentMethod().equals(EPaymentMethod.VN_PAY))
+            return "redirect:/payment/pay?orderId=" + orderEntity.getId();
+        else
+            return "redirect:/order/bank-info/" + orderEntity.getId();
+
     }
 
-//    @GetMapping("/userOrder/{id}")
-//    public String userOrder(@PathVariable Long id,Model model , HttpSession session) {
-//        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-//        if(entity == null){
-//            return "redirect:/signin";
-//        }else {
-//            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-//            List<OrderEntity> order = orderService.getPaymentCompletedByUserId(userId);
-//            System.out.println("order: " + order);
-//            model.addAttribute("order", order);
-//            return "payments/userOrder";
-//        }
-//    }
-
-//    @GetMapping("/pending-payment/{id}")
-//    public String pendingPayment(@PathVariable Long id,Model model, HttpSession session) {
-//        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-//        if (entity == null) {
-//            return "redirect:/signin";
-//        } else {
-//            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-//            List<OrderPendingDTO> order = orderService.getPendingPaymentByUserId(userId);
-//            System.out.println("order: " + order);
-//            model.addAttribute("order", order);
-//            return "payments/pending-payment";
-//        }
-//    }
 
 }

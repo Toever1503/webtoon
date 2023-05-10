@@ -78,7 +78,15 @@ public class UserEntity {
             inverseJoinColumns = @JoinColumn(name = "authority_id"))
     private Set<AuthorityEntity> authorities;
 
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "deleted_at")
+    private Date deletedAt;
     // count date
+
+    @Temporal(TemporalType.DATE)
+    @Column(name = "trial_registered_date")
+    private Date trialRegisteredDate;
 
     @Temporal(TemporalType.DATE)
     @Column(name = "can_read_until_date")

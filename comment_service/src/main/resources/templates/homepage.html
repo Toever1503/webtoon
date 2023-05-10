@@ -16,57 +16,15 @@
             </a>
         </div>
 
-        <div class="login-signup" th:if="${session.loggedUser == null}">
-            <a href="/signin"
-               class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Đăng
-                nhập</a>
-            <a href="/signup"
-               class="inline-block p-0 m-0 py-[5px] px-[15px] border-[2px] border-[#666] rounded-[30px] font-[600] hover:text-[#eb3349]">Đăng
-                ký</a>
-        </div>
-        <div th:if="${session.loggedUser != null}" id="logged-user-section"
-             class="rounded-full border px-[10px] py-[5px] cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-500 dark:hover:text-white relative">
-            <i class="fas fa-user-circle"></i>
-            <a href="/my-account">Tài khoản</a>
-
-
-            <div id="account-dropdown"
-                 class="absolute top-[40px] hidden ease-in-out duration-200 right-0 z-10 border bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
-                <ul class="py-2 text-sm text-gray-700 dark:text-gray-200" aria-labelledby="dropdownDefaultButton">
-                    <li>
-                        <a href="#"
-                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Thông tin tài khoản</a>
-                    </li>
-                    <li>
-                        <a href="#" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Đổi mật
-                            khẩu</a>
-                    </li>
-                    <li>
-                        <a href="/user/userOrder" class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Lịch sử
-                            mua</a>
-                    </li>
-                    <li>
-                        <a href="/signout"
-                           class="block px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-600 dark:hover:text-white">Đăng xuất</a>
-                    </li>
-                </ul>
-            </div>
-
-            <script>
-        document.addEventListener('DOMContentLoaded', () => {
-          document.getElementById('logged-user-section').addEventListener('mouseenter', () => {
-            document.getElementById('account-dropdown').classList.remove('hidden');
-          });
-
-
-          document.getElementById('account-dropdown').addEventListener('mouseenter', () => {
-            document.getElementById('account-dropdown').classList.remove('hidden');
-          });
-          document.getElementById('account-dropdown').addEventListener('mouseleave', () => {
-            document.getElementById('account-dropdown').classList.add('hidden');
-          });
-        });
-      </script>
+        <!--  seach button -->
+        <div id="search_modal" class="h-[30px]">
+            <form action="/search" method="get" class="flex space-x-2 text-sm h-full">
+                <input name="q" class="rounded py-1 px-2 h-full" placeholder="Nhập tên truyện, tác giả,..."
+                       style="border: 1px solid gainsboro;"/>
+                <button type="submit">
+                    <i class="fas fa-search text-white hover:text-neutral-200"></i>
+                </button>
+            </form>
         </div>
 
         <ul class="detail-genres-list hidden absolute w-full bg-[#f3f3f3] top-[55px] z-[1000] left-0 px-[15px]

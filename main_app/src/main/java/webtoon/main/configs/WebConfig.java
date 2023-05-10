@@ -53,7 +53,6 @@ public class WebConfig implements WebMvcConfigurer {
 
                 , new AntPathRequestMatcher("/payment/**")
                 , new AntPathRequestMatcher("/order/**")
-                ,new AntPathRequestMatcher("/user/**")
 
 
                 //for manga module

@@ -43,4 +43,6 @@ public interface IUserService extends IJwtService {
     LoginResponseDto signin(LoginInput input);
 
     UserEntity getById(Long userId);
+
+    Long countTotalRegisterTrialThisMonth();
 }

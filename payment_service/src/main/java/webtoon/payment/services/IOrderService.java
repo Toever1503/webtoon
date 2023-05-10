@@ -13,6 +13,7 @@ import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 
+import java.util.Date;
 import java.util.List;
 
 public interface IOrderService {
@@ -24,6 +25,7 @@ public interface IOrderService {
     OrderEntity getMaDonHang(String maDonHang);
 
     Page<OrderDto> filter(Pageable pageable, Specification<OrderEntity> finalSpec);
+    Page<OrderEntity> filterEntity(Pageable pageable, Specification<OrderEntity> finalSpec);
     List<OrderEntity> getByUserId(Long userId);
     Long getIdByMaDonHang(String maDonHang);
 
@@ -67,4 +69,14 @@ public interface IOrderService {
     List<Object[]> sumTotalRevenueInLast7Days();
 
     void changeStatusOrder(Long id, EOrderStatus status);
+
+    Long totalRevenueThisMonth();
+
+    Long countTotalRegisterThisMonth();
+
+    List<Object[]> sumRevenuePerMonthByYear(String year);
+
+    List<Object[]> sumRevenuePerDayByMonth(String monthDate);
+
+    List<Object[]> sumRevenuePerSubsPackByMonth(String monthDate);
 }

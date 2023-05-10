@@ -44,14 +44,13 @@ public class PaymentController {
     private ISubscriptionPackService subscriptionPackService;
 
     @RequestMapping("pay")
-    public void test(HttpServletRequest req,
-                     HttpServletResponse resp,
-                     @RequestParam Long subscriptionPack) throws IOException, ParseException {
+    public void test(HttpServletResponse resp,
+                     @RequestParam Long orderId) throws IOException, ParseException {
 
-        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(subscriptionPack);
-        OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, EPaymentMethod.VN_PAY);
+        OrderEntity orderEntity = this.orderService.getById(orderId);
+        SubscriptionPackEntity subscriptionPackEntity = orderEntity.getSubs_pack_id();
+
         Integer amount = subscriptionPackEntity.getPrice().intValue();
-
         String vnp_OrderInfo = "Thanh toan goi " + subscriptionPackEntity.getMonthCount() + " thang.";
         String vnp_TxnRef = orderEntity.getMaDonHang();
         String bank_code = ""; // edit later

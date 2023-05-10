@@ -10,6 +10,7 @@ import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.enums.EOrderStatus;
 
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -56,4 +57,27 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
             "WHERE created_at >= DATE_SUB(CURRENT_DATE, INTERVAL 7 DAY) and status = 'COMPLETED' \n" +
             "GROUP by DATE_FORMAT(created_at, \"%Y-%m-%d\")", nativeQuery = true)
     List<Object[]> sumTotalRevenueInLast7Days();
+
+    @Query("select sum(o.finalPrice) from tbl_order o where o.status = 'COMPLETED' and function('date_format', o.created_at, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
+    Long totalRevenueThisMonth();
+
+    @Query("select count(o) from tbl_order o where o.orderType = 'NEW' and function('date_format', o.created_at, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
+    Long countTotalRegisterThisMonth();
+
+
+    @Query(value = "SELECT DATE_FORMAT(created_at, \"%Y-%m\") as k, SUM(final_price) as v FROM `tbl_order` \n" +
+            "WHERE DATE_FORMAT(created_at, '%Y') = :year and status = 'COMPLETED' \n" +
+            "GROUP by DATE_FORMAT(created_at, \"%Y-%m\")", nativeQuery = true)
+    List<Object[]> sumRevenuePerMonthByYear(@Param("year") String monthDate);
+
+    @Query(value = "SELECT DATE_FORMAT(created_at, \"%Y-%m-%d\") as k, SUM(final_price) as v FROM `tbl_order` \n" +
+            "WHERE DATE_FORMAT(created_at, '%Y-%m') = :month and status = 'COMPLETED' \n" +
+            "GROUP by DATE_FORMAT(created_at, \"%Y-%m-%d\")", nativeQuery = true)
+    List<Object[]> sumRevenuePerDayByMonth(@Param("month") String monthDate);
+
+    @Query(value = "SELECT S.ID, s.subs_name, sum(o.final_price) FROM `tbl_order` as o\n" +
+            "JOIN tbl_subscription_pack as s on o.subs_pack_id = s.id\n" +
+            "WHERE o.status = 'COMPLETED' and DATE_FORMAT(o.created_at, '%Y-%m') = :month\n" +
+            "GROUP BY s.id", nativeQuery = true)
+    List<Object[]> sumRevenuePerSubsPackByMonth(@Param("month") String monthDate);
 }

@@ -113,6 +113,11 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.findAll(finalSpec, pageable).map(OrderDto::toDto);
     }
 
+    @Override
+    public Page<OrderEntity> filterEntity(Pageable pageable, Specification<OrderEntity> finalSpec) {
+        return this.orderRepository.findAll(finalSpec, pageable);
+    }
+
     public List<OrderEntity> getByUserId(Long userId) {
         return orderRepository.getByUserId(userId);
     }
@@ -311,6 +316,31 @@ public class OrderServiceImpl implements IOrderService {
             this.sendOrderInfoToMail(orderEntity);
         }
         this.orderRepository.saveAndFlush(orderEntity);
+    }
+
+    @Override
+    public Long totalRevenueThisMonth() {
+        return this.orderRepository.totalRevenueThisMonth();
+    }
+
+    @Override
+    public Long countTotalRegisterThisMonth() {
+        return this.orderRepository.countTotalRegisterThisMonth();
+    }
+
+    @Override
+    public List<Object[]> sumRevenuePerMonthByYear(String year) {
+        return this.orderRepository.sumRevenuePerMonthByYear(year);
+    }
+
+    @Override
+    public List<Object[]> sumRevenuePerDayByMonth(String monthDate) {
+        return this.orderRepository.sumRevenuePerDayByMonth(monthDate);
+    }
+
+    @Override
+    public List<Object[]> sumRevenuePerSubsPackByMonth(String monthDate) {
+        return this.orderRepository.sumRevenuePerSubsPackByMonth(monthDate);
     }
 
     private void sendOrderInfoToMail(OrderEntity orderEntity) {

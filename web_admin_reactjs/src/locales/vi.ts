@@ -23,8 +23,8 @@ export default {
         revenue: {
             title: 'Thống kê doanh thu',
             totalRevenueThisMonth: 'Tổng doanh thu tháng này',
-            totalSubscriber: 'Tổng số người đăng ký',
-            totalSubscriberOnTrial: 'Tổng số người đăng ký dùng thử',
+            totalSubscriber: 'Số người đăng ký tháng này',
+            totalSubscriberOnTrial: 'Số người đăng ký dùng thử tháng này',
             totalRevenueBySubsPack: 'Doanh thu theo gói đăng ký',
             revenueByDay: 'Doanh thu theo ngày',
             monthlyRevenue: 'Doanh thu hàng tháng',
