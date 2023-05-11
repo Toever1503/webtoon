@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
+import webtoon.account.services.IUserService;
 import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.enums.EOrderType;
@@ -32,6 +33,9 @@ public class OrderController {
     private ISubscriptionPackService subscriptionPackService;
     @Autowired
     private IOrderService orderService;
+
+    @Autowired
+    private IUserService userService;
 
 //    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
 
@@ -116,6 +120,24 @@ public class OrderController {
         else
             return "redirect:/order/bank-info/" + orderEntity.getId();
 
+    }
+
+    @GetMapping("register-trial")
+    public String registerTrial(HttpSession session, RedirectAttributes redirectAttributes) {
+        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
+
+        entity.setTrialRegisteredDate(Calendar.getInstance().getTime());
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, 3);
+        entity.setCanReadUntilDate(calendar.getTime());
+        entity.setCurrentUsedSubsId(null);
+
+
+        this.userService.saveUserEntity(entity);
+        SecurityUtils.getCurrentUser().setUser(entity);
+        redirectAttributes.addAttribute("showNotification", true);
+        redirectAttributes.addAttribute("notificationMessage", "Đăng ký dùng thử thành công!");
+        return "redirect:/subscription_pack/load";
     }
 
 

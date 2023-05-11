@@ -288,6 +288,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public void saveUserEntity(UserEntity entity) {
+        this.userRepository.saveAndFlush(entity);
+    }
+
+    @Override
     public void changeStatus(Long id, EStatus status) {
         UserEntity entity = this.getById(id);
         entity.setStatus(status);

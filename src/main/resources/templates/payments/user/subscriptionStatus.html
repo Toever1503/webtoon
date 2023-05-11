@@ -19,10 +19,26 @@
     <div class="grid grid-cols-4">
         <div th:replace="account/fragments/sidebar :: user-sidebar"/>
 
-        <div class="col-span-3 pt-4 border">
+        <div class="col-span-3 p-4 border">
+            <p th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
 
-            <p>Hiện bạn chưa sử dụng gói nào!</p>
+            <div th:if="${isUsingTrial}">
+                <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
+                <p>Thời hạn đọc đến: <span
+                        th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span></p>
+            </div>
+
+            <div th:if="${currentUsingSubsPack != null}">
+                <p>Bạn đang sử dụng gói
+                    <span th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}"></span>
+
+                </p>
+                <p>Thời hạn đọc đến: <span
+                        th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span></p>
+            </div>
+
         </div>
     </div>
+</div>
 </body>
 </html>

@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 
 @Data
 public class CustomUserDetail implements UserDetails {
-    private final UserEntity user;
+    private UserEntity user;
 
     public CustomUserDetail(UserEntity user) {
         this.user = user;

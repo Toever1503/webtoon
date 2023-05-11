@@ -46,4 +46,6 @@ public interface IUserService extends IJwtService {
     UserEntity getById(Long userId);
 
     Long countTotalRegisterTrialThisMonth();
+
+    void saveUserEntity(UserEntity entity);
 }
