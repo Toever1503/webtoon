@@ -60,7 +60,7 @@ const RichtextEditorForm: React.FC<RichtextEditorFormProps> = (props: RichtextEd
     };
 
 
-    const [content, setContent] = useState<string>('a');
+    const [content, setContent] = useState<string>('');
 
     useEffect(() => {
         console.log('richtext editor mounted');

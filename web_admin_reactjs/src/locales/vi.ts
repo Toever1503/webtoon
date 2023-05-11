@@ -57,6 +57,7 @@ export default {
                 'authors-required': 'Vui lòng chọn tác giả',
                 'tags-required': 'Vui lòng chọn thẻ',
                 'featured-image-required': 'Vui lòng chọn ảnh',
+                'featured-image-invalid': 'Định dạng không hợp lệ',
                 'volume-required': 'Please enter volume name!',
                 'chapter-name-required': 'Chapter name is required',
                 'chapter-images-required': 'Chapter image is required',

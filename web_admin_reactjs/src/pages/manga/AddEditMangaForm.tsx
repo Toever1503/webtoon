@@ -37,7 +37,7 @@ export async function autoSaveMangaInfo(mangaInput: MangaInput) {
 
     isAutoSavingMangaInfo = true;
     try {
-        const res = await mangaService.addMangaInfo(mangaInput);
+        const res = await mangaService.addMangaInfo(getMangaInputFormData(mangaInput));
         console.log('auto save manga success', res.data);
         mangaInput.id = res.data.id;
     }
@@ -49,6 +49,33 @@ export async function autoSaveMangaInfo(mangaInput: MangaInput) {
     }
 
 };
+
+const getMangaInputFormData = (mangaInput: MangaInput): FormData => {
+    const formData = new FormData();
+    if (mangaInput.id)
+        formData.append('id', mangaInput.id.toString());
+
+    formData.append('title', mangaInput.title);
+    formData.append('description', mangaInput.description);
+    formData.append('excerpt', mangaInput.excerpt);
+    formData.append('mangaName', mangaInput.mangaName);
+    formData.append('status', mangaInput.status);
+    formData.append('mangaStatus', mangaInput.mangaStatus);
+    formData.append('releaseYear', mangaInput.releaseYear?.toString() || `${new Date().getFullYear()}`);
+    formData.append('mangaType', mangaInput.mangaType);
+    formData.append('genres', mangaInput.genres.join(','));
+    formData.append('authors', mangaInput.authors.join(','));
+    formData.append('tags', mangaInput.tags.join(','));
+    formData.append('isFree', mangaInput.isFree.toString());
+
+    if (mangaInput.featuredImageFile)
+        formData.append('featuredImageFile', mangaInput.featuredImageFile);
+    else
+        formData.append('featuredImage', mangaInput.featuredImage);
+    formData.append('displayType', mangaInput.displayType);
+
+    return formData;
+}
 
 interface AddEditMangaFormProps {
     type: 'ADD' | 'EDIT';
@@ -75,7 +102,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         authors: [],
         tags: [],
         isFree: false,
-        featuredImage: 'https://img-s-msn-com.akamaized.net/tenant/amp/entityid/AAVSp94.img?w=768&h=1024&m=6&x=257&y=190&s=273&d=273',
+        featuredImage: '',
         displayType: 'CHAP'
     });
     const [isSavingMangaInfo, setIsSavingMangaInfo] = useState<boolean>(false);
@@ -84,6 +111,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         setMangaContentEditorRef(rteObj);
         setContent(mangaInput.description);
     };
+
 
     const onSaveMangaInfo = async () => {
         if (isSavingMangaInfo)
@@ -103,7 +131,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         }
         else mangaInputError.title = '';
 
-        if (!mangaInput.description) {
+        if (mangaExcerpt.length == 0) {
             errorCount++;
             mangaInputError.description = 'manga.form.errors.content-required';
         }
@@ -130,7 +158,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
         if (!mangaInput.featuredImage) {
             errorCount++;
-            mangaInputError.featuredImage = 'manga.form.errors.feature-image-required';
+            mangaInputError.featuredImage = 'manga.form.errors.featured-image-required';
         }
         else mangaInputError.featuredImage = '';
         setMangaInputError({ ...mangaInputError });
@@ -140,14 +168,19 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
             setIsSavingMangaInfo(true);
             mangaInput.status = 'PUBLISHED';
-            mangaService.addMangaInfo(mangaInput)
+
+
+            const formData = getMangaInputFormData(mangaInput);
+
+
+            mangaService.addMangaInfo(formData)
                 .then((res) => {
                     console.log('add manga success', res.data);
 
                     if (props.type === 'ADD')
                         dispatch(showNofification({
                             type: 'success',
-                            message: t('manga.form.errors.add-success'),
+                            message: t('manga.form.errors.create-success'),
                         }));
                     else
                         dispatch(showNofification({
@@ -160,12 +193,12 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                     console.log(err);
                     if (props.type === 'ADD')
                         dispatch(showNofification({
-                            type: 'success',
-                            message: t('manga.form.errors.add-failed'),
+                            type: 'error',
+                            message: t('manga.form.errors.create-failed'),
                         }));
                     else
                         dispatch(showNofification({
-                            type: 'success',
+                            type: 'error',
                             message: t('manga.form.errors.edit-failed'),
                         }));
 
@@ -193,14 +226,40 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         tags: '',
     });
 
+    const onChooseFeaturedImage = () => {
+        let inputTag = document.createElement('input');
+        inputTag.type = 'file';
+        inputTag.accept = 'image/*';
+        inputTag.onchange = (e: any) => {
+            let file: File = e.target.files[0];
+
+            if (file.type.indexOf('image') === -1) {
+                dispatch(showNofification({
+                    type: 'error',
+                    message: t('manga.form.errors.featured-image-invalid'),
+                }));
+                return;
+            }
+
+            mangaInput.featuredImageFile = file;
+            // read base64 
+
+            var reader = new FileReader();
+            reader.onloadend = function () {
+                console.log('RESULT', reader.result);
+                setMangaInput({
+                    ...mangaInput,
+                    featuredImage: reader.result as string
+                });
+            }
+            reader.readAsDataURL(file);
+        };
+        inputTag.click();
+    }
+
     let { id } = useParams();
     const [isFetchingMangaInfo, setIsFetchingMangaInfo] = useState<boolean>(true);
     useEffect(() => {
-        // let id: number | undefined;
-        // id = setInterval(() => {
-        //     autoSaveMangaInfo(mangaInput);
-        // }, 15000);
-        // return () => clearInterval(id);
         if (props.type === 'EDIT') {
             if (id) {
                 mangaService.findById(id)
@@ -287,12 +346,6 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                         <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
                             <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Thông tin bổ sung</p>
 
-                            <div className='flex gap-x-[15px] px-[10px] mt-[10px]'>
-                                <span className='text-[14px] font-bold'>Truyện có phí?</span>
-                                <Checkbox defaultChecked={mangaInput.isFree} onChange={e => mangaInput.isFree = e.target.checked} />
-                            </div>
-
-
                             {/* <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Trạng thái:</span>
                                 <Select
@@ -342,16 +395,16 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             </div>
 
 
-                            <div className='flex justify-between p-[10px]'>
-                                <a className='text-[13px]'>Chọn ảnh</a>
+                            <div className='grid p-[10px]'>
+                                <a className='text-[13px] mb-[20px] block' onClick={onChooseFeaturedImage}>Chọn ảnh</a>
 
                                 {
                                     mangaInput.featuredImage &&
-                                    <img className='h-[120px] w-[120px]' src={mangaInput.featuredImage} />
+                                    <img className='h-[250px] w-[200px]' src={mangaInput.featuredImage} />
                                 }
                             </div>
                             {
-                                !mangaInputError.featuredImage &&
+                                mangaInputError.featuredImage.length > 0 &&
                                 <p className='text-[12px] text-red-500 px-[5px]'>
                                     {t(mangaInputError.featuredImage)}
                                 </p>

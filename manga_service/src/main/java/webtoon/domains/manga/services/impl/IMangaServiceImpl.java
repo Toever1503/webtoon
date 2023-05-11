@@ -25,6 +25,8 @@ import webtoon.domains.tag.service.ITagService;
 import webtoon.domains.manga.entities.MangaEntity_;
 import webtoon.domains.manga.repositories.*;
 import webtoon.domains.manga.services.IMangaService;
+import webtoon.storage.domain.dtos.FileDto;
+import webtoon.storage.domain.services.IFileService;
 import webtoon.utils.ASCIIConverter;
 
 import java.util.Calendar;
@@ -59,6 +61,9 @@ public class IMangaServiceImpl implements IMangaService {
     @Autowired
     private ITagService tagService;
 
+    @Autowired
+    private IFileService fileService;
+
 
     @Override
     public MangaDto add(MangaModel model) {
@@ -86,6 +91,12 @@ public class IMangaServiceImpl implements IMangaService {
             mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.MANGA));
         else
             mangaEntity.setTags(Collections.EMPTY_LIST);
+
+        if (model.getFeaturedImageFile() != null) {
+            FileDto fileDto = fileService.uploadFile(model.getFeaturedImageFile(), "manga/" + mangaEntity.getId() +"/");
+            mangaEntity.setFeaturedImage(fileDto.getUrl());
+        }
+
         return this.mangaMapper.toDto(mangaEntity);
     }
 
@@ -127,6 +138,18 @@ public class IMangaServiceImpl implements IMangaService {
         MangaEntity entity = this.getById(id);
         entity.setMangaType(mangaType);
         entity.setDisplayType(displayType);
+
+        if (entity.getVolumeEntities() != null) {
+            entity.getVolumeEntities().forEach(vol -> {
+                this.mangaChapterRepository.deleteALlByMangaVolumeId(vol.getId());
+            });
+        }
+
+        this.mangaVolumeRepository.deleteAllByMangaId(id);
+        this.mangaChapterRepository.deleteALlByMangaId(id);
+
+        entity.setVolumeEntities(null);
+        entity.setChapters(null);
         this.mangaRepository.saveAndFlush(entity);
     }
 
@@ -205,7 +228,7 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
         return mangaRepository.findAll(specs, pageable).map(entity -> {
-            entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.POST));
+            entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.MANGA));
             return MangaDto.toDto(entity);
         });
     }

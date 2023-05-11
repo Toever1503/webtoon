@@ -48,8 +48,10 @@ function get(endpointApiUrl: any, payload = {}) {
     });
 }
 
-function post(endpointApiUrl: any, payload = {}) {
-    return getInstance().post(endpointApiUrl, payload);
+function post(endpointApiUrl: any, payload = {}, headers = {}) {
+    return getInstance().post(endpointApiUrl, payload, {
+        headers: headers,
+    });
 }
 
 function put(endpointApiUrl: any, payload = {}) {
