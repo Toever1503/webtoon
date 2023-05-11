@@ -27,5 +27,7 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long>, JpaSpe
 
     Optional<UserEntity> findByUsername(String username);
 
+    @Query("SELECT COUNT(u) FROM UserEntity u WHERE u.email = ?1")
+    Long checkTrungEmail(String email);
 
 }

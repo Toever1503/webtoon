@@ -11,6 +11,7 @@ import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.LoginInput;
 import webtoon.account.inputs.UserInput;
+import webtoon.account.models.CreateUserModel;
 
 import java.util.List;
 
@@ -30,6 +31,9 @@ public interface IUserService extends IJwtService {
     List<AuthorityEntity> getAllAuthorities();
 
     UserDto add(UserInput input);
+
+    UserDto addDk(CreateUserModel userModel);
+
     UserDto update(UserInput input);
 
     void changeStatus(Long id, EStatus status);

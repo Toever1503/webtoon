@@ -25,7 +25,7 @@ public class RegisterUserController {
 
     @PostMapping
     public String add(@ModelAttribute("createModel") CreateUserModel model) {
-//        this.userService.add(model);
-        return "login";
+        this.userService.addDk(model);
+        return "account/login-form";
     }
 }

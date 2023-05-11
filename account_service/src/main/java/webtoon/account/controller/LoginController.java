@@ -37,9 +37,18 @@ public class LoginController {
             this.loginService.login(model, req);
 
             String redirectTo = (String) session.getAttribute("redirectTo");
+
             if (session != null)
                 session.removeAttribute("redirectTo");
-            res.sendRedirect("/" + (redirectTo.isEmpty() ? "" : "/" + redirectTo));
+
+            if (redirectTo == null){
+                res.sendRedirect("");
+
+            }else {
+                res.sendRedirect( "/" + redirectTo);
+
+            }
+
         } catch (CustomHandleException e) {
             if (e.getCode() == 0) {
                 return "login error";

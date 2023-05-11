@@ -16,6 +16,7 @@ import webtoon.account.entities.UserEntity_;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.LoginInput;
+import webtoon.account.models.CreateUserModel;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.IUserService;
 import webtoon.account.dtos.UserDto;
@@ -220,6 +221,7 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDto add(UserInput input) {
+
         UserEntity entity = UserInput.toEntity(input);
 
         if(this.userRepository.findByUsername(input.getUsername()).isPresent())
@@ -236,6 +238,24 @@ public class UserServiceImpl implements IUserService {
         entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         this.userRepository.saveAndFlush(entity);
         return UserDto.toDto(entity);
+    }
+
+    @Override
+    public UserDto addDk(CreateUserModel userModel){
+        Long count = this.userRepository.checkTrungEmail(userModel.getEmail());
+        if (count > 0 ){
+            throw new RuntimeException("trùng email");
+
+        }
+            UserEntity entity = UserEntity.builder()
+                    .username(userModel.getUsername())
+                    .password(this.passwordEncoder.encode(userModel.getPassword()))
+                    .email(userModel.getEmail())
+                    .fullName(userModel.getFullName())
+                    .build();
+            this.userRepository.saveAndFlush(entity);
+            return UserDto.toDto(entity);
+
     }
 
     @Transactional

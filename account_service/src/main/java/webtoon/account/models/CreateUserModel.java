@@ -7,6 +7,7 @@ import webtoon.account.enums.ESex;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class CreateUserModel {
     private String username;
 
