@@ -79,4 +79,6 @@ public interface IOrderService {
     List<Object[]> sumRevenuePerDayByMonth(String monthDate);
 
     List<Object[]> sumRevenuePerSubsPackByMonth(String monthDate);
+
+    List<Object[]> countSubscriberStatusPerMonthByYear(String year);
 }

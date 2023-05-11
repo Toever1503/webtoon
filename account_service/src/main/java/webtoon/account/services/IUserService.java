@@ -37,6 +37,7 @@ public interface IUserService extends IJwtService {
     void unHasBlockedByNumberOfFailedSignInAndResetNumberOfFailedSignIn(Long id);
 
     Page<UserDto> findAll(Pageable pageable, Specification<UserEntity> finalSpec);
+    Page<UserEntity> findAllEntities(Pageable pageable, Specification<UserEntity> finalSpec);
 
     void forgotPassword(String email);
 

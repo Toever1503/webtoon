@@ -343,6 +343,15 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.sumRevenuePerSubsPackByMonth(monthDate);
     }
 
+    @Override
+    public List<Object[]> countSubscriberStatusPerMonthByYear(String year) {
+        List<Object[]> ls = new ArrayList<>();
+        ls.addAll(this.orderRepository.calcRenewOrderPerMonthByYear(year));
+        ls.addAll(this.orderRepository.calcNotRenewOrderPerMonthByYear(year));
+
+        return ls;
+    }
+
     private void sendOrderInfoToMail(OrderEntity orderEntity) {
         Map<String, Object> context = new HashMap<>();
         context.put("order", orderEntity);

@@ -59,13 +59,15 @@ const RevenueStatsPage: React.FC = () => {
                         dataMap.set(item[0], item[1]);
                     });
 
+                let data: LineDataType[] = [];
                 dataMap.forEach((value, key) => {
-                    revenueByDayData.push({
+                    data.push({
                         name: String(key.substring(8)),
                         value: value,
                         category: 'Doanh thu từng ngày'
                     });
                 });
+                setRevenueByDayData(data);
             });
     }
 
@@ -91,13 +93,15 @@ const RevenueStatsPage: React.FC = () => {
 
 
                 console.log('monthlyRevenueData: ', dataMap);
+                let data: LineDataType[] = [];
                 dataMap.forEach((value, key) => {
-                    monthlyRevenueData.push({
+                    data.push({
                         name: String(key.substring(5)),
                         value: value,
                         category: 'Doanh thu của từng tháng'
                     });
                 });
+                setMonthlyRevenueData(data);
             });
     };
 
@@ -130,7 +134,20 @@ const RevenueStatsPage: React.FC = () => {
 
     const [rateSubscriberDate, setRateSubscriberDate] = useState<Dayjs | null>(dayjs());
     const [rateSubscriberData, setRateSubscriberData] = useState<LineDataType[]>([]);
+    const onCallApiGetRateSubscriber = (date: Dayjs) => {
+        let year: number = date.year();
+        statisticService.countSubscriberStatusPerMonthByYear(year).then((res) => {
+            let data: LineDataType[] = res.data.map((item: [number, number, String]) => ({
+                name: Number(item[0]) < 10 ? `0${item[0]}` : String(item[0]),
+                value: String(item[1]),
+                category: String(item[2]),
+            }));
+            setRateSubscriberData([...data]);
 
+            console.log('res111: ', res.data[0] < 0);
+        });
+
+    };
 
 
     useEffect(() => {
@@ -153,6 +170,7 @@ const RevenueStatsPage: React.FC = () => {
 
         callApiGetRevenueByDay(revenueByDayDate || dayjs());
         onCallApiGetMonthlyRevenue(monthlyRevenueDate || dayjs());
+        onCallApiGetRateSubscriber(rateSubscriberDate || dayjs());
 
     }, []);
 
@@ -196,7 +214,10 @@ const RevenueStatsPage: React.FC = () => {
                     <h3>
                         {t('statistic.revenue.revenueByDay')}
                     </h3>
-                    <DatePicker picker="month" value={revenueByDayDate} onChange={e => setRateSubscriberDate(e)} />
+                    <DatePicker picker="month" value={revenueByDayDate} onChange={e => {
+                        setRevenueByDayDate(e);
+                        callApiGetRevenueByDay(e || dayjs());
+                    }} />
 
                 </Space>
 
@@ -209,7 +230,10 @@ const RevenueStatsPage: React.FC = () => {
                         {t('statistic.revenue.monthlyRevenue')}
                     </h3>
 
-                    <DatePicker picker="year" value={monthlyRevenueDate} onChange={e => setRateSubscriberDate(e)} />
+                    <DatePicker picker="year" value={monthlyRevenueDate} onChange={e => {
+                        setMonthlyRevenueDate(e);
+                        onCallApiGetMonthlyRevenue(e || dayjs());
+                    }} />
                 </Space>
 
                 <LineChart data={monthlyRevenueData} />
@@ -221,7 +245,10 @@ const RevenueStatsPage: React.FC = () => {
                         {t('statistic.revenue.totalRevenueBySubsPack')}
                     </h3>
 
-                    <DatePicker picker="month" value={revenuePerSubDate} onChange={e => setRateSubscriberDate(e)} />
+                    <DatePicker picker="month" value={revenuePerSubDate} onChange={e => {
+                        setRevenuePerSubDate(e);
+                        onCallApiGetRevenuePerSub(e || dayjs(), subscriptionPackData);
+                    }} />
                 </Space>
 
                 <BarChart data={revenuePerSubData} />
@@ -233,7 +260,10 @@ const RevenueStatsPage: React.FC = () => {
                     <h3>
                         {t('statistic.registrationRate.title')}
                     </h3>
-                    <DatePicker picker="month" onChange={e => setRateSubscriberDate(e)} value={rateSubscriberDate} />
+                    <DatePicker picker="year" onChange={e => {
+                        setRateSubscriberDate(e);
+                        onCallApiGetRateSubscriber(e || dayjs());
+                    }} value={rateSubscriberDate} />
                 </Space>
 
                 <LineChart data={rateSubscriberData} />

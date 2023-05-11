@@ -34,15 +34,15 @@ export default {
             table: {
                 'user': 'Người mua',
                 'subscriptionPack': 'Gói đăng ký',
-                'expiredDate': 'Ngày hết hạn', 
+                'expiredDate': 'Ngày hết hạn',
                 action: {
                     sendEmail: 'Gửi email',
                 }
             }
         },
         registrationRate: {
-            title: 'Tỉ lệ đăng ký',
-        }
+            title: 'Tỉ lệ người đăng ký hàng tháng',
+        },
     },
     manga: {
         form:
@@ -442,5 +442,8 @@ export default {
         delete: 'Xóa',
         reset: 'Làm mới',
         filter: 'Lọc',
+    },
+    notifications: {
+        getDataFailed: 'Lấy dữ liệu thất bại!',
     }
 }

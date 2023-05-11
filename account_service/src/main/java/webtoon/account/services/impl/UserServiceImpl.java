@@ -325,6 +325,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public Page<UserEntity> findAllEntities(Pageable pageable, Specification<UserEntity> finalSpec) {
+        return this.userRepository.findAll(finalSpec, pageable);
+    }
+
+    @Override
     public void forgotPassword(String email) {
 
         UserEntity userEntity = this.findByUsername(email);

@@ -5,12 +5,10 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import webtoon.account.entities.UserEntity;
 import webtoon.payment.dtos.OrderPendingDTO;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.enums.EOrderStatus;
 
-import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -58,10 +56,10 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
             "GROUP by DATE_FORMAT(created_at, \"%Y-%m-%d\")", nativeQuery = true)
     List<Object[]> sumTotalRevenueInLast7Days();
 
-    @Query("select sum(o.finalPrice) from tbl_order o where o.status = 'COMPLETED' and function('date_format', o.created_at, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
+    @Query("select sum(o.finalPrice) from tbl_order o where o.status = 'COMPLETED' and function('date_format', o.created_at, '%Y, %m') = function('date_format', CURRENT_DATE, '%Y, %m')")
     Long totalRevenueThisMonth();
 
-    @Query("select count(o) from tbl_order o where o.orderType = 'NEW' and function('date_format', o.created_at, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
+    @Query("select count(o) from tbl_order o where o.status = 'COMPLETED' AND function('date_format', o.created_at, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
     Long countTotalRegisterThisMonth();
 
 
@@ -80,4 +78,37 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
             "WHERE o.status = 'COMPLETED' and DATE_FORMAT(o.created_at, '%Y-%m') = :month\n" +
             "GROUP BY s.id", nativeQuery = true)
     List<Object[]> sumRevenuePerSubsPackByMonth(@Param("month") String monthDate);
+
+    @Query(value = "WITH RECURSIVE month_list (d) \n" +
+            "\tAS (\n" +
+            "\t\t  SELECT 1\n" +
+            "\t\t  UNION ALL\n" +
+            "\t\t  SELECT d+1\n" +
+            "\t\t  FROM month_list \n" +
+            "\t\t  WHERE d <= 12\n" +
+            "\t\t)    \n" +
+            "SELECT m.d AS k, COUNT(o.id) as v, 'Gia hạn thêm' \n" +
+            "FROM month_list as m\n" +
+            "LEFT JOIN `tbl_order` as o \n" +
+            "on m.d = DATE_FORMAT(o.created_at, '%m') and o.order_type = 'RENEW' AND :year = DATE_FORMAT(o.created_at, '%Y')\n" +
+            "GROUP BY m.d\n" +
+            "\n", nativeQuery = true)
+    List<Object[]> calcRenewOrderPerMonthByYear(@Param("year") String year);
+
+    @Query(value = "WITH RECURSIVE month_list (d) \n" +
+            "\tAS (\n" +
+            "\t\t  SELECT 1\n" +
+            "\t\t  UNION ALL\n" +
+            "\t\t  SELECT d+1\n" +
+            "\t\t  FROM month_list \n" +
+            "\t\t  WHERE d <= 12\n" +
+            "\t\t)    \n" +
+            "SELECT m.d AS k, COUNT(u.id) as v, 'Không gia hạn' \n" +
+            "FROM month_list as m\n" +
+            "LEFT JOIN `tbl_user` as u \n" +
+            "on m.d = DATE_FORMAT(u.can_read_until_date, '%m') AND DATE_FORMAT(u.can_read_until_date, '%y') = :year AND u.can_read_until_date is not null AND u.can_read_until_date <= CURRENT_DATE\n" +
+            "GROUP BY m.d\n" +
+            "\n", nativeQuery = true)
+    List<Object[]> calcNotRenewOrderPerMonthByYear(@Param("year") String year);
+
 }

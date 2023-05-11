@@ -2,17 +2,14 @@ import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button, 
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
-import { Link, useNavigate } from "react-router-dom";
-import { DownOutlined } from "@ant-design/icons";
-import { UserState, addNewUser, deleteUser, editUser, setUserData } from "../../stores/features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
-import { RootState } from "../../stores";
 import { reIndexTbl } from "../../utils/indexData";
-import userService from "../../services/user/UserService";
 import { AxiosResponse } from "axios";
 import { showNofification } from "../../stores/features/notification/notificationSlice";
 import IUserType from "../user/types/IUserType";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
+import statisticService from "../../services/stats/StatisticService";
+import { useNavigate } from "react-router-dom";
 
 
 
@@ -26,7 +23,6 @@ const RegistrationStatusStatsPage: React.FC = () => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
 
-    const userState: UserState = useSelector((state: RootState) => state.user);
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
     const [dataSource, setDataSource] = useState<IUserRegistrationStatus[]>([
@@ -45,7 +41,7 @@ const RegistrationStatusStatsPage: React.FC = () => {
             subscriptionPack: {
                 name: 'fas',
                 price: 1,
-                monthCount : 1,
+                monthCount: 1,
             },
         }
     ]);
@@ -55,13 +51,13 @@ const RegistrationStatusStatsPage: React.FC = () => {
         total: 0,
     });
     const [userFilter, setUserFilter] = useState<{
-        status: string;
+        type: string;
         q?: string;
     }>({
-        status: 'ALL'
+        type: 'EXPIRING'
     });
     const onSearch = () => {
-        onCallApiFilterUser();
+        onCallApiFilterUserSubscriptionStatus();
     }
 
 
@@ -96,9 +92,13 @@ const RegistrationStatusStatsPage: React.FC = () => {
             width: 150,
             render: (_, record) => (
                 <Space size="small">
-                    <Button size="small">{
-                        t('statistic.registrationStatus.table.action.sendEmail')
-                    }</Button>
+                    {
+                        userFilter.type == 'EXPIRING' ?
+                            <Button size="small">{
+                                t('statistic.registrationStatus.table.action.sendEmail')
+                            }</Button>
+                            : '-'
+                    }
                 </Space>
             ),
         },
@@ -109,44 +109,61 @@ const RegistrationStatusStatsPage: React.FC = () => {
     const onTblChange = (pagination: TablePaginationConfig) => {
         pageConfig.current = pagination.current || 1;
         setPageConfig(pageConfig);
-        onCallApiFilterUser();
+        onCallApiFilterUserSubscriptionStatus();
     };
 
-    const onCallApiFilterUser = () => {
+    const onCallApiFilterUserSubscriptionStatus = () => {
         setTableLoading(true);
+        statisticService
+            .filterUserSubscriptionPackStatus(
+                userFilter.q,
+                userFilter.type,
+                pageConfig.current - 1,
+                pageConfig.pageSize,
+            )
+            .then((res: AxiosResponse<{
+                content: IUserRegistrationStatus[];
+                totalElements: number;
+            }>) => {
+                console.log('user registration status', res.data);
+                setDataSource(reIndexTbl(pageConfig.current, pageConfig.pageSize || 0, res.data.content));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements,
+                })
+            })
+            .catch((err) => {
+                console.log('err', err);
+                dispatch(showNofification({ type: 'error', message: t('notifications.getDataFailed') }));
+            })
+            .finally(() => setTableLoading(false));
 
     }
 
     const [hasInitialized, setHasInitialized] = useState(false);
     useEffect(() => {
         if (!hasInitialized) {
-            // onCallApiFilterUser();
-            // setHasInitialized(true);
+            onCallApiFilterUserSubscriptionStatus();
+            setHasInitialized(true);
         }
-
-        // setDataSource(reIndexTbl(pageConfig.current, pageConfig.pageSize || 0, userState.data))
-    }, [userState]);
+    }, []);
 
 
-    const FILTER_STATUS = [{
-        'label': 'Tất cả',
-        'value': 'ALL'
-    },
-    {
-        'label': 'Sắp hết hạn',
-        'value': 'EXPIRING'
-    },
-    {
-        'label': 'Đã hết hạn',
-        'value': 'EXPIRED'
-    }
+    const FILTER_STATUS = [
+        {
+            'label': 'Sắp hết hạn',
+            'value': 'EXPIRING'
+        },
+        {
+            'label': 'Đã hết hạn',
+            'value': 'EXPIRED'
+        }
     ];
 
     const onChangeStatus = (val: string) => {
-        setUserFilter({
-            ...userFilter,
-            status: val
-        });
+        userFilter.type = val;
+        setUserFilter(userFilter);
+        onCallApiFilterUserSubscriptionStatus();
     };
 
     return (<>
@@ -161,7 +178,7 @@ const RegistrationStatusStatsPage: React.FC = () => {
 
             </div>
             <div className="flex justify-between items-center">
-                <Segmented options={FILTER_STATUS} value={userFilter.status} onChange={((val) => onChangeStatus(String(val)))} />
+                <Segmented options={FILTER_STATUS} value={userFilter.type} onChange={((val) => onChangeStatus(String(val)))} />
                 <Input.Search placeholder={`${t('placeholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
             </div>
 
