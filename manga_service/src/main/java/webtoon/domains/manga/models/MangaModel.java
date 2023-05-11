@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 import webtoon.account.entities.UserEntity;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
@@ -26,7 +27,10 @@ public class MangaModel {
 	private String excerpt;
 	private String description;
 	private String mangaName;
-	private String featuredImage ;
+
+	private String featuredImage;
+	private MultipartFile featuredImageFile;
+
 	private EStatus status;
 	private EMangaSTS mangaStatus;
 	private EMangaType mangaType;
@@ -41,3 +45,4 @@ public class MangaModel {
 	private List<Long> tags;
 
 }
+

@@ -1,17 +1,23 @@
 package webtoon.payment.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import webtoon.account.entities.UserEntity;
 import webtoon.payment.dtos.SubscriptionPackDto;
+import webtoon.payment.entities.SubscriptionPackEntity_;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -50,13 +56,37 @@ public class SubscriptionPackController {
     }
 
     @GetMapping("/load")
-    public String Payment(Model model, HttpSession session) {
-        if(session.getAttribute("loggedUser") == null)
+    public String Payment(Model model,
+                          HttpSession session,
+                          @RequestParam(required = false) String showNotification,
+                          @RequestParam(required = false) String notificationMessage
+    ) {
+        if (session.getAttribute("loggedUser") == null)
             return "redirect:/signin?redirectTo=/subscription_pack/load";
-        List<SubscriptionPackDto> subscriptionPackEntities = this.subscriptionPackService.getAll();
-        System.out.println(subscriptionPackEntities + "test");
+
+        Specification spec = (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNull(root.get(SubscriptionPackEntity_.DELETED_AT));
+        List<SubscriptionPackDto> subscriptionPackEntities = this.subscriptionPackService.filter(
+                PageRequest.of(0, 50).withSort(Sort.Direction.ASC, SubscriptionPackEntity_.MONTH_COUNT),
+                spec
+        ).getContent();
+
+        boolean isUsingTrial = false;
+        boolean hasExpiredTrial = false;
+        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+
+        if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            isUsingTrial = result >= 0;
+            hasExpiredTrial = result < 0;
+
+        }
+
         model.addAttribute("items", subscriptionPackEntities);
+        model.addAttribute("showNotification", showNotification);
+        model.addAttribute("notificationMessage", notificationMessage);
+        model.addAttribute("isUsingTrial", isUsingTrial);
+        model.addAttribute("hasExpiredTrial", hasExpiredTrial);
         return "payments/chonGoi";
     }
-
 }

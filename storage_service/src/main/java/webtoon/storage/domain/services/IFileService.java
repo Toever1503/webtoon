@@ -12,6 +12,13 @@ import webtoon.storage.domain.dtos.FileDto;
 import webtoon.storage.domain.entities.FileEntity;
 
 public interface IFileService {
+
+	/*
+	 * Upload file to storage
+	 * @param file
+	 * @param folder
+	 * @Value folder: folder name to store file in storage, ex: /manga/featured/
+	 */
 	FileDto uploadFile(MultipartFile file, String folder);
 	
 	List<FileDto> uploadBulkFile(List<MultipartFile> files, String folder);

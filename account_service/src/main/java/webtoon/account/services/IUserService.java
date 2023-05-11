@@ -41,6 +41,7 @@ public interface IUserService extends IJwtService {
     void unHasBlockedByNumberOfFailedSignInAndResetNumberOfFailedSignIn(Long id);
 
     Page<UserDto> findAll(Pageable pageable, Specification<UserEntity> finalSpec);
+    Page<UserEntity> findAllEntities(Pageable pageable, Specification<UserEntity> finalSpec);
 
     void forgotPassword(String email);
 
@@ -49,4 +50,6 @@ public interface IUserService extends IJwtService {
     UserEntity getById(Long userId);
 
     Long countTotalRegisterTrialThisMonth();
+
+    void saveUserEntity(UserEntity entity);
 }

@@ -34,15 +34,15 @@ export default {
             table: {
                 'user': 'Người mua',
                 'subscriptionPack': 'Gói đăng ký',
-                'expiredDate': 'Ngày hết hạn', 
+                'expiredDate': 'Ngày hết hạn',
                 action: {
                     sendEmail: 'Gửi email',
                 }
             }
         },
         registrationRate: {
-            title: 'Tỉ lệ đăng ký',
-        }
+            title: 'Tỉ lệ người đăng ký hàng tháng',
+        },
     },
     manga: {
         form:
@@ -57,6 +57,7 @@ export default {
                 'authors-required': 'Vui lòng chọn tác giả',
                 'tags-required': 'Vui lòng chọn thẻ',
                 'featured-image-required': 'Vui lòng chọn ảnh',
+                'featured-image-invalid': 'Định dạng không hợp lệ',
                 'volume-required': 'Please enter volume name!',
                 'chapter-name-required': 'Chapter name is required',
                 'chapter-images-required': 'Chapter image is required',
@@ -442,5 +443,8 @@ export default {
         delete: 'Xóa',
         reset: 'Làm mới',
         filter: 'Lọc',
+    },
+    notifications: {
+        getDataFailed: 'Lấy dữ liệu thất bại!',
     }
 }

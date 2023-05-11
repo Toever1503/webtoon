@@ -10,11 +10,17 @@
             />
         </div>
         <div>
-            <h2 class="text-center text-xl" th:text="${user.fullName}"></h2>
+            <h2 class="text-center text-xl" th:text="${session.loggedUser.fullName}"></h2>
         </div>
         <div class="text-[13px] text-center mb-[15px]">
-            Thời hạn đọc còn lại: 20h
-<!--            <span th:text="${user.remainingTime}"></span>-->
+            Thời hạn đọc còn lại:
+            <span th:if="${!session.loggedUser.getCanReadUntilDate().after(#dates.createNow())}">
+                0 ngày
+            </span>
+
+            <span th:if="${session.loggedUser.getCanReadUntilDate().after(#dates.createNow())}">
+               <span th:text="${(session.loggedUser.getCanReadUntilDate().getTime() - #dates.createNow().getTime()) / (1000 * 60 * 60 * 24) + ' ngày.'}" />
+            </span>
         </div>
     </div>
     <div class="my-10 w-[250px] h-[154px]">

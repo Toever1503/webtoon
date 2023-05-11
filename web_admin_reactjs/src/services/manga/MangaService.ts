@@ -20,6 +20,7 @@ export interface MangaInput {
     authors: string[];
     tags: string[];
     featuredImage: string;
+    featuredImageFile?: File;
     isFree: boolean;
     displayType: 'VOL' | 'CHAP';
 }
@@ -47,7 +48,11 @@ export type MangaFilterInput = {
 const findById = async (id: number | string) => mangaAxios.get(`${basePath}/${id}`);
 
 const filterManga = (input: MangaFilterInput, page: number, size: number) => mangaAxios.post(`${basePath}/filter?page=${page}&size=${size}&sort=id,desc`, input);
-const addMangaInfo = async (model: MangaInput) => mangaAxios.post(`${basePath}`, model);
+const addMangaInfo = async (model: FormData) => mangaAxios.post(`${basePath}`, model, {
+    headers: {
+        'Content-Type': 'multipart/form-data'
+    }
+});
 const updateMangaInfo = async (model: MangaInput) => mangaAxios.put(`${basePath}/${model.id}`, model);
 const setMangaTypeAndDisplayType = async (id: number | string, mangaTye: MangaType,  displayType: 'VOL' | 'CHAP') => mangaAxios.patch(`${basePath}/set-manga-type-and-display-type/${id}?mangaType=${mangaTye}&displayType=${displayType}`);
 const resetMangaType = async (id: number | string) => mangaAxios.patch(`${basePath}/reset-manga-type/${id}`);

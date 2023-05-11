@@ -308,6 +308,11 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public void saveUserEntity(UserEntity entity) {
+        this.userRepository.saveAndFlush(entity);
+    }
+
+    @Override
     public void changeStatus(Long id, EStatus status) {
         UserEntity entity = this.getById(id);
         entity.setStatus(status);
@@ -342,6 +347,11 @@ public class UserServiceImpl implements IUserService {
     @Override
     public Page<UserDto> findAll(Pageable pageable, Specification<UserEntity> finalSpec) {
         return this.userRepository.findAll(finalSpec, pageable).map(UserDto::toDto);
+    }
+
+    @Override
+    public Page<UserEntity> findAllEntities(Pageable pageable, Specification<UserEntity> finalSpec) {
+        return this.userRepository.findAll(finalSpec, pageable);
     }
 
     @Override

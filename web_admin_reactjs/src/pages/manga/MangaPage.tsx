@@ -22,7 +22,7 @@ const mangaStatus: MangaStatus[] = [
 ];
 
 const releaseStatus: ReleaseStatus[] = [
-    'COMING', 'ONGOING',  'ON_STOPPING', 'CANCELLED', 'COMPLETED'
+    'COMING', 'ONGOING', 'ON_STOPPING', 'CANCELLED', 'COMPLETED'
 ];
 
 
@@ -63,7 +63,10 @@ const MangaPage: React.FC = () => {
             title: t('manga.table.mangaType'),
             dataIndex: 'mangaType',
             key: 'mangaType',
-            render: (text) => <>{t(`manga.eMangaType.${text}`)}</>,
+            render: (text) => <>{
+                text === 'UNSET' ? '-'
+                    : t(`manga.eMangaType.${text}`)
+            }</>,
         },
         {
             title: t('manga.table.releaseStatus'),
@@ -331,7 +334,7 @@ const MangaPage: React.FC = () => {
                 <p className="text-[23px] font-[400]">Manga</p>
                 <Button className="font-medium" onClick={() => navigate('/mangas/add')}>Add new</Button>
             </div>
-            
+
             <div className="flex justify-end">
                 <div className="flex space-x-3 items-center hidden">
                     <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'ALL' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'ALL' })}>

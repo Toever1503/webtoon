@@ -10,8 +10,8 @@ import Sortable from "sortablejs";
 import RichtextEditorForm from "../../../../components/RichtextEditorForm";
 import mangaService, { MangaInput } from "../../../../services/manga/MangaService";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
-import { ChapterImageType, ChapterType } from "../manga-form/MangaVolumeInfoItem";
 import chapterService from "../../../../services/manga/ChapterService";
+import { ChapterType } from "../manga-form-new/ChapterSetting";
 
 type MangaUploadChapterModalProps = {
     mangaInput: MangaInput,
@@ -244,11 +244,13 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         let errorCount = 0;
         const chapterContent = chapterContentEditorRef?.getHtml() || '';
 
-        if (!chapterInput.chapterName) {
-            chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
-            errorCount++;
+        if (props.mangaInput.mangaType === 'TEXT') {
+            if (!chapterInput.chapterName) {
+                chapterInputError.chapterName = 'manga.form.errors.chapter-name-required';
+                errorCount++;
+            }
+            else chapterInputError.chapterName = '';
         }
-        else chapterInputError.chapterName = '';
 
         if (props.mangaInput.mangaType === 'IMAGE') {
             if (oldImageChapterFiles.length + imageChapterFiles.length === 0) {
@@ -288,7 +290,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 formdata.append('isRequiredVip', isRequireVipChapter.toString());
                 formdata.append('volumeId', chapterInput?.volumeId?.toString() || '0');
 
-                const oldImages: [] = [];
+
                 document.querySelectorAll('#chapter-images-list > div').forEach((item) => {
                     // @ts-ignore
                     if (item.chapterFile.id)
@@ -378,7 +380,10 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                         setChapterInput(res.data);
                         setMangaTextChapter(res.data.content);
                         if (res.data.chapterImages)
-                            setOldImageChapterFiles(res.data.chapterImages.map((item: ChapterImageType) => (
+                            setOldImageChapterFiles(res.data.chapterImages.map((item:
+                                // ChapterImageType 
+                                any
+                            ) => (
                                 {
                                     id: item.id,
                                     index: item.imageIndex,
@@ -408,7 +413,9 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         >
             <section className="py-[20px]">
                 <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
-                    <span className='text-red-500'>*</span>
+                    {
+                        props.mangaInput.mangaType === 'TEXT' && <span className='text-red-500'>*</span>
+                    }
                     <span> Chapter name:</span>
                 </label>
                 <Input placeholder="enter your chapter name" value={chapterInput.chapterName} onChange={val => setChapterInput({ ...chapterInput, chapterName: val.target.value })} />

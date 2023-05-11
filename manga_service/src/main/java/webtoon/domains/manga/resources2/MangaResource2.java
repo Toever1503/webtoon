@@ -41,7 +41,7 @@ public class MangaResource2 {
         specs.add((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
         if (input.getStatus() != null)
-            if (!input.getStatus().equals(EStatus.ALL))
+            if (!input.getStatus().equals(EMangaSTS.COMING.ALL))
                 specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), input.getStatus()));
 
         if (input.getQ() != null) {
@@ -58,7 +58,7 @@ public class MangaResource2 {
     }
 
     @PostMapping
-    public MangaDto saveMangaInfo(@RequestBody MangaModel input) {
+    public MangaDto saveMangaInfo(MangaModel input) {
         return mangaService.add(input);
     }
 

@@ -33,7 +33,7 @@ public class FileServiceImpl implements IFileService {
 	private final FileMapper fileMapper;
 
 	public FileServiceImpl(IFileRepositoty fileRepository, FileUploadProvider fileUploadProvider,
-			FileMapper fileMapper) {
+						   FileMapper fileMapper) {
 		super();
 		this.fileRepository = fileRepository;
 		this.fileUploadProvider = fileUploadProvider;
@@ -47,7 +47,7 @@ public class FileServiceImpl implements IFileService {
 		FileEntity entity;
 		if (folder != null)
 			entity = this.fileUploadProvider.uploadFile(file, folder);
-		entity = this.fileUploadProvider.uploadFile(file);
+		else entity = this.fileUploadProvider.uploadFile(file);
 		this.fileRepository.save(entity);
 		return fileMapper.toDto(entity);
 	}

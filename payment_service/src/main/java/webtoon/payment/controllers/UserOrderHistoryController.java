@@ -17,9 +17,12 @@ import webtoon.payment.entities.OrderEntity_;
 import webtoon.payment.entities.SubscriptionPackEntity_;
 import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.services.IOrderService;
+import webtoon.payment.services.ISubscriptionPackService;
 
 import javax.servlet.http.HttpSession;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 @Controller
@@ -28,6 +31,9 @@ public class UserOrderHistoryController {
 
     @Autowired
     private IOrderService orderService;
+
+    @Autowired
+    private ISubscriptionPackService subscriptionPackService;
 
     @GetMapping("/userOrder")
     public String userOrder(Model model, HttpSession session) {
@@ -98,12 +104,22 @@ public class UserOrderHistoryController {
         if (entity == null) {
             return "redirect:/signin";
         } else {
-            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-            UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
-            List<OrderEntity> order = orderService.getPaymentCompletedByUserId(userId);
-            model.addAttribute("user", userEntity);
-            model.addAttribute("order", order);
+            boolean isUsingTrial = false;
+            UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+
+            if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+                isUsingTrial = result >= 0;
+            }
+
+            model.addAttribute("isUsingTrial", isUsingTrial);
+            if (userEntity.getCurrentUsedSubsId() != null)
+                model.addAttribute("currentUsingSubsPack", this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId()));
+
             return "payments/user/subscriptionStatus";
         }
     }
+
+
 }
