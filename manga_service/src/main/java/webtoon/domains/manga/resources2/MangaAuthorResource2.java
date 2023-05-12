@@ -5,6 +5,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.entities.MangaAuthorEntity_;
+import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.manga.models.MangaAuthorModel;
 import webtoon.domains.manga.entities.MangaAuthorEntity;
 import webtoon.domains.manga.services.IMangaAuthorService;
@@ -18,6 +19,12 @@ public class MangaAuthorResource2 {
 
     public MangaAuthorResource2(IMangaAuthorService mangaAuthorService) {
         this.mangaAuthorService = mangaAuthorService;
+    }
+
+
+    @GetMapping("get-all")
+    public List<MangaAuthorEntity> getAll() {
+        return this.mangaAuthorService.getAll();
     }
 
     @GetMapping("filter")

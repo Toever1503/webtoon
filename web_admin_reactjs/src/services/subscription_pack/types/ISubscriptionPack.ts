@@ -12,4 +12,5 @@ export default interface ISubscriptionPack{
     
     createdBy?: IUserType;
     updatedBy?: IUserType;
+    status: boolean;
 }

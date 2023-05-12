@@ -13,12 +13,15 @@ const updateSubscriptionPack = async (id: string | number, input: ISubscriptionP
 
 const deleteSubscriptionPack = async (id: string | number) => mangaAxios.del(`${basePath}/${id}`);
 
+const toggleSubscriptionPackStatus = async (id: string | number) => mangaAxios.patch(`${basePath}/toggle-status/${id}`);
+
 const subscriptionPackService = {
     getAllSubscriptionPack,
     filterSubscriptionPack,
     addSubscriptionPack,
     updateSubscriptionPack,
-    deleteSubscriptionPack
+    deleteSubscriptionPack,
+    toggleSubscriptionPackStatus
 };
 
 export default subscriptionPackService;

@@ -27,4 +27,6 @@ public interface IMangaGenreService {
 	MangaGenreEntity getById(Long id);
 
 	List<MangaGenreEntity> findAllGenre();
+
+    List<MangaGenreEntity> getAll();
 }

@@ -15,6 +15,7 @@ export interface AuthorInput {
     slug?: string;
 }
 
+const getAll = async () => mangaAxios.get(`${basePath}/get-all`);
 const filterAuthor = async (model: AuthorFilter) => mangaAxios.get(`${basePath}/filter?s=${model.s}&page=${model.page}&size=${model.size}&sort=${model.sort}`);
 
 const addAuthor = async (model: AuthorInput) => mangaAxios.post(`${basePath}`, model);
@@ -22,6 +23,7 @@ const updateAuthor = async (model: AuthorInput) => mangaAxios.put(`${basePath}/$
 const deleteAuthor= async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
 const authorService = {
+    getAll,
     filterAuthor,
     addAuthor,
     updateAuthor,

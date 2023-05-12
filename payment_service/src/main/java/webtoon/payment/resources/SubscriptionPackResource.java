@@ -47,9 +47,13 @@ public class SubscriptionPackResource {
         return this.subscriptionPackService.updateSubscriptionPack(subscriptionPackModel);
     }
 
+    @PatchMapping("toggle-status/{id}")
+    public void toggleStatus(@PathVariable Long id) {
+        this.subscriptionPackService.toggleStatus(id);
+    }
 
     @DeleteMapping("{id}")
-    public void deleteById(@PathVariable Long id){
+    public void deleteById(@PathVariable Long id) {
         this.subscriptionPackService.deleteById(id);
     }
 }

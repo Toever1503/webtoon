@@ -27,28 +27,6 @@ public class OrderEntity {
     @Column(name = "id")
     private Long id;
 
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
-    @CreationTimestamp
-    private Date created_at;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @UpdateTimestamp
-    private Date modifiedAt;
-
-    @Column
-    @Temporal(TemporalType.DATE)
-    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
-    private Date gioLap;
-
-    @Column(name = "month_count")
-    private Integer monthCount;
-
-    @Column(name = "day_count")
-    private Integer dayCount;
-
     @Column(name = "final_price")
     private Double finalPrice;
 
@@ -60,14 +38,19 @@ public class OrderEntity {
     @Enumerated(EnumType.STRING)
     private EOrderStatus status;
 
-    @Column
-    private String content;
-
-    @Column
-    private String ipAddr;
-
-    @Column
+    @Column(unique = true)
     private String maDonHang;
+
+     @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
+    @CreationTimestamp
+    private Date created_at;
+
+    @Column
+    @Temporal(TemporalType.TIMESTAMP)
+    @UpdateTimestamp
+    private Date modifiedAt;
 
     @Enumerated(EnumType.STRING)
     @Column
@@ -81,30 +64,11 @@ public class OrderEntity {
     @ManyToOne
     private UserEntity user_id;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "from_order_id")
     @Where(clause = "deleted_at is null")
     private OrderEntity fromOrder;
 
-    @OneToMany(mappedBy = "fromOrder")
-    @Where(clause = "deleted_at is null")
-    private List<OrderEntity> otherOrders;
-
-    @Override
-    public String toString() {
-        return "OrderEntity{" +
-                "id=" + id +
-                ", created_at=" + created_at +
-                ", gioLap=" + gioLap +
-                ", finalPrice=" + finalPrice +
-                ", estatus=" + orderType +
-                ", content='" + content + '\'' +
-                ", ipAddr='" + ipAddr + '\'' +
-                ", maDonHang='" + maDonHang + '\'' +
-                ", subs_pack_id=" + subs_pack_id +
-                ", user_id=" + user_id +
-                '}';
-    }
     @ManyToOne
     @JoinColumn(name = "modified_by")
     private UserEntity modifiedBy;

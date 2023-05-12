@@ -14,28 +14,25 @@ import java.util.Date;
 public class SubscriptionPackDto {
     private Long id;
     private String name;
+    private String subsCode;
     private Integer monthCount;
-    private Integer dayCount;
     private Double price;
-    private Date createdAt;
     private Date modifiedAt;
 
-    private UserDto createdBy;
     private UserDto updatedBy;
+    private Boolean status;
 
     public static SubscriptionPackDto toDto(SubscriptionPackEntity subscriptionPackEntity) {
         if (subscriptionPackEntity == null) return null;
 
         return SubscriptionPackDto.builder()
                 .id(subscriptionPackEntity.getId())
+                .subsCode(subscriptionPackEntity.getSubsCode())
                 .name(subscriptionPackEntity.getName())
-                .monthCount(subscriptionPackEntity.getMonthCount())
-                .dayCount(subscriptionPackEntity.getDayCount())
                 .price(subscriptionPackEntity.getPrice())
-                .createdAt(subscriptionPackEntity.getCreatedAt())
                 .modifiedAt(subscriptionPackEntity.getModifiedAt())
-                .createdBy(UserDto.toDto(subscriptionPackEntity.getCreatedBy()))
                 .updatedBy(UserDto.toDto(subscriptionPackEntity.getUpdatedBy()))
+                .status(subscriptionPackEntity.getStatus())
                 .build();
     }
 }

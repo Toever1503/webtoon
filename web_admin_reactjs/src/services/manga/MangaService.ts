@@ -25,7 +25,7 @@ export interface MangaInput {
     displayType: 'VOL' | 'CHAP';
 }
 
-export type MangaStatus = 'ALL' | 'PUBLISHED' | 'DELETED' | 'DRAFTED';
+export type MangaStatus = 'ALL' | 'PUBLISHED' | 'DELETED' | 'HIDDEN' | 'DRAFTED';
 export type ReleaseStatus = 'COMING' | 'ONGOING' | 'ON_STOPPING' | 'CANCELLED' | 'COMPLETED';
 export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 
@@ -42,8 +42,12 @@ export type MangaType = 'UNSET' | 'IMAGE' | 'TEXT';
 
 // for manga
 export type MangaFilterInput = {
+    genre: string;
+    author: string;
     status: MangaStatus;
     q?: string;
+    releaseStatus?: ReleaseStatus;
+    timeRange?: Dayjs[];
 }
 const findById = async (id: number | string) => mangaAxios.get(`${basePath}/${id}`);
 

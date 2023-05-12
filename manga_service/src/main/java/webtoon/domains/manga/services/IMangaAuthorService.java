@@ -25,4 +25,6 @@ public interface IMangaAuthorService {
 	Page<MangaAuthorEntity> filterAuthor(Specification spec, Pageable page);
 
 	void deleteAuthorByIds(List<Long> ids);
+
+    List<MangaAuthorEntity> getAll();
 }

@@ -43,11 +43,19 @@ export const subscriptionPackSlice = createSlice({
         },
         setSubscriptionPackData: (state, { payload }) => {
             state.data = payload;
+        },
+        updateSubscriptionStatus: (state, { payload }) => {
+            state.data = state.data.map((item) => {
+                if (item.id === payload.id) {
+                    item.status = payload.status;
+                }
+                return item;
+            });
         }
     },
 })
 
 // Action creators are generated for each case reducer function
-export const { addSubscriptionPack, updateSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData } = subscriptionPackSlice.actions
+export const { addSubscriptionPack, updateSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData, updateSubscriptionStatus } = subscriptionPackSlice.actions
 
 export default subscriptionPackSlice.reducer

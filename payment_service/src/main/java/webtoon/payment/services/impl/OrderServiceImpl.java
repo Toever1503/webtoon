@@ -54,12 +54,9 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDto add(OrderModel orderModel) {
         OrderEntity orderEntity = OrderEntity.builder()
                 .created_at(orderModel.getCreated_at())
-                .gioLap(orderModel.getGioLap())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
-                .content(orderModel.getContent())
-                .ipAddr(orderModel.getIpAddr())
                 .maDonHang(orderModel.getMaDonHang())
                 .subs_pack_id(orderModel.getSubs_pack_id())
                 .user_id(orderModel.getUser_id())
@@ -74,12 +71,9 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDto update(OrderModel orderModel) {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
-        orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());
-        orderEntity.setContent(orderModel.getContent());
-        orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
         orderEntity.setSubs_pack_id(orderModel.getSubs_pack_id());
         orderEntity.setUser_id(orderModel.getUser_id());
@@ -142,8 +136,6 @@ public class OrderServiceImpl implements IOrderService {
 
         entity.setMaDonHang(orderNumber);
         entity.setUser_id(userService.getById(input.getUser_id()));
-        entity.setMonthCount(subscriptionPack.getMonthCount());
-        entity.setDayCount(subscriptionPack.getDayCount());
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
@@ -166,8 +158,6 @@ public class OrderServiceImpl implements IOrderService {
             entity.setSubs_pack_id(subscriptionPack);
             entity.setFinalPrice(subscriptionPack.getPrice());
 
-            entity.setMonthCount(subscriptionPack.getMonthCount());
-            entity.setDayCount(subscriptionPack.getDayCount());
         }
 
         entity.setOrderType(input.getOrderType());
@@ -225,8 +215,6 @@ public class OrderServiceImpl implements IOrderService {
 
         entity.setMaDonHang(maDonHang);
         entity.setUser_id(SecurityUtils.getCurrentUser().getUser());
-        entity.setMonthCount(subscriptionPackEntity.getMonthCount());
-        entity.setDayCount(subscriptionPackEntity.getDayCount());
         entity.setStatus(EOrderStatus.DRAFTED);
         entity.setOrderType(EOrderType.NEW);
         entity.setPaymentMethod(paymentMethod);
@@ -381,11 +369,8 @@ public class OrderServiceImpl implements IOrderService {
                 .paymentMethod(input.getPaymentMethod())
                 .status(EOrderStatus.PENDING_PAYMENT)
                 .finalPrice(subscriptionPack.getPrice() - originalOrder.getSubs_pack_id().getPrice())
-                .content("Upgrade order")
                 .user_id(SecurityUtils.getCurrentUser().getUser())
                 .modifiedBy(SecurityUtils.getCurrentUser().getUser())
-                .monthCount(subscriptionPack.getMonthCount() - originalOrder.getSubs_pack_id().getMonthCount())
-                .dayCount(subscriptionPack.getDayCount() - originalOrder.getSubs_pack_id().getDayCount())
                 .build();
 
         // task: send mail notify to user

@@ -72,6 +72,11 @@ public class IMangaAuthorServiceImpl implements IMangaAuthorService {
     }
 
     @Override
+    public List<MangaAuthorEntity> getAll() {
+        return this.mangaAuthorRepository.findAll();
+    }
+
+    @Override
     public boolean deleteById(Long id) {
         try {
             this.mangaAuthorRepository.deleteById(id);
