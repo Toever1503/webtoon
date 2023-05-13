@@ -99,7 +99,8 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
 
         if (props.input) {
             form.setFieldsValue({
-                ...props.input
+                ...props.input,
+                price: props.input.price.toString(),
             });
         }
     }, [props]);
@@ -137,7 +138,7 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                         <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`} suffix="vnd" />
                     </Form.Item>
 
-                    <Form.Item
+                    {/* <Form.Item
                         label={t('subscription-pack.modal.dateCount')}
                         name="monthCount"
                         rules={[{ required: true, message: `${t('subscription-pack.modal.errors.required-dateCount')}` }]}
@@ -180,7 +181,7 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                                 </Space>
                         }
 
-                    </Form.Item>
+                    </Form.Item> */}
 
 
 

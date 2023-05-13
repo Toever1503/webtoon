@@ -93,5 +93,10 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
                 }).collect(Collectors.toList());
     }
 
+    @Override
+    public List<MangaGenreEntity> getAll() {
+        return this.genreRepository.findAll();
+    }
+
 
 }

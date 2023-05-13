@@ -21,22 +21,18 @@ public class SubscriptionPackEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "subs_code")
+    private String subsCode;
+
     @Column(name = "subs_name")
     private String name;
-
-    @Column(name = "day_count")
-    private Integer dayCount;
 
     @Column(name = "month_count")
     private Integer monthCount;
 
     @Column
     private Double price;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    private Date createdAt;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
@@ -48,11 +44,10 @@ public class SubscriptionPackEntity {
     private Date deletedAt;
 
     @ManyToOne
-    @JoinColumn(name = "created_by")
-    private UserEntity createdBy;
-
-    @ManyToOne
     @JoinColumn(name = "updated_by")
     private UserEntity updatedBy;
+
+    @Column(columnDefinition = "boolean default true")
+    private Boolean status;
 
 }

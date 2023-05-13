@@ -44,6 +44,12 @@ public class OrderResource {
         if(input.getStatus() != null){
             specs.add((root, query, cb) -> root.get(OrderEntity_.STATUS).in(input.getStatus()));
         }
+        if(input.getPaymentMethod() != null){
+            specs.add((root, query, cb) -> cb.equal(root.get(OrderEntity_.PAYMENT_METHOD), input.getPaymentMethod()));
+        }
+        if(input.getFromDate() != null){
+            specs.add((root, query, cb) -> cb.between(root.get(OrderEntity_.CREATED_AT), input.getFromDate(), input.getToDate()));
+        }
         Specification<OrderEntity> finalSpec = null;
         for(Specification<OrderEntity> spec : specs){
             if(finalSpec == null){

@@ -34,27 +34,33 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
-    getItem('Đơn hàng', '/orders', <ShoppingCartOutlined />),
+    getItem('Quản lý đơn hàng', 'parent-orders', <ShoppingCartOutlined />, [
+        getItem('Tất cả đơn hàng', '/orders'),
+        getItem('Xử lý đơn hàng', '/orders/handle'),
+    ]),
     getItem('Thống kê', '/stats', <AreaChartOutlined />, [
         getItem('Doanh thu', '/stats/revenue'),
         // getItem('Tỉ lệ đăng ký gói', '/stats/registration-rate'),
         getItem('Trạng thái đăng ký', '/stats/registration-status'),
     ]),
-    getItem('Gói đọc', '/subscription-packs', <AppstoreOutlined />),
-    getItem('Manga', 'parent-mangas', <FormOutlined />, [
-        getItem('All mangas', '/mangas'),
-        getItem('Manga genres', '/mangas/genres'),
-        getItem('Manga authors', '/mangas/authors')
+
+    getItem('Quản lý gói đọc', '/subscription-packs', <AppstoreOutlined />),
+
+    getItem('Quản lý truyện', 'parent-mangas', <FormOutlined />, [
+        getItem('Tất cả truyện', '/mangas'),
+        getItem('Quản lý thể loại', '/mangas/genres'),
+        getItem('Quản lý tác giả', '/mangas/authors'),
+        getItem('Thẻ', '/tag')
     ]),
+
     // getItem('Tin tức', 'parent-posts', <FormOutlined />, [
     //     getItem('All Posts', 'posts'),
     //     getItem('Categories', 'categories')
     // ]),
-    getItem('Thẻ', '/tag', <TagsOutlined />),
-    getItem('Bình luận', 'comments', <CommentOutlined />),
+    // getItem('Bình luận', 'comments', <CommentOutlined />),
     getItem('Người dùng', 'parent-users', <UserOutlined />, [
-        getItem('All Users', 'users'),
-        getItem('My Profile', 'user-profile'),
+        getItem('Quản lý người dùng', 'users'),
+        // getItem('My Profile', 'user-profile'),
     ]),
 ];
 
@@ -99,7 +105,7 @@ const App: React.FC = () => {
             <NotificationComponent />
             <Layout style={{ minHeight: '100vh' }}>
 
-                <Sider theme="light" collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
+                <Sider theme="light" collapsible width={'220px'} collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className='flex items-center justify-center' style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
                         <span className='font-bold text-2xl'>Admin</span>
                     </div>

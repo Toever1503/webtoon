@@ -120,6 +120,7 @@ export default {
             author: 'Tác giả',
             tag: 'Thẻ',
             action: 'Hành động',
+            status: 'Trạng thái',
         },
         eReleaseStatus: {
             'COMING': 'Sắp ra mắt',
@@ -132,6 +133,11 @@ export default {
         eMangaType: {
             'IMAGE': 'Truyện tranh',
             'TEXT': 'Truyện chữ',
+        },
+        eMangaStatus: {
+            'ALL': 'Tất cả',
+            'PUBLISHED': 'Đang hiển thị',
+            'HIDDEN': 'Đang ẩn',
         }
     },
     comment: {
@@ -278,7 +284,8 @@ export default {
             viewDetail: 'Chi tiết',
             upgradeSubs: 'Nâng cấp gói',
             originalOrderNumber: 'Mã đơn hàng gốc',
-
+            timeRange: 'Thời gian',
+            keyword: 'Từ khóa',
         },
         modal: {
             addTitle: 'Thêm mới',
@@ -333,23 +340,37 @@ export default {
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
             'USER_CONFIRMED_BANKING': 'Chờ kiểm tra CK',
+        },
+        ePaymentMethod: {
+            'ALL': 'Tất cả',
+            'ATM': 'Chuyển khoản',
+            'VN_PAY': 'VN Pay',
         }
     },
     'subscription-pack': {
         'page-title': 'Danh sách gói đọc',
         addBtn: 'Thêm mới',
         table: {
+            'subsCode': 'Mã gói',
             'name': 'Tên gói',
             'price': 'Giá gói',
-            'limitedDayCount': 'Số ngày đọc',
+            'limitedMonthCount': 'Số tháng đọc',
             'createdAt': 'Ngày tạo',
             'modifiedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'action': 'Hành động',
+            'status': 'Trạng thái hiển thị',
             'sure-delete': 'Bạn chắc chắn muốn xóa gói đọc này?',
             'all': 'Tất cả',
             'deleted': 'Xóa mềm',
+            active: 'Đang hiển thị',
+            'inactive': 'Đang ẩn',
+            edit: 'Chỉnh sửa',
+            actions: {
+                hide: 'Ẩn',
+                show: 'Hiển thị',
+            }
         },
         modal: {
             addTitle: "Thêm gói đọc mới",
@@ -367,6 +388,8 @@ export default {
                 'edit-failed': 'Sửa thất bại!',
                 'delete-success': 'Xóa thành công!',
                 'delete-failed': 'Xóa thất bại!',
+                'toggle-failed': 'Thay đổi trạng thái thất bại!',
+                'toggle-success': 'Thay đổi trạng thái thành công!',
             },
             placeholders: {
                 title: "Nhập tên gói",

@@ -20,6 +20,11 @@ public class MangaGenreResource2 {
         this.mangaGenreService = mangaGenreService;
     }
 
+    @GetMapping("get-all")
+    public List<MangaGenreEntity> getAll() {
+        return this.mangaGenreService.getAll();
+    }
+
     @GetMapping("filter")
     public Page<MangaGenreEntity> filter(@RequestParam String s, Pageable page) {
         Specification<MangaGenreEntity> spec = (root, query, cb) ->

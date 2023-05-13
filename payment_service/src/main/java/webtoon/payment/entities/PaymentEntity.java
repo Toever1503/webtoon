@@ -40,9 +40,9 @@ public class PaymentEntity {
     @Column(name = "status")
     private int status;
 
-
     @Column(name = "bank_trans_no") // ma giao dich cua ngan hang
     private String bankTranNo;
+
     @Column
     @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp

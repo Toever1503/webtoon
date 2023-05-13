@@ -1,4 +1,4 @@
-import { Button, Input, PaginationProps, Popconfirm, Select, Space, Table, Tag } from "antd";
+import { Button, DatePicker, Input, PaginationProps, Popconfirm, Select, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import { dateTimeFormat } from "../../utils/dateFormat";
 import UpgradeOrderModal, { UpgradeOrderModalProps } from "./components/UpgradeOrderModal";
 import { showNofification } from "../../stores/features/notification/notificationSlice";
 import DetailOrderModal, { DetailOrderModalProps } from "./components/DetailOrderModal";
+import { Dayjs } from "dayjs";
 
 const OrderPage: React.FC = () => {
     const { t } = useTranslation();
@@ -156,9 +157,13 @@ const OrderPage: React.FC = () => {
 
     const [filterInput, setFilterInput] = useState<{
         q?: string,
-        status?: string,
+        status: string,
+        paymentMethod: 'ALL',
+        timeRange: Dayjs[],
     }>({
-        status: '',
+        status: 'ALL',
+        paymentMethod: 'ALL',
+        timeRange: []
     });
 
 
@@ -303,7 +308,10 @@ const OrderPage: React.FC = () => {
         orderService
             .filterOrder({
                 q: filterInput.q ? filterInput.q : undefined,
-                status: filterInput.status ? [filterInput.status] : undefined,
+                status: filterInput.status !== 'ALL' ? [filterInput.status] : undefined,
+                paymentMethod: filterInput.paymentMethod === 'ALL' ? undefined : filterInput.paymentMethod,
+                fromDate: filterInput.timeRange.length > 0 ? filterInput.timeRange[0].format('YYYY-MM-DD') : undefined,
+                toDate: filterInput.timeRange.length > 0 ? filterInput.timeRange[1].format('YYYY-MM-DD') : undefined,
             })
             .then((res: AxiosResponse<{
                 content: IOrder[],
@@ -346,8 +354,8 @@ const OrderPage: React.FC = () => {
                 </Button>
             </div>
 
-            <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-3">
+            <div className="grid lg:flex items-center gap-3 bg-white px-[15px] py-[15px]">
+                <Space>
                     <label className="font-bold">{t('order.table.status')}: </label>
                     <Select className="min-w-[200px]"
                         onChange={val => {
@@ -356,7 +364,7 @@ const OrderPage: React.FC = () => {
                             onCallApi();
                         }}
                         value={filterInput.status}>
-                        <Select.Option value="">
+                        <Select.Option value="ALL">
                             {t('order.eStatus.ALL')}
                         </Select.Option>
 
@@ -367,12 +375,54 @@ const OrderPage: React.FC = () => {
                                 </Select.Option>)
                         }
                     </Select>
-                </div>
-                <Input.Search placeholder={`${t('placeholders.search')}`}
-                    value={filterInput.q} onChange={e => setFilterInput({ ...filterInput, q: e.target.value })}
-                    onSearch={onSearch}
-                    style={{ width: 200 }} />
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.paymentMethod')}: </label>
+                    <Select className="min-w-[200px]"
+                        onChange={val => {
+                            filterInput.paymentMethod = val;
+                            setFilterInput(filterInput);
+                            onCallApi();
+                        }}
+                        value={filterInput.paymentMethod}>
+                        <Select.Option value="ALL">
+                            {t('order.eStatus.ALL')}
+                        </Select.Option>
+
+                        <Select.Option value={'ATM'} >
+                            {t('order.ePaymentMethod.ATM')}
+                        </Select.Option>
+                        <Select.Option value={'VN_PAY'} >
+                            {t('order.ePaymentMethod.VN_PAY')}
+                        </Select.Option>
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.timeRange')}: </label>
+                    <DatePicker.RangePicker onChange={(val: any) => {
+                        console.log('val: ', val);
+
+                        if (!val)
+                            filterInput.timeRange = [];
+                        else
+                            filterInput.timeRange = [val[0], val[1]];
+
+                        setFilterInput(filterInput);
+                        onCallApi();
+                    }} />
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.keyword')}: </label>
+                    <Input.Search placeholder={`${t('placeholders.search')}`}
+                        value={filterInput.q} onChange={e => setFilterInput({ ...filterInput, q: e.target.value })}
+                        onSearch={onSearch}
+                        style={{ width: 200 }} />
+                </Space>
             </div>
+
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
             <AddEditOrderModal
