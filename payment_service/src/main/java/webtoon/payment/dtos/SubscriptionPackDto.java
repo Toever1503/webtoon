@@ -21,6 +21,7 @@ public class SubscriptionPackDto {
 
     private UserDto updatedBy;
     private Boolean status;
+    private String description;
 
     public static SubscriptionPackDto toDto(SubscriptionPackEntity subscriptionPackEntity) {
         if (subscriptionPackEntity == null) return null;
@@ -28,11 +29,13 @@ public class SubscriptionPackDto {
         return SubscriptionPackDto.builder()
                 .id(subscriptionPackEntity.getId())
                 .subsCode(subscriptionPackEntity.getSubsCode())
+                .monthCount(subscriptionPackEntity.getMonthCount())
                 .name(subscriptionPackEntity.getName())
                 .price(subscriptionPackEntity.getPrice())
                 .modifiedAt(subscriptionPackEntity.getModifiedAt())
                 .updatedBy(UserDto.toDto(subscriptionPackEntity.getUpdatedBy()))
                 .status(subscriptionPackEntity.getStatus())
+                .description(subscriptionPackEntity.getDescription())
                 .build();
     }
 }

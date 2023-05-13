@@ -381,6 +381,7 @@ export default {
             resetBtn: "Làm mới",
             saveBtn: "Lưu",
             dateCount: "Thời hạn gói",
+            description: "Mô tả",
             form: {
                 'add-success': 'Thêm thành công!',
                 'add-failed': 'Thêm thất bại!',

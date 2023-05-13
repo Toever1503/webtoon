@@ -43,9 +43,10 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     @Override
     public SubscriptionPackDto updateSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
         SubscriptionPackEntity subscriptionPackEntity = this.getById(subscriptionPackModel.getId());
-        subscriptionPackEntity.setName(subscriptionPackModel.getName());
+//        subscriptionPackEntity.setName(subscriptionPackModel.getName());
+        subscriptionPackEntity.setDescription(subscriptionPackModel.getDescription());
         subscriptionPackEntity.setPrice(subscriptionPackModel.getPrice());
-        subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
+//        subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
         subscriptionPackEntity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);

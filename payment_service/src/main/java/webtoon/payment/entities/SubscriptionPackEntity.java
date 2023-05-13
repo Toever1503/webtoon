@@ -25,6 +25,9 @@ public class SubscriptionPackEntity {
     @Column(name = "subs_code")
     private String subsCode;
 
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "subs_name")
     private String name;
 

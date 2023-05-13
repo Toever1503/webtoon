@@ -138,6 +138,13 @@ const AddEditSubscriptionPackModal: React.FC<AddEditSubscriptionPackModalProps> 
                         <Input type="number" placeholder={`${t('subscription-pack.modal.placeholders.price')}`} suffix="vnd" />
                     </Form.Item>
 
+                    <Form.Item
+                        label={t('subscription-pack.modal.description')}
+                        name="description"
+                    >
+                        <Input placeholder={`${t('subscription-pack.modal.description')}`} />
+                    </Form.Item>
+
                     {/* <Form.Item
                         label={t('subscription-pack.modal.dateCount')}
                         name="monthCount"
