@@ -31,7 +31,6 @@ public class OrderDto {
     private UserDto user_id;
     private UserDto modifiedBy;
 
-    private OrderDto fromOrder;
     private boolean hasUpgradingOrder;
 
     public static OrderDto toDto(OrderEntity orderEntity) {
@@ -61,7 +60,6 @@ public class OrderDto {
                 .user_id(UserDto.toDto(orderEntity.getUser_id()))
                 .modifiedBy(UserDto.toDto(orderEntity.getModifiedBy()))
                 .hasUpgradingOrder(hasUpgradingOrder)
-                .fromOrder(OrderDto.toDto(orderEntity.getFromOrder()))
                 .build();
     }
 }

@@ -23,4 +23,6 @@ public interface ISubscriptionPackService {
     List<SubscriptionPackMetadataDto> getAllPackMetadata();
 
     void toggleStatus(Long id);
+
+    List<SubscriptionPackEntity>  findAllEntity(Specification spec);
 }

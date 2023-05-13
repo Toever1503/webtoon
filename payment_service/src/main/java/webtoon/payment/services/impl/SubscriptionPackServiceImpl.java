@@ -91,6 +91,11 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     }
 
     @Override
+    public List<SubscriptionPackEntity> findAllEntity(Specification spec) {
+        return this.subscriptionPackRepository.findAll(spec);
+    }
+
+    @Override
     public List<SubscriptionPackDto> getAll() {
         return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
                 SubscriptionPackDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());

@@ -262,7 +262,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(id);
         if (!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
             throw new CustomHandleException(43);
-        orderEntity.setStatus(EOrderStatus.REFUNDING);
         this.orderRepository.saveAndFlush(orderEntity);
     }
 
@@ -356,13 +355,12 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
 
-        String orderNumber = UUID.randomUUID().toString();
+        String orderNumber = VnPayConfig.getRandomNumber(10);
         while (this.orderRepository.getByMaDonHang(orderNumber) != null) {
-            orderNumber = UUID.randomUUID().toString();
+            orderNumber = VnPayConfig.getRandomNumber(10);
         }
 
         OrderEntity upgradeOrder = OrderEntity.builder()
-                .fromOrder(originalOrder)
                 .orderType(EOrderType.UPGRADE)
                 .maDonHang(orderNumber)
                 .subs_pack_id(subscriptionPack)

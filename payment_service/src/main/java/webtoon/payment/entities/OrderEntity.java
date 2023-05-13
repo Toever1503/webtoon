@@ -64,11 +64,6 @@ public class OrderEntity {
     @ManyToOne
     private UserEntity user_id;
 
-    @OneToOne
-    @JoinColumn(name = "from_order_id")
-    @Where(clause = "deleted_at is null")
-    private OrderEntity fromOrder;
-
     @ManyToOne
     @JoinColumn(name = "modified_by")
     private UserEntity modifiedBy;
