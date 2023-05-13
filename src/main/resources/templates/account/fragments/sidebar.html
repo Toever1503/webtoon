@@ -14,11 +14,11 @@
         </div>
         <div class="text-[13px] text-center mb-[15px]">
             Thời hạn đọc còn lại:
-            <span th:if="${!session.loggedUser.getCanReadUntilDate().after(#dates.createNow())}">
+            <span th:if="${session.loggedUser.getCanReadUntilDate() == null || !session.loggedUser.getCanReadUntilDate().after(#dates.createNow())}">
                 0 ngày
             </span>
 
-            <span th:if="${session.loggedUser.getCanReadUntilDate().after(#dates.createNow())}">
+            <span th:if="${session.loggedUser.getCanReadUntilDate() != null && session.loggedUser.getCanReadUntilDate().after(#dates.createNow())}">
                <span th:text="${(session.loggedUser.getCanReadUntilDate().getTime() - #dates.createNow().getTime()) / (1000 * 60 * 60 * 24) + ' ngày.'}" />
             </span>
         </div>
@@ -48,40 +48,16 @@
             <button
                     th:onclick="| window.location.href='/user/subscription-status'|"
                     type="button"
-                    class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
+                    class="relative gap-[10px] inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
             >
-                <svg
-                        aria-hidden="true"
-                        class="w-4 h-4 mr-2 fill-current"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                            fill-rule="evenodd"
-                            d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-6-3a2 2 0 11-4 0 2 2 0 014 0zm-2 4a5 5 0 00-4.546 2.916A5.986 5.986 0 0010 16a5.986 5.986 0 004.546-2.084A5 5 0 0010 11z"
-                            clip-rule="evenodd"
-                    ></path>
-                </svg>
-                Gói của bạn
+                <i class="fal fa-whistle"></i>
+                <span>Gói của bạn</span>
             </button>
-            <button
-                    type="button"
-                    th:onclick="| window.location.href='/user/order-history?status=COMPLETED&search='|"
-                    class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
-            >
-                <svg
-                        aria-hidden="true"
-                        class="w-4 h-4 mr-2 fill-current"
-                        fill="currentColor"
-                        viewBox="0 0 20 20"
-                        xmlns="http://www.w3.org/2000/svg"
-                >
-                    <path
-                            d="M5 4a1 1 0 00-2 0v7.268a2 2 0 000 3.464V16a1 1 0 102 0v-1.268a2 2 0 000-3.464V4zM11 4a1 1 0 10-2 0v1.268a2 2 0 000 3.464V16a1 1 0 102 0V8.732a2 2 0 000-3.464V4zM16 3a1 1 0 011 1v7.268a2 2 0 010 3.464V16a1 1 0 11-2 0v-1.268a2 2 0 010-3.464V4a1 1 0 011-1z"
-                    ></path>
-                </svg>
-                Lịch sử mua
+
+            <button type="button" th:onclick="| window.location.href='/user/order-history?status=COMPLETED&search='|"
+                    class="relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white">
+                <i class="fas fa-history"></i>
+                <span>Lịch sử mua</span>
             </button>
         </div>
     </div>

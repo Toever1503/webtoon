@@ -1,25 +1,25 @@
 <!DOCTYPE html>
 <html
         lang="en"
-        xmlns:th="http://www.thymeleaf.org"
-        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-        layout:decorate="~{layout.html}">
+        xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
-    <link href="../static/main.css" rel="stylesheet"/>
+    <link href="/static/main.css" rel="stylesheet"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+          integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
-<body>
-<div class="flex justify-center" layout:fragment="content">
-    <div class="w-2/3 p-4 ">
-        <div class="flex flex-col">
+<body class="bg-[#f6f6f6]">
+    <div class="max-w-[1200px] px-[15px] mx-auto bg-white">
+    <div class="flex flex-col">
             <div class="h-32">
                 <div class="relative ...">
                     <div class="absolute top-16 left-0 font-bold text-2xl">
-                        <span th:text="${mangaData.title}"></span>
+                        <span id="mangaName" th:data-name="${mangaData.mangaName}" th:text="${mangaData.title}"></span>
                         -
                         <span th:if="${mangaData.displayType == 'VOL'}"
                               th:text="${'Tập ' + (currentVol.volumeIndex + 1) + ': ' + currentVol.name + ' -'}"></span>
@@ -31,12 +31,13 @@
 
             <div class=" p-4 ">
                 <div class="flex justify-between">
-                        <!--Third breadcrumb-->
+                    <!--Third breadcrumb-->
                     <div class="breadcrumb py-[10px]">
                         <nav class="w-full rounded-md">
                             <ol class="list-reset flex">
                                 <li><a href="/"
-                                       class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Trang chủ</a>
+                                       class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Trang
+                                    chủ</a>
                                 </li>
                                 <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
                                 </li>
@@ -47,34 +48,40 @@
                                 </li>
                                 <li><a
                                         th:href="@{'/manga/' + ${mangaData.mangaName} + '/' + ${mangaData.id}}"
-                                        class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600" th:text="${mangaData.title}">
+                                        class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600"
+                                        th:text="${mangaData.title}">
                                 </a>
                                 </li>
 
                                 <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
                                 </li>
 
-                                <li th:if="${mangaData.displayType.name == 'VOL'}"  class="text-neutral-500 dark:text-neutral-400" th:text="${'Tập ' + (currentVol.volumeIndex + 1)}"></li>
+                                <li th:if="${mangaData.displayType.name == 'VOL'}"
+                                    class="text-neutral-500 dark:text-neutral-400"
+                                    th:text="${'Tập ' + (currentVol.volumeIndex + 1)}"></li>
 
                                 <li th:if="${mangaData.displayType.name == 'VOL'}">
                                     <span class="mx-2 text-neutral-500 dark:text-neutral-400"
                                     >/</span>
                                 </li>
                                 <li><a
-                                        class="text-sm text-neutral-500 transition duration-150 ease-in-out" th:text="${'Chương ' + (chapterData.chapterIndex + 1)}"></a>
+                                        class="text-sm text-neutral-500 transition duration-150 ease-in-out"
+                                        th:text="${'Chương ' + (chapterData.chapterIndex + 1)}"></a>
                                 </li>
                             </ol>
                         </nav>
                     </div>
 
-                    <div class=" p-4 flex items-center">
+                    <div class=" p-4 flex items-center hidden">
                         <button class="p-2 mr-2 rounded-full bg-red-400 text-white">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bookmark-fill" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-bookmark-fill" viewBox="0 0 16 16">
                                 <path d="M2 2v13.5a.5.5 0 0 0 .74.439L8 13.069l5.26 2.87A.5.5 0 0 0 14 15.5V2a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2z"/>
                             </svg>
                         </button>
                         <button class="p-2 rounded-full text-white bg-red-400">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-circle-half" viewBox="0 0 16 16">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-circle-half" viewBox="0 0 16 16">
                                 <path d="M8 15A7 7 0 1 0 8 1v14zm0 1A8 8 0 1 1 8 0a8 8 0 0 1 0 16z"/>
                             </svg>
 
@@ -85,7 +92,7 @@
             </div>
 
             <div class="p-4 sticky top-0 z-12 px-4 py-2 shadow bg-[seashell]">
-                <div class="flex justify-between " >
+                <div class="flex justify-between ">
                     <div class=" p-4">
                         <div class="flex items-center select-auto">
 
@@ -116,7 +123,7 @@
                     </div>
                     <div class=" p-4">
                         <div class="flex items-center justify-end">
-                            <div  th:if="${prevChapter != null}">
+                            <div th:if="${prevChapter != null}">
                                 <a
                                         th:href="@{'/manga/'+${chapterData.chapterName}+'/chapter/'+${prevChapter.id}}"
                                         class="p-2 mr-2 rounded-full bg-red-500 text-white hover:underline"
@@ -132,7 +139,7 @@
                                 </a>
                             </div>
 
-                            <div th:if="${nextChapter != null}" >
+                            <div th:if="${nextChapter != null}">
                                 <a
                                         th:href="@{'/manga/'+ ${chapterData.chapterName}+'/chapter/'+${nextChapter.id}}"
                                         class="p-2 mr-2 rounded-full bg-red-500 text-white hover:underline"
@@ -147,7 +154,8 @@
                                 </a>
                             </div>
                             <div class="p-2 rounded-full bg-red-500 text-white">
-                                <a th:href="@{'/manga/'+ ${mangaData.mangaName} + '/' + ${mangaData.id}}" class="text-white hover:underline">Thông tin truyện</a>
+                                <a th:href="@{'/manga/'+ ${mangaData.mangaName} + '/' + ${mangaData.id}}"
+                                   class="text-white hover:underline">Thông tin truyện</a>
                             </div>
                         </div>
                     </div>
@@ -157,16 +165,14 @@
             <!-- Sự kiện onchange selectbox -->
 
             <script>
+               window.addEventListener("DOMContentLoaded", (event) => {
 
-                // Lấy đối tượng select box 1
+                    // Lấy đối tượng select box 1
                 const selectVolume = document.getElementById("volume");
-
-                // Lấy đối tượng select box 2
-                const selectChapter = document.getElementById("chapter");
-
                 // Thêm sự kiện onchange cho select box
 
-                selectVolume.addEventListener("change", function (e) {
+                if(selectVolume){
+                    selectVolume.addEventListener("change", function (e) {
                     // console.log('on choose vol: ', e.target.value)
                     const x = selectVolume;
 
@@ -174,7 +180,7 @@
                     selectChapter.value = "";
                     let listChapter = [];
                     // call api de set vao listchapter
-                    fetch('http://localhost:8000/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
+                    fetch('/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
                         method: 'GET'
                     })
                         .then(res => res.json())
@@ -200,6 +206,11 @@
                     const selectedValue = selectBox.value;
 
                 });
+                }
+
+                // Lấy đối tượng select box 2
+                const selectChapter = document.getElementById("chapter");
+
                 // Thêm sự kiện onchange cho select box2
                 selectChapter.addEventListener("change", function () {
                     // Lấy giá trị đã chọn từ select box2
@@ -207,20 +218,22 @@
                     var selectedText = selectChapter.text;
                     // Thực hiện các hành động mong muốn khi giá trị đã chọn từ select box2 thay đổi
 
-                    window.location.href = 'http://localhost:8000/manga/' + selectedText + '/chapter/' + selectedValue2
+                    window.location.href = '/manga/' + document.getElementById('mangaName').dataset.name + '/chapter/' + selectedValue2
 
                 });
+               });
+
             </script>
 
             <!-- Kết thúc sự kiện -->
 
 
             <div class=" p-4">
-<!--                <div class="flex justify-center">-->
-<!--                    <div class="w-2/3 p-4 ">-->
-<!--                        <img src="https://live.mangabooth.com/wp-content/uploads/2017/10/ads-1.jpg" alt="">-->
-<!--                    </div>-->
-<!--                </div>-->
+                <!--                <div class="flex justify-center">-->
+                <!--                    <div class="w-2/3 p-4 ">-->
+                <!--                        <img src="https://live.mangabooth.com/wp-content/uploads/2017/10/ads-1.jpg" alt="">-->
+                <!--                    </div>-->
+                <!--                </div>-->
 
                 <div class="flex justify-center mt-3">
                     <div class="p-4">
@@ -243,12 +256,11 @@
 
             </div>
         </div>
-    </div>
     <script th:inline="javascript">
         /*<![CDATA[*/
         const mangaId = /*[[${mangaData.getId()}]]*/ 'default';
 
-        window.addEventListener('load', function() {
+        window.addEventListener('DOMContentLoaded', function() {
             // Kiểm tra xem trang đã được truy cập thông qua một liên kết chưa
             const referrer = document.referrer;
 
@@ -276,9 +288,9 @@
             localStorage.setItem('users', JSON.stringify(users));
         });
         /*]]>*/
+
     </script>
-
 </div>
-
+    <footer th:replace="fragments/footer-component :: footer"/>
 </body>
 </html>

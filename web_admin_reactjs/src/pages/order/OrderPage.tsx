@@ -143,11 +143,11 @@ const OrderPage: React.FC = () => {
                         </Popconfirm>
 
                     </Space>
-                    <br />
+                    {/* <br />
                     {
                         record.status === 'COMPLETED' && !record.hasUpgradingOrder && record.orderType !== 'UPGRADE' && subscriptionPackList[subscriptionPackList.length - 1]?.id !== record.subs_pack_id.id &&
                         <a onClick={() => showUpgradeModal(record)}>{t('order.table.upgradeSubs')}</a>
-                    }
+                    } */}
                 </>
             ),
             width: 150

@@ -61,9 +61,6 @@ public class SubscriptionPackController {
                           @RequestParam(required = false) String showNotification,
                           @RequestParam(required = false) String notificationMessage
     ) {
-        if (session.getAttribute("loggedUser") == null)
-            return "redirect:/signin?redirectTo=/subscription_pack/load";
-
         Specification spec = (root, criteriaQuery, criteriaBuilder) -> criteriaBuilder.isNull(root.get(SubscriptionPackEntity_.DELETED_AT));
         List<SubscriptionPackDto> subscriptionPackEntities = this.subscriptionPackService.filter(
                 PageRequest.of(0, 50).withSort(Sort.Direction.ASC, SubscriptionPackEntity_.MONTH_COUNT),
@@ -74,12 +71,14 @@ public class SubscriptionPackController {
         boolean hasExpiredTrial = false;
         UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
 
-        if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
-            isUsingTrial = result >= 0;
-            hasExpiredTrial = result < 0;
+        if(userEntity != null){
+            if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
+                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+                int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+                isUsingTrial = result >= 0;
+                hasExpiredTrial = result < 0;
 
+            }
         }
 
         model.addAttribute("items", subscriptionPackEntities);

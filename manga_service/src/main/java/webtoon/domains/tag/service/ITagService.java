@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.tag.entity.TagEntity;
 import webtoon.domains.tag.entity.enums.ETagType;
 
@@ -19,4 +20,9 @@ public interface ITagService {
 	void deleteTagByIds(List<Long> ids);
 
 	Page<TagEntity> filterTag(String s, Pageable page);
+
+    TagEntity getById(Long id);
+
+	List<TagEntity> findAll();
+	List<TagEntity> findAll(Pageable pageable);
 }

@@ -33,6 +33,11 @@ public class CommentController {
 
         model.addAttribute("objectId", objectId);
         model.addAttribute("commentType", commentType);
+
+        model.addAttribute("hasPrevPage", commentEntityPage.hasPrevious());
+        model.addAttribute("hasNextPage", commentEntityPage.hasNext());
+        model.addAttribute("currentPage", commentEntityPage.getNumber());
+        model.addAttribute("totalPage", commentEntityPage.getTotalPages());
         return "comment/index";
     }
 

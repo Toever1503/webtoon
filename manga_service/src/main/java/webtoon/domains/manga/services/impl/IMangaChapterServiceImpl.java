@@ -72,7 +72,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         this.chapterRepository.saveAndFlush(chapterEntity);
         return MangaChapterDto.builder().chapterName(chapterEntity.getChapterName()).volumeId(chapterEntity.getMangaVolume().getId())
                 .chapterIndex(chapterEntity.getChapterIndex()).content(chapterEntity.getContent())
-                .isRequiredVip(chapterEntity.getRequiredVip()).build();
+                .requiredVip(chapterEntity.getRequiredVip()).build();
     }
 
     @Override
@@ -87,7 +87,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         chapterRepository.saveAndFlush(entity);
         return MangaChapterDto.builder().chapterName(entity.getChapterName()).content(entity.getContent())
                 .chapterIndex(entity.getChapterIndex()).volumeId(entity.getMangaVolume().getId())
-                .isRequiredVip(entity.getRequiredVip()).build();
+                .requiredVip(entity.getRequiredVip()).build();
     }
 
     @Override

@@ -57,6 +57,8 @@ public class HomeController {
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
 
+
+
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
 
         List<PostEntity> postEntity = this.postService.findAllPost();
@@ -76,5 +78,10 @@ public class HomeController {
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         model.addAttribute("logger",loggedUser);
         return "homepage";
+    }
+
+    public static void main(String[] args) {
+        Double f = new Double(3.5);
+        System.out.println(f.intValue());
     }
 }

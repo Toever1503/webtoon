@@ -83,6 +83,11 @@ public class IMangaVolumeServiceImpl implements IMangaVolumeService {
     }
 
     @Override
+    public Page<MangaVolumeEntity> filterEntity(Pageable pageable, Specification<MangaVolumeEntity> specs) {
+        return mangaVolumeRepository.findAll(specs, pageable);
+    }
+
+    @Override
     public MangaVolumeEntity getById(Long id) {
         return this.mangaVolumeRepository.findById(id).orElseThrow(() -> new RuntimeException("22"));
     }

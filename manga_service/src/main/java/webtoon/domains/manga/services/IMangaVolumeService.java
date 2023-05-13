@@ -20,6 +20,7 @@ public interface IMangaVolumeService {
 	MangaVolumeDto add(MangaVolumeModel model);
 
 	Page<MangaVolumeDto> filter(Pageable pageable, Specification<MangaVolumeEntity> specs);
+	Page<MangaVolumeEntity> filterEntity(Pageable pageable, Specification<MangaVolumeEntity> specs);
 
     MangaVolumeEntity getById(Long id);
 

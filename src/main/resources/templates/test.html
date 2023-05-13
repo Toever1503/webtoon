@@ -17,38 +17,23 @@
 </head>
 
 <body>
-  <header class="py-[20px]" th:fragment="header" style="background: linear-gradient(to right, #eb3349 40%, #f45c43)">
-    <div class="main-header-layout max-w-[1100px] mx-auto flex gap-[50px] justify-between items-center">
+  <div class="flex gap-[10px] items-center">
+    <ul>
+      <i class="fas fa-star" style="color: #ffeb3b;"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+    </ul>
 
-      <div class="logo">
-        <a href="/">
-          <img src="https://live.mangabooth.com/wp-content/themes/madara/images/logo.png" alt="logo">
-        </a>
-      </div>
+    <a class="underline text-underline">4.6</a>
+  </div>
 
-      <div class="flex items-center gap-[20px]">
-        <ul class="menu-nav-bar flex gap-[30px] text-[18px]">
-          <li><a class="text-white font-bold hover:text-yellow-200" href="/">Trang chủ</a></li>
-          <li><a class="text-white font-bold hover:text-yellow-200" href="/mangas">Danh sách truyện</a></li>
-          <li><a class="text-white font-bold hover:text-yellow-200" href="/subscription_pack/load">Mua gói</a></li>
-          <li><a class="text-white font-bold hover:text-yellow-200" href="/contact">Liên hệ</a></li>
-        </ul>
-
-        <!--  seach button -->
-        <div id="search_modal" class="h-[30px]">
-          <form action="/search" method="get" class="flex space-x-2 text-sm h-full">
-            <input name="q" class="rounded py-1 px-2 h-full" placeholder="Nhập tên truyện, tác giả,..."
-              style="border: 1px solid gainsboro;" />
-            <button type="submit">
-              <i class="fas fa-search text-white hover:text-neutral-200"></i>
-            </button>
-          </form>
-        </div>
-
-      </div>
-
-    </div>
-  </header>
+  <button type="button" th:onclick="| window.location.href='/user/order-history?status=COMPLETED&search='|"
+    class="relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white">
+    <i class="fas fa-history"></i>
+    <span>Lịch sử mua</span>
+  </button>
 </body>
 
 </html>

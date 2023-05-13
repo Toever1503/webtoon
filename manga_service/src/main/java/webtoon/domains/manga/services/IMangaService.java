@@ -32,7 +32,7 @@ public interface IMangaService {
     Double getRating(Long id);
 
 
-    List<MangaEntity> getALLByGeners(Long id);
+    List<MangaEntity> getALLByGenres(List<Long> ids);
 
     MangaDto getByMangaId(Long id);
 
@@ -67,4 +67,6 @@ public interface IMangaService {
         published: 90
      */
     List<Object[]> calculateTotalMangaEachStatus(String q);
+
+    Page<MangaEntity> filterEntitiesByTag(Long id);
 }

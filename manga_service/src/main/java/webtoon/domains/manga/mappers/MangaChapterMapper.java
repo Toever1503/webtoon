@@ -29,7 +29,7 @@ public class MangaChapterMapper {
                 .chapterName(entity.getChapterName())
                 .content(entity.getContent())
                 .chapterIndex(entity.getChapterIndex())
-                .isRequiredVip(entity.getRequiredVip())
+                .requiredVip(entity.getRequiredVip())
                 .build();
     }
 

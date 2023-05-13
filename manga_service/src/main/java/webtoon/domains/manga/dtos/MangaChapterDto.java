@@ -8,6 +8,7 @@ import lombok.Setter;
 import webtoon.domains.manga.entities.MangaChapterEntity;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -27,9 +28,11 @@ public class MangaChapterDto {
 
     private Integer chapterIndex;
 
-    private Boolean isRequiredVip;
+    private Boolean requiredVip;
 
     private List<MangaChapterImageDto> chapterImages;
+
+    private Date createdAt;
 
     public static MangaChapterDto toDto(MangaChapterEntity mangaEntity) {
         if (mangaEntity == null) return null;
@@ -39,8 +42,9 @@ public class MangaChapterDto {
                 .chapterName(mangaEntity.getChapterName())
                 .content(mangaEntity.getContent())
                 .chapterIndex(mangaEntity.getChapterIndex())
-                .isRequiredVip(mangaEntity.getRequiredVip())
+                .requiredVip(mangaEntity.getRequiredVip())
                 .chapterImages(mangaEntity.getChapterImages() != null ? mangaEntity.getChapterImages().stream().map(MangaChapterImageDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
+                .createdAt(mangaEntity.getCreatedAt())
                 .build();
 
         if (mangaEntity.getMangaVolume() != null)

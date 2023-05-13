@@ -182,12 +182,11 @@ public class IMangaServiceImpl implements IMangaService {
             return  this.mangaRepository.getRatingManga(id);
     }
 
-
     @Override
-    public List<MangaEntity> getALLByGeners(Long id){
-
-        return this.mangaRepository.findByGenresIn(id);
+    public List<MangaEntity> getALLByGenres(List<Long> ids) {
+        return this.mangaRepository.findByGenresIn(ids);
     }
+
 
     @Override
     public MangaDto getByMangaId(Long id){
@@ -287,5 +286,10 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public List<Object[]> calculateTotalMangaEachStatus(String q) {
         return this.mangaRepository.calculateTotalMangaEachStatus(q);
+    }
+
+    @Override
+    public Page<MangaEntity> filterEntitiesByTag(Long id) {
+        return null;
     }
 }

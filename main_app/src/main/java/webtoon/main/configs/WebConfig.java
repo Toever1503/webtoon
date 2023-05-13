@@ -47,12 +47,15 @@ public class WebConfig implements WebMvcConfigurer {
                 , new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())
 
                 , new AntPathRequestMatcher("/post/**")
+                , new AntPathRequestMatcher("/comments/**")
                 , new AntPathRequestMatcher("/signin/**")
                 , new AntPathRequestMatcher("/signup/**")
                 , new AntPathRequestMatcher("/subscription_pack/**")
 
                 , new AntPathRequestMatcher("/payment/**")
                 , new AntPathRequestMatcher("/order/**")
+                , new AntPathRequestMatcher("/order/bank-info/**")
+                , new AntPathRequestMatcher("/order/create-order/**")
 
 
                 //for manga module
@@ -61,7 +64,8 @@ public class WebConfig implements WebMvcConfigurer {
                 , new AntPathRequestMatcher("/manga/**")
                 , new AntPathRequestMatcher("/mangas/**")
                 , new AntPathRequestMatcher("/manga-search/**")
-                , new AntPathRequestMatcher("/manga-genrer/**")
+                , new AntPathRequestMatcher("/genre/**")
+                , new AntPathRequestMatcher("/tag/**")
                 , new AntPathRequestMatcher("/search/**")
 
                 , new AntPathRequestMatcher("/mangas/**")
