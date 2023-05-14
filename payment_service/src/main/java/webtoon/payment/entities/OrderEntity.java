@@ -71,4 +71,9 @@ public class OrderEntity {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
+
+
+    @OneToOne(mappedBy = "orderId")
+    private PaymentEntity paymentEntity;
+
 }

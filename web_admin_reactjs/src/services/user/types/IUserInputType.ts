@@ -10,4 +10,5 @@ export default interface IUserInputType {
     sex: IUserSex;
     status: IUserStatus;
     authorities: number[] | string[]
+    role: number | string;
 }

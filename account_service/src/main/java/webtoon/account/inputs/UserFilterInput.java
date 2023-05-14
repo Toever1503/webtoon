@@ -12,4 +12,6 @@ import lombok.NoArgsConstructor;
 public class UserFilterInput {
     private String q;
 
+    private Long role;
+
 }

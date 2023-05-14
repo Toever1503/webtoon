@@ -34,10 +34,7 @@ function getItem(
 
 const items: MenuItem[] = [
     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
-    getItem('Quản lý đơn hàng', 'parent-orders', <ShoppingCartOutlined />, [
-        getItem('Tất cả đơn hàng', '/orders'),
-        getItem('Xử lý đơn hàng', '/orders/handle'),
-    ]),
+    getItem('Quản lý đơn hàng', 'orders', <ShoppingCartOutlined />),
     getItem('Thống kê', '/stats', <AreaChartOutlined />, [
         getItem('Doanh thu', '/stats/revenue'),
         // getItem('Tỉ lệ đăng ký gói', '/stats/registration-rate'),

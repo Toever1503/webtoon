@@ -10,12 +10,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webtoon.account.configs.security.CustomUserDetail;
 import webtoon.account.configs.security.jwt.JwtProvider;
-import webtoon.account.entities.EAuthorityConstants;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
 import webtoon.account.models.LoginModel;
 import webtoon.account.repositories.IAuthorityRepository;
+import webtoon.account.repositories.IRoleRepository;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.ILoginService;
 import webtoon.utils.exception.CustomHandleException;
@@ -23,7 +23,6 @@ import webtoon.utils.exception.CustomHandleException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.Set;
 
 
 @Service
@@ -38,11 +37,14 @@ public class LoginServiceImpl implements ILoginService {
 
     private final JwtProvider jwtProvider;
 
-    public LoginServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider) {
+    private final IRoleRepository roleRepository;
+
+    public LoginServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider, IRoleRepository roleRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.jwtProvider = jwtProvider;
+        this.roleRepository = roleRepository;
     }
 
 
@@ -88,10 +90,9 @@ public class LoginServiceImpl implements ILoginService {
                     .email(email)
                     .fullName(oAuth2User.getAttribute("name"))
                     .hasBlocked(false)
-                    .numberOfFailedSignIn(1)
                     .status(EStatus.ACTIVED)
                     .password(this.passwordEncoder.encode(username))
-                    .authorities(Set.of(this.authorityRepository.findByAuthorityName(EAuthorityConstants.ROLE_USER)))
+                    .role(this.roleRepository.findById(3l).get())
                     .build();
             if (accountType == EAccountType.GOOGLE)
                 entity.setAvatar(oAuth2User.getAttribute("picture"));

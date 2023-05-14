@@ -4,7 +4,7 @@ export default {
         newOrderCount: 'Tổng đơn hàng mới',
         totalRevenue: 'Tổng doanh thu',
         paymentPending: 'Chờ thanh toán',
-        orderCompleted: 'Đã hoàn tất',
+        orderCompleted: 'Tổng đơn hàng hoàn tất tháng này',
         orderCancelledCount: 'Đã hủy',
         recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
 
@@ -12,7 +12,7 @@ export default {
             title: 'Đơn hàng mới nhất',
             table: {
                 orderNo: 'Mã đơn hàng',
-                createdBy: 'Người mua',
+                createdBy: 'Khách hàng',
                 subscriptionPack: 'Gói đăng ký',
                 price: 'Giá',
                 createdAt: 'Ngày tạo',
@@ -23,8 +23,8 @@ export default {
         revenue: {
             title: 'Thống kê doanh thu',
             totalRevenueThisMonth: 'Tổng doanh thu tháng này',
-            totalSubscriber: 'Số người đăng ký tháng này',
-            totalSubscriberOnTrial: 'Số người đăng ký dùng thử tháng này',
+            totalSubscriber: 'Tổng số người đăng ký tháng này',
+            totalSubscriberOnTrial: 'Tổng số người đăng ký dùng thử tháng này',
             totalRevenueBySubsPack: 'Doanh thu theo gói đăng ký',
             revenueByDay: 'Doanh thu theo ngày',
             monthlyRevenue: 'Doanh thu hàng tháng',
@@ -162,6 +162,7 @@ export default {
             'avatar': 'Ảnh đại diện',
             'status': 'Trạng thái',
             'createdAt': 'Ngày tạo',
+            role: 'Vai trò',
             'accountType': 'Loại tài khoản',
             'action': 'Hành động',
             'status-item': {
@@ -173,6 +174,12 @@ export default {
                 FACEBOOK: 'Facebook',
                 GOOGLE: 'Google',
                 DATABASE: 'Tài khoản thường'
+            },
+            'role-item': {
+                ADMIN: 'Quản lý',
+                EMP: 'Nhân viên',
+                CUS: 'Khách hàng'
+                
             },
             'status-item-select': {
                 ACTIVED: 'Kích hoạt',
@@ -226,6 +233,7 @@ export default {
                 'confirm-password-not-match': 'Mật khẩu không khớp!',
                 'password-max': 'Mật khẩu không được quá 30 ký tự!',
                 'authority-required': 'Vui lòng chọn quyền',
+                'role-required': 'Vui lòng chọn vai trò',
 
             }
         },
@@ -278,7 +286,7 @@ export default {
             'orderType': 'Loại đơn hàng',
             'createdAt': 'Ngày tạo',
             'updatedAt': 'Ngày sửa',
-            'createdBy': 'Người tạo',
+            'createdBy': 'Khách hàng',
             'modifiedBy': 'Người sửa',
             'upgrade': 'Nâng cấp',
             viewDetail: 'Chi tiết',
@@ -298,7 +306,7 @@ export default {
                     price: 'Giá tiền',
                     paymentMethod: 'Phương thức thanh toán',
                     choosePaymentMethod: 'Chọn phương thức thanh toán',
-                    'createdBy': 'Người mua',
+                    'createdBy': 'Khách hàng',
                     status: 'Trạng thái',
                     chooseUser: 'Chọn người dùng',
                     'sure-complete': 'Bạn chắc chắn muốn hoàn tất đơn hàng này?',

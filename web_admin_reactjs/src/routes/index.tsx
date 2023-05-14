@@ -18,6 +18,7 @@ import SubscriptionPackPage from "../pages/subscription-pack/SubscriptionPackPag
 import LoginPage from "../pages/login/LoginPage";
 import RevenueStatsPage from "../pages/statistics/RevenueStatsPage";
 import RegistrationStatusStatsPage from "../pages/statistics/RegistrationStatusStatsPage";
+import OrderHandlePage from "../pages/order/OrderHandlePage";
 
 const router = createBrowserRouter([
     {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
             {
                 path: "/orders",
                 element: <OrderPage />,
+            },
+            {
+                path: "/orders/handle/:id",
+                element: <OrderHandlePage />,
             },
             {
                 path: "/subscription-packs",

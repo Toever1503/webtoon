@@ -2,6 +2,7 @@ package webtoon.account.dtos;
 
 import lombok.Builder;
 import lombok.Getter;
+import webtoon.account.entities.RoleEntity;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
@@ -22,12 +23,13 @@ public class UserDto {
     private ESex sex;
     private EStatus status;
     private Boolean hasBlocked;
-    private Integer numberOfFailedSignIn;
     private EAccountType accountType;
     private Date createdAt;
     private Date modifiedAt;
 
     private Set<AuthorityEntity> authorities;
+
+    private RoleEntity role;
 
     public static UserDto toDto(UserEntity entity) {
         if(entity == null) return  null;
@@ -40,11 +42,11 @@ public class UserDto {
                 .sex(entity.getSex())
                 .status(entity.getStatus())
                 .hasBlocked(entity.getHasBlocked())
-                .numberOfFailedSignIn(entity.getNumberOfFailedSignIn())
                 .accountType(entity.getAccountType())
                 .createdAt(entity.getCreatedAt())
                 .modifiedAt(entity.getModifiedAt())
                 .authorities(entity.getAuthorities())
+                .role(entity.getRole())
                 .build();
     }
 }

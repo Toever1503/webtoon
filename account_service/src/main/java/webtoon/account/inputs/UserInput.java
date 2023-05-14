@@ -21,6 +21,8 @@ public class UserInput {
     private ESex sex;
     private List<Long> authorities;
 
+    private Long role;
+
     public static UserEntity toEntity(UserInput input){
         return UserEntity.builder()
                 .id(input.getId())

@@ -2,6 +2,7 @@ package webtoon.payment.services.impl;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import webtoon.payment.dtos.PaymentDto;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.repositories.IPaymentRepository;
@@ -10,6 +11,7 @@ import webtoon.payment.services.IPaymentService;
 import java.util.List;
 
 @Service
+@Transactional
 public class PaymentServiceImpl implements IPaymentService {
     @Autowired
     private IPaymentRepository paymentRepository;

@@ -27,11 +27,11 @@ public class OrderDto {
     private String maDonHang;
     private EPaymentMethod paymentMethod;
     private SubscriptionPackEntity subs_pack_id;
-    private String payment_method;
     private UserDto user_id;
     private UserDto modifiedBy;
-
     private boolean hasUpgradingOrder;
+
+    private PaymentDto paymentDto;
 
     public static OrderDto toDto(OrderEntity orderEntity) {
         if (orderEntity == null) return null;
@@ -60,6 +60,7 @@ public class OrderDto {
                 .user_id(UserDto.toDto(orderEntity.getUser_id()))
                 .modifiedBy(UserDto.toDto(orderEntity.getModifiedBy()))
                 .hasUpgradingOrder(hasUpgradingOrder)
+                .paymentDto(PaymentDto.toDto(orderEntity.getPaymentEntity()))
                 .build();
     }
 }

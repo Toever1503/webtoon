@@ -14,6 +14,8 @@ import webtoon.account.entities.UserEntity_;
 import webtoon.account.services.IUserService;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.dtos.UserSubscriptionPackStatusDto;
+import webtoon.payment.entities.OrderEntity_;
+import webtoon.payment.enums.EOrderStatus;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.ISubscriptionPackService;
 
@@ -38,6 +40,11 @@ public class StatisticResource {
         this.orderService = orderService;
         this.userService = userService;
         this.subscriptionPackService = subscriptionPackService;
+    }
+
+    @GetMapping("sum-completed-order-this-month")
+    public Long countTotalCompletedOrderThisMonth(){
+        return this.orderService.countTotalCompletedOrderThisMonth();
     }
 
     @GetMapping("sum-revenue-this-month")

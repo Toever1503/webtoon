@@ -173,7 +173,7 @@ public class PaymentController {
             model.addAttribute("maPhanHoi", tinhTrangThanhToan);
             model.addAttribute("maGD", paymentEntity.getTransNo());
             model.addAttribute("maNganHang", paymentEntity.getBankCode());
-            model.addAttribute("thoiGianTT", formatter.format(thoiGianTT));
+            model.addAttribute("thoiGianTT", paymentEntity.getPaidDate());
             model.addAttribute("ketQua", "Giao dịch thành công");
 
         } else {

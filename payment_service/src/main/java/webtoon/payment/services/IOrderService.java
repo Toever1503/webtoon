@@ -81,4 +81,8 @@ public interface IOrderService {
     List<Object[]> sumRevenuePerSubsPackByMonth(String monthDate);
 
     List<Object[]> countSubscriberStatusPerMonthByYear(String year);
+
+    OrderDto findById(Long id);
+
+    Long countTotalCompletedOrderThisMonth();
 }

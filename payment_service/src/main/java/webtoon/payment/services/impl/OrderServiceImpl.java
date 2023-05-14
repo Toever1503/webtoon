@@ -140,7 +140,7 @@ public class OrderServiceImpl implements IOrderService {
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
 
-        if(input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)){
+        if (input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)) {
 
         }
 
@@ -167,7 +167,7 @@ public class OrderServiceImpl implements IOrderService {
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
 
         // send order info to user's mail
-        if(entity.getStatus().equals(EOrderStatus.COMPLETED))
+        if (entity.getStatus().equals(EOrderStatus.COMPLETED))
             this.sendOrderInfoToMail(entity);
 
         this.orderRepository.saveAndFlush(entity);
@@ -251,7 +251,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void cancelOrder(Long id) {
         OrderEntity orderEntity = this.getById(id);
-        if(!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+        if (!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
             throw new CustomHandleException(42);
         orderEntity.setStatus(EOrderStatus.CANCELED);
         this.orderRepository.saveAndFlush(orderEntity);
@@ -337,6 +337,17 @@ public class OrderServiceImpl implements IOrderService {
         ls.addAll(this.orderRepository.calcNotRenewOrderPerMonthByYear(year));
 
         return ls;
+    }
+
+    @Override
+    public OrderDto findById(Long id) {
+        OrderEntity orderEntity = this.getById(id);
+        return OrderDto.toDto(orderEntity);
+    }
+
+    @Override
+    public Long countTotalCompletedOrderThisMonth() {
+        return this.orderRepository.countTotalRegisterThisMonth();
     }
 
     private void sendOrderInfoToMail(OrderEntity orderEntity) {

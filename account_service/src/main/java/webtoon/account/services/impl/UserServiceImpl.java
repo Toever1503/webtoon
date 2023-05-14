@@ -12,16 +12,14 @@ import org.springframework.stereotype.Service;
 import webtoon.account.configs.security.CustomUserDetail;
 import webtoon.account.configs.security.jwt.JwtProvider;
 import webtoon.account.dtos.LoginResponseDto;
-import webtoon.account.entities.UserEntity_;
+import webtoon.account.entities.*;
 import webtoon.account.enums.EAccountType;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.LoginInput;
+import webtoon.account.repositories.IRoleRepository;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.IUserService;
 import webtoon.account.dtos.UserDto;
-import webtoon.account.entities.AuthorityEntity;
-import webtoon.account.entities.EAuthorityConstants;
-import webtoon.account.entities.UserEntity;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.utils.exception.CustomHandleException;
@@ -42,58 +40,61 @@ public class UserServiceImpl implements IUserService {
     private final IAuthorityRepository authorityRepository;
     private final JwtProvider jwtProvider;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider) {
+    private final IRoleRepository roleRepository;
+
+    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider, IRoleRepository roleRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.jwtProvider = jwtProvider;
+        this.roleRepository = roleRepository;
         initAuthority();
     }
 
 
     private void initAuthority() {
         // for manga
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(1L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(2L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA)
-//                        .build()
-//        );
-//
-//        // for manga author
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(2L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA_AUTHOR)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(3L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA_AUTHOR)
-//                        .build()
-//        );
-//
-//        // for manga genre
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(4L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA_GENRE)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(5L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA_GENRE)
-//                        .build()
-//        );
-//
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(1L)
+                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA)
+                        .build()
+        );
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(2L)
+                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA)
+                        .build()
+        );
+
+        // for manga author
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(2L)
+                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA_AUTHOR)
+                        .build()
+        );
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(3L)
+                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA_AUTHOR)
+                        .build()
+        );
+
+        // for manga genre
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(4L)
+                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA_GENRE)
+                        .build()
+        );
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(5L)
+                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA_GENRE)
+                        .build()
+        );
+
 //        // for user
 //        authorityRepository.saveAndFlush(
 //                AuthorityEntity.builder()
@@ -107,21 +108,21 @@ public class UserServiceImpl implements IUserService {
 //                        .authorityName(EAuthorityConstants.ROLE_DELETE_USER)
 //                        .build()
 //        );
-//
-//        // for order
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(8L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_ORDER)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(9L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_ORDER)
-//                        .build()
-//        );
-//
+
+        // for order
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(8L)
+                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_ORDER)
+                        .build()
+        );
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(9L)
+                        .authorityName(EAuthorityConstants.ROLE_DELETE_ORDER)
+                        .build()
+        );
+
 //        // for category
 //        authorityRepository.saveAndFlush(
 //                AuthorityEntity.builder()
@@ -149,7 +150,7 @@ public class UserServiceImpl implements IUserService {
 //                        .authorityName(EAuthorityConstants.ROLE_DELETE_POST)
 //                        .build()
 //        );
-//
+
 //        // for comment
 //        authorityRepository.saveAndFlush(
 //                AuthorityEntity.builder()
@@ -163,21 +164,21 @@ public class UserServiceImpl implements IUserService {
 //                        .authorityName(EAuthorityConstants.ROLE_DELETE_COMMENT)
 //                        .build()
 //        );
-//
-//        // for tag
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(16L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_TAG)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(17L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_TAG)
-//                        .build()
-//        );
-//
+
+        // for tag
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(16L)
+                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_TAG)
+                        .build()
+        );
+        authorityRepository.saveAndFlush(
+                AuthorityEntity.builder()
+                        .id(17L)
+                        .authorityName(EAuthorityConstants.ROLE_DELETE_TAG)
+                        .build()
+        );
+
 //        // for statistic
 //        authorityRepository.saveAndFlush(
 //                AuthorityEntity.builder()
@@ -186,32 +187,22 @@ public class UserServiceImpl implements IUserService {
 //                        .build()
 //        );
 
-        // for role
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(19l)
-                        .authorityName(EAuthorityConstants.ROLE_ADMIN)
+        this.roleRepository.saveAndFlush(
+                RoleEntity.builder()
+                        .id(1l)
+                        .roleName(ERoleConstants.ADMIN)
                         .build()
         );
-
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(20l)
-                        .authorityName(EAuthorityConstants.ROLE_USER)
+        this.roleRepository.saveAndFlush(
+                RoleEntity.builder()
+                        .id(2l)
+                        .roleName(ERoleConstants.EMP)
                         .build()
         );
-
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(21l)
-                        .authorityName(EAuthorityConstants.ROLE_MANGA_MANAGEMENT)
-                        .build()
-        );
-
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(22l)
-                        .authorityName(EAuthorityConstants.ROLE_ORDER_MANAGEMENT)
+        this.roleRepository.saveAndFlush(
+                RoleEntity.builder()
+                        .id(3l)
+                        .roleName(ERoleConstants.CUS)
                         .build()
         );
 
@@ -236,18 +227,22 @@ public class UserServiceImpl implements IUserService {
     public UserDto add(UserInput input) {
         UserEntity entity = UserInput.toEntity(input);
 
-        if(this.userRepository.findByUsername(input.getUsername()).isPresent())
+        if (this.userRepository.findByUsername(input.getUsername()).isPresent())
             throw new CustomHandleException(11);
 
         if (this.userRepository.existsByEmail(input.getEmail())) {
             throw new CustomHandleException(12);
         }
         entity.setHasBlocked(false);
-        entity.setNumberOfFailedSignIn(0);
         entity.setStatus(EStatus.ACTIVED);
         entity.setAccountType(EAccountType.DATABASE);
         entity.setPassword(this.passwordEncoder.encode(input.getPassword()));
-        entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
+
+        if (input.getRole() != null) {
+            entity.setRole(this.roleRepository.findById(input.getRole()).get());
+        }
+        if (input.getAuthorities() != null)
+            entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         this.userRepository.saveAndFlush(entity);
         return UserDto.toDto(entity);
     }
@@ -269,6 +264,9 @@ public class UserServiceImpl implements IUserService {
         entity.setPhone(input.getPhone());
         entity.setSex(input.getSex());
 
+        if (input.getRole() != null) {
+            entity.setRole(this.roleRepository.findById(input.getRole()).get());
+        }
         if (input.getAuthorities() != null)
             entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         if (input.getPassword() != null)
@@ -321,9 +319,6 @@ public class UserServiceImpl implements IUserService {
         if (entity.getHasBlocked())
             throw new CustomHandleException(2);
 
-        entity.setNumberOfFailedSignIn(entity.getNumberOfFailedSignIn() + 1);
-        if (entity.getNumberOfFailedSignIn() >= 5)
-            entity.setHasBlocked(Boolean.TRUE);
 
         this.userRepository.saveAndFlush(entity);
     }
@@ -333,8 +328,6 @@ public class UserServiceImpl implements IUserService {
         UserEntity entity = this.getById(id);
 
         entity.setHasBlocked(Boolean.FALSE);
-        entity.setNumberOfFailedSignIn(0);
-
         this.userRepository.saveAndFlush(entity);
     }
 

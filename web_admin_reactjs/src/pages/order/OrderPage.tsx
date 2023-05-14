@@ -75,21 +75,20 @@ const OrderPage: React.FC = () => {
             render: (text) => <>{text}</>,
         },
         {
-            title: 'Email',
+            title: 'Số điện thoại',
             dataIndex: 'email',
             key: 'email',
             render: (_, record: IOrder) => <>{
-                record.user_id.email
+                record.user_id.phone
             }</>,
         },
         {
             title: t('order.table.status'),
             dataIndex: 'status',
             key: 'status',
-            render: (text) => <span style={{ border: '1px solid #d9d9d9' }} className="block text-center w-[120px] break-all rounded px-[5px]">
-                {
-                    t('order.eStatus.' + text)
-                }</span>,
+            render: (text: EORDER_STATUS) => <>
+                <Tag color={getColorForStatus(text)}>{t('order.eStatus.' + text)}</Tag>
+            </>,
         },
 
         {
@@ -121,7 +120,7 @@ const OrderPage: React.FC = () => {
             render: (text) => <>{dateTimeFormat(text)}</>,
         },
         {
-            title: 'Action',
+            title: 'Thao tác',
             key: 'action',
             render: (_, record: IOrder) => (
                 <>
@@ -144,16 +143,24 @@ const OrderPage: React.FC = () => {
                         </Popconfirm>
 
                     </Space>
-                    {/* <br />
+                    <br />
                     {
-                        record.status === 'COMPLETED' && !record.hasUpgradingOrder && record.orderType !== 'UPGRADE' && subscriptionPackList[subscriptionPackList.length - 1]?.id !== record.subs_pack_id.id &&
-                        <a onClick={() => showUpgradeModal(record)}>{t('order.table.upgradeSubs')}</a>
-                    } */}
+                        record.status === 'USER_CONFIRMED_BANKING' &&
+                        <Link to={`/orders/handle/${record.id}`}>
+                            Xử lý trạng thái
+                        </Link>
+                    }
                 </>
             ),
-            width: 150
         },
     ];
+
+    const getColorForStatus = (status: EORDER_STATUS) => {
+        if (status === 'COMPLETED') return '#1677ff';
+        if (status === 'PENDING_PAYMENT') return '#ff5722';
+        if (status === 'USER_CONFIRMED_BANKING') return '#ff5722';
+        if (status === 'CANCELED') return 'red';
+    }
 
     const [filterInput, setFilterInput] = useState<{
         q?: string,
@@ -283,13 +290,11 @@ const OrderPage: React.FC = () => {
             detailOrderModal.visible = false;
             setDetailOrderModal(detailOrderModal);
         },
-        showEditModal: () => {
-            console.log('edit');
-
-            if (detailOrderModal.input)
-                openEditModal(detailOrderModal.input);
-        }
     });
+    const showEditModal = (record: IOrder) => {
+        console.log('edit');
+        openEditModal(record);
+    };
     const viewDetailOrder = (record: IOrder) => {
         detailOrderModal.input = record;
         setDetailOrderModal({
@@ -346,12 +351,12 @@ const OrderPage: React.FC = () => {
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('order.page-title')}
                 </h1>
-                <Button onClick={() => setAddEditOrderModal({
+                {/* <Button onClick={() => setAddEditOrderModal({
                     ...addEditOrderModal,
                     visible: true
                 })}>
                     {t('order.addBtn')}
-                </Button>
+                </Button> */}
             </div>
 
             <div className="grid lg:flex items-center gap-3 bg-white px-[15px] py-[15px]">
@@ -443,7 +448,6 @@ const OrderPage: React.FC = () => {
         <DetailOrderModal
             visible={detailOrderModal.visible}
             onCancel={detailOrderModal.onCancel}
-            showEditModal={detailOrderModal.showEditModal}
             input={detailOrderModal.input}
         />
     </>)

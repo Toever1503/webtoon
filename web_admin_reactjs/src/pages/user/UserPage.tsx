@@ -1,4 +1,4 @@
-import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button } from "antd";
+import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button, Select } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -31,7 +31,7 @@ const UserPage: React.FC = () => {
         total: 0,
     });
     const [userFilter, setUserFilter] = useState<any>({
-        commentType: 'ALL'
+        role: 'ALL',
     });
     const onSearch = () => {
         onCallApiFilterUser();
@@ -110,6 +110,12 @@ const UserPage: React.FC = () => {
             dataIndex: 'sex',
             key: 'sex',
             render: (text) => <>{text && t(`user.form.sex-radio.${text.toLowerCase()}`)}</>,
+        },
+        {
+            title: t('user.table.role'),
+            dataIndex: 'role',
+            key: 'role',
+            render: (text) => <>{t(`user.table.role-item.${text?.roleName}`)}</>,
         },
         {
             title: t('user.table.accountType'),
@@ -228,6 +234,7 @@ const UserPage: React.FC = () => {
         setTableLoading(true);
         userService.filterUser({
             q: userFilter.q,
+            role: userFilter.role === 'ALL' ? undefined : userFilter.role,
         }, pageConfig.current - 1, pageConfig.pageSize)
             .then((res: AxiosResponse<{
                 content: IUserType[],
@@ -283,10 +290,46 @@ const UserPage: React.FC = () => {
                 </Button>
 
             </div>
+
+            <div className="grid lg:flex items-center justify-between gap-3 bg-white px-[15px] py-[15px]">
+                <Space>
+                    <label className="font-bold">
+                        Loại tài khoản: </label>
+                    <Select className="min-w-[200px]"
+                        onChange={val => {
+                            userFilter.role = val;
+                            setUserFilter(userFilter);
+                            onCallApiFilterUser();
+                        }}
+                        value={userFilter.role}>
+                        <Select.Option value="ALL">
+                            {t('order.eStatus.ALL')}
+                        </Select.Option>
+
+                        {/* <Select.Option value='1' >
+                            Quản lý
+                        </Select.Option> */}
+
+                        <Select.Option value='2' >
+                            Nhân viên
+                        </Select.Option>
+
+                        <Select.Option value='3' >
+                            Khách hàng
+                        </Select.Option>
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">Từ khóa: </label>
+                    <Input.Search placeholder={`${t('placeholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
+            
+                    </Space>
+
+            </div>
             <AddEditUserModal visible={addEditUserModal.visible} authorityOptions={authorityOptions} cancel={addEditUserModal.cancel} onOk={addEditUserModal.onOk} title={addEditUserModal.title} userInput={addEditUserModal.userInput} />
             <div className="flex justify-end items-center">
-                <Input.Search placeholder={`${t('placeholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
-            </div>
+                </div>
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} rowKey={(() => Math.random())} pagination={pageConfig} />
         </div>
