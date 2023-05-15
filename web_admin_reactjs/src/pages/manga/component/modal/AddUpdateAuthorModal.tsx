@@ -4,6 +4,7 @@ import { useDispatch, } from "react-redux";
 import authorService from "../../../../services/manga/AuthorService";
 import {addAuthor, updateAuthor} from "../../../../stores/features/manga/authorSlice";
 import {showNofification} from "../../../../stores/features/notification/notificationSlice";
+import { useTranslation } from "react-i18next";
 
 
 interface AddUpdateAuthorModalProps {
@@ -12,7 +13,7 @@ interface AddUpdateAuthorModalProps {
 
 const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: AddUpdateAuthorModalProps | any) => {
 
-
+    const {t} = useTranslation();
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -36,8 +37,21 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
                     handleCancel();
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Add author successfully',
+                        message: 'Thêm thành công!',
                     }))
+                })
+                .catch(err => {
+                    if (!err.response.data.code)
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: 'Sửa thất bại!'
+                        }))
+                    else {
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('response.errors.' + err.response.data.code)
+                        }))
+                    }
                 })
                 .finally(() => {
                     setIsSubmitting(false);
@@ -50,9 +64,22 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
                     dispatch(updateAuthor(res.data));
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Edit author successfully',
+                        message: 'Sửa thành công!',
                     }))
                     handleCancel();
+                })
+                .catch(err => {
+                    if (!err.response.data.code)
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: 'Sửa thất bại!'
+                        }))
+                    else {
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('response.errors.' + err.response.data.code)
+                        }))
+                    }
                 })
                 .finally(() => {
                     setIsSubmitting(false);
@@ -84,12 +111,12 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                labelCol={{ span: 4 }}
+                labelCol={{ span: 5 }}
             >
                 <Form.Item
-                    label="Name"
+                    label="Tên tác giả"
                     name="name"
-                    rules={[{ required: true, message: 'Please input your name!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -103,7 +130,7 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                        Save
+                        Lưu
                     </Button>
                 </Form.Item>
             </Form>

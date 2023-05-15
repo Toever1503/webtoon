@@ -80,7 +80,7 @@ const LoginPage: React.FC = () => {
 
     useEffect(() => {
         form.setFieldsValue({
-            username: 'test',
+            username: 'admin',
             password: 123456,
             rememberMe: false
         });

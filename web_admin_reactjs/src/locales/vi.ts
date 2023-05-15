@@ -459,6 +459,10 @@ export default {
             'code-0': 'Lỗi server. Vui lòng thử lại sau!',
             'code-11': 'Tên đăng nhập đã tồn tại!',
             'code-12': 'Email đã tồn tại!',
+            'code-91': 'Tên đã tồn tại!',
+            'code-92': 'Slug đã tồn tại!',
+            'code-111': 'Tên đã tồn tại!',
+            'code-112': 'Slug đã tồn tại!',
         }
     },
     table: {

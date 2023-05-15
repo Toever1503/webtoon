@@ -20,7 +20,6 @@ public class SubscriptionPackDto {
     private Date modifiedAt;
 
     private UserDto updatedBy;
-    private Boolean status;
     private String description;
 
     public static SubscriptionPackDto toDto(SubscriptionPackEntity subscriptionPackEntity) {
@@ -34,7 +33,6 @@ public class SubscriptionPackDto {
                 .price(subscriptionPackEntity.getPrice())
                 .modifiedAt(subscriptionPackEntity.getModifiedAt())
                 .updatedBy(UserDto.toDto(subscriptionPackEntity.getUpdatedBy()))
-                .status(subscriptionPackEntity.getStatus())
                 .description(subscriptionPackEntity.getDescription())
                 .build();
     }

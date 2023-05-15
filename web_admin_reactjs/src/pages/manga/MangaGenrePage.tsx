@@ -105,11 +105,11 @@ const MangaGenrePage: React.FC = () => {
     const deleteGenre = (record: GenreModel) => {
         console.log('delete  genre', record);
         confirm({
-            title: 'Are you sure delete this tag?',
+            title: 'Bạn chắc chắn?',
             icon: <ExclamationCircleFilled />,
-            okText: 'Yes',
+            okText: 'Chắc chắn',
             okType: 'danger',
-            cancelText: 'No',
+            cancelText: 'Hủy',
             onOk() {
                 console.log('OK');
                 setTblLoading(true);
@@ -119,7 +119,7 @@ const MangaGenrePage: React.FC = () => {
                         dispatch(deleteGenreById({ id: record.id }));
                         dispatch(showNofification({
                             type: 'success',
-                            message: 'Delete genre successfully',
+                            message: 'Xóa thành công!',
                         }))
                     })
                     .finally(() => {

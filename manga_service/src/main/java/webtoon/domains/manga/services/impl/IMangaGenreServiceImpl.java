@@ -13,6 +13,7 @@ import webtoon.domains.manga.models.MangaGenreModel;
 import webtoon.domains.manga.repositories.IMangaGenreRepository;
 import webtoon.domains.manga.services.IMangaGenreService;
 import webtoon.utils.ASCIIConverter;
+import webtoon.utils.exception.CustomHandleException;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -31,6 +32,11 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
             entity.setSlug(ASCIIConverter.removeAccent(model.getSlug()));
         else
             entity.setSlug(ASCIIConverter.removeAccent(model.getName()));
+
+        if (genreRepository.findByName(model.getName()).isPresent())
+            throw new CustomHandleException(91);
+        if (genreRepository.findBySlug(entity.getSlug()).isPresent())
+            throw new CustomHandleException(92);
         genreRepository.saveAndFlush(entity);
         return entity;
     }
@@ -40,6 +46,14 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
         MangaGenreEntity entity = this.getById(model.getId());
         entity.setName(model.getName());
         entity.setSlug(model.getSlug());
+
+        MangaGenreEntity checkGenre = genreRepository.findByName(model.getName()).orElse(null);
+        if (checkGenre != null && (checkGenre.getId() != entity.getId()))
+            throw new CustomHandleException(91);
+        checkGenre = genreRepository.findBySlug(model.getSlug()).orElse(null);
+        if (checkGenre != null && (checkGenre.getId() != entity.getId()))
+            throw new CustomHandleException(92);
+
         genreRepository.saveAndFlush(entity);
         return entity;
     }

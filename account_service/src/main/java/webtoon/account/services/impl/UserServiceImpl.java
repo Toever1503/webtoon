@@ -14,6 +14,7 @@ import webtoon.account.configs.security.jwt.JwtProvider;
 import webtoon.account.dtos.LoginResponseDto;
 import webtoon.account.entities.*;
 import webtoon.account.enums.EAccountType;
+import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.LoginInput;
 import webtoon.account.repositories.IRoleRepository;
@@ -49,7 +50,26 @@ public class UserServiceImpl implements IUserService {
         this.authorityRepository = authorityRepository;
         this.jwtProvider = jwtProvider;
         this.roleRepository = roleRepository;
+
         initAuthority();
+
+        if ((userRepository.findById(1l).isEmpty())) {
+            UserEntity userEntity = UserEntity.builder()
+                    .id(1l)
+                    .email("admin@admin.com")
+                    .phone("0123456789")
+                    .username("admin")
+                    .password(passwordEncoder.encode("123456"))
+                    .status(EStatus.ACTIVED)
+                    .sex(ESex.FEMALE)
+                    .accountType(EAccountType.DATABASE)
+                    .hasBlocked(false)
+                    .fullName("Admin")
+                    .role(roleRepository.findById(1l).get())
+                    .avatar("")
+                    .build();
+            this.userRepository.saveAndFlush(userEntity);
+        }
     }
 
 

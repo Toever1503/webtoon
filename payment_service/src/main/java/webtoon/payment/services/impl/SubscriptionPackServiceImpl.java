@@ -85,7 +85,6 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     @Override
     public void toggleStatus(Long id) {
         SubscriptionPackEntity subscriptionPackEntity = this.getById(id);
-        subscriptionPackEntity.setStatus(!subscriptionPackEntity.getStatus());
         subscriptionPackEntity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
     }

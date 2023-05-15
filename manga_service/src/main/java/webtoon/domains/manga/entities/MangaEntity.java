@@ -56,7 +56,7 @@ public class MangaEntity {
     @Column(name = "comment_count")
     private Integer commentCount;
 
-    @Column(name = "is_show", columnDefinition = "default true")
+    @Column(name = "is_show")
     private Boolean isShow;
 
     // nam phat hanh

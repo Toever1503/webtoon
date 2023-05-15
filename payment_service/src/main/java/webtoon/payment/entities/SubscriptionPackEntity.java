@@ -50,7 +50,4 @@ public class SubscriptionPackEntity {
     @JoinColumn(name = "updated_by")
     private UserEntity updatedBy;
 
-    @Column(columnDefinition = "boolean default true")
-    private Boolean status;
-
 }

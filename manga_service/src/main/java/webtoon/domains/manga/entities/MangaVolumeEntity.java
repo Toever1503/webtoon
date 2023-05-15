@@ -25,8 +25,8 @@ public class MangaVolumeEntity {
     @Column(name = "id")
     private java.lang.Long id;
 
-    @JoinColumn(name = "manga_id")
     @ManyToOne
+    @JoinColumn(name = "manga_id")
     private MangaEntity manga;
 
     @Column(name = "name")
