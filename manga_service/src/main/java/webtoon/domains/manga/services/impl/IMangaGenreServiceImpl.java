@@ -32,7 +32,7 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
             entity.setSlug(ASCIIConverter.removeAccent(model.getSlug()));
         else
             entity.setSlug(ASCIIConverter.removeAccent(model.getName()));
-
+        entity.setSlug(entity.getSlug().replace(" ", "-").toLowerCase());
         if (genreRepository.findByName(model.getName()).isPresent())
             throw new CustomHandleException(91);
         if (genreRepository.findBySlug(entity.getSlug()).isPresent())
@@ -46,7 +46,7 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
         MangaGenreEntity entity = this.getById(model.getId());
         entity.setName(model.getName());
         entity.setSlug(model.getSlug());
-
+        entity.setSlug(entity.getSlug().replace(" ", "-").toLowerCase());
         MangaGenreEntity checkGenre = genreRepository.findByName(model.getName()).orElse(null);
         if (checkGenre != null && (checkGenre.getId() != entity.getId()))
             throw new CustomHandleException(91);

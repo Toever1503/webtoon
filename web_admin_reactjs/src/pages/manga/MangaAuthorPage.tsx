@@ -96,14 +96,14 @@ const MangaAuthorPage: React.FC = () => {
     };
 
     const addNewAuthor = () => {
-        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Add new author', type: 'add' });
+        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Thêm mới', type: 'add' });
         console.log('add new author', addUpdateAuthorModal);
 
     };
 
     const updateAuthor = (record: AuthorModel) => {
         console.log('update  author', record)
-        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Update tag', type: 'update', record });
+        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Chỉnh sửa', type: 'update', record });
     };
 
     const deleteAuthor = (record: AuthorModel) => {

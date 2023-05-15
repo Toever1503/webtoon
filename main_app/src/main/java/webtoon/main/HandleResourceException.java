@@ -1,4 +1,4 @@
-package webtoon.utils.exception;
+package webtoon.main;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -8,13 +8,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
+import webtoon.utils.exception.CustomHandleException;
+import webtoon.utils.exception.ResponseDto;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
-public class HandleException {
+@RestControllerAdvice
+public class HandleResourceException {
 
 	@ExceptionHandler(MethodArgumentNotValidException.class)
 	public ResponseEntity<?> inValidArguments(MethodArgumentNotValidException ex) {

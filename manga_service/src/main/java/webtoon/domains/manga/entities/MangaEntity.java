@@ -83,10 +83,10 @@ public class MangaEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
-    @Column(name = "rating", columnDefinition = "default 0")
+    @Column(name = "rating")
     private Float rating;
 
-    @Column(name = "view_count", columnDefinition = "default 0")
+    @Column(name = "view_count")
     private Integer viewCount;
 
     @ManyToOne

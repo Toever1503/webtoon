@@ -48,6 +48,12 @@ const SubscriptionPackPage: React.FC = () => {
             render: (text) => <>{text}</>,
         },
         {
+            title: t('subscription-pack.modal.description'),
+            dataIndex: 'description',
+            key: 'description',
+            render: (text) => <>{text ? text : '-'}</>,
+        },
+        {
             title: t('subscription-pack.table.price'),
             dataIndex: 'price',
             key: 'price',

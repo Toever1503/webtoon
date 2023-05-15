@@ -2,8 +2,8 @@ import React, { useEffect } from "react";
 import { Button, Form, Input, Modal } from 'antd';
 import { useDispatch, } from "react-redux";
 import authorService from "../../../../services/manga/AuthorService";
-import {addAuthor, updateAuthor} from "../../../../stores/features/manga/authorSlice";
-import {showNofification} from "../../../../stores/features/notification/notificationSlice";
+import { addAuthor, updateAuthor } from "../../../../stores/features/manga/authorSlice";
+import { showNofification } from "../../../../stores/features/notification/notificationSlice";
 import { useTranslation } from "react-i18next";
 
 
@@ -13,7 +13,7 @@ interface AddUpdateAuthorModalProps {
 
 const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: AddUpdateAuthorModalProps | any) => {
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -28,7 +28,11 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
-        if(config.type === 'add'){
+
+        if (isSubmitting) return;
+        setIsSubmitting(true);
+        values.name = values.name.trim();
+        if (config.type === 'add') {
             authorService
                 .addAuthor(values)
                 .then((res) => {
@@ -41,10 +45,12 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
                     }))
                 })
                 .catch(err => {
+                    console.log('err', err);
+
                     if (!err.response.data.code)
                         dispatch(showNofification({
                             type: 'error',
-                            message: 'Sửa thất bại!'
+                            message: 'Thêm thất bại!'
                         }))
                     else {
                         dispatch(showNofification({
@@ -56,7 +62,7 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
                 .finally(() => {
                     setIsSubmitting(false);
                 });
-        } else{
+        } else {
             authorService
                 .updateAuthor({ ...values, id: config.record.id })
                 .then((res) => {
@@ -92,7 +98,7 @@ const AddUpdateAuthorModal: React.FC<AddUpdateAuthorModalProps> = ({ config }: A
     };
 
     useEffect(() => {
-        if (config.visible){
+        if (config.visible) {
             form.resetFields();
             if (config.type === 'update') {
                 console.log('config.record', config.record);

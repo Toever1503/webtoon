@@ -16,15 +16,7 @@ export interface TagState {
 
 const initialState = (): TagState => {
     return {
-        data: [
-            {
-                id: 1,
-                key: 1,
-                index: 1,
-                tagName: 'John Brown',
-                slug: 'New York No. 1 Lake Park',
-            },
-        ],
+        data: [],
         totalElements: 1,
         size: 10,
     }

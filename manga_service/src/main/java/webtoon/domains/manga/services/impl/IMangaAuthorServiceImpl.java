@@ -27,13 +27,15 @@ public class IMangaAuthorServiceImpl implements IMangaAuthorService {
 
     @Override
     public MangaAuthorEntity add(MangaAuthorModel model) {
-        MangaAuthorEntity authorEntity = this.getById(model.getId());
-        authorEntity.setName(model.getName());
+        MangaAuthorEntity authorEntity = MangaAuthorEntity.builder()
+                .name(model.getName())
+                .build();
         if (model.getSlug() != null)
             authorEntity.setSlug(ASCIIConverter.removeAccent(model.getSlug()));
         else
             authorEntity.setSlug(ASCIIConverter.removeAccent(model.getName()));
 
+        authorEntity.setSlug(authorEntity.getSlug().replace(" ", "-").toLowerCase());
         if (mangaAuthorRepository.findByName(model.getName()).isPresent())
             throw new CustomHandleException(111);
         if (mangaAuthorRepository.findBySlug(authorEntity.getSlug()).isPresent())
@@ -50,6 +52,7 @@ public class IMangaAuthorServiceImpl implements IMangaAuthorService {
             authorEntity.setSlug(ASCIIConverter.removeAccent(model.getSlug()));
         else
             authorEntity.setSlug(ASCIIConverter.removeAccent(model.getName()));
+        authorEntity.setSlug(authorEntity.getSlug().replace(" ", "-").toLowerCase());
 
         MangaAuthorEntity checkGenre = mangaAuthorRepository.findByName(model.getName()).orElse(null);
         if (checkGenre != null && (checkGenre.getId() != authorEntity.getId()))

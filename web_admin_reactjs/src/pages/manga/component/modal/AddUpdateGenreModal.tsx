@@ -28,6 +28,10 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
+
+        if(isSubmitting) return;
+        setIsSubmitting(true);
+        values.name = values.name.trim();
         if (config.type === 'add') {
             genreService
                 .addGenre(values)
