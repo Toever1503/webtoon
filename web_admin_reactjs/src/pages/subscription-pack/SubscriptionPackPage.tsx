@@ -87,30 +87,30 @@ const SubscriptionPackPage: React.FC = () => {
                 text ? text.fullName : '-'
             }</>,
         },
-        {
-            title: t('subscription-pack.table.status'),
-            dataIndex: 'status',
-            key: 'status',
-            render: (text) => <>
-                {
-                    text ?
-                        <Tag color="#108ee9">{t('subscription-pack.table.active')}</Tag>
-                        : <Tag color='red'>
-                            {t('subscription-pack.table.inactive')}
-                        </Tag>
-                }
-            </>,
-        },
+        // {
+        //     title: t('subscription-pack.table.status'),
+        //     dataIndex: 'status',
+        //     key: 'status',
+        //     render: (text) => <>
+        //         {
+        //             text ?
+        //                 <Tag color="#108ee9">{t('subscription-pack.table.active')}</Tag>
+        //                 : <Tag color='red'>
+        //                     {t('subscription-pack.table.inactive')}
+        //                 </Tag>
+        //         }
+        //     </>,
+        // },
         {
             title: 'Action',
             key: 'action',
             render: (_, record: ISubscriptionPack) => (
                 <Space size="middle">
-                    <a onClick={() => changeRecordStatus(record)}>
+                    {/* <a onClick={() => changeRecordStatus(record)}>
                         {
                             record.status ? t('subscription-pack.table.actions.hide') :  t('subscription-pack.table.actions.show')
                         }
-                    </a>
+                    </a> */}
                     <a onClick={() => showAddEditModal(record)}>
                         {
                             t('subscription-pack.table.edit')

@@ -25,4 +25,6 @@ public interface ISubscriptionPackService {
     void toggleStatus(Long id);
 
     List<SubscriptionPackEntity>  findAllEntity(Specification spec);
+
+    void renewSubscriptionPack(Integer userId);
 }

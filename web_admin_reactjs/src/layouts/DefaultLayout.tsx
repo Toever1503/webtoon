@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     LogoutOutlined,
     UserOutlined,
@@ -8,7 +8,7 @@ import { Layout, Menu, theme } from 'antd';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { AppstoreOutlined, AreaChartOutlined, CommentOutlined, DashboardOutlined, FormOutlined, ShoppingCartOutlined, TagsOutlined } from '@ant-design/icons/lib/icons';
 import NotificationComponent from '../components/NotificationComponent';
-import { eraseCookie } from '../plugins/cookieUtil';
+import { eraseCookie, getCookie, hasAnyAuths } from '../plugins/cookieUtil';
 import { showNofification } from '../stores/features/notification/notificationSlice';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
@@ -96,6 +96,18 @@ const App: React.FC = () => {
             navigate('/signin');
         }, 200);
     }
+
+    useEffect(() => {
+        if (!hasAnyAuths(['ADMIN', 'EMP'])) {
+            dispatch(showNofification({
+                type: 'error',
+                message: 'Bạn không có quyền truy cập trang này!'
+            }));
+            navigate('/signin');
+        }
+        getCookie('token') ? null : navigate('/signin');
+
+    }, []);
 
     return (
         <>

@@ -98,4 +98,10 @@ public class UserEntity {
 
     @Column(name = "current_used_subs_id")
     private Long currentUsedSubsId;
+
+    @Column(name = "current_expired_subs_id")
+    private Long currentExpiredSubsId;
+
+    @Column(name = "has_send_renewal_email", columnDefinition = "boolean default false")
+    private Boolean hasSendRenewalEmail;
 }

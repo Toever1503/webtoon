@@ -13,9 +13,12 @@ import java.util.Date;
 @Data
 @Builder
 public class UserSubscriptionPackStatusDto {
+    private Long userId;
     private UserMetadataDto user;
 
     private SubscriptionPackDto subscriptionPack;
 
     private Date expiredDate;
+
+    private Boolean hasSendRenewalEmail;
 }

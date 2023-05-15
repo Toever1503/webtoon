@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.account.entities.UserEntity;
 import webtoon.payment.dtos.SubscriptionPackDto;
 import webtoon.payment.entities.SubscriptionPackEntity_;
+import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.models.SubscriptionPackModel;
@@ -25,6 +26,9 @@ import java.util.List;
 public class SubscriptionPackController {
     @Autowired
     private ISubscriptionPackService subscriptionPackService;
+
+    @Autowired
+    private IOrderService orderService;
 
     @GetMapping("/all")
     public ResponseEntity<?> getAll() {
@@ -71,16 +75,21 @@ public class SubscriptionPackController {
         boolean hasExpiredTrial = false;
         UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
 
+        boolean isExpiredSub = false;
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if(userEntity != null){
             if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
-                SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
                 int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isUsingTrial = result >= 0;
                 hasExpiredTrial = result < 0;
-
+            }
+            if (userEntity.getCurrentUsedSubsId() != null) {
+                int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+                isExpiredSub = result < 0;
             }
         }
 
+        model.addAttribute("isExpiredSub", isExpiredSub);
         model.addAttribute("items", subscriptionPackEntities);
         model.addAttribute("showNotification", showNotification);
         model.addAttribute("notificationMessage", notificationMessage);
@@ -88,4 +97,5 @@ public class SubscriptionPackController {
         model.addAttribute("hasExpiredTrial", hasExpiredTrial);
         return "payments/chonGoi";
     }
+
 }

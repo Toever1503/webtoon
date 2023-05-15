@@ -131,7 +131,7 @@
             <div class="p-2">
                 <div class="flex justify-center">
                     <div class="bg-slate-100  shadow-lg ">
-                        <img class="h-96 w-60" th:src="${model.featuredImage}">
+                        <img class="h-[300px] w-[200px]" th:src="${model.featuredImage}">
                     </div>
                     <div class="w-2/3" style="padding: 0 20px">
                         <div class="flex justify-between">
@@ -599,9 +599,9 @@
         <!-- end post comment -->
 
 
-        <div class="flex flex-col mt-2">
+        <div class="flex flex-col mt-[20px]">
             <div class="shadow">
-                <h3 class="text-2xl"> Các truyện cùng thể loại</h3>
+                <h3 class="text-2xl font-bold"> Các truyện cùng thể loại</h3>
             </div>
 
             <h5 class="mt-[20px]" th:if="${relatedMangas.size() == 0}"> Không có truyện nào cùng thể loại!</h5>

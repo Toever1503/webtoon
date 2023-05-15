@@ -7,18 +7,18 @@ import { useDispatch } from "react-redux";
 import chapterService from "../../../../services/manga/ChapterService";
 import { MangaInput } from "../../../../services/manga/MangaService";
 import debounce from "../../../../utils/debounce";
-import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
 import ChapterItem from "./ChapterItem";
+import MangaUploadChapterModal from "../modal/MangaUploadChapterModal";
 
- 
+
 export type ChapterType = {
     id?: string | number;
     chapterName: string;
     chapterIndex?: number;
-    isRequiredVip: boolean;
+    requiredVip: boolean;
     content?: string
     volumeId?: string | number;
-    chapterImages?: ChapterImageType[];
+    chapterImages: ChapterImageType[];
 }
 type ChapterImageType = {
     id: string | number;
@@ -30,7 +30,7 @@ type ChapterSettingProps = {
     mangaInput: MangaInput,
     volumeId: number | string,
     isShowAddNewChapter: boolean,
-    refreshChapterLatest?: Function
+    refreshChapterLatest: Function
 }
 const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProps) => {
     const { t } = useTranslation();
@@ -55,7 +55,8 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
         chapterName: '',
         chapterIndex: 0,
         volumeId: props.volumeId,
-        isRequiredVip: false,
+        requiredVip: false,
+        chapterImages: [],
     });
 
     const onAddEditChapterOk = (chapter: ChapterType) => {
@@ -84,7 +85,8 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
             chapterName: '',
             chapterIndex: 0,
             volumeId: props.volumeId,
-            isRequiredVip: false,
+            requiredVip: false,
+            chapterImages: [],
         })
         setShowUploadChapterModal(false);
 
@@ -102,6 +104,14 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
     }
     const showAddChapterModal = () => {
         console.log('last chapter index- ', lastChapterIndex);
+        setChapterInput({
+            id: '',
+            chapterName: '',
+            chapterIndex: 0,
+            volumeId: props.volumeId,
+            requiredVip: false,
+            chapterImages: [],
+        });
 
         setShowUploadChapterModal(true);
         setUploadChapterModalTitle(`${t('manga.form.chapter.add-chapter')} (${t('manga.form.chapter.chapter')} ${lastChapterIndex + 2})`);
@@ -146,17 +156,17 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                 setIsSearching(false);
             });
     }
+
     useEffect(() => {
         if (props.mangaInput.id) {
             onCallApiSearch();
             if (props.mangaInput.displayType === 'CHAP')
                 chapterService.getLastChapterIndexForChapType(props.mangaInput.id)
-                    .then((res: AxiosResponse<number>) => {
-                        setLastChapterIndex(res.data);
-                        // props.refreshChapterLatest({
-                        //     name: '',
-                        //     volumeIndex: res.data,
-                        // });
+                    .then((res) => {
+                        console.log('last chapter index: ', res.data);
+                        if (res.data)
+                            setLastChapterIndex(res.data.chapterIndex);
+
                     });
             else
                 chapterService.getLastChapterIndexForVolType(props.volumeId)
@@ -216,6 +226,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                                         i.chapterIndex--;
                                 return i;
                             }));
+                            props.refreshChapterLatest();
                         }} showEditChapterModal={onShowEditChapterModal} />
                     </div>
 
@@ -231,6 +242,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                 mangaInput={props.mangaInput}
                 chapterInput={chapterInput}
                 volumeId={props.volumeId}
+                refreshLatestChapter={props.refreshChapterLatest}
             />
         }
 

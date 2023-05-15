@@ -3,44 +3,29 @@ package webtoon.payment.controllers;
 import java.io.IOException;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
 
-import javax.mail.MessagingException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import webtoon.account.configs.security.SecurityUtils;
-import webtoon.account.entities.UserEntity;
-import webtoon.payment.entities.OrderEntity;
-import webtoon.payment.entities.PaymentEntity;
-import webtoon.payment.entities.SubscriptionPackEntity;
-import webtoon.payment.enums.EOrderStatus;
-import webtoon.payment.enums.EOrderType;
-import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
-import webtoon.payment.services.ISendEmail;
+import webtoon.payment.services.ISendEmailService;
 import webtoon.payment.services.ISubscriptionPackService;
-import webtoon.payment.models.OrderModel;
-import webtoon.payment.services.impl.SendEmailServiceImpl;
 
 @Controller
 @RequestMapping("payment/refund")
 public class RefundController {
 
     @Autowired
-    private ISendEmail sendEmail;
+    private ISendEmailService sendEmail;
     @Autowired
     private IPaymentService paymentService;
     @Autowired

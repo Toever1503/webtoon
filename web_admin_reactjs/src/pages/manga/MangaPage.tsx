@@ -89,6 +89,22 @@ const MangaPage: React.FC = () => {
             </>,
         },
         {
+            title: 'Trạng thái',
+            dataIndex: 'isShow',
+            key: 'isShow',
+            render: (text) => <>{
+                text ? <Tag color='green'>Đang hiển thị</Tag> : <Tag color='red'>Đang ẩn</Tag>
+            }</>,
+        },
+        {
+            title: 'Hình thức truyện',
+            dataIndex: 'isFree',
+            key: 'isFree',
+            render: (text) => <>{
+                text ? 'Miễn phí' : 'Trả phí'
+            }</>,
+        },
+        {
             title: t('manga.table.genre'),
             dataIndex: 'genres',
             key: 'genres',
@@ -190,6 +206,7 @@ const MangaPage: React.FC = () => {
         genre: 'ALL',
         author: 'ALL',
         status: 'ALL',
+        releaseStatus: 'ALL',
         q: '',
         timeRange: [],
     });
@@ -210,7 +227,13 @@ const MangaPage: React.FC = () => {
     const onfilterManga = () => {
         if (tableLoading) return;
         setTableLoading(true);
-        mangaService.filterManga(mangaFilter, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
+        mangaService.filterManga({
+            q: mangaFilter.q ? mangaFilter.q : undefined,
+            genreId: mangaFilter.genre !== 'ALL' ? mangaFilter.genre : undefined,
+            authorId: mangaFilter.author !== 'ALL' ? mangaFilter.author : undefined,
+            isShow: mangaFilter.status !== 'ALL' ? (mangaFilter.status === 'PUBLISHED' ? true : false) : undefined,
+            status: mangaFilter.releaseStatus !== 'ALL' ? mangaFilter.releaseStatus : undefined,
+        }, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
             .then((res: AxiosResponse<{
                 totalElements: number | undefined;
                 content: MangaInput[],
@@ -357,16 +380,16 @@ const MangaPage: React.FC = () => {
                     <label className="font-bold">{t('manga.table.releaseStatus')}: </label>
                     <Select className="min-w-[120px]"
                         onChange={(val: string) => {
-                            // @ts-ignore
                             mangaFilter.releaseStatus = val;
                             setMangaFilter(mangaFilter);
                             onfilterManga();
-                        }} defaultValue='ALL'>
+                        }}
+                        value={mangaFilter.releaseStatus}>
                         <Select.Option value="ALL">
                             {t('manga.eMangaStatus.ALL')}
                         </Select.Option>
                         {
-                            ['COMING', 'ONGOING', 'ON_STOPPING', 'CANCELLED', 'COMPLETED'].map((status, index) => (
+                            ['COMING', 'ONGOING', 'ON_STOPPING', 'COMPLETED'].map((status, index) => (
                                 <Select.Option key={index} value={status} >
                                     {t('manga.eReleaseStatus.' + status)}
                                 </Select.Option>)

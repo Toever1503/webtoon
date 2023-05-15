@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import org.thymeleaf.TemplateEngine;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
-import webtoon.payment.services.ISendEmail;
+import webtoon.payment.services.ISendEmailService;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
@@ -19,7 +19,7 @@ import org.thymeleaf.context.Context;
 
 @Service
 @RequiredArgsConstructor
-public class SendEmailServiceImpl implements ISendEmail {
+public class SendEmailServiceImpl implements ISendEmailService {
 
     private final JavaMailSender javaMailSender;
     private final TemplateEngine templateEngine;

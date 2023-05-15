@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.entities.UserEntity_;
+import webtoon.account.services.IUserService;
 import webtoon.payment.dtos.OrderDto;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.OrderEntity_;
@@ -41,6 +42,8 @@ public class UserPaymentController {
     @Autowired
     private ISubscriptionPackService subscriptionPackService;
 
+    @Autowired
+    private IUserService userService;
 
     @GetMapping("/userOrder")
     public String userOrder(Model model, HttpSession session) {
@@ -64,7 +67,7 @@ public class UserPaymentController {
                                Pageable pageable) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
         if (entity == null) {
-            return "redirect:/signin";
+            return "redirect:/signin?redirectTo=/user/order-history";
         } else {
             List<Specification<OrderEntity>> specs = new ArrayList<>();
             specs.add((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(OrderEntity_.DELETED_AT)));
@@ -91,10 +94,17 @@ public class UserPaymentController {
                 }
             }
             Page<OrderEntity> orderPage = orderService.filterEntity(pageable, finalSpec);
+
+            Long pendingPaymentCount = this.orderService.count(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.PENDING_PAYMENT)));
+            Long pendingCheckCount = this.orderService.count(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.USER_CONFIRMED_BANKING)));
+
             model.addAttribute("search", search);
             model.addAttribute("status", status.name());
             model.addAttribute("user", entity);
             model.addAttribute("order", orderPage.getContent());
+
+            model.addAttribute("pendingPaymentCount", pendingPaymentCount);
+            model.addAttribute("pendingCheckCount", pendingCheckCount);
 
 
             model.addAttribute("hasPrevPage", orderPage.hasPrevious());
@@ -109,35 +119,40 @@ public class UserPaymentController {
     public String subscriptionStatus(Model model, HttpSession session) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
         if (entity == null) {
-            return "redirect:/signin";
+            return "redirect:/signin?redirectTo=/user/subscription-status";
         } else {
             boolean isUsingTrial = false;
-            UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+            boolean isTrialExpired = false;
+
+            UserEntity userEntity = this.userService.getById(entity.getId());
+            session.setAttribute("loggedUser", userEntity);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
                 int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isUsingTrial = result >= 0;
 
+                if (userEntity.getCurrentUsedSubsId() == null)
+                    isUsingTrial = true;
+                isTrialExpired = result < 0;
             }
 
             boolean isExpiredSub = false;
-            if(userEntity.getCurrentUsedSubsId() != null && userEntity.getTrialRegisteredDate() != null){
+            if (userEntity.getCurrentUsedSubsId() != null) {
                 int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isExpiredSub = result < 0;
             }
-            model.addAttribute("isExpiredSub", isExpiredSub);
 
-            model.addAttribute("isUsingTrial", isUsingTrial);
             boolean canUpgradeSubs = false;
-            if (userEntity.getCurrentUsedSubsId() != null && !isUsingTrial) {
+            if (userEntity.getCurrentUsedSubsId() != null) {
+                isUsingTrial = false;
                 model.addAttribute("currentUsingSubsPack", this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId()));
-                Specification spec = (root, query, cb) -> cb.equal(root.get(SubscriptionPackEntity_.STATUS), Boolean.TRUE);
-                List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(spec);
+
+                List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(null);
 
                 Specification orderSpec = ((root, query, criteriaBuilder) -> criteriaBuilder.and(
-                        root.get(OrderEntity_.STATUS).in(List.of(EOrderStatus.PENDING_PAYMENT, EOrderStatus.USER_CONFIRMED_BANKING)),
-                        criteriaBuilder.equal(root.get(OrderEntity_.ORDER_TYPE), EOrderType.UPGRADE)
+                        criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not(),
+                        root.get(OrderEntity_.STATUS).in(List.of(EOrderStatus.PENDING_PAYMENT, EOrderStatus.USER_CONFIRMED_BANKING))
                 ));
 
                 boolean hasOtherPendingOrder = false;
@@ -152,7 +167,11 @@ public class UserPaymentController {
                 }
 
                 model.addAttribute("canUpgradeSubs", canUpgradeSubs && !hasOtherPendingOrder);
-            } else   model.addAttribute("canUpgradeSubs", true);
+            } else model.addAttribute("canUpgradeSubs", true);
+
+            model.addAttribute("isTrialExpired", isTrialExpired);
+            model.addAttribute("isExpiredSub", isExpiredSub);
+            model.addAttribute("isUsingTrial", isUsingTrial);
 
             return "payments/user/subscriptionStatus";
         }
@@ -233,5 +252,33 @@ public class UserPaymentController {
             return "redirect:/payment/pay?orderId=" + upgradeOrder.getId();
         }
         return "redirect:/order/bank-info/" + upgradeOrder.getId();
+    }
+
+
+    @GetMapping("renew_subscription_pack")
+    public String renewSubscriptionPack(Model model, HttpSession session) {
+        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+        if (userEntity == null)
+            return "redirect:/signin?redirectTo=/user/renew_subscription_pack";
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+
+        model.addAttribute("userEntity", userEntity);
+        model.addAttribute("sub", subscriptionPack);
+        return "payments/user/renew_subscription_form";
+    }
+
+    @GetMapping("handle_renew_subscription_pack")
+    public String handleRenew(@RequestParam EPaymentMethod paymentMethod, HttpSession session) {
+        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+        if (userEntity == null)
+            return "redirect:/signin?redirectTo=/user/renew_subscription_pack";
+
+        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+        OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, paymentMethod);
+        if (paymentMethod.equals(EPaymentMethod.VN_PAY)) {
+            return "redirect:/payment/pay?orderId=" + orderEntity.getId();
+        }
+        return "redirect:/order/bank-info/" + orderEntity.getId();
+
     }
 }

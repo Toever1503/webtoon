@@ -1,7 +1,7 @@
 
 
 import { DeleteOutlined } from "@ant-design/icons";
-import { Checkbox, Popconfirm, TablePaginationConfig } from "antd";
+import { Checkbox, Popconfirm, Space, TablePaginationConfig } from "antd";
 import { useState } from "react";
 import { useTranslation } from "react-i18next";
 import { MangaInput } from "../../../../services/manga/MangaService";
@@ -48,20 +48,27 @@ const ChapterItem: React.FC<ChapterItemProps> = (props: ChapterItemProps) => {
         <div className="chapter-item flex justify-between items-center rounded cursor-pointer p-[5px] hover:bg-slate-200 ease-in-out duration-150" onClick={(e) => props.showEditChapterModal(e, props.chapterInput)}>
             <div className="chapter-title flex space-x-2 items-center">
                 <span>
-                    {t('manga.form.chapter.chapter')} {(props.chapterInput.chapterIndex || 0) + 1}: {props.chapterInput.chapterName}
+                    {t('manga.form.chapter.chapter')} {(props.chapterInput.chapterIndex || 0) + 1} {props.chapterInput.chapterName && `: ${props.chapterInput.chapterName}`}
                 </span>
             </div>
-            <Popconfirm
-                title={t('manga.form.chapter.sure-delete')}
-                onConfirm={(e) => {
-                    e?.stopPropagation();
-                    onDeleleChapter();
-                }}
-                okText={t('confirm-yes')}
-                cancelText={t('confirm-no')}
-            >
-                <DeleteOutlined onClick={e => e.stopPropagation()} className="hover:text-red-500" />
-            </Popconfirm>
+            <Space>
+                <span>
+                    {
+                        props.chapterInput.requiredVip ? 'Trả phí' : 'Đọc miễn phí'
+                    }
+                </span>
+                <Popconfirm
+                    title={t('manga.form.chapter.sure-delete')}
+                    onConfirm={(e) => {
+                        e?.stopPropagation();
+                        onDeleleChapter();
+                    }}
+                    okText={t('confirm-yes')}
+                    cancelText={t('confirm-no')}
+                >
+                    <DeleteOutlined onClick={e => e.stopPropagation()} className="hover:text-red-500" />
+                </Popconfirm>
+            </Space>
         </div>
     </>
 };

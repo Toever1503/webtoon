@@ -61,7 +61,7 @@ public class MangaChapterResource2 {
     }
 
     @GetMapping("get-last-chapter-index-for-chap-type/{mangaId}")
-    public Long getLastChapterIndexForChapType(@PathVariable Long mangaId) {
+    public MangaChapterDto getLastChapterIndexForChapType(@PathVariable Long mangaId) {
         return this.mangaChapterService.getLastChapterIndexForChapType(mangaId);
     }
 

@@ -10,6 +10,7 @@ import ChapterSetting from "./ChapterSetting";
 import volumeService from "../../../../services/manga/VolumeService";
 import { useDispatch } from "react-redux";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
+import chapterService from "../../../../services/manga/ChapterService";
 
 
 
@@ -31,6 +32,17 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
         name: '',
         id: ''
     });
+
+    const refreshLatestChapter = () => {
+
+        if (props.mangaInput.displayType === 'VOL') {
+            onCallApiLastVolIndex();
+        }
+        else {
+            onCallApiLastChapterIndex();
+        }
+    };
+
     const [volumeData, setVolumeData] = useState<VolumeType[]>([]);
     const [selectedVolId, setSelectedVolId] = useState<number | string>('');
     const onSearchVol = debounce((val: string) => {
@@ -54,7 +66,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                 onCallApiLastVolIndex();
                 if (newVols.length > 0) {
                     setSelectedVolId(newVols[0].id);
-                    setLastVolIndex(newVols[0]);    
+                    setLastVolIndex(newVols[0]);
                 }
                 dispatch(showNofification({
                     type: 'success',
@@ -75,7 +87,8 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
     const [addEditVolumTitle, setAddEditVolumTitle] = useState<string>('');
     const [volumeInput, setVolumeInput] = useState<VolumeForm>();
     const openAddEditVolumeModal = (modalTitle: string, volume?: VolumeForm) => {
-        console.log('on show add edit volume modal: ', lastVolIndex);
+        if(showAddEditVolumeModal) return;
+        console.log('on show add edit volume modal: ', lastVolIndex, volume);
 
         if (volume) {
             setAddEditVolumTitle(`${modalTitle} (${t('manga.form.volume.volume')} ${volume.volumeIndex + 1})`);
@@ -93,8 +106,6 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
         setTimeout(() => {
             setShowAddEditVolumModal(false);
         }, 50);
-        setVolumeInput(undefined);
-        console.log('modal status: ', showAddEditVolumeModal);
     }
 
     const onVolumeModalOk = (newVolume: VolumeForm) => {
@@ -126,6 +137,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             });
     }
 
+
     const onCallApiLastVolIndex = () => {
         mangaService.getLastVolIndex(props.mangaInput.id)
             .then((res: AxiosResponse<VolumeType>) => {
@@ -134,11 +146,27 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                     setLastVolIndex(res.data);
             });
     }
+
+    const onCallApiLastChapterIndex = () => {
+        chapterService.getLastChapterIndexForChapType(props.mangaInput.id)
+            .then((res) => {
+                console.log('last chapter index: ', res.data);
+                if (res.data)
+                    setLastVolIndex({
+                        id: res.data.id,
+                        volumeIndex: res.data.chapterIndex,
+                        name: res.data.chapterName,
+                    });
+            });
+    }
+
     useEffect(() => {
         if (props.mangaInput.id) {
             onCallApiFilterVolume('');
             if (props.mangaInput.displayType === 'VOL')
                 onCallApiLastVolIndex();
+            else
+                onCallApiLastChapterIndex();
         }
     }, [props.mangaInput])
 
@@ -157,7 +185,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                     :
                     <Badge >
                         {
-                            lastVolIndex.volumeIndex < 0 ? <a>Hiện chưa có chương nào!</a> : <a>Chương mới nhất là {lastVolIndex.volumeIndex + 1}</a>
+                            lastVolIndex.volumeIndex < 0 ? <a>Hiện chưa có chương nào!</a> : <a>Chương mới nhất là {lastVolIndex.volumeIndex + 1} {lastVolIndex.name && `: ${lastVolIndex.name}`}</a>
                         }
                     </Badge>
             }
@@ -195,7 +223,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                         {
                             selectedVolId &&
                             <>
-                                <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeInput)}>
+                                <Button onClick={() => openAddEditVolumeModal(`${t('manga.form.volume.edit-volume')}`, volumeData.find((vol) => vol.id === selectedVolId))}>
                                     Chỉnh sửa tập
                                 </Button>
 
@@ -217,11 +245,11 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
                     </div>
                     {
                         selectedVolId &&
-                        <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
+                        <ChapterSetting refreshChapterLatest={refreshLatestChapter} mangaInput={props.mangaInput} volumeId={selectedVolId} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
                     }
                 </>
                 :
-                <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} refreshChapterLatest={setLastVolIndex} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
+                <ChapterSetting mangaInput={props.mangaInput} volumeId={selectedVolId} refreshChapterLatest={refreshLatestChapter} isShowAddNewChapter={lastVolIndex.volumeIndex === volumeData.find((vol) => vol.id === selectedVolId)?.volumeIndex} />
         }
 
 

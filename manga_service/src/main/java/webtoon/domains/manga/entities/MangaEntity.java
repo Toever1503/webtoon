@@ -56,6 +56,9 @@ public class MangaEntity {
     @Column(name = "comment_count")
     private Integer commentCount;
 
+    @Column(name = "is_show", columnDefinition = "default true")
+    private Boolean isShow;
+
     // nam phat hanh
     @Column(name = "release_year")
     private Integer releaseYear;
@@ -80,7 +83,7 @@ public class MangaEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
-    @Column(name = "rating")
+    @Column(name = "rating", columnDefinition = "default 0")
     private Float rating;
 
     @Column(name = "view_count", columnDefinition = "default 0")

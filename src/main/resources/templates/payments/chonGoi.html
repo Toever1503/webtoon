@@ -106,7 +106,7 @@
 
       <div class="w-[200px] h-[245px] relative" th:each="item : ${items}">
 
-        <p th:if="${session.loggedUser != null && session.loggedUser.currentUsedSubsId == item.id}"
+        <p th:if="${session.loggedUser != null && session.loggedUser.currentUsedSubsId == item.id && !isExpiredSub}"
            class="text-center bg-[#eb3349] py-[10px] font-semibold text-white absolute top-[-44px] left-0 w-full">Gói
           hiện tại</p>
 

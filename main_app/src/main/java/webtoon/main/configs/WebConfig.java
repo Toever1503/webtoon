@@ -6,6 +6,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.OrRequestMatcher;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
@@ -46,6 +47,7 @@ public class WebConfig implements WebMvcConfigurer {
                 , new AntPathRequestMatcher("/")
                 , new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())
 
+                , new AntPathRequestMatcher("/contact/**")
                 , new AntPathRequestMatcher("/post/**")
                 , new AntPathRequestMatcher("/comments/**")
                 , new AntPathRequestMatcher("/signin/**")
@@ -71,6 +73,7 @@ public class WebConfig implements WebMvcConfigurer {
                 , new AntPathRequestMatcher("/mangas/**")
                 , new AntPathRequestMatcher("/order/**")
                 ,new AntPathRequestMatcher("/user/**")
+                ,new AntPathRequestMatcher("/user/renew_subscription_pack/**")
                 ,new AntPathRequestMatcher("/subscription_pack/load")
                 ,new AntPathRequestMatcher("/author/**")
                 // for account module
@@ -83,6 +86,21 @@ public class WebConfig implements WebMvcConfigurer {
         );
     }
 
-
+    @Bean
+    public WebMvcConfigurer configurer() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/**")
+                        .allowedOrigins(
+                                "http://localhost:5173",
+                                "http://127.0.0.1:5173"
+                        )
+                        .allowedOriginPatterns("*.*.*.*:*")
+                        .allowCredentials(true)
+                        .allowedMethods("GET", "POST", "DELETE", "PUT", "PATCH", "OPTIONS");
+            }
+        };
+    }
 
 }

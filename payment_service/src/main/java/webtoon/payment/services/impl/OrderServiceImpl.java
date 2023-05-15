@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webtoon.account.configs.security.SecurityUtils;
+import webtoon.account.entities.UserEntity;
 import webtoon.account.services.IUserService;
 import webtoon.payment.controllers.VnPayConfig;
 import webtoon.payment.dtos.OrderDto;
@@ -23,10 +24,12 @@ import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.services.IOrderService;
-import webtoon.payment.services.ISendEmail;
+import webtoon.payment.services.ISendEmailService;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.utils.exception.CustomHandleException;
 
+import javax.mail.MessagingException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -42,10 +45,10 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IUserService userService;
 
-    private final ISendEmail sendEmailService;
+    private final ISendEmailService sendEmailService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public OrderServiceImpl(IOrderRepository orderRepository, ISendEmail sendEmailService) {
+    public OrderServiceImpl(IOrderRepository orderRepository, ISendEmailService sendEmailService) {
         this.orderRepository = orderRepository;
         this.sendEmailService = sendEmailService;
     }
@@ -149,29 +152,31 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public OrderDto updateOrder(OrderInput input) {
-        OrderEntity entity = this.getById(input.getId());
+        OrderEntity orderEntity = this.getById(input.getId());
 
 
-        if (!entity.getSubs_pack_id().getId().equals(input.getSubscriptionPack())) {
+        if (!orderEntity.getSubs_pack_id().getId().equals(input.getSubscriptionPack())) {
             SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPack());
 
-            entity.setSubs_pack_id(subscriptionPack);
-            entity.setFinalPrice(subscriptionPack.getPrice());
+            orderEntity.setSubs_pack_id(subscriptionPack);
+            orderEntity.setFinalPrice(subscriptionPack.getPrice());
 
         }
 
-        entity.setOrderType(input.getOrderType());
-        entity.setStatus(input.getStatus());
-        entity.setPaymentMethod(input.getPaymentMethod());
+        orderEntity.setOrderType(input.getOrderType());
+        orderEntity.setStatus(input.getStatus());
+        orderEntity.setPaymentMethod(input.getPaymentMethod());
 
-        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+        orderEntity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
 
         // send order info to user's mail
-        if (entity.getStatus().equals(EOrderStatus.COMPLETED))
-            this.sendOrderInfoToMail(entity);
+        if (orderEntity.getStatus().equals(EOrderStatus.COMPLETED)) {
+            this.plusReadTimeToUser(orderEntity);
+            this.sendOrderInfoToMail(orderEntity);
+        }
 
-        this.orderRepository.saveAndFlush(entity);
-        return OrderDto.toDto(entity);
+        this.orderRepository.saveAndFlush(orderEntity);
+        return OrderDto.toDto(orderEntity);
     }
 
     @Override
@@ -300,6 +305,8 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(id);
         orderEntity.setStatus(status);
         if (status.equals(EOrderStatus.COMPLETED)) { // need send mail
+            this.plusReadTimeToUser(orderEntity);
+
             this.sendOrderInfoToMail(orderEntity);
         }
         this.orderRepository.saveAndFlush(orderEntity);
@@ -350,9 +357,56 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.countTotalRegisterThisMonth();
     }
 
+    @Override
+    public void sendMailRenewSubscription(Long userId) throws MessagingException {
+        UserEntity userEntity = this.userService.getById(userId);
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+
+        sendEmailService.sendMail("payments/mail-templates/renew_subscription.html",
+                userEntity.getEmail(), "Thông báo gia hạn gói đăng ký",
+                Map.of("user", userEntity, "sub", subscriptionPack));
+    }
+
+    @Override
+    public void plusReadTimeToUser(OrderEntity orderEntity) {
+        Calendar canReadUntilDate = Calendar.getInstance();
+        int monthCount = orderEntity.getSubs_pack_id().getMonthCount();
+        // update user current used subs
+        if (orderEntity.getUser_id().getCurrentUsedSubsId() == null) {
+            orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
+            orderEntity.getUser_id().setFirstBoughtSubsDate(Calendar.getInstance().getTime());
+
+        }  if (orderEntity.getSubs_pack_id().getId() > orderEntity.getUser_id().getCurrentUsedSubsId()) {
+            orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        if(orderEntity.getUser_id().getCanReadUntilDate() == null){
+            canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+        }
+        else {
+            int result = formatter.format(orderEntity.getUser_id().getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            if (result < 0) {
+                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+            } else {
+                canReadUntilDate.setTime(orderEntity.getUser_id().getCanReadUntilDate());
+                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+            }
+        }
+        orderEntity.getUser_id().setCanReadUntilDate(canReadUntilDate.getTime());
+
+        userService.saveUserEntity(orderEntity.getUser_id());
+    }
+
+    @Override
+    public Long count(Specification<OrderEntity> spec) {
+        return this.orderRepository.count(spec);
+    }
+
     private void sendOrderInfoToMail(OrderEntity orderEntity) {
         Map<String, Object> context = new HashMap<>();
         context.put("order", orderEntity);
+
         try {
             this.sendEmailService.sendMail("payments/mail-templates/order_info.html", orderEntity.getUser_id().getEmail(), "Thông tin đặt hàng", context);
         } catch (Exception e) {

@@ -96,6 +96,11 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     }
 
     @Override
+    public void renewSubscriptionPack(Integer userId) {
+
+    }
+
+    @Override
     public List<SubscriptionPackDto> getAll() {
         return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
                 SubscriptionPackDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());

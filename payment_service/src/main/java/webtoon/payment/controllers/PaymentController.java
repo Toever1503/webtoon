@@ -7,25 +7,23 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
-import javax.mail.MessagingException;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import webtoon.account.configs.security.SecurityUtils;
-import webtoon.account.entities.UserEntity;
+import webtoon.account.services.IUserService;
 import webtoon.payment.entities.OrderEntity;
 import webtoon.payment.entities.PaymentEntity;
 import webtoon.payment.entities.SubscriptionPackEntity;
 import webtoon.payment.enums.EOrderStatus;
-import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.IPaymentService;
+import webtoon.payment.services.ISendEmailService;
 import webtoon.payment.services.ISubscriptionPackService;
 
 @Controller
@@ -43,10 +41,15 @@ public class PaymentController {
     @Autowired
     private ISubscriptionPackService subscriptionPackService;
 
+    @Autowired
+    private ISendEmailService sendEmailService;
+
+    @Autowired
+    private IUserService userService;
+
     @RequestMapping("pay")
     public void test(HttpServletResponse resp,
                      @RequestParam Long orderId) throws IOException, ParseException {
-
         OrderEntity orderEntity = this.orderService.getById(orderId);
         SubscriptionPackEntity subscriptionPackEntity = orderEntity.getSubs_pack_id();
 
@@ -136,9 +139,8 @@ public class PaymentController {
 
     @RequestMapping("/ket-qua")
     public String ketQua(HttpServletRequest request,
-                         Model model) throws ParseException {
+                         Model model, HttpSession httpSession) throws ParseException {
         SimpleDateFormat formatter = new SimpleDateFormat("yyyyMMddHHmmss");
-
         String maDonHang = request.getParameter("vnp_TxnRef");
         String tinhTrangThanhToan = request.getParameter("vnp_TransactionStatus");
         String thoiGianTT = request.getParameter("vnp_PayDate");
@@ -165,7 +167,22 @@ public class PaymentController {
                     .orderInfo(request.getParameter("vnp_OrderInfo"))
                     .build();
             paymentService.add(paymentEntity);
-            //			sendEmail.sendingPayment(email);
+
+
+            this.orderService.plusReadTimeToUser(orderEntity);
+
+            httpSession.setAttribute("loggedUser", orderEntity.getUser_id());
+
+            try {
+                this.sendEmailService.sendMail("payments/mail-templates/order_info.html",
+                        orderEntity.getUser_id().getEmail(),
+                        "Đơn hàng của bạn đã được thanh toán thành công!",
+                        Map.of("order", orderEntity));
+            } catch (Exception e) {
+                System.out.printf("send mail failed!");
+                e.printStackTrace();
+
+            }
 
             model.addAttribute("maDonHang", maDonHang);
             model.addAttribute("soTien", orderEntity.getFinalPrice());

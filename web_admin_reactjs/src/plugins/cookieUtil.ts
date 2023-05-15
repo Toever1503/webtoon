@@ -21,4 +21,17 @@ function eraseCookie(name: string) {
     document.cookie = name + '=; Path=/; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
 }
 
-export { setCookie, getCookie, eraseCookie };
+function hasAnyAuths(names: string[]) {
+    var auths = JSON.parse(localStorage.getItem("auths") || '[]');
+    if (auths) {
+        for(var i = 0; i < names.length; i++) {
+            if (auths.includes(names[i])) {
+                return true;
+            }
+        }
+        return false;
+    }
+    return false;
+}
+
+export { setCookie, getCookie, eraseCookie, hasAnyAuths };

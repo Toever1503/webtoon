@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid #c1cfd1;
+            border-collapse: collapse;
+        }
+    </style>
+</head>
+
+<body style="max-width: 500px; min-width: 300px; margin-top: 20px; font-size: 14px;">
+
+    <div>Chào <span th:text="${user.getFullName()}" />, </div>
+    <p>
+        Gói dịch vụ của bạn sắp hết hạn vào ngày <span h:text="${#dates.format(user.getCanReadUntilDate(), 'dd-MMM-yyyy')}"></span> tới đây. Vui lòng tiến hành gia hạn để tiếp tục sử dụng dịch vụ của chúng tôi.
+    </p>
+
+    <a style="display: block; margin-top: 15px;" th:href="@{'http://localhost:8080/user/renew_subscription_pack'}">
+        <span style="background-color: #e7e7e7; color: black; padding: 5px 8px;">
+            Gia hạn gói dịch vụ
+        </button>
+    </a>
+
+    <p>
+        Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.
+    </p>
+
+</body>
+
+</html>

@@ -26,7 +26,6 @@ import webtoon.domains.tag.entity.TagEntity;
 public class MangaDto {
     private java.lang.Long id;
     private String title;
-    private String alternativeTitle;
     private String excerpt;
     private String description;
     String mangaName;
@@ -42,6 +41,7 @@ public class MangaDto {
     private Float rating;
     private Integer viewCount;
     private Boolean isFree;
+    private Boolean isShow;
     private UserEntity createdBy;
 
     private List<MangaAuthorDto> authors;
@@ -73,6 +73,7 @@ public class MangaDto {
                 .tags(mangaEntity.getTags())
                 .createdBy(mangaEntity.getCreatedBy())
                 .isFree(mangaEntity.getIsFree())
+                .isShow(mangaEntity.getIsShow())
                 .build();
     }
 }

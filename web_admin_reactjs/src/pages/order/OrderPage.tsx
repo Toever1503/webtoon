@@ -147,11 +147,12 @@ const OrderPage: React.FC = () => {
                     {
                         record.status === 'USER_CONFIRMED_BANKING' &&
                         <Link to={`/orders/handle/${record.id}`}>
-                            Xử lý trạng thái
+                            Xử lý TT
                         </Link>
                     }
                 </>
             ),
+            width: 150
         },
     ];
 

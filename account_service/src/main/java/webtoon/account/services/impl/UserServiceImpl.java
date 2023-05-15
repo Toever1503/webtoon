@@ -27,6 +27,7 @@ import webtoon.utils.exception.CustomHandleException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -363,9 +364,19 @@ public class UserServiceImpl implements IUserService {
                 validTimeIn
         );
 
+        List<String> auths = new ArrayList<>();
+        if (userEntity.getAuthorities() != null) {
+            for (AuthorityEntity authorityEntity : userEntity.getAuthorities()) {
+                auths.add(authorityEntity.getAuthorityName().name());
+            }
+        }
+        if (userEntity.getRole() != null) {
+            auths.add(userEntity.getRole().getRoleName().name());
+        }
         return LoginResponseDto.builder()
                 .token(token)
                 .validTimeIn(validTimeIn)
+                .auths(auths)
                 .build();
     }
 

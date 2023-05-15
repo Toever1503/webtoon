@@ -76,4 +76,10 @@ public class LoginController {
         model.addAttribute("message", "Đăng nhập thất bại. Vui lòng thử lại sau!");
         return "account/login-form";
     }
+
+    @RequestMapping("signout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/";
+    }
 }

@@ -32,7 +32,7 @@ export default {
         registrationStatus: {
             title: 'Trạng thái đăng ký',
             table: {
-                'user': 'Người mua',
+                'user': 'Khách hàng',
                 'subscriptionPack': 'Gói đăng ký',
                 'expiredDate': 'Ngày hết hạn',
                 action: {
@@ -58,10 +58,10 @@ export default {
                 'tags-required': 'Vui lòng chọn thẻ',
                 'featured-image-required': 'Vui lòng chọn ảnh',
                 'featured-image-invalid': 'Định dạng không hợp lệ',
-                'volume-required': 'Please enter volume name!',
-                'chapter-name-required': 'Chapter name is required',
-                'chapter-images-required': 'Chapter image is required',
-                'chapter-content-required': 'Chapter content is required',
+                'volume-required': 'Vui lòng thêm tập!',
+                'chapter-name-required': 'Tiêu đề không được bỏ trống!',
+                'chapter-images-required': 'Ảnh không được để trống!',
+                'chapter-content-required': 'Nội dung không được để trống!',
                 'create-failed': 'Thêm thất bại!',
                 'create-success': 'Thêm thành công!',
                 'edit-failed': 'Sửa thất bại!',

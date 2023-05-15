@@ -13,6 +13,7 @@ import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.services.IOrderService;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -93,8 +94,6 @@ public class OrderResource {
         this.orderService.changeStatusOrder(id, status);
     }
 
-    ;
-
     @RequestMapping("dashboard")
     public Object dashboardToday() {
         Map<String, Object> map = new HashMap<>();
@@ -109,5 +108,11 @@ public class OrderResource {
     @RequestMapping("sum-revenue-in-last-7-days")
     public List<Object[]> sumRevenueInWeek() {
         return this.orderService.sumTotalRevenueInLast7Days();
+    }
+
+
+    @GetMapping("send-mail-renew-subscription-pack/{id}")
+    public void sendMailRenewSubscription(@PathVariable Long id) throws MessagingException {
+        this.orderService.sendMailRenewSubscription(id);
     }
 }

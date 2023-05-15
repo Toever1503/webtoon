@@ -21,6 +21,7 @@ type MangaUploadChapterModalProps = {
     title: string,
     chapterInput?: ChapterType,
     volumeId: string | number,
+    refreshLatestChapter: Function,
 }
 
 interface ChapterForm {
@@ -206,7 +207,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
         chapterIndex: 0,
         content: '',
         chapterImages: [],
-        isRequiredVip: false,
+        requiredVip: false,
         volumeId: props.volumeId,
     });
 
@@ -223,7 +224,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             chapterIndex: 0,
             content: '',
             chapterImages: [],
-            isRequiredVip: false,
+            requiredVip: false,
             volumeId: props.volumeId,
         });
         setChapterInputError({
@@ -332,8 +333,9 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
                     chapterName: chapterInput.chapterName,
                     content: chapterContent,
-                    isRequiredVip: isRequireVipChapter,
+                    requiredVip: isRequireVipChapter,
                     volumeId: chapterInput.volumeId || 0,
+                    chapterImages: []
                 }, props.mangaInput.id)
                     .then((res: AxiosResponse<ChapterType>) => {
                         console.log('create text chapter success:', res.data);
@@ -369,8 +371,8 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
 
     let imageSorter: Sortable;
     useEffect(() => {
-        if (!props.visible)
-            resetChapterInput();
+        console.log('use effect image sorter: ', props.mangaInput);
+
         if (props.chapterInput) {
             if (props.chapterInput.id)
                 chapterService.findById(props.chapterInput.id)
@@ -392,10 +394,16 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                                     url: item.image,
                                 }
                             )));
+
+                        // @ts-ignore
+                        setIsRequireVipChapter(res.data.requiredVip);
                     })
                     .catch(err => {
                         console.log('get chapter error:', err);
                     })
+        }
+        else {
+            resetChapterInput();
         }
         if (props.mangaInput.mangaType === 'IMAGE')
             // @ts-ignore
@@ -411,12 +419,12 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             onCancel={() => props.onCancel()}
             footer={null}
         >
-            <section className="py-[20px]">
+            <section className="py-[10px]">
                 <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                     {
                         props.mangaInput.mangaType === 'TEXT' && <span className='text-red-500'>*</span>
                     }
-                    <span> Chapter name:</span>
+                    <span> Tên chương:</span>
                 </label>
                 <Input placeholder="enter your chapter name" value={chapterInput.chapterName} onChange={val => setChapterInput({ ...chapterInput, chapterName: val.target.value })} />
                 {
@@ -426,12 +434,15 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 }
             </section>
 
-            <section className="flex items-center space-x-3">
-                <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
-                    <span> Require vip:</span>
-                </label>
-                <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.checked)} />
-            </section>
+            {
+                !props.mangaInput.isFree &&
+                <section className="flex items-center space-x-3 py-[10px]">
+                    <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
+                        <span>Chương có yêu cầu trả phí?:</span>
+                    </label>
+                    <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.checked)} />
+                </section>
+            }
 
             {/* for text chapter content */}
             {
@@ -439,10 +450,10 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 <section >
                     <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                         <span className='text-red-500'>*</span>
-                        <span> Chapter content:</span>
+                        <span> Nội dung chương:</span>
                     </label>
 
-                    <a className="mb-[10px] w-fit text-[12px]" onClick={uploadTextChapterByFile}>Upload text file (Support .txt)</a>
+                    <a className="mb-[10px] w-fit text-[12px]" onClick={uploadTextChapterByFile}>Tải nội dung bằng file (Hỗ trợ định dạng .txt, lưu ý file không dc quá 5mb và nội dung dưới 15000 từ)</a>
 
                     <div className=''>
                         <RichtextEditorForm onReady={onReadyMangaContentEditor} toolbarSettings={{}} />
@@ -463,10 +474,10 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                 <section >
                     <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px]'>
                         <span className='text-red-500'>*</span>
-                        <span> Chapter Image:</span>
+                        <span> Ảnh:</span>
                     </label>
 
-                    <a className="mb-[10px] block text-[12px] underline" onClick={uploadImageChapter}>Upload image (maximum 30files), all files aren't format will be discard</a>
+                    <a className="mb-[10px] block text-[12px] underline" onClick={uploadImageChapter}>Lưu ý: chỉ được tối đa 30 ảnh(mỗi ảnh không quá 5mb), định dạng (jpa,png,webp) </a>
 
                     <div id="chapter-images-list" className="flex flex-wrap gap-[5px]">
                         {imageChapterFiles && imageChapterFiles.length > 0 && (

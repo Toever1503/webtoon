@@ -44,6 +44,10 @@ public class HomeController {
     @Autowired
     private IPostService postService;
 
+    public HomeController() {
+        System.out.printf("HomeController init\n");
+    }
+
     @RequestMapping("/index")
     public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
         Specification mangaSpec = Specification.where(
@@ -80,8 +84,9 @@ public class HomeController {
         return "homepage";
     }
 
-    public static void main(String[] args) {
-        Double f = new Double(3.5);
-        System.out.println(f.intValue());
+
+    @RequestMapping("contact")
+    public String contact(){
+        return "contact";
     }
 }

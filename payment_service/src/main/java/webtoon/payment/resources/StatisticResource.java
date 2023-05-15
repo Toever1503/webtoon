@@ -91,6 +91,7 @@ public class StatisticResource {
     ) {
         List<Specification> specs = new ArrayList<>();
         specs.add(((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(UserEntity_.DELETED_AT))));
+        specs.add(((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(UserEntity_.CAN_READ_UNTIL_DATE)).not()));
         specs.add(((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(UserEntity_.CURRENT_USED_SUBS_ID)).not()));
 
         switch (type) {
@@ -135,10 +136,13 @@ public class StatisticResource {
 
         userEntityPage.getContent().stream().forEach(userEntity -> {
             UserSubscriptionPackStatusDto dto = UserSubscriptionPackStatusDto.builder()
+                    .userId(userEntity.getId())
                     .user(UserMetadataDto.toDto(userEntity))
-                    .subscriptionPack(SubscriptionPackDto.toDto(this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId())))
                     .expiredDate(userEntity.getCanReadUntilDate())
+                    .hasSendRenewalEmail(userEntity.getHasSendRenewalEmail())
                     .build();
+
+            dto.setSubscriptionPack(SubscriptionPackDto.toDto(this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId())));
             userSubscriptionPackStatusList.add(dto);
         });
 

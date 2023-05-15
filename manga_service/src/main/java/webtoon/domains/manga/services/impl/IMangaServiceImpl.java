@@ -226,7 +226,9 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
-        return mangaRepository.findAll(specs, pageable).map(entity -> {
+        Page<MangaEntity> mangaEntityPage = mangaRepository.findAll(specs, pageable);
+
+        return mangaEntityPage.map(entity -> {
             entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.MANGA));
             return MangaDto.toDto(entity);
         });

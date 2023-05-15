@@ -93,6 +93,8 @@ const MangaAddEditVolumeModal: React.FC<MangaAddEditVolumeModalProps> = (props: 
     }
 
     useEffect(() => {
+        console.log('edit volume:', props.volumeInput);
+        
         if (props.volumeInput) {
             setVolumeVal(props.volumeInput.name);
         }

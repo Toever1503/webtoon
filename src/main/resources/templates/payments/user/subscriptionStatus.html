@@ -28,19 +28,21 @@
                             th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
                     </p>
                     <p>Trạng thái: 
-                        <span th:if="${!isExpiredSub}" class="text-green-500 font-semibold">Đang hoạt động</span>
-                        <span th:if="${isExpiredSub}" class="text-red-500 font-semibold">Đã hết hạn</span>
+                        <span th:if="${!isTrialExpired}" class="text-green-500 font-semibold">Đang hoạt động</span>
+                        <span th:if="${isTrialExpired}" class="text-red-500 font-semibold">Đã hết hạn</span>
                     </p>
 
                     <div class="flex gap-[10px]">
-                        <button th:if="${canUpgradeSubs}"
+                        <button th:if="${canUpgradeSubs && isUsingTrial}"
                             class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
-                            <a href="/user/upgrade-subscription" class="text-white">Nâng
-                                cấp gói</a></button>
+                            <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
 
-                        <button th:if="${!isUsingTrial && isExpiredSub}"
-                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
-                            <a href="/user/upgrade-subscription" class="text-white">Gia hạn lại</a></button>
+                        <button th:if="${canUpgradeSubs && !isUsingTrial}"
+                                class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                            <a href="/user/upgrade-subscription" class="text-white">Nâng
+                                cấp gói</a>
+                        </button>
+
                     </div>
                 </div>
 
@@ -64,7 +66,7 @@
 
                         <button th:if="${!isUsingTrial && isExpiredSub}"
                             class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
-                            <a href="/user/upgrade-subscription" class="text-white">Gia hạn lại</a></button>
+                            <a href="/user/renew_subscription_pack" class="text-white">Gia hạn lại</a></button>
                     </div>
 
                 </div>
