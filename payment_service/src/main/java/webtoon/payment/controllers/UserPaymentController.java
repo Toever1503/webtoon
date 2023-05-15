@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.thymeleaf.expression.Dates;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.entities.UserEntity_;
@@ -26,9 +27,12 @@ import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.ISubscriptionPackService;
 
 import javax.servlet.http.HttpSession;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -45,6 +49,10 @@ public class UserPaymentController {
     @Autowired
     private IUserService userService;
 
+    public UserPaymentController() {
+        System.out.println("okk");
+    }
+
     @GetMapping("/userOrder")
     public String userOrder(Model model, HttpSession session) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
@@ -58,21 +66,22 @@ public class UserPaymentController {
             model.addAttribute("order", order);
             return "account/userOrder";
         }
+
     }
 
     @GetMapping("/order-history")
     public String confirmOrder(Model model, HttpSession session,
                                @RequestParam(name = "search", required = false, defaultValue = "") String search,
-                               @RequestParam("status") EOrderStatus status,
+                               @RequestParam(value = "status", defaultValue = "COMPLETED") EOrderStatus status,
                                Pageable pageable) {
-        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if (entity == null) {
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
             return "redirect:/signin?redirectTo=/user/order-history";
         } else {
             List<Specification<OrderEntity>> specs = new ArrayList<>();
             specs.add((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(OrderEntity_.DELETED_AT)));
             specs.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not());
-            specs.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(OrderEntity_.USER_ID).get(UserEntity_.ID), entity.getId()));
+            specs.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(OrderEntity_.USER_ID).get(UserEntity_.ID), loggedUser.getId()));
 
             if (!search.isBlank()) {
                 search = "%" + search + "%";
@@ -95,17 +104,25 @@ public class UserPaymentController {
             }
             Page<OrderEntity> orderPage = orderService.filterEntity(pageable, finalSpec);
 
-            Long pendingPaymentCount = this.orderService.count(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.PENDING_PAYMENT)));
-            Long pendingCheckCount = this.orderService.count(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.USER_CONFIRMED_BANKING)));
+            Long pendingPaymentCount = this.orderService.count(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.and(
+                            criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.PENDING_PAYMENT),
+                            criteriaBuilder.equal(root.join(OrderEntity_.USER_ID).get(UserEntity_.ID), loggedUser.getId())
+                    )));
+            Long pendingCheckCount = this.orderService.count(((root, query, criteriaBuilder) ->
+                    criteriaBuilder.and(
+                            criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.USER_CONFIRMED_BANKING),
+                            criteriaBuilder.equal(root.join(OrderEntity_.USER_ID).get(UserEntity_.ID), loggedUser.getId())
+                    )
+            ));
 
             model.addAttribute("search", search);
             model.addAttribute("status", status.name());
-            model.addAttribute("user", entity);
+            model.addAttribute("user", loggedUser);
             model.addAttribute("order", orderPage.getContent());
 
             model.addAttribute("pendingPaymentCount", pendingPaymentCount);
             model.addAttribute("pendingCheckCount", pendingCheckCount);
-
 
             model.addAttribute("hasPrevPage", orderPage.hasPrevious());
             model.addAttribute("hasNextPage", orderPage.hasNext());
@@ -150,13 +167,14 @@ public class UserPaymentController {
 
                 List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(null);
 
-                Specification orderSpec = ((root, query, criteriaBuilder) -> criteriaBuilder.and(
+                Specification pendingOrderSpec = ((root, query, criteriaBuilder) -> criteriaBuilder.and(
                         criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not(),
-                        root.get(OrderEntity_.STATUS).in(List.of(EOrderStatus.PENDING_PAYMENT, EOrderStatus.USER_CONFIRMED_BANKING))
+                        root.get(OrderEntity_.STATUS).in(List.of(EOrderStatus.PENDING_PAYMENT, EOrderStatus.USER_CONFIRMED_BANKING)),
+                        criteriaBuilder.equal(root.join(OrderEntity_.USER_ID).get(UserEntity_.ID), userEntity.getId())
                 ));
 
                 boolean hasOtherPendingOrder = false;
-                Page<OrderDto> pendingOrderPage = this.orderService.filter(Pageable.unpaged(), orderSpec);
+                Page<OrderDto> pendingOrderPage = this.orderService.filter(Pageable.unpaged(), pendingOrderSpec);
                 if (!pendingOrderPage.getContent().isEmpty())
                     hasOtherPendingOrder = true;
 
@@ -286,5 +304,13 @@ public class UserPaymentController {
         }
         return "redirect:/order/bank-info/" + orderEntity.getId();
 
+    }
+
+    public static void main(String[] args) {
+        Date d = java.sql.Date.valueOf("2023-05-20");
+        Date d1 = java.sql.Date.valueOf("2023-05-19");
+
+        System.out.println((d.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
+        Dates dd;
     }
 }

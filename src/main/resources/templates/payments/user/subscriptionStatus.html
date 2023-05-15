@@ -28,7 +28,7 @@
 
                 <div th:if="${isUsingTrial}">
                     <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
-                    <p>Thời hạn đọc đến: <span
+                    <p>Thời hạn đọc đến hết ngày: <span
                             th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
                     </p>
                     <p>Trạng thái: 
@@ -55,7 +55,7 @@
                         <span th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}"></span>
 
                     </p>
-                    <p>Thời hạn đọc đến: <span
+                    <p>Thời hạn đọc đến hết ngày: <span
                             th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
                     </p>
                     <p>Trạng thái:

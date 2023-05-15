@@ -29,7 +29,7 @@
             <div th:if="${session.loggedUser != null}" id="logged-user-section"
                  class="rounded-full border px-[10px] py-[5px] cursor-pointer bg-white hover:bg-gray-100 dark:hover:bg-gray-500 text-white relative">
                 <i class="fas fa-user-circle text-black"></i>
-                <a href="/user/profile" class="text-black" th:text="${session.loggedUser.fullName}"></a>
+                <a href="/user/profile" class="text-black text-[13px]" th:text="${session.loggedUser.fullName}"></a>
 
                 <div id="account-dropdown"
                      class="absolute top-[40px] hidden ease-in-out duration-200 right-0 z-10 border bg-white divide-y divide-gray-100 rounded-lg shadow w-44 dark:bg-gray-700">
