@@ -68,8 +68,10 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public MangaDto add(MangaModel model) {
         MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
-        mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
-
+        mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle())
+                .replace(" ", "-")
+                .replace("?", "-")
+                .toLowerCase());
 
         if (model.getId() != null) {
             MangaEntity originalEntity = this.getById(model.getId());
