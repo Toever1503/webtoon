@@ -198,8 +198,7 @@ public class UserPaymentController {
         model.addAttribute("currentPrice", currentPrice);
         model.addAttribute("isUsingTrial", isUsingTrial);
 
-        Specification spec = (root, query, cb) -> cb.equal(root.get(SubscriptionPackEntity_.STATUS), Boolean.TRUE);
-        List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(spec);
+        List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(null);
         List<SubscriptionPackEntity> canUpgradeList = new ArrayList<>();
 
         if (userEntity.getCurrentUsedSubsId() != null) {
