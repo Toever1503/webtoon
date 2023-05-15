@@ -76,6 +76,13 @@ const OrderDashboard: React.FC = () => {
                                                         {
                                                             order.subs_pack_id.name
                                                         }
+                                                        {
+                                                            order.orderType === 'UPGRADE' && <span className="text-red-400"> ({t('order.table.upgrade')})</span>
+                                                        }
+
+                                                        {
+                                                            order.orderType === 'RENEW' && <span className="text-red-400"> ({t('order.table.renew')})</span>
+                                                        }
                                                     </td>
                                                     <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
                                                         {

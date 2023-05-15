@@ -21,6 +21,10 @@
                 <h3 class="mb-[10px] font-semibold text-2xl">Thông tin gói</h3>
 
                 <p th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
+                <button th:if="${!isUsingTrial && currentUsingSubsPack == null}"
+                        class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                    <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
+
 
                 <div th:if="${isUsingTrial}">
                     <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>

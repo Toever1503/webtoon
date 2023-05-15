@@ -58,6 +58,10 @@ const OrderPage: React.FC = () => {
                 {
                     record.orderType === 'UPGRADE' && <span className="text-red-400"> ({t('order.table.upgrade')})</span>
                 }
+
+                {
+                    record.orderType === 'RENEW' && <span className="text-red-400"> ({t('order.table.renew')})</span>
+                }
             </>,
         },
         {

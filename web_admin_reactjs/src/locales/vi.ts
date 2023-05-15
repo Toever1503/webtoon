@@ -290,6 +290,7 @@ export default {
             'createdBy': 'Khách hàng',
             'modifiedBy': 'Người sửa',
             'upgrade': 'Nâng cấp',
+            renew: 'Gia hạn',
             viewDetail: 'Chi tiết',
             upgradeSubs: 'Nâng cấp gói',
             originalOrderNumber: 'Mã đơn hàng gốc',

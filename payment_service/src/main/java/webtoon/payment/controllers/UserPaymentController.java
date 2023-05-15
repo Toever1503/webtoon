@@ -279,6 +279,8 @@ public class UserPaymentController {
 
         SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
         OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, paymentMethod);
+        orderEntity.setOrderType(EOrderType.RENEW);
+        this.orderService.saveOrderEntity(orderEntity);
         if (paymentMethod.equals(EPaymentMethod.VN_PAY)) {
             return "redirect:/payment/pay?orderId=" + orderEntity.getId();
         }
