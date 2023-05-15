@@ -17,9 +17,249 @@
 </head>
 
 <body>
-   
+  <div class="max-w-[1100px] mx-auto bg-white">
+    <div class="flex flex-col">
+      <div class="p-4">
+        <!--Third breadcrumb-->
+        <div class="breadcrumb py-[10px]">
+          <nav class="w-full rounded-md">
+            <ol class="list-reset flex">
+              <li><a href="/"
+                  class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600">Trang
+                  chủ</a>
+              </li>
+              <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+              </li>
+              <li><a class="text-sm text-neutral-500 transition duration-150 ease-in-out">Truyện</a>
+              </li>
+              <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+              </li>
+              <li><a th:href="@{'/manga/' + ${mangaData.mangaName} + '/' + ${mangaData.id}}"
+                  class="text-sm text-blue-400 transition duration-150 ease-in-out hover:text-blue-600 focus:text-blue-600 active:text-blue-700 dark:text-blue-400 dark:hover:text-blue-500 dark:focus:text-blue-500 dark:active:text-blue-600"
+                  th:text="${mangaData.title}">
+                </a>
+              </li>
+
+              <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+              </li>
+
+              <li th:if="${mangaData.displayType.name == 'VOL'}" class="text-neutral-500 dark:text-neutral-400"
+                th:text="${'Tập ' + (currentVol.volumeIndex + 1)}"></li>
+
+              <li th:if="${mangaData.displayType.name == 'VOL'}">
+                <span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
+              </li>
+              <li><a class="text-sm text-neutral-500 transition duration-150 ease-in-out"
+                  th:text="${'Chương ' + (chapterData.chapterIndex + 1)}"></a>
+              </li>
+            </ol>
+          </nav>
+        </div>
+
+        <div class="font-bold text-2xl">
+          <span id="mangaName" th:data-name="${mangaData.mangaName}" th:text="${mangaData.title}"></span>
+          -
+          <span th:if="${mangaData.displayType == 'VOL'}"
+            th:text="${'Tập ' + (currentVol.volumeIndex + 1) + ': ' + currentVol.name + ' -'}"></span>
+
+          <span
+            th:text="${'Chương ' + (chapterData.chapterIndex + 1) + (chapterData.chapterName.length() > 0 ? (': ' + chapterData.chapterName) : '') }"></span>
+        </div>
+      </div>
+
+      <div class="p-4 sticky top-0 z-12 px-4 py-2 shadow bg-[seashell]">
+        <div class="flex justify-between ">
+          <div class=" p-4">
+            <div class="flex items-center select-auto">
+
+              <select th:if="${mangaData.displayType.name == 'VOL'}" id="volume" data-te-select-init
+                data-te-select-size="lg" class="shadow-md mr-2 p-2">
+                <option th:each="item : ${volumeEntity1}" th:value="${item.id}"
+                  th:text="${'Tập ' + (item.volumeIndex + 1) +': '+item.name}"
+                  th:selected="${currentVol.id == item.id}"></option>
+              </select>
+              <select id="chapter" th:value="${chapterData.id}" class="shadow-md mr-2 p-2">
+                <option th:each="itemchapter : ${chapterData1}" th:value="${itemchapter.id}"
+                  th:text="${'Chương ' + (itemchapter.chapterIndex + 1) +': '+itemchapter.chapterName}"
+                  th:selected="${chapterData.id == itemchapter.id}"></option>
+              </select>
+            </div>
+          </div>
+          <div class=" p-4">
+            <div class="flex items-center justify-end">
+              <div th:if="${prevChapter != null}">
+                <a th:href="@{'/manga/'+${chapterData.chapterName}+'/chapter/'+${prevChapter.id}}"
+                  class="p-2 mr-2 rounded-full bg-red-500 text-white hover:underline"
+                  style="display: flex; align-items: center">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-left-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd" d="M12 8a.5.5 0 0 1-.5.5H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0
+                                        1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5a.5.5 0 0 1 .5.5z" />
+                  </svg>
+                  Chương trước
+                </a>
+              </div>
+
+              <div th:if="${nextChapter != null}">
+                <a th:href="@{'/manga/'+ ${chapterData.chapterName}+'/chapter/'+${nextChapter.id}}"
+                  class="p-2 mr-2 rounded-full bg-red-500 text-white hover:underline"
+                  style="display: flex; align-items: center">
+                  Chương sau
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                    class="bi bi-arrow-right-short" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                      d="M4 8a.5.5 0 0 1 .5-.5h5.793L8.146 5.354a.5.5 0 1 1
+                                        .708-.708l3 3a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708-.708L10.293 8.5H4.5A.5.5 0 0 1 4 8z" />
+                  </svg>
+                </a>
+              </div>
+              <div class="p-2 rounded-full bg-red-500 text-white">
+                <a th:href="@{'/manga/'+ ${mangaData.mangaName} + '/' + ${mangaData.id}}"
+                  class="text-white hover:underline">Thông tin truyện</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sự kiện onchange selectbox -->
+
+      <script>
+        window.addEventListener("DOMContentLoaded", (event) => {
+
+          // Lấy đối tượng select box 1
+          const selectVolume = document.getElementById("volume");
+          // Thêm sự kiện onchange cho select box
+
+          if (selectVolume) {
+            selectVolume.addEventListener("change", function (e) {
+              // console.log('on choose vol: ', e.target.value)
+              const x = selectVolume;
+
+              selectChapter.querySelectorAll('option').forEach((opt, i) => i !== 0 && opt.remove());
+              selectChapter.value = "";
+              let listChapter = [];
+              // call api de set vao listchapter
+              fetch('/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
+                method: 'GET'
+              })
+                .then(res => res.json())
+
+                .then(res => {
+                  // console.log('chapter dât: ', res);
+                  listChapter = res;
+                  listChapter.forEach(item => {
+                    //  item la chapter item
+                    let optEl = document.createElement('option');
+                    optEl.innerText = `${'Chương ' + (item.chapterIndex + 1) + ': ' + item.chapterName}`; // e.name
+                    optEl.value = item.id; // e.value
+
+                    // add option to select
+                    selectChapter.append(optEl);
+                  })
+                })
+                .catch(err => {
+                  console.log('error', err)
+                })
+
+              // Lấy giá trị đã chọn
+              const selectedValue = selectBox.value;
+
+            });
+          }
+
+          // Lấy đối tượng select box 2
+          const selectChapter = document.getElementById("chapter");
+
+          // Thêm sự kiện onchange cho select box2
+          selectChapter.addEventListener("change", function () {
+            // Lấy giá trị đã chọn từ select box2
+            const selectedValue2 = selectChapter.value;
+            var selectedText = selectChapter.text;
+            // Thực hiện các hành động mong muốn khi giá trị đã chọn từ select box2 thay đổi
+
+            window.location.href = '/manga/' + document.getElementById('mangaName').dataset.name + '/chapter/' + selectedValue2
+
+          });
+        });
 
 
+      </script>
+
+      <!-- Kết thúc sự kiện -->
+
+
+      <!--                        for display alert to buy subscription-->
+      <div th:if="${!model.isFree}" class="bg-orange-100 border-l-4 border-orange-500 p-4 my-[15px]" role="alert">
+        <p class="text-orange-700">Bạn cần phải đăng ký gói đọc để mở khóa chương này!</p>
+        <a>Bấm vào <a href="/subscription_pack/load" class="text-blue-500 hover:text-blue-400">đây</a> để mua gói
+          đọc.</a>
+      </div>
+
+      <div class="p-4 px-[15px] hidden">
+        <!--                <div class="flex justify-center">-->
+        <!--                    <div class="w-2/3 p-4 ">-->
+        <!--                        <img src="https://live.mangabooth.com/wp-content/uploads/2017/10/ads-1.jpg" alt="">-->
+        <!--                    </div>-->
+        <!--                </div>-->
+
+        <div class="flex justify-center mt-3">
+          <div class="p-4">
+            <h2 th:if="${chapterData == null}">Không có dữ liệu!</h2>
+            <div th:else class="text-left mt-4 mx-7">
+              <div th:if="${mangaType} == 'TEXT'">
+                <h3 th:utext="${chapterData.content}"></h3>
+              </div>
+
+              <div th:else="${mangaType} == 'IMAGE'">
+                <h1 th:text="${chapterData.chapterName}"></h1>
+                <p th:each="image : ${chapterData.chapterImages}">
+                  <img th:src="${image.image}" />
+                </p>
+                <!-- <h3 th:text="${item.chapterEntities.chapterImageEntities}"></h3> -->
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <script th:inline="javascript">
+      /*<![CDATA[*/
+      const mangaId = /*[[${mangaData.getId()}]]*/ 'default';
+
+      window.addEventListener('DOMContentLoaded', function () {
+        // Kiểm tra xem trang đã được truy cập thông qua một liên kết chưa
+        const referrer = document.referrer;
+
+        const urlPath = window.location.pathname; // lấy đường dẫn của trang
+
+        // tách giá trị của mangaId và chapterId từ đường dẫn URL
+        const splittedUrlPath = urlPath.split('/');
+        const chapterId = splittedUrlPath[4];
+        // Lấy các thông tin đã lưu trữ trong Local Storage
+        const usersJson = localStorage.getItem('users');
+        // Chuyển giá trị lấy được về mảng JavaScript nếu mảng đã tồn tại, hoặc khởi tạo một mảng mới nếu usersJson là null hoặc undefined.
+        const users = JSON.parse(usersJson) || [];
+
+        // Tìm user trong mảng có mangaId tương ứng. Nếu không có thì trả về -1
+        let userIndex = users.findIndex((user) => user.mangaId === mangaId);
+
+        if (userIndex === -1) { // một mangaId chưa từng tồn tại trong mảng
+          const newUser = { mangaId, chapterId };
+          users.push(newUser);
+        } else { // mangaId đã có trong mảng
+          users[userIndex].chapterId = chapterId;
+        }
+
+        // Lưu lại mảng users với thông tin mới vào Local Storage
+        localStorage.setItem('users', JSON.stringify(users));
+      });
+        /*]]>*/
+
+
+    </script>
+  </div>
 
 
 </body>

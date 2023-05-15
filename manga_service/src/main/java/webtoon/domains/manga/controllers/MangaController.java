@@ -155,16 +155,17 @@ public class MangaController {
     public String readMangaChapter(@PathVariable java.lang.Long id, @PathVariable String name, Model model, HttpSession session) {
         MangaChapterEntity chapterEntity = this.mangaChapterService.getById(id);
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+
+        boolean canReadChapter = false;
         if (chapterEntity.getRequiredVip() == true) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            if (loggedUser == null && loggedUser.getCanReadUntilDate() != null) {
-                throw new RuntimeException("you need to login");
-            }
-            int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
-            if (result < 0) {
-                throw new RuntimeException("you need to buy subscription");
+            if (loggedUser != null) {
+                int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+                canReadChapter = result >=0;
             }
         }
+        else canReadChapter = true;
+        model.addAttribute("canReadChapter", canReadChapter);
 
         MangaEntity mangaEntity = null;
         if (chapterEntity.getMangaVolume() == null) { // display type chap

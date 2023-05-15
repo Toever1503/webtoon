@@ -106,11 +106,15 @@ const OrderDashboard: React.FC = () => {
                                                 </tr>
                                             )
                                         }
-                                        <tr>
-                                            <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-500">
-                                                Chưa có đơn hàng nào!
-                                            </td>
-                                        </tr>
+                                        {
+                                            latestOrder.length <= 0 &&
+                                            <tr>
+                                                <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-500">
+                                                    Chưa có đơn hàng nào!
+                                                </td>
+                                            </tr>
+                                        }
+
                                         <tr>
                                             <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                 <Link to='/orders'>

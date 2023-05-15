@@ -94,7 +94,7 @@
 
 <body>
 <div class="flex justify-center" layout:fragment="content" th:each="model : ${model}">
-    <div class="max-w-[1100px] mx-auto bg-white px-[15px]">
+    <div class="w-[1100px] mx-auto bg-white px-[15px]">
 
         <div class="breadcrumb py-[10px]">
             <nav class="w-full rounded-md">
@@ -328,7 +328,7 @@
                             </div>
 
                             <div>
-                                <h3>Chương mới nhất</h3>
+                                <h3 class="font-bold">Chương mới nhất:</h3>
                                 <!--  for display chapter by VOL -->
                                 <ul th:if="${model.volumeEntities.size() > 0 && volI.index < 1}"
                                     class="grid mt-[10px] gap-[5px] p-0 px-[15px]"
@@ -336,17 +336,18 @@
                                     <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 5}">
                                         <a th:href="@{'/manga/'+${model.mangaName}+'/chapter/'+${chapter.id}}"
                                            class="hover:underline"
-                                           th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"/>
+                                           th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                        />
                                     </li>
                                 </ul>
                                 <!--  for display chapter by chap -->
                                 <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0 px-[15px]">
                                     <li class="gap-[5px] flex" th:each="chapter,iter: ${model.chapters}"
-                                        th:if="${iter.index < 1}"
+                                        th:if="${iter.index < 5}"
                                     >
                                         <a th:href="@{'/manga/'+${model.mangaName}+'/chapter/'+${chapter.id}}"
                                            class="hover:underline"
-                                           th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"/>
+                                           th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}" />
                                     </li>
                                 </ul>
                             </div>
@@ -457,7 +458,7 @@
                              class="bg-orange-100 border-l-4 border-orange-500 p-4 w-fit my-[15px]" role="alert">
                             <p class="text-orange-700">Bạn cần phải đăng ký gói đọc để mở khóa các chương bên dưới!</p>
                             <a>Bấm vào <a href="/subscription_pack/load"
-                                          class="text-blue-500 hover:text-blue-400">đây</a> để mua gói đọc</a>
+                                          class="text-blue-500 hover:text-blue-400">đây</a> để mua gói đọc.</a>
                         </div>
                     </div>
                 </div>
@@ -488,7 +489,7 @@
                          th:each="itemvolume : ${volumeEntities}">
                             <span class="px-[10px] py-[5px] bg-[#ebebeb] flex justify-between rounded cursor-pointer">
                                 <p class="text-[18px] font-bold m-0"
-                                   th:text="${'Tập ' + (itemvolume.volumeIndex + 1) + itemvolume.name.length() > (': ' + itemvolume.name) : ''}">
+                                   th:text="${'Tập ' + (itemvolume.volumeIndex + 1) + (itemvolume.name.length() > 0 ? (': ' + itemvolume.name) : '')}">
                                 </p>
                                 <span>+</span>
                             </span>
@@ -498,7 +499,7 @@
                                 th:each="chapter,iter: ${itemvolume.chapterEntities}">
                                 <div class="flex justify-between items-center px-[10px] space-x-3 full">
                                     <a th:href="${chapter.requiredVip ? '#' : '/manga/'+model.mangaName+'/chapter/'+chapter.id}"
-                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
                                        class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                     </a>
                                     <span th:if="${!model.isFree && chapter.requiredVip}"
@@ -538,7 +539,7 @@
                         <li class="gap-[5px] flex justify-between" th:each="chapter,iter: ${chapterEntities}">
                             <div class="flex justify-between items-center px-[10px] space-x-3 full">
                                 <a th:href="${chapter.requiredVip ? '#' : '/manga/' + model.mangaName + '/chapter/' + chapter.id}"
-                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + ': ' + chapter.chapterName}"
+                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
                                    class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                 </a>
                                 <span th:if="${!model.isFree && chapter.requiredVip}"
@@ -547,10 +548,16 @@
                                 </span>
                                 <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
 
-                                <span th:if="${!chapter.requiredVip && model.isFree}"
+                                <span th:if="${!chapter.requiredVip && !model.isFree}"
                                       class="text-[12px] text-green-600">
                                         Đọc thử miễn phí
                                 </span>
+
+                                <span th:if="${!chapter.requiredVip && model.isFree}"
+                                      class="text-[12px] text-green-600">
+                                        Đọc miễn phí
+                                </span>
+
                             </div>
                             <span th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
                         </li>
