@@ -168,7 +168,7 @@ const VolumeSetting: React.FC<VolumeSettingProps> = (props: VolumeSettingProps) 
             else
                 onCallApiLastChapterIndex();
         }
-    }, [props.mangaInput])
+    }, []);  // changed
 
     return <div className="p-[10px]">
         <div className="flex space-x-2">

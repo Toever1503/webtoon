@@ -163,7 +163,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
             if (props.mangaInput.displayType === 'CHAP')
                 chapterService.getLastChapterIndexForChapType(props.mangaInput.id)
                     .then((res) => {
-                        console.log('last chapter index: ', res.data);
+                        console.log('last chapter index--1: ', res.data);
                         if (res.data)
                             setLastChapterIndex(res.data.chapterIndex);
 
@@ -175,7 +175,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                     });
         }
 
-    }, [props]);
+    }, []); // changed
 
     return <div className="mt-[20px]">
 

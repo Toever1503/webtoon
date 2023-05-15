@@ -114,7 +114,7 @@
                                                     th:if="${iter.index < 2}">
 
                                                     <div class="gap-[5px] flex items-center">
-                                                        <a th:href="@{'/manga/'+${mangalist.title}+'/chapter/'+${chapter.id}}"
+                                                        <a th:href="@{'/manga/'+${mangalist.mangaName}+'/chapter/'+${chapter.id}}"
                                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                            class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
                                                         </a>
@@ -131,7 +131,7 @@
                                                 <li class="gap-[5px] flex" th:each="chapter,iter: ${mangalist.chapters}"
                                                     th:if="${iter.index < 2}"
                                                 >
-                                                    <a th:href="@{'/manga/'+${mangalist.title}+'/chapter/'+${chapter.id}}"
+                                                    <a th:href="@{'/manga/'+${mangalist.mangaName}+'/chapter/'+${chapter.id}}"
                                                        th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                        class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
                                                     </a>

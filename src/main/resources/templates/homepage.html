@@ -174,7 +174,7 @@
                                     <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
                                         <div class="gap-[5px] flex items-center">
-                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
+                                            <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                style="border: 1px solid #ebebeb"
                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
@@ -191,7 +191,7 @@
                                     <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
                                         th:if="${iter.index < 2}"
                                     >
-                                        <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
+                                        <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                            style="border: 1px solid #ebebeb"
                                            class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">

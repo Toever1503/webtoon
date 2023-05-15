@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import webtoon.domains.manga.dtos.MangaDto;
 import webtoon.domains.manga.entities.MangaEntity;
 import webtoon.domains.manga.models.MangaModel;
+import webtoon.utils.ASCIIConverter;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -37,7 +38,7 @@ public class MangaMapper {
                 .title(input.getTitle())
                 .excerpt(input.getExcerpt())
                 .description(input.getDescription())
-                .mangaName(input.getMangaName())
+                .mangaName(ASCIIConverter.removeAccent(input.getTitle()).replace(" ", "-").toLowerCase())
                 .featuredImage(input.getFeaturedImage())
                 .status(input.getStatus()) // enum status
                 .mangaStatus(input.getMangaStatus())

@@ -136,7 +136,7 @@
                                     <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
                                         <div class="gap-[5px] flex items-center">
-                                            <a th:href="@{'/manga/'+${mangaE.title}+'/chapter/'+${chapter.id}}"
+                                            <a th:href="@{'/manga/'+${mangaE.mangaName}+'/chapter/'+${chapter.id}}"
                                                 th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                 style="border: 1px solid #ebebeb"
                                                 class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
@@ -154,7 +154,7 @@
                                 <ul th:else class="latest-chapters grid mt-[10px] gap-[5px] p-0">
                                     <li class="gap-[5px] flex" th:each="chapter,iter: ${mangaE.chapters}"
                                         th:if="${iter.index < 2}">
-                                        <a th:href="@{'/manga/'+${mangaE.title}+'/chapter/'+${chapter.id}}"
+                                        <a th:href="@{'/manga/'+${mangaE.mangaName}+'/chapter/'+${chapter.id}}"
                                             th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                             style="border: 1px solid #ebebeb"
                                             class="block cursor-pointer min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">

@@ -82,6 +82,7 @@ public class MangaResource2 {
     public void setMangaTypeAndDisplayType(@PathVariable Long id, @RequestParam EMangaType mangaType, @RequestParam EMangaDisplayType displayType) {
         if (mangaType.equals(EMangaType.UNSET))
             throw new RuntimeException("type is not support");
+
         this.mangaService.setMangaTypeAndDisplayType(id, mangaType, displayType);
     }
 
