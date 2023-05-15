@@ -14,6 +14,7 @@ public class ResponseDto {
 	private Object data;
 	private Object otherData;
 
+
 	public static ResponseDto of(int code, Object data) {
 		return ResponseDto.builder().code("code-" + code).data(data).build();
 	}
@@ -29,5 +30,4 @@ public class ResponseDto {
 	public static ResponseDto ofError(int code) {
 		return ResponseDto.builder().code("code-" + code).build();
 	}
-
 }

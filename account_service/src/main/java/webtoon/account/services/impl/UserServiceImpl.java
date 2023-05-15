@@ -3,6 +3,8 @@ package webtoon.account.services.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -26,10 +28,12 @@ import webtoon.account.entities.UserEntity;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.utils.exception.CustomHandleException;
+import webtoon.utils.exception.ResponseDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -242,19 +246,31 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDto addDk(CreateUserModel userModel){
-        Long count = this.userRepository.checkTrungEmail(userModel.getEmail());
-        if (count > 0 ){
-            throw new RuntimeException("trùng email");
-
-        }
-            UserEntity entity = UserEntity.builder()
-                    .username(userModel.getUsername())
-                    .password(this.passwordEncoder.encode(userModel.getPassword()))
-                    .email(userModel.getEmail())
-                    .fullName(userModel.getFullName())
-                    .build();
-            this.userRepository.saveAndFlush(entity);
-            return UserDto.toDto(entity);
+            Long countEmail = this.userRepository.checkTrungEmail(userModel.getEmail());
+            Long countPhone = this.userRepository.checkTrungPhone(userModel.getPhone());
+        List<String> errorMessages = new ArrayList<>();  // Tạo danh sách thông báo lỗi ở đầu
+            try {
+                if (countEmail > 0) {
+                    errorMessages.add("Email đã tồn tại trong hệ thống");
+                }
+                if (countPhone > 0) {
+                    errorMessages.add("Số điện thoại đã tồn tại trong hệ thống");
+                }
+                if (!errorMessages.isEmpty()) {  // Nếu danh sách thông báo lỗi không rỗng
+                    throw new RuntimeException(String.join(", ", errorMessages));
+                }
+                UserEntity entity = UserEntity.builder()
+                        .username(userModel.getUsername())
+                        .password(this.passwordEncoder.encode(userModel.getPassword()))
+                        .email(userModel.getEmail())
+                        .fullName(userModel.getFullName())
+                        .build();
+                this.userRepository.saveAndFlush(entity);
+                return UserDto.toDto(entity);
+            }catch (Exception e){
+                errorMessages.add(e.getMessage());  // Thêm thông báo lỗi vào danh sách
+                return
+            }
 
     }
 
