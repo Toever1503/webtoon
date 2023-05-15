@@ -3,7 +3,9 @@ package webtoon.domains.manga.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -124,6 +126,7 @@ public class MangaController {
 
         if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL)) {
             Specification spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(MangaVolumeEntity_.MANGA).get(MangaEntity_.ID), mangaEntity.getId());
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()).withSort(Sort.Direction.DESC, "id");
             Page<MangaVolumeEntity> volumeEntities = this.mangaVolumeService.filterEntity(pageable, Specification.where(spec));
 
             model.addAttribute("volumeEntities", volumeEntities.getContent());
@@ -134,7 +137,7 @@ public class MangaController {
             model.addAttribute("totalPage", volumeEntities.getTotalPages());
         } else {
             Specification spec = (root, query, criteriaBuilder) -> criteriaBuilder.equal(root.join(MangaChapterEntity_.MANGA).get(MangaEntity_.ID), mangaEntity.getId());
-
+            pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()).withSort(Sort.Direction.DESC, "id");
             Page<MangaChapterEntity> chapterEntities = this.mangaChapterService.filter(pageable, Specification.where(spec));
             model.addAttribute("chapterEntities", chapterEntities.getContent());
 
