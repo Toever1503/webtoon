@@ -179,9 +179,13 @@ public class UserPaymentController {
 
 
     @GetMapping("upgrade-subscription")
-    public String getFromUpgrade(Model model) {
-
-        UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
+    public String getFromUpgrade(Model model, HttpSession session) {
+        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+        if (userEntity == null) {
+            return "redirect:/signin?redirectTo=/user/subscription-status";
+        }
+        userEntity = this.userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
+        session.setAttribute("loggedUser", userEntity);
         boolean isUsingTrial = false;
         if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -202,7 +206,8 @@ public class UserPaymentController {
         List<SubscriptionPackEntity> canUpgradeList = new ArrayList<>();
 
         if (userEntity.getCurrentUsedSubsId() != null) {
-            canUpgradeList = upgradeList.stream().filter(sub -> sub.getId() > userEntity.getCurrentUsedSubsId()).collect(Collectors.toList());
+            UserEntity finalUserEntity = userEntity;
+            canUpgradeList = upgradeList.stream().filter(sub -> sub.getId() > finalUserEntity.getCurrentUsedSubsId()).collect(Collectors.toList());
         } else canUpgradeList = upgradeList;
 
 

@@ -16,6 +16,7 @@ export default {
                 subscriptionPack: 'Gói đăng ký',
                 price: 'Giá',
                 createdAt: 'Ngày tạo',
+                action: 'Thao tác',
             }
         }
     },

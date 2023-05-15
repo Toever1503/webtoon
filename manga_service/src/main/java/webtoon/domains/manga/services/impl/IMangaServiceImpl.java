@@ -75,6 +75,10 @@ public class IMangaServiceImpl implements IMangaService {
             MangaEntity originalEntity = this.getById(model.getId());
             mangaEntity.setVolumeEntities(originalEntity.getVolumeEntities());
             mangaEntity.setChapters(originalEntity.getChapters());
+
+            mangaEntity.setRating(originalEntity.getRating());
+            mangaEntity.setViewCount(originalEntity.getViewCount());
+            mangaEntity.setCommentCount(originalEntity.getCommentCount());
         } else {
             mangaEntity.setRating(0F);
             mangaEntity.setViewCount(0);

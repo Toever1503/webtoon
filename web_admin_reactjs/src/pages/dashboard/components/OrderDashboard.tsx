@@ -15,7 +15,7 @@ const OrderDashboard: React.FC = () => {
 
     useEffect(() => {
         orderService.filterOrder({
-            status: ['USER_CONFIRMED_BANKING', 'COMPLETED'],
+            status: ['USER_CONFIRMED_BANKING', 'PENDING_PAYMENT'],
         })
             .then((res) => {
                 console.log('latest order: ', res.data);
@@ -55,6 +55,11 @@ const OrderDashboard: React.FC = () => {
                                                 className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
                                                 {t('dashboard.orderLatest.table.createdAt')}
                                             </th>
+
+                                            <th scope="col"
+                                                className="text-sm font-medium text-gray-900 px-6 py-4 text-left">
+                                                {t('dashboard.orderLatest.table.action')}
+                                            </th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -82,9 +87,23 @@ const OrderDashboard: React.FC = () => {
                                                             dateTimeFormat(order.created_at)
                                                         }
                                                     </td>
+                                                    <td>
+                                                        {
+                                                            order.status === 'USER_CONFIRMED_BANKING' ?
+                                                                <Link to={`/orders/handle/${order.id}`}>
+                                                                    Xử lý TT
+                                                                </Link>
+                                                                : '-'
+                                                        }
+                                                    </td>
                                                 </tr>
                                             )
                                         }
+                                        <tr>
+                                            <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm text-center font-medium text-gray-500">
+                                                Chưa có đơn hàng nào!
+                                            </td>
+                                        </tr>
                                         <tr>
                                             <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
                                                 <Link to='/orders'>
