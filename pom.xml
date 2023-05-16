@@ -134,22 +134,6 @@
         </dependency>
 
 
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc -->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-jdbc</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-
-        <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-core -->
-        <dependency>
-            <groupId>org.springframework.session</groupId>
-            <artifactId>spring-session-core</artifactId>
-            <version>2.7.0</version>
-        </dependency>
-
-
         <!-- https://mvnrepository.com/artifact/com.mysql/mysql-connector-j -->
         <dependency>
             <groupId>com.mysql</groupId>
