@@ -12,7 +12,7 @@
 
     <groupId>webtoon.storage</groupId>
     <artifactId>webtoon-storage-service</artifactId>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
     <name>storage Maven Webapp</name>
     <url>http://maven.apache.org</url>
 

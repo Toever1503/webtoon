@@ -8,7 +8,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.thymeleaf.expression.Dates;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
 import webtoon.account.entities.UserEntity_;
@@ -26,14 +25,12 @@ import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.storage.domain.services.IFileService;
 
 import javax.servlet.http.HttpSession;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
+
 
 @Controller
 @RequestMapping("/user")
@@ -55,21 +52,6 @@ public class UserPaymentController {
         System.out.println("okk");
     }
 
-    @GetMapping("/userOrder")
-    public String userOrder(Model model, HttpSession session) {
-        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if (entity == null) {
-            return "redirect:/signin";
-        } else {
-            Long userId = SecurityUtils.getCurrentUser().getUser().getId();
-            UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
-            List<OrderEntity> order = orderService.getPaymentCompletedByUserId(userId);
-            model.addAttribute("user", userEntity);
-            model.addAttribute("order", order);
-            return "account/userOrder";
-        }
-
-    }
 
     @GetMapping("/order-history")
     public String confirmOrder(Model model, HttpSession session,
@@ -337,11 +319,4 @@ public class UserPaymentController {
         return "redirect:/user/profile";
     }
 
-    public static void main(String[] args) {
-        Date d = java.sql.Date.valueOf("2023-05-20");
-        Date d1 = java.sql.Date.valueOf("2023-05-19");
-
-        System.out.println((d.getTime() - d1.getTime()) / (1000 * 60 * 60 * 24));
-        Dates dd;
-    }
 }

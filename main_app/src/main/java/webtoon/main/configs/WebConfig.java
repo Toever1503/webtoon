@@ -10,7 +10,7 @@ import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import webtoon.storage.domain.utils.FileUploadProvider;
+import webtoon.main.storage.domain.utils.FileUploadProvider;
 
 import javax.annotation.PostConstruct;
 import java.util.TimeZone;
@@ -28,11 +28,11 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addResourceHandler("/static/**").addResourceLocations("classpath:/static/");
         registry.addResourceHandler("/uploads/**").addResourceLocations("file:///".concat(FileUploadProvider.ROOT_CONTENT_SYS));
     }
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        registry.addViewController("/")
-                .setViewName("forward:/comment");
-    }
+//    @Override
+//    public void addViewControllers(ViewControllerRegistry registry) {
+//        registry.addViewController("/")
+//                .setViewName("forward:/comment");
+//    }
 
     @Bean
     public OrRequestMatcher publicUrls() {
@@ -94,7 +94,8 @@ public class WebConfig implements WebMvcConfigurer {
                 registry.addMapping("/**")
                         .allowedOrigins(
                                 "http://localhost:5173",
-                                "http://127.0.0.1:5173"
+                                "http://127.0.0.1:5173",
+                                "http://35.229.243.12:5173"
                         )
                         .allowedOriginPatterns("*.*.*.*:*")
                         .allowCredentials(true)

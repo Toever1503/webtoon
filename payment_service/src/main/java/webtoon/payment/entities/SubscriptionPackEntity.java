@@ -1,9 +1,7 @@
 package webtoon.payment.entities;
 
 import lombok.*;
-import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.springframework.format.annotation.DateTimeFormat;
 import webtoon.account.entities.UserEntity;
 
 import javax.persistence.*;

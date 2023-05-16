@@ -12,45 +12,45 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 
 
 @Configuration
-@EntityScan(
-        basePackages = {
-                "webtoon.domains",
-                "webtoon.payment",
-                "webtoon.comment",
-                "webtoon.account",
-
-                "webtoon.storage.domain",
-        }
-)
-@EnableJpaRepositories(
-        basePackages = {
-                "webtoon.domains",
-                "webtoon.comment",
-                "webtoon.payment",
-                "webtoon.account",
-
-                "webtoon.storage.domain",
-        }
-)
-@ComponentScan(
-        basePackages = {
-                "webtoon.domains",
-
-                "webtoon.account.configs.security",
-                "webtoon.account.controller",
-                "webtoon.account.services",
-
-                "webtoon.comment.services",
-                "webtoon.comment.controllers",
-
-                "webtoon.payment.services",
-                "webtoon.payment.controllers",
-                "webtoon.payment.resources",
-
-                "webtoon.storage.api",
-                "webtoon.storage.domain",
-        }
-)
+//@EntityScan(
+//        basePackages = {
+//                "webtoon.main.domains",
+//                "webtoon.main.payment",
+//                "webtoon.comment",
+//                "webtoon.account",
+//
+//                "webtoon.storage.domain",
+//        }
+//)
+//@EnableJpaRepositories(
+//        basePackages = {
+//                "webtoon.main.domains",
+//                "webtoon.comment",
+//                "webtoon.main.payment",
+//                "webtoon.account",
+//
+//                "webtoon.storage.domain",
+//        }
+//)
+//@ComponentScan(
+//        basePackages = {
+//                "webtoon.main.domains",
+//
+//                "webtoon.account.configs.security",
+//                "webtoon.account.controller",
+//                "webtoon.account.services",
+//
+//                "webtoon.comment.services",
+//                "webtoon.comment.controllers",
+//
+//                "webtoon.main.payment.services",
+//                "webtoon.main.payment.controllers",
+//                "webtoon.main.payment.resources",
+//
+//                "webtoon.storage.api",
+//                "webtoon.storage.domain",
+//        }
+//)
 public class ComponentLoaderConfiguration {
 //    @Bean
 //    public PasswordEncoder passwordEncoder() {
