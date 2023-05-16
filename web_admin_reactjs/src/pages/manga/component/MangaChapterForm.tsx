@@ -58,7 +58,16 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
     // props.mangaInput.mangaType = 'TEXT';
     // props.mangaInput.displayType = 'VOL';
     useEffect(() => {
-       
+        console.log('load manga: ', props.mangaInput);
+
+        if (props.mangaInput.displayType)
+            setCurrentStep(3);
+
+        if (props.mangaInput.mangaType === 'UNSET') {
+            setCurrentStep(0);
+        }
+
+
     }, [])
 
     return (
@@ -77,14 +86,14 @@ const MangaChapterForm: React.FC<MangaChapterFormProps> = (props: MangaChapterFo
             {
                 currentStep === 0 &&
                 <section className='manga-type-choice px-[10px] text-center py-[15px] h-full pt-[50px]'>
-                    <p className='text-[16px] font-bold mb-1'>Truyện có trả phí không?</p>
+                    <p className='text-[16px] font-bold mb-1'>Hình thức trả phí?</p>
                     <span className="text-[12px] text-neutral-500">
                         Bạn sẽ không thể thay đổi sau khi chọn.
                     </span>
                     <br />
                     <Radio.Group className="my-[20px]" defaultValue={props.mangaInput.isFree} onChange={e => props.mangaInput.isFree = Boolean(e.target.value)} >
-                        <Radio value={true} className="text-[15px]">Có</Radio>
-                        <Radio value={false} className="text-[15px]">Không</Radio>
+                        <Radio value={true} className="text-[15px]">Miễn phí</Radio>
+                        <Radio value={false} className="text-[15px]">Trả phí</Radio>
                     </Radio.Group>
 
                     <br />

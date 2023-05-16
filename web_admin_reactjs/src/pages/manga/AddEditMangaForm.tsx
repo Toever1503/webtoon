@@ -67,6 +67,7 @@ const getMangaInputFormData = (mangaInput: MangaInput): FormData => {
     formData.append('authors', mangaInput.authors.join(','));
     formData.append('tags', mangaInput.tags.join(','));
     formData.append('isFree', mangaInput.isFree.toString());
+    formData.append('isShow', mangaInput.isShow.toString());
 
     if (mangaInput.featuredImageFile)
         formData.append('featuredImageFile', mangaInput.featuredImageFile);
@@ -102,6 +103,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
         authors: [],
         tags: [],
         isFree: false,
+        isShow: true,
         featuredImage: '',
         displayType: 'CHAP'
     });
@@ -346,18 +348,20 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                         <section className='bg-white grid gap-y-[10px] pb-[15px]' style={{ border: '1px solid #c3c4c7' }}>
                             <p className='text-[18px] font-bold py-[10px] px-[10px] m-0' style={{ borderBottom: '1px solid #c3c4c7' }}>Thông tin bổ sung</p>
 
-                            {/* <div className='flex justify-between items-center px-[10px]'>
+                            <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Trạng thái:</span>
                                 <Select
                                     className='min-w-[150px]'
-                                    value={mangaInput.status}
-                                    onChange={(val: MangaStatus) => { setMangaInput({ ...mangaInput, status: val }) }}
+                                    defaultValue={mangaInput.isShow}
+                                    onChange={(val) => { 
+                                        setMangaInput({ ...mangaInput, isShow: Boolean(val) });
+                                     }}
                                     options={[
-                                        { value: 'PUBLISHED', label: 'Đăng ngay' },
-                                        { value: 'DRAFTED', label: 'Đăng sau' },
+                                        { value: true, label: 'Đăng ngay' },
+                                        { value: false, label: 'Ẩn' },
                                     ]}
                                 />
-                            </div> */}
+                            </div>
 
                             <div className='flex justify-between items-center px-[10px]'>
                                 <span className='text-[14px] font-bold'>Tình trạng phát hành:</span>
@@ -368,7 +372,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                     options={[
                                         { value: 'COMING', label: 'Sắp ra mắt' },
                                         { value: 'GOING', label: 'Đang ra' },
-                                        { value: 'CANCELLED', label: 'Đã hủy' },
+                                        { value: 'ON_STOPPING', label: 'Đang tạm dừng' },
                                         { value: 'COMPLETED', label: 'Đã hoàn thành' },
                                     ]}
                                 />

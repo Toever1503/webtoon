@@ -16,7 +16,8 @@ const Dashboard: React.FC = () => {
         </h1>
 
         <div className='pt-[15px] grid gap-[15px]'>
-            <TopSection />
+            <OrderDashboard />
+            {/* <TopSection />
             <div className="grid grid-cols-10 gap-[15px]">
                 <div className="col-span-6 w-full bg-white">
                     <FlowChart />
@@ -24,7 +25,7 @@ const Dashboard: React.FC = () => {
                 <div className="col-span-4 bg-white">
                     <OrderDashboard />
                 </div>
-            </div>
+            </div> */}
         </div>
     </>
 };

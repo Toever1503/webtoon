@@ -21,11 +21,15 @@ public class SubscriptionPackEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
+
+    @Column(name = "subs_code")
+    private String subsCode;
+
+    @Column(name = "description")
+    private String description;
+
     @Column(name = "subs_name")
     private String name;
-
-    @Column(name = "day_count")
-    private Integer dayCount;
 
     @Column(name = "month_count")
     private Integer monthCount;
@@ -35,21 +39,12 @@ public class SubscriptionPackEntity {
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
-    @CreationTimestamp
-    private Date createdAt;
-
-    @Column
-    @Temporal(TemporalType.TIMESTAMP)
     @UpdateTimestamp
     private Date modifiedAt;
 
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
-
-    @ManyToOne
-    @JoinColumn(name = "created_by")
-    private UserEntity createdBy;
 
     @ManyToOne
     @JoinColumn(name = "updated_by")

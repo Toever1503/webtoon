@@ -21,4 +21,10 @@ public interface ISubscriptionPackService {
     Page<SubscriptionPackDto> filter(Pageable pageable, Specification<SubscriptionPackEntity> spec);
 
     List<SubscriptionPackMetadataDto> getAllPackMetadata();
+
+    void toggleStatus(Long id);
+
+    List<SubscriptionPackEntity>  findAllEntity(Specification spec);
+
+    void renewSubscriptionPack(Integer userId);
 }

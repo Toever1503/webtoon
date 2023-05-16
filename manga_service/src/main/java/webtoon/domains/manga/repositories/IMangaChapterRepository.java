@@ -22,8 +22,11 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     Optional<Long> getLastChapterIndexForVolType(Long mangaId);
 
 
-    @Query("SELECT MAX(c.chapterIndex) FROM MangaChapterEntity c WHERE c.manga.id = ?1")
-    Optional<Long> getLastChapterIndexForChapType(Long mangaId);
+    @Query(value = "SELECT * FROM `tbl_manga_chapter_entity`\n" +
+            "where manga_id = :mangaId\n" +
+            "ORDER BY chapter_index desc\n" +
+            "LIMIT 0,1", nativeQuery = true)
+    Optional<MangaChapterEntity> getLastChapterIndexForChapType(@Param("mangaId") Long mangaId);
 
     void deleteALlByMangaId(Long id);
     @Modifying
@@ -61,4 +64,9 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     MangaChapterEntity findByMangId(Long id);
 
     Long countByMangaId(Long id);
+
+
+    @Modifying
+    @Query(value = "DELETE FROM `tbl_manga_chapter_entity` WHERE id = :id", nativeQuery = true)
+    void deleteById(@Param(("id")) Long id);
 }

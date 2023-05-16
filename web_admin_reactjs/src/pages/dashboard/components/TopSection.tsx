@@ -48,6 +48,7 @@ const TopSection: React.FC = () => {
                     valueStyle={{ textAlign: 'center' }}
                 />
             </Card>
+
             <Card className="w-1/5" bordered={false}>
                 <Statistic
                     title={<h3 className="text-[18px] text-center">
@@ -57,7 +58,8 @@ const TopSection: React.FC = () => {
                     valueStyle={{ textAlign: 'center' }}
                 />
             </Card>
-            <Card className="w-1/5" bordered={false}>
+
+            {/* <Card className="w-1/5" bordered={false}>
                 <Statistic
                     title={<h3 className="text-[18px] text-center">
                         {t('dashboard.orderCompleted')}
@@ -65,8 +67,8 @@ const TopSection: React.FC = () => {
                     value={statisticData.totalCompleted}
                     valueStyle={{ textAlign: 'center' }}
                 />
-            </Card>
-            <Card className="w-1/5">
+            </Card> */}
+            {/* <Card className="w-1/5">
                 <Statistic
                     title={<h3 className="text-[18px] text-center">
                         {t('dashboard.orderCancelledCount')}
@@ -74,7 +76,7 @@ const TopSection: React.FC = () => {
                     value={statisticData.totalCanceled}
                     valueStyle={{ textAlign: 'center' }}
                 />
-            </Card>
+            </Card> */}
 
         </div>
     </>

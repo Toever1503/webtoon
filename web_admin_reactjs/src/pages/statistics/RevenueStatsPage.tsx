@@ -8,6 +8,8 @@ import statisticService from "../../services/stats/StatisticService";
 import dayjs, { Dayjs } from "dayjs";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
+import React from "react";
+import TopSection from "../dashboard/components/TopSection";
 
 
 const RevenueStatsPage: React.FC = () => {
@@ -180,32 +182,46 @@ const RevenueStatsPage: React.FC = () => {
             {t('statistic.revenue.title')}
         </h1>
 
-        <div className="grid grid-cols-3 gap-[15px] mt-[15px]">
-            <Card bordered={false}>
-                <Statistic
-                    title={<h3 className="font-semibold text-xl">
-                        {t('statistic.revenue.totalRevenueThisMonth')}
-                    </h3>}
-                    value={formatVnCurrency(totalRevenueThisMonth)}
-                />
-            </Card>
-            <Card bordered={false}>
-                <Statistic
-                    title={<h3 className="font-semibold text-xl">
-                        {t('statistic.revenue.totalSubscriber')}
-                    </h3>}
-                    value={totalSubscriber}
-                />
-            </Card>
+        <div>
+            <div className="flex gap-[15px] mt-[15px]">
 
-            <Card bordered={false}>
-                <Statistic
-                    title={<h3 className="font-semibold text-xl">
-                        {t('statistic.revenue.totalSubscriberOnTrial')}
-                    </h3>}
-                    value={totalSubscriberOnTrial}
-                />
-            </Card>
+                <Card className="w-1/4" bordered={false}>
+                    <Statistic
+                        title={<h3 className="font-semibold text-xl">
+                            {t('statistic.revenue.totalRevenueThisMonth')}
+                        </h3>}
+                        value={formatVnCurrency(totalRevenueThisMonth)}
+                    />
+                </Card>
+
+                <Card className="w-1/4" bordered={false}>
+                    <Statistic
+                        title={<h3 className="text-[18px] text-center">
+                            {t('dashboard.orderCompleted')}
+                        </h3>}
+                        value={totalSubscriber}
+                        valueStyle={{ textAlign: 'center' }}
+                    />
+                </Card>
+{/* 
+                <Card className="w-1/4" bordered={false}>
+                    <Statistic
+                        title={<h3 className="font-semibold text-xl">
+                            {t('statistic.revenue.totalSubscriber')}
+                        </h3>}
+                        value={totalSubscriber}
+                    />
+                </Card>
+
+                <Card className="w-1/4" bordered={false}>
+                    <Statistic
+                        title={<h3 className="font-semibold text-xl">
+                            {t('statistic.revenue.totalSubscriberOnTrial')}
+                        </h3>}
+                        value={totalSubscriberOnTrial}
+                    />
+                </Card> */}
+            </div>
         </div>
 
         <div className="grid grid-cols-2 gap-[15px] mt-[15px]">

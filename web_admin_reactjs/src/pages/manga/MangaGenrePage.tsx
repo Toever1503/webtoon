@@ -10,6 +10,7 @@ import { ExclamationCircleFilled } from "@ant-design/icons";
 import genreService, { GenreInput } from "../../services/manga/GenreService";
 import { showNofification } from '../../stores/features/notification/notificationSlice';
 import { reIndexTbl } from '../../utils/indexData';
+import { useTranslation } from 'react-i18next';
 
 
 const { Search } = Input;
@@ -18,6 +19,7 @@ const { confirm } = Modal;
 const MangaGenrePage: React.FC = () => {
     const genreData = useSelector((state: RootState) => state.genre);
 
+    const {t} = useTranslation();
     const dispatch = useDispatch();
 
     const [dataSource, setDataSource] = useState<GenreModel[]>([]);
@@ -46,7 +48,7 @@ const MangaGenrePage: React.FC = () => {
             key: 'index',
         },
         {
-            title: 'Name',
+            title: 'Tên',
             dataIndex: 'name',
             key: 'name',
         },
@@ -56,17 +58,17 @@ const MangaGenrePage: React.FC = () => {
             key: 'slug',
         },
         {
-            title: 'Total Manga',
+            title: 'Tổng số truyện',
             dataIndex: 'mangaCount',
             key: 'mangaCount',
         },
         {
-            title: 'Action',
+            title: 'Hành động',
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => updateGenre(record)}>Edit</a>
-                    <a onClick={() => deleteGenre(record)}>Delete</a>
+                    <a onClick={() => updateGenre(record)}>Sửa</a>
+                    <a onClick={() => deleteGenre(record)}>Xóa</a>
                 </Space>
             ),
             width: 200,
@@ -103,11 +105,11 @@ const MangaGenrePage: React.FC = () => {
     const deleteGenre = (record: GenreModel) => {
         console.log('delete  genre', record);
         confirm({
-            title: 'Are you sure delete this tag?',
+            title: 'Bạn chắc chắn?',
             icon: <ExclamationCircleFilled />,
-            okText: 'Yes',
+            okText: 'Chắc chắn',
             okType: 'danger',
-            cancelText: 'No',
+            cancelText: 'Hủy',
             onOk() {
                 console.log('OK');
                 setTblLoading(true);
@@ -117,7 +119,7 @@ const MangaGenrePage: React.FC = () => {
                         dispatch(deleteGenreById({ id: record.id }));
                         dispatch(showNofification({
                             type: 'success',
-                            message: 'Delete genre successfully',
+                            message: 'Xóa thành công!',
                         }))
                     })
                     .finally(() => {
@@ -163,14 +165,14 @@ const MangaGenrePage: React.FC = () => {
         <div className="space-y-3 py-3">
             <div className='flex justify-between items-center'>
                 <div className="flex space-x-3">
-                    <p className="text-[23px] font-[400]">Genre</p>
-                    <Button className="font-medium" onClick={addNewGenre}>Add new</Button>
+                    <p className="text-[23px] font-[400]">Danh sách thể loại</p>
+                    <Button className="font-medium" onClick={addNewGenre}>Thêm mới</Button>
                     {/* @ts-ignore */}
                     <AddUpdateGenreModal config={addUpdateGenreModal} />
                 </div>
 
                 <div className='search-genre flex justify-end'>
-                    <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
+                    <Search placeholder={`${t('placeholders.search')}`} onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
 

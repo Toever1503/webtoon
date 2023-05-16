@@ -4,17 +4,17 @@
 <body>
 <div layout:fragment="content" >
     <section
-            class="manga-genres w-full h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-between items-center">
-        <div class="flex gap-[20px] items-center">
-            <span class="text-[20px] font-semibold">Thể loại: </span>
-            <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"
-               th:each="item,iter : ${genreList}" th:if="${iter.index < 10}" th:text="${item.name}"
-               th:href="@{'/manga-gener/' + ${item.name} + '/' + ${item.id}}"
-            ></a>
-            <a class="hover:text-[#eb3349] ease-in-out duration-200 cursor-pointer view-detail-genes">Xem thêm
-                <i class="fas fa-chevron-right text-[14px] font-bold"></i>
-            </a>
-        </div>
+            class="manga-genres w-full h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-end items-center">
+<!--        <div class="flex gap-[20px] items-center">-->
+<!--            <span class="text-[20px] font-semibold">Thể loại: </span>-->
+<!--            <a class="block w-fit hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"-->
+<!--               th:each="item,iter : ${genreList}" th:if="${iter.index < 8}" th:text="${item.name}"-->
+<!--               th:href="@{'/manga-gener/' + ${item.name} + '/' + ${item.id}}"-->
+<!--            ></a>-->
+<!--            <a class="block w-fit hover:text-[#eb3349] ease-in-out duration-200 cursor-pointer view-detail-genes">Xem thêm-->
+<!--                <i class="fas fa-chevron-right text-[14px] font-bold"></i>-->
+<!--            </a>-->
+<!--        </div>-->
 
         <!--  seach button -->
         <div id="search_modal" class="h-[30px]">
@@ -74,7 +74,7 @@
 
         <section class="latest-popular-managas max-w-[1100px] mx-auto pt-[20px] h-[300px]">
             <h3 class="font-bold text-2xl mb-[15px]">
-                Top truyện được đọc nhiều nhất
+                Top truyện hot
             </h3>
             <!-- Slider main container -->
             <div class="swiper">
@@ -147,12 +147,23 @@
                             <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
                                  th:src="${manga.featuredImage}"/>
                             <div class="manga-info block m-0 h-full py-[10px]">
-                                <h4 class="font-bold leading-0 m-0 h-[90px]">
+                                <h4 class="font-bold leading-0 m-0">
                                     <a th:text="${manga.title}"
                                        th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
                                        class="hover:text-[#eb3349] text-[14px]"></a>
-                                    <span class="manga-meta block text-[12px] text-neutral-400"
-                                          th:text="${#dates.format(manga.createdAt, 'dd-MM-yyyy')}"></span>
+
+                                    <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
+                                        <ul>
+                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 1 ? 'color: #ffeb3b;' : ''}"></i>
+                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 2 ? 'color: #ffeb3b;' : ''}"></i>
+                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 3 ? 'color: #ffeb3b;' : ''}"></i>
+                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 4 ? 'color: #ffeb3b;' : ''}"></i>
+                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
+                                        </ul>
+
+                                        <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+                                    </div>
+
                                 </h4>
 
                                 <!--  for display chapter by vol-->
@@ -163,7 +174,7 @@
                                     <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
                                         <div class="gap-[5px] flex items-center">
-                                            <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
+                                            <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                style="border: 1px solid #ebebeb"
                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
@@ -180,7 +191,7 @@
                                     <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
                                         th:if="${iter.index < 2}"
                                     >
-                                        <a th:href="@{'/manga/'+${manga.title}+'/chapter/'+${chapter.id}}"
+                                        <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
                                            th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                            style="border: 1px solid #ebebeb"
                                            class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
@@ -205,6 +216,7 @@
                     </li>
 
                 </ul>
+
             </section>
 
             <div class="w-[300px] mx-auto mt-2 divide-y">
@@ -294,250 +306,54 @@
                 </div>
 
 
-                <div class="sidebar-section px-[10px] py-[10px]" th:if="${postList != null}">
+<!--                <div class="sidebar-section px-[10px] py-[10px]" th:if="${postList != null}">-->
+<!--                    <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">-->
+<!--                        Bài viết mới nhất-->
+<!--                    </h3>-->
+
+<!--                    <ul class="sidebar-posts divide-y mt-[10px]" th:each="item : ${postList}">-->
+<!--                        <li>-->
+<!--                            <a th:href="@{'/post/' + ${item.title} + '/' + ${item.id}}"-->
+<!--                               class="w-full h-full flex gap-x-[5px] py-3">-->
+<!--                                <div class="w-[90px] h-[100px] post_feature_image">-->
+<!--                                    <img class="w-[90px] h-[100px]"-->
+<!--                                         th:src="${item.featuredImage}">-->
+<!--                                </div>-->
+<!--                                <div class="post-infor w-[200px]">-->
+<!--                                    <h2 th:text="${item.title}"-->
+<!--                                        class="post-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">-->
+
+<!--                                    </h2>-->
+
+<!--                                    <div class="post-infor-meta flex gap-[2px] text-[13px] text-neutral-400">-->
+<!--                                            <span th:text="${item.createdDate}">-->
+<!--                                                <i class="far fa-calendar-alt"></i>-->
+<!--                                            </span>-->
+
+<!--                                        <span>|</span>-->
+
+<!--                                        <span>-->
+<!--                                                <i class="far fa-eye"></i>-->
+<!--                                                202-->
+<!--                                            </span>-->
+<!--                                    </div>-->
+<!--                                </div>-->
+<!--                            </a>-->
+<!--                        </li>-->
+
+<!--                    </ul>-->
+<!--                </div>-->
+
+                <div class="sidebar-section px-[10px] py-[10px] border mt-[15px]">
                     <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
-                        Bài viết mới nhất
+                        Thể loại
                     </h3>
 
-                    <ul class="sidebar-posts divide-y mt-[10px]" th:each="item : ${postList}">
-                        <li>
-                            <a th:href="@{'/post/' + ${item.title} + '/' + ${item.id}}"
-                               class="w-full h-full flex gap-x-[5px] py-3">
-                                <div class="w-[90px] h-[100px] post_feature_image">
-                                    <img class="w-[90px] h-[100px]"
-                                         th:src="${item.featuredImage}">
-                                </div>
-                                <div class="post-infor w-[200px]">
-                                    <h2 th:text="${item.title}"
-                                        class="post-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
-
-                                    </h2>
-
-                                    <div class="post-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
-                                            <span th:text="${item.createdDate}">
-                                                <i class="far fa-calendar-alt"></i>
-                                            </span>
-
-                                        <span>|</span>
-
-                                        <span>
-                                                <i class="far fa-eye"></i>
-                                                202
-                                            </span>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-
-                    </ul>
-                </div>
-
-                <div class="sidebar-section hidden px-[10px] py-[10px]">
-                    <h3 class="sidebar-section_title text-xl font-bold bordered border-b-[2px] border-black pb-2">
-                        Popular Manga
-                    </h3>
-
-                    <ul class="sidebar-manga-list divide-y mt-[10px]">
-                        <li class="manga-item">
-                            <a class="w-full h-full flex gap-x-[5px] py-3">
-                                <div class="w-[90px] h-[100px] manga_feature_image relative">
-                                    <img class="w-[90px] h-[100px]"
-                                         src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
-
-                                    <span
-                                            class="ml-2 inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[9px] font-bold leading-none text-danger-700 bg-yellow-500 absolute top-0 right-0">
-                                            Require some fee
-                                        </span>
-                                </div>
-
-                                <div class="manga-infor w-[200px]">
-                                    <h2
-                                            class="manga-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
-
-                                            <span
-                                                    class="manga-title-badget inline-block bg-[#eb3349] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                                HOT
-                                            </span>
-
-                                        <span
-                                                class="manga-title-badget inline-block bg-[#37b7da] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                                NEW
-                                            </span>
-
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </h2>
-
-                                    <div class="manga-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
-                                            <span>
-                                                <i class="far fa-calendar-alt"></i>
-                                                2021-09-01
-                                            </span>
-
-                                        <span>|</span>
-
-                                        <span>
-                                                <i class="far fa-eye"></i>
-                                                202
-                                            </span>
-                                    </div>
-                                </div>
-                            </a>
-                            <ul class="latest-chapters mx-auto w-fit p-0">
-                                <li class="flex gap-[5px] py-[5px]">
-                                    <a href="#"
-                                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                        Chapter 12
-                                    </a>
-                                    <a href="#"
-                                       class="text-[12px] text-[#666666] hover:text-[#eb3349] h-full cursor-pointer duration-300 py-[2px]">Volume
-                                        2</a>
-
-                                    <span class="text-[12px] text-[#52515168] py-[2px] ml-[10px]">
-                                            <i class="far fa-calendar-alt"></i>
-                                            2021-09-01
-                                        </span>
-                                </li>
-
-
-                                <a href="#"
-                                   class="block w-fit mx-auto text-[#eb3349] text-[12px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300 mb-[5px]">
-                                    View all chapters </a>
-                            </ul>
-                        </li>
-
-                        <li class="manga-item">
-                            <a class="w-full h-full flex gap-x-[5px] py-3">
-                                <div class="w-[90px] h-[100px] manga_feature_image relative">
-                                    <img class="w-[90px] h-[100px]"
-                                         src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
-
-                                    <span
-                                            class="ml-2 inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[9px] font-bold leading-none text-danger-700 bg-yellow-500 absolute top-0 right-0">
-                                            Require some fee
-                                        </span>
-                                </div>
-
-                                <div class="manga-infor w-[200px]">
-                                    <h2
-                                            class="manga-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
-
-                                            <span
-                                                    class="manga-title-badget inline-block bg-[#eb3349] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                                HOT
-                                            </span>
-
-                                        <span
-                                                class="manga-title-badget inline-block bg-[#37b7da] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                                NEW
-                                            </span>
-
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </h2>
-
-                                    <div class="manga-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
-                                            <span>
-                                                <i class="far fa-calendar-alt"></i>
-                                                2021-09-01
-                                            </span>
-
-                                        <span>|</span>
-
-                                        <span>
-                                                <i class="far fa-eye"></i>
-                                                202
-                                            </span>
-                                    </div>
-                                </div>
-                            </a>
-                            <ul class="latest-chapters mx-auto w-fit p-0">
-                                <li class="flex gap-[5px] py-[5px]">
-                                    <a href="#"
-                                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                        Chapter 12
-                                    </a>
-                                    <a href="#"
-                                       class="text-[12px] text-[#666666] hover:text-[#eb3349] h-full cursor-pointer duration-300 py-[2px]">Volume
-                                        2</a>
-
-                                    <span class="text-[12px] text-[#52515168] py-[2px] ml-[10px]">
-                                            <i class="far fa-calendar-alt"></i>
-                                            2021-09-01
-                                        </span>
-                                </li>
-
-
-                                <a href="#"
-                                   class="block w-fit mx-auto text-[#eb3349] text-[12px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300 mb-[5px]">
-                                    View all chapters </a>
-                            </ul>
-                        </li>
-                        <li class="manga-item">
-                            <a class="w-full h-full flex gap-x-[5px] py-3">
-                                <div class="w-[90px] h-[100px] manga_feature_image relative">
-                                    <img class="w-[90px] h-[100px]"
-                                         src="http://worldimg.kbs.co.kr/src/images/create/230317112616_96.jpg">
-
-                                    <span
-                                            class="ml-2 inline-block whitespace-nowrap rounded-[0.27rem] bg-danger-100 px-[0.65em] pt-[0.35em] pb-[0.25em] text-center align-baseline text-[9px] font-bold leading-none text-danger-700 bg-yellow-500 absolute top-0 right-0">
-                                            Require some fee
-                                        </span>
-                                </div>
-
-                                <div class="manga-infor w-[200px]">
-                                    <h2
-                                            class="manga-title font-bold text-[15px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300">
-
-                                            <span
-                                                    class="manga-title-badget inline-block bg-[#eb3349] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                                HOT
-                                            </span>
-
-                                        <span
-                                                class="manga-title-badget inline-block bg-[#37b7da] w-[24px] h-[24px] rounded-full text-center text-[8px] text-white leading-[26px] font-bold rotate-[-10deg]">
-                                                NEW
-                                            </span>
-
-                                        Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                                    </h2>
-
-                                    <div class="manga-infor-meta flex gap-[2px] text-[13px] text-neutral-400">
-                                            <span>
-                                                <i class="far fa-calendar-alt"></i>
-                                                2021-09-01
-                                            </span>
-
-                                        <span>|</span>
-
-                                        <span>
-                                                <i class="far fa-eye"></i>
-                                                202
-                                            </span>
-                                    </div>
-                                </div>
-                            </a>
-                            <ul class="latest-chapters mx-auto w-fit p-0">
-                                <li class="flex gap-[5px] py-[5px]">
-                                    <a href="#"
-                                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white bg-[#ebebeb] hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                        Chapter 12
-                                    </a>
-                                    <a href="#"
-                                       class="text-[12px] text-[#666666] hover:text-[#eb3349] h-full cursor-pointer duration-300 py-[2px]">Volume
-                                        2</a>
-
-                                    <span class="text-[12px] text-[#52515168] py-[2px] ml-[10px]">
-                                            <i class="far fa-calendar-alt"></i>
-                                            2021-09-01
-                                        </span>
-                                </li>
-
-
-                                <a href="#"
-                                   class="block w-fit mx-auto text-[#eb3349] text-[12px] hover:underline hover:underline-offset-1 cursor-pointer ease-in-out duration-300 mb-[5px]">
-                                    View all chapters </a>
-                            </ul>
-                        </li>
-
+                    <ul class="grid grid-cols-2 justify-between gap-[10px] mt-[15px]">
+                        <a class="block w-fit hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"
+                           th:each="item,iter : ${genreList}" th:if="${iter.index < 8}" th:text="${item.name}"
+                           th:href="@{'/manga-gener/' + ${item.name} + '/' + ${item.id}}"
+                        ></a>
                     </ul>
                 </div>
 

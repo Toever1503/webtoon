@@ -44,6 +44,10 @@ public class HomeController {
     @Autowired
     private IPostService postService;
 
+    public HomeController() {
+        System.out.printf("HomeController init\n");
+    }
+
     @RequestMapping("/index")
     public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
         Specification mangaSpec = Specification.where(
@@ -56,6 +60,8 @@ public class HomeController {
 
         Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
+
+
 
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
 
@@ -76,5 +82,11 @@ public class HomeController {
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         model.addAttribute("logger",loggedUser);
         return "homepage";
+    }
+
+
+    @RequestMapping("contact")
+    public String contact(){
+        return "contact";
     }
 }

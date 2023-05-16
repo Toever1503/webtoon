@@ -13,7 +13,11 @@ export default interface IUserType {
     authorities: {
         id: number | string;
         authorityName: string;
-    }[]
+    }[],
+    role: {
+        id: number | string;
+        roleName: string;
+    }
 }
 
 export type IUserStatus = 'NOT_ENABLED' | 'DEACTIVED' | 'ACTIVED';

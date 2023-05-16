@@ -4,6 +4,7 @@ import { useDispatch, } from "react-redux";
 import genreService from "../../../../services/manga/GenreService";
 import { addGenre, updateGenre } from "../../../../stores/features/manga/genreSlice";
 import { showNofification } from "../../../../stores/features/notification/notificationSlice";
+import { useTranslation } from "react-i18next";
 
 interface AddUpdateGenreModalProps {
     config: object;
@@ -12,6 +13,7 @@ interface AddUpdateGenreModalProps {
 const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | any) => {
 
 
+    const { t } = useTranslation();
     const dispatch = useDispatch();
     const [form] = Form.useForm();
     const [isSubmitting, setIsSubmitting] = React.useState(false);
@@ -26,6 +28,10 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
 
     const onFinish = (values: any) => {
         console.log('Success:', values);
+
+        if(isSubmitting) return;
+        setIsSubmitting(true);
+        values.name = values.name.trim();
         if (config.type === 'add') {
             genreService
                 .addGenre(values)
@@ -35,8 +41,21 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                     handleCancel();
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Add genre successfully',
+                        message: 'Thêm thành công!',
                     }));
+                })
+                .catch(err => {
+                    if (!err.response.data.code)
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: 'Thêm thất bại!'
+                        }))
+                    else {
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('response.errors.' + err.response.data.code)
+                        }))
+                    }
                 })
                 .finally(() => {
                     setIsSubmitting(false);
@@ -50,8 +69,21 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                     handleCancel();
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Edit genre successfully',
+                        message: 'Sửa thành công!',
                     }));
+                })
+                .catch(err => {
+                    if (!err.response.data.code)
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: 'Sửa thất bại!'
+                        }))
+                    else {
+                        dispatch(showNofification({
+                            type: 'error',
+                            message: t('response.errors.' + err.response.data.code)
+                        }))
+                    }
                 })
                 .finally(() => {
                     setIsSubmitting(false);
@@ -83,12 +115,12 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                 onFinish={onFinish}
                 onFinishFailed={onFinishFailed}
                 autoComplete="off"
-                labelCol={{ span: 4 }}
+                labelCol={{ span: 5 }}
             >
                 <Form.Item
-                    label="Name"
+                    label="Tên thể loại"
                     name="name"
-                    rules={[{ required: true, message: 'Please input your name!' }]}
+                    rules={[{ required: true, message: 'Vui lòng nhập tên!' }]}
                 >
                     <Input />
                 </Form.Item>
@@ -102,7 +134,7 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
 
                 <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
                     <Button type="primary" htmlType="submit" loading={isSubmitting}>
-                        Save
+                        Lưu
                     </Button>
                 </Form.Item>
             </Form>

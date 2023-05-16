@@ -109,4 +109,5 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
             "\n", nativeQuery = true)
     List<Object[]> calcNotRenewOrderPerMonthByYear(@Param("year") String year);
 
+
 }

@@ -68,13 +68,19 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public MangaDto add(MangaModel model) {
         MangaEntity mangaEntity = this.mangaMapper.toEntity(model);
-        mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle()));
-
+        mangaEntity.setMangaName(ASCIIConverter.utf8ToAscii(model.getTitle())
+                .replace(" ", "-")
+                .replace("?", "-")
+                .toLowerCase());
 
         if (model.getId() != null) {
             MangaEntity originalEntity = this.getById(model.getId());
             mangaEntity.setVolumeEntities(originalEntity.getVolumeEntities());
             mangaEntity.setChapters(originalEntity.getChapters());
+
+            mangaEntity.setRating(originalEntity.getRating());
+            mangaEntity.setViewCount(originalEntity.getViewCount());
+            mangaEntity.setCommentCount(originalEntity.getCommentCount());
         } else {
             mangaEntity.setRating(0F);
             mangaEntity.setViewCount(0);
@@ -182,12 +188,11 @@ public class IMangaServiceImpl implements IMangaService {
             return  this.mangaRepository.getRatingManga(id);
     }
 
-
     @Override
-    public List<MangaEntity> getALLByGeners(Long id){
-
-        return this.mangaRepository.findByGenresIn(id);
+    public List<MangaEntity> getALLByGenres(List<Long> ids) {
+        return this.mangaRepository.findByGenresIn(ids);
     }
+
 
     @Override
     public MangaDto getByMangaId(Long id){
@@ -227,7 +232,9 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Override
     public Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs) {
-        return mangaRepository.findAll(specs, pageable).map(entity -> {
+        Page<MangaEntity> mangaEntityPage = mangaRepository.findAll(specs, pageable);
+
+        return mangaEntityPage.map(entity -> {
             entity.setTags(this.tagService.findAllByObjectIdAndType(entity.getId(), ETagType.MANGA));
             return MangaDto.toDto(entity);
         });
@@ -287,5 +294,10 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public List<Object[]> calculateTotalMangaEachStatus(String q) {
         return this.mangaRepository.calculateTotalMangaEachStatus(q);
+    }
+
+    @Override
+    public Page<MangaEntity> filterEntitiesByTag(Long id) {
+        return null;
     }
 }

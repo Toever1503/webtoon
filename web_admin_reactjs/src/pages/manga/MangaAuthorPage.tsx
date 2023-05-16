@@ -11,11 +11,13 @@ import AddUpdateAuthorModal from "./component/modal/AddUpdateAuthorModal";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { showNofification } from '../../stores/features/notification/notificationSlice';
 import { reIndexTbl } from '../../utils/indexData';
+import { useTranslation } from 'react-i18next';
 
 const { Search } = Input;
 const { confirm } = Modal;
 
 const MangaAuthorPage: React.FC = () => {
+    const { t } = useTranslation();
     const authorData = useSelector((state: RootState) => state.author);
 
     const dispatch = useDispatch();
@@ -31,7 +33,7 @@ const MangaAuthorPage: React.FC = () => {
     const [dataSource, setDataSource] = useState<AuthorModel[]>(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, authorData.data));
 
     const [addUpdateAuthorModal, setAddUpdateAuthorModal] = useState<object>({
-        title: 'Add new author',
+        title: 'Thêm mới tác giả',
         visible: false,
         type: 'add',
         setVisible: (visible: boolean) => setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible }),
@@ -41,11 +43,11 @@ const MangaAuthorPage: React.FC = () => {
     const columns: ColumnsType<AuthorModel> = [
         {
             title: 'STT',
-            dataIndex: 'stt',
+            dataIndex: 'index',
             key: 'stt',
         },
         {
-            title: 'Name',
+            title: 'Tên',
             dataIndex: 'name',
             key: 'name',
         },
@@ -55,17 +57,20 @@ const MangaAuthorPage: React.FC = () => {
             key: 'slug',
         },
         {
-            title: 'Total Manga',
+            title: 'Tổng số truyện',
             dataIndex: 'mangaCount',
             key: 'mangaCount',
+            render: (text) => <>
+                {text ? text : '0'}
+            </>
         },
         {
-            title: 'Action',
+            title: 'Thao tác',
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => updateAuthor(record)}>Edit</a>
-                    <a onClick={() => deleteAuthor(record)}>Delete</a>
+                    <a onClick={() => updateAuthor(record)}>Sửa</a>
+                    <a onClick={() => deleteAuthor(record)}>Xóa</a>
                 </Space>
             ),
             width: 200,
@@ -91,14 +96,14 @@ const MangaAuthorPage: React.FC = () => {
     };
 
     const addNewAuthor = () => {
-        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Add new author', type: 'add' });
+        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Thêm mới', type: 'add' });
         console.log('add new author', addUpdateAuthorModal);
 
     };
 
     const updateAuthor = (record: AuthorModel) => {
         console.log('update  author', record)
-        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Update tag', type: 'update', record });
+        setAddUpdateAuthorModal({ ...addUpdateAuthorModal, visible: true, title: 'Chỉnh sửa', type: 'update', record });
     };
 
     const deleteAuthor = (record: AuthorModel) => {
@@ -137,9 +142,9 @@ const MangaAuthorPage: React.FC = () => {
         authorService.filterAuthor({ s, page, size, sort })
             .then((res) => {
                 console.log('author', res.data);
-          
+
                 dispatch(setAuthorData({
-                    data: res.data.content.map((item: AuthorModel) => ({ ...item, key: item.id })),
+                    data: reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, res.data.content.map((item: AuthorModel) => ({ ...item, key: item.id }))),
                     totalElements: res.data.totalElements
                 }));
 
@@ -159,6 +164,8 @@ const MangaAuthorPage: React.FC = () => {
 
         setDataSource(reIndexTbl(pageConfig.current || 0, pageConfig.pageSize || 10, authorData.data));
 
+        console.log('author data', authorData.data);
+
     }, [authorData]);
 
 
@@ -166,15 +173,15 @@ const MangaAuthorPage: React.FC = () => {
         <div className="space-y-3 py-3">
             <div className='flex justify-between items-center'>
                 <div className="flex space-x-3">
-                    <p className="text-[23px] font-[400]">Author</p>
-                    <Button className="font-medium" onClick={addNewAuthor}>Add new</Button>
+                    <p className="text-[23px] font-[400]">Danh sách tác giả</p>
+                    <Button className="font-medium" onClick={addNewAuthor}>Thêm mới</Button>
                     {/* @ts-ignore */}
                     {/* <AddUpdateGenreModal config={addUpdateGenreModal} /> need create new */}
                     <AddUpdateAuthorModal config={addUpdateAuthorModal} />
                 </div>
 
                 <div className='search-genre flex justify-end'>
-                    <Search placeholder="input search text" onSearch={onSearch} style={{ width: 200 }} />
+                    <Search placeholder={`${t('placeholders.search')}`} onSearch={onSearch} style={{ width: 200 }} />
                 </div>
             </div>
 

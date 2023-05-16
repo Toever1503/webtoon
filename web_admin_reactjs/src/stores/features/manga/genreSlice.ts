@@ -14,15 +14,7 @@ export interface GenreState {
 }
 
 const initialState: GenreState = {
-    data: [
-        {
-            key: 1,
-            id: 1,
-            index: 1,
-            name: 'John Brown',
-            slug: 'New York No. 1 Lake Park',
-        },
-    ],
+    data: [],
     pageSize: 10,
 }
 

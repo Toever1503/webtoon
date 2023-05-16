@@ -14,10 +14,15 @@ export default interface IOrder {
     subs_pack_id: ISubscriptionPack;
     user_id: IUserType;
     modifiedBy: IUserType;
-    fromOrder: IOrder;
     hasUpgradingOrder: boolean;
+    paymentDto: IPaymentDto;
 }
 
+type IPaymentDto = {
+    id: string;
+    bankTranNo: string;
+    transNo: string;
+}
 export type EORDER_STATUS =  'PENDING_PAYMENT' | 'CANCELED' | 'COMPLETED' | 'USER_CONFIRMED_BANKING';
 
 

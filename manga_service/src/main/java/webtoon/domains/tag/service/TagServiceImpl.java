@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import webtoon.domains.manga.entities.MangaGenreEntity;
 import webtoon.domains.tag.entity.ITagRelationRepository;
 import webtoon.domains.tag.entity.ITagRepository;
 import webtoon.domains.tag.entity.TagEntity;
@@ -15,6 +16,7 @@ import webtoon.domains.tag.entity.TagEntityRelation;
 import webtoon.domains.tag.entity.*;
 import webtoon.domains.tag.entity.enums.ETagType;
 import webtoon.utils.ASCIIConverter;
+import webtoon.utils.exception.CustomHandleException;
 
 @Service
 public class TagServiceImpl implements ITagService {
@@ -72,6 +74,21 @@ public class TagServiceImpl implements ITagService {
         return this.tagRepository.findAll((root, query, cb) -> {
             return cb.like(root.get(TagEntity_.TAG_NAME), "%" + s + "%");
         }, page);
+    }
+
+    @Override
+    public TagEntity getById(Long id) {
+        return this.tagRepository.findById(id).orElseThrow(() -> new CustomHandleException(1));
+    }
+
+    @Override
+    public List<TagEntity> findAll() {
+        return this.tagRepository.findAll();
+    }
+
+    @Override
+    public List<TagEntity> findAll(Pageable pageable) {
+        return this.tagRepository.findAll(pageable).getContent();
     }
 
 }

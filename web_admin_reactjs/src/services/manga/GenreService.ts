@@ -15,6 +15,8 @@ export interface GenreInput {
     slug?: string;
 }
 
+const getAll = async () => mangaAxios.get(`${basePath}/get-all`);
+
 const filterGenre = async (model: GenreFilter) => mangaAxios.get(`${basePath}/filter?s=${model.s}&page=${model.page}&size=${model.size}&sort=${model.sort}`);
 
 const addGenre = async (model: GenreInput) => mangaAxios.post(`${basePath}`, model);
@@ -22,6 +24,7 @@ const updateGenre = async (model: GenreInput) => mangaAxios.put(`${basePath}/${m
 const deleteGenre = async (ids: Array<number | string>) => mangaAxios.del(`${basePath}/bulk-del?ids=${ids}`);
 
 const genreService = {
+    getAll,
     filterGenre,
     addGenre,
     updateGenre,

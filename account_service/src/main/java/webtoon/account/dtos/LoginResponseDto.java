@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -12,4 +14,6 @@ import lombok.NoArgsConstructor;
 public class LoginResponseDto {
     private String token;
     private long validTimeIn;
+
+    private List<String> auths;
 }

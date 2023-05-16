@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Space, Table, TablePaginationConfig, Tag, Input, Dropdown, MenuProps, Popconfirm, Tooltip } from 'antd';
+import { Button, Space, Table, TablePaginationConfig, Tag, Input, Dropdown, MenuProps, Popconfirm, Tooltip, Select, DatePicker } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
 import mangaService, { MangaFilterInput, MangaInput, MangaStatus, ReleaseStatus } from '../../services/manga/MangaService';
 import { Link, useNavigate } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 import { TagInput } from '../../services/TagService';
-import { AuthorInput } from '../../services/manga/AuthorService';
-import { GenreInput } from '../../services/manga/GenreService';
+import authorService, { AuthorInput } from '../../services/manga/AuthorService';
+import genreService, { GenreInput } from '../../services/manga/GenreService';
 import { DeleteOutlined, DownOutlined } from '@ant-design/icons';
 import debounce from '../../utils/debounce';
 import { useTranslation } from 'react-i18next';
@@ -87,6 +87,22 @@ const MangaPage: React.FC = () => {
                 </Dropdown>
 
             </>,
+        },
+        {
+            title: 'Trạng thái',
+            dataIndex: 'isShow',
+            key: 'isShow',
+            render: (text) => <>{
+                text ? <Tag color='green'>Đang hiển thị</Tag> : <Tag color='red'>Đang ẩn</Tag>
+            }</>,
+        },
+        {
+            title: 'Hình thức truyện',
+            dataIndex: 'isFree',
+            key: 'isFree',
+            render: (text) => <>{
+                text ? 'Miễn phí' : 'Trả phí'
+            }</>,
         },
         {
             title: t('manga.table.genre'),
@@ -187,8 +203,12 @@ const MangaPage: React.FC = () => {
     ];
 
     const [mangaFilter, setMangaFilter] = React.useState<MangaFilterInput>({
+        genre: 'ALL',
+        author: 'ALL',
         status: 'ALL',
-        q: ''
+        releaseStatus: 'ALL',
+        q: '',
+        timeRange: [],
     });
 
     const onChangeTable = (page: TablePaginationConfig) => {
@@ -205,8 +225,15 @@ const MangaPage: React.FC = () => {
     const [mangaData, setMangaData] = React.useState<MangaInput[]>([]);
     const [tableLoading, setTableLoading] = React.useState<boolean>(false);
     const onfilterManga = () => {
+        if (tableLoading) return;
         setTableLoading(true);
-        mangaService.filterManga(mangaFilter, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
+        mangaService.filterManga({
+            q: mangaFilter.q ? mangaFilter.q : undefined,
+            genreId: mangaFilter.genre !== 'ALL' ? mangaFilter.genre : undefined,
+            authorId: mangaFilter.author !== 'ALL' ? mangaFilter.author : undefined,
+            isShow: mangaFilter.status !== 'ALL' ? (mangaFilter.status === 'PUBLISHED' ? true : false) : undefined,
+            status: mangaFilter.releaseStatus !== 'ALL' ? mangaFilter.releaseStatus : undefined,
+        }, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
             .then((res: AxiosResponse<{
                 totalElements: number | undefined;
                 content: MangaInput[],
@@ -325,32 +352,134 @@ const MangaPage: React.FC = () => {
             });
     }
 
+    const [genreListData, setGenreListData] = useState<GenreInput[]>([]);
+    const [authorListData, setAuthorListData] = useState<AuthorInput[]>([]);
+
     useEffect(() => {
         onfilterManga();
+        genreService.getAll()
+            .then((res) => {
+                setGenreListData(res.data);
+            });
+        authorService.getAll()
+            .then((res) => {
+                setAuthorListData(res.data);
+            })
     }, [mangaFilter.status]);
+
     return (
         <div className="space-y-3 py-3">
             <div className="flex space-x-3">
-                <p className="text-[23px] font-[400]">Manga</p>
-                <Button className="font-medium" onClick={() => navigate('/mangas/add')}>Add new</Button>
+                <p className="text-[23px] font-[400]">Danh sách truyện</p>
+                <Button className="font-medium" onClick={() => navigate('/mangas/add')}>Thêm mới</Button>
             </div>
 
-            <div className="flex justify-end">
-                <div className="flex space-x-3 items-center hidden">
-                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'ALL' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'ALL' })}>
-                        <p className="m-0">All</p><p className="m-0">({mangaStatusCalc.ALL})</p>
-                    </div>
-                    <div>
-                        <p className="m-0">|</p>
-                    </div>
+            <div className="grid lg:flex items-center gap-3 bg-white px-[15px] py-[15px]">
 
-                    <div className={'flex space-x-[2px] cursor-pointer hover:text-blue-400' + (mangaFilter.status === 'DELETED' ? ' text-blue-400' : '')} onClick={() => setMangaFilter({ ...mangaFilter, status: 'DELETED' })}>
-                        <p className="m-0">Deleted</p><p className="m-0">({mangaStatusCalc.DELETED})</p>
-                    </div>
-                </div>
-                <div>
+                <Space>
+                    <label className="font-bold">{t('manga.table.releaseStatus')}: </label>
+                    <Select className="min-w-[120px]"
+                        onChange={(val: string) => {
+                            mangaFilter.releaseStatus = val;
+                            setMangaFilter(mangaFilter);
+                            onfilterManga();
+                        }}
+                        value={mangaFilter.releaseStatus}>
+                        <Select.Option value="ALL">
+                            {t('manga.eMangaStatus.ALL')}
+                        </Select.Option>
+                        {
+                            ['COMING', 'ONGOING', 'ON_STOPPING', 'COMPLETED'].map((status, index) => (
+                                <Select.Option key={index} value={status} >
+                                    {t('manga.eReleaseStatus.' + status)}
+                                </Select.Option>)
+                            )
+                        }
+
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('manga.table.status')}: </label>
+                    <Select className="min-w-[120px]"
+                        onChange={val => {
+                            mangaFilter.status = val;
+                            setMangaFilter(mangaFilter);
+                            onfilterManga();
+                        }}
+                        value={mangaFilter.status}>
+                        <Select.Option value="ALL">
+                            {t('manga.eMangaStatus.ALL')}
+                        </Select.Option>
+
+                        {
+                            ['PUBLISHED', 'HIDDEN'].map((status, index) =>
+                                <Select.Option key={index} value={status} >
+                                    {t('manga.eMangaStatus.' + status)}
+                                </Select.Option>)
+                        }
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('manga.table.genre')}: </label>
+                    <Select
+                        showSearch
+                        className="min-w-[150px]"
+                        filterOption={(input, option) =>
+                            String((option?.label ?? '')).toLowerCase().includes(input.toLowerCase())
+                        }
+                        onChange={val => {
+                            mangaFilter.genre = val;
+                            setMangaFilter(mangaFilter);
+                            onfilterManga();
+                        }}
+                        value={mangaFilter.genre}>
+                        <Select.Option value="ALL">
+                            {t('order.eStatus.ALL')}
+                        </Select.Option>
+
+                        {
+                            genreListData.map((item, index) =>
+                                <Select.Option key={index} value={item.id} label={item.name}>
+                                    {item.name}
+                                </Select.Option>)
+                        }
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('manga.table.author')}: </label>
+                    <Select
+                        showSearch
+                        className="min-w-[150px]"
+                        filterOption={(input, option) => {
+                            return String((option?.label ?? '')).toLowerCase().includes(input.toLowerCase());
+                        }
+                        }
+                        onChange={val => {
+                            mangaFilter.author = val;
+                            setMangaFilter(mangaFilter);
+                            onfilterManga();
+                        }}
+                        value={mangaFilter.author}>
+                        <Select.Option value="ALL">
+                            {t('order.eStatus.ALL')}
+                        </Select.Option>
+
+                        {
+                            authorListData.map((item, index) =>
+                                <Select.Option key={index} value={item.id} label={item.name}>
+                                    {item.name}
+                                </Select.Option>)
+                        }
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.keyword')}: </label>
                     <Search placeholder={`${t('placeholders.search')}`} value={mangaFilter.q} onChange={e => setMangaFilter({ ...mangaFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
-                </div>
+                </Space>
             </div>
             <Table columns={columns} loading={tableLoading} pagination={pageConfig} dataSource={mangaData} onChange={onChangeTable} />
         </div>

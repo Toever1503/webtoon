@@ -43,7 +43,7 @@ const TagPage: React.FC = () => {
             key: 'index',
         },
         {
-            title: 'Name',
+            title: 'Tên',
             dataIndex: 'tagName',
             key: 'tagName',
         },
@@ -52,18 +52,13 @@ const TagPage: React.FC = () => {
             dataIndex: 'slug',
             key: 'slug',
         },
-        // {
-        //     title: 'Total Manga',
-        //     dataIndex: 'mangaCount',
-        //     key: 'mangaCount',
-        // },
         {
-            title: 'Action',
+            title: 'Thao tác',
             key: 'action',
             render: (_, record) => (
                 <Space size="middle">
-                    <a onClick={() => updateTag(record)}>Edit</a>
-                    <a onClick={() => deleteTag(record)}>Delete</a>
+                    <a onClick={() => updateTag(record)}>Sửa</a>
+                    <a onClick={() => deleteTag(record)}>Xóa</a>
                 </Space>
             ),
             width: 200,
@@ -161,8 +156,8 @@ const TagPage: React.FC = () => {
         <div className="space-y-3 py-3">
             <div className='flex justify-between items-center'>
                 <div className="flex space-x-3">
-                    <p className="text-[23px] font-bold">Tag</p>
-                    <Button className="font-medium" onClick={addNewGenre}>Add new</Button>
+                    <p className="text-[23px] font-bold">Danh sách thẻ</p>
+                    <Button className="font-medium" onClick={addNewGenre}>Thêm mới</Button>
                     {/* @ts-ignore */}
                     <AddUpdateTagModal config={addUpdateTagModal} />
                 </div>

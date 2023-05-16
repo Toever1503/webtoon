@@ -9,6 +9,7 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import webtoon.account.configs.security.SecurityUtils;
+import webtoon.account.entities.UserEntity;
 import webtoon.account.services.IUserService;
 import webtoon.payment.controllers.VnPayConfig;
 import webtoon.payment.dtos.OrderDto;
@@ -23,10 +24,12 @@ import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 import webtoon.payment.repositories.IOrderRepository;
 import webtoon.payment.services.IOrderService;
-import webtoon.payment.services.ISendEmail;
+import webtoon.payment.services.ISendEmailService;
 import webtoon.payment.services.ISubscriptionPackService;
 import webtoon.utils.exception.CustomHandleException;
 
+import javax.mail.MessagingException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -42,10 +45,10 @@ public class OrderServiceImpl implements IOrderService {
     @Autowired
     private IUserService userService;
 
-    private final ISendEmail sendEmailService;
+    private final ISendEmailService sendEmailService;
     private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
-    public OrderServiceImpl(IOrderRepository orderRepository, ISendEmail sendEmailService) {
+    public OrderServiceImpl(IOrderRepository orderRepository, ISendEmailService sendEmailService) {
         this.orderRepository = orderRepository;
         this.sendEmailService = sendEmailService;
     }
@@ -54,12 +57,9 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDto add(OrderModel orderModel) {
         OrderEntity orderEntity = OrderEntity.builder()
                 .created_at(orderModel.getCreated_at())
-                .gioLap(orderModel.getGioLap())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
-                .content(orderModel.getContent())
-                .ipAddr(orderModel.getIpAddr())
                 .maDonHang(orderModel.getMaDonHang())
                 .subs_pack_id(orderModel.getSubs_pack_id())
                 .user_id(orderModel.getUser_id())
@@ -74,12 +74,9 @@ public class OrderServiceImpl implements IOrderService {
     public OrderDto update(OrderModel orderModel) {
         OrderEntity orderEntity = this.getById(orderModel.getId());
         orderEntity.setCreated_at(orderModel.getCreated_at());
-        orderEntity.setGioLap(orderModel.getGioLap());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());
-        orderEntity.setContent(orderModel.getContent());
-        orderEntity.setIpAddr(orderModel.getIpAddr());
         orderEntity.setMaDonHang(orderModel.getMaDonHang());
         orderEntity.setSubs_pack_id(orderModel.getSubs_pack_id());
         orderEntity.setUser_id(orderModel.getUser_id());
@@ -142,13 +139,11 @@ public class OrderServiceImpl implements IOrderService {
 
         entity.setMaDonHang(orderNumber);
         entity.setUser_id(userService.getById(input.getUser_id()));
-        entity.setMonthCount(subscriptionPack.getMonthCount());
-        entity.setDayCount(subscriptionPack.getDayCount());
 
         entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(entity);
 
-        if(input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)){
+        if (input.getStatus().equals(EOrderStatus.PENDING_PAYMENT)) {
 
         }
 
@@ -157,31 +152,31 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public OrderDto updateOrder(OrderInput input) {
-        OrderEntity entity = this.getById(input.getId());
+        OrderEntity orderEntity = this.getById(input.getId());
 
 
-        if (!entity.getSubs_pack_id().getId().equals(input.getSubscriptionPack())) {
+        if (!orderEntity.getSubs_pack_id().getId().equals(input.getSubscriptionPack())) {
             SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPack());
 
-            entity.setSubs_pack_id(subscriptionPack);
-            entity.setFinalPrice(subscriptionPack.getPrice());
+            orderEntity.setSubs_pack_id(subscriptionPack);
+            orderEntity.setFinalPrice(subscriptionPack.getPrice());
 
-            entity.setMonthCount(subscriptionPack.getMonthCount());
-            entity.setDayCount(subscriptionPack.getDayCount());
         }
 
-        entity.setOrderType(input.getOrderType());
-        entity.setStatus(input.getStatus());
-        entity.setPaymentMethod(input.getPaymentMethod());
+        orderEntity.setOrderType(input.getOrderType());
+        orderEntity.setStatus(input.getStatus());
+        orderEntity.setPaymentMethod(input.getPaymentMethod());
 
-        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+        orderEntity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
 
         // send order info to user's mail
-        if(entity.getStatus().equals(EOrderStatus.COMPLETED))
-            this.sendOrderInfoToMail(entity);
+        if (orderEntity.getStatus().equals(EOrderStatus.COMPLETED)) {
+            this.plusReadTimeToUser(orderEntity);
+            this.sendOrderInfoToMail(orderEntity);
+        }
 
-        this.orderRepository.saveAndFlush(entity);
-        return OrderDto.toDto(entity);
+        this.orderRepository.saveAndFlush(orderEntity);
+        return OrderDto.toDto(orderEntity);
     }
 
     @Override
@@ -225,8 +220,6 @@ public class OrderServiceImpl implements IOrderService {
 
         entity.setMaDonHang(maDonHang);
         entity.setUser_id(SecurityUtils.getCurrentUser().getUser());
-        entity.setMonthCount(subscriptionPackEntity.getMonthCount());
-        entity.setDayCount(subscriptionPackEntity.getDayCount());
         entity.setStatus(EOrderStatus.DRAFTED);
         entity.setOrderType(EOrderType.NEW);
         entity.setPaymentMethod(paymentMethod);
@@ -263,7 +256,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void cancelOrder(Long id) {
         OrderEntity orderEntity = this.getById(id);
-        if(!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
+        if (!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
             throw new CustomHandleException(42);
         orderEntity.setStatus(EOrderStatus.CANCELED);
         this.orderRepository.saveAndFlush(orderEntity);
@@ -274,7 +267,6 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(id);
         if (!orderEntity.getUser_id().getId().equals(SecurityUtils.getCurrentUser().getUser().getId()))
             throw new CustomHandleException(43);
-        orderEntity.setStatus(EOrderStatus.REFUNDING);
         this.orderRepository.saveAndFlush(orderEntity);
     }
 
@@ -313,6 +305,8 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity orderEntity = this.getById(id);
         orderEntity.setStatus(status);
         if (status.equals(EOrderStatus.COMPLETED)) { // need send mail
+            this.plusReadTimeToUser(orderEntity);
+
             this.sendOrderInfoToMail(orderEntity);
         }
         this.orderRepository.saveAndFlush(orderEntity);
@@ -352,9 +346,67 @@ public class OrderServiceImpl implements IOrderService {
         return ls;
     }
 
+    @Override
+    public OrderDto findById(Long id) {
+        OrderEntity orderEntity = this.getById(id);
+        return OrderDto.toDto(orderEntity);
+    }
+
+    @Override
+    public Long countTotalCompletedOrderThisMonth() {
+        return this.orderRepository.countTotalRegisterThisMonth();
+    }
+
+    @Override
+    public void sendMailRenewSubscription(Long userId) throws MessagingException {
+        UserEntity userEntity = this.userService.getById(userId);
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+
+        sendEmailService.sendMail("payments/mail-templates/renew_subscription.html",
+                userEntity.getEmail(), "Thông báo gia hạn gói đăng ký",
+                Map.of("user", userEntity, "sub", subscriptionPack));
+    }
+
+    @Override
+    public void plusReadTimeToUser(OrderEntity orderEntity) {
+        Calendar canReadUntilDate = Calendar.getInstance();
+        int monthCount = orderEntity.getSubs_pack_id().getMonthCount();
+        // update user current used subs
+        if (orderEntity.getUser_id().getCurrentUsedSubsId() == null) {
+            orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
+            orderEntity.getUser_id().setFirstBoughtSubsDate(Calendar.getInstance().getTime());
+
+        }  if (orderEntity.getSubs_pack_id().getId() > orderEntity.getUser_id().getCurrentUsedSubsId()) {
+            orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+        if(orderEntity.getUser_id().getCanReadUntilDate() == null){
+            canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+        }
+        else {
+            int result = formatter.format(orderEntity.getUser_id().getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            if (result < 0) {
+                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+            } else {
+                canReadUntilDate.setTime(orderEntity.getUser_id().getCanReadUntilDate());
+                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+            }
+        }
+        orderEntity.getUser_id().setCanReadUntilDate(canReadUntilDate.getTime());
+
+        userService.saveUserEntity(orderEntity.getUser_id());
+    }
+
+    @Override
+    public Long count(Specification<OrderEntity> spec) {
+        return this.orderRepository.count(spec);
+    }
+
     private void sendOrderInfoToMail(OrderEntity orderEntity) {
         Map<String, Object> context = new HashMap<>();
         context.put("order", orderEntity);
+
         try {
             this.sendEmailService.sendMail("payments/mail-templates/order_info.html", orderEntity.getUser_id().getEmail(), "Thông tin đặt hàng", context);
         } catch (Exception e) {
@@ -368,24 +420,20 @@ public class OrderServiceImpl implements IOrderService {
         OrderEntity originalOrder = this.getById(input.getOriginalOrderId());
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(input.getSubscriptionPackId());
 
-        String orderNumber = UUID.randomUUID().toString();
+        String orderNumber = VnPayConfig.getRandomNumber(10);
         while (this.orderRepository.getByMaDonHang(orderNumber) != null) {
-            orderNumber = UUID.randomUUID().toString();
+            orderNumber = VnPayConfig.getRandomNumber(10);
         }
 
         OrderEntity upgradeOrder = OrderEntity.builder()
-                .fromOrder(originalOrder)
                 .orderType(EOrderType.UPGRADE)
                 .maDonHang(orderNumber)
                 .subs_pack_id(subscriptionPack)
                 .paymentMethod(input.getPaymentMethod())
                 .status(EOrderStatus.PENDING_PAYMENT)
                 .finalPrice(subscriptionPack.getPrice() - originalOrder.getSubs_pack_id().getPrice())
-                .content("Upgrade order")
                 .user_id(SecurityUtils.getCurrentUser().getUser())
                 .modifiedBy(SecurityUtils.getCurrentUser().getUser())
-                .monthCount(subscriptionPack.getMonthCount() - originalOrder.getSubs_pack_id().getMonthCount())
-                .dayCount(subscriptionPack.getDayCount() - originalOrder.getSubs_pack_id().getDayCount())
                 .build();
 
         // task: send mail notify to user

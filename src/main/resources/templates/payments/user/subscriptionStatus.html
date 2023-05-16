@@ -1,44 +1,83 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout.html}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{layout.html}">
+
 <head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Thông tin cá nhân</title>
-    <link href="/src/main/resources/static/main.css" rel="stylesheet"/>
-    <script
-            src="https://kit.fontawesome.com/b86979ecfa.js"
-            crossorigin="anonymous"
-    ></script>
+    <link href="/src/main/resources/static/main.css" rel="stylesheet" />
+    <script src="https://kit.fontawesome.com/b86979ecfa.js" crossorigin="anonymous"></script>
     <script src="node_modules/@material-tailwind/html/scripts/collapse.js"></script>
 </head>
+
 <body>
-<div class="w-[1100px] mx-auto" layout:fragment="content">
-    <div class="grid grid-cols-4">
-        <div th:replace="account/fragments/sidebar :: user-sidebar"/>
+    <div class="w-[1100px] mx-auto" layout:fragment="content">
+        <div class="grid grid-cols-4 min-h-[670px]">
+            <div th:replace="account/fragments/sidebar :: user-sidebar" />
 
-        <div class="col-span-3 p-4 border">
-            <p th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
+            <div class="col-span-3  w-[780px] p-4 border border-gray-400 mt-4 bg-white">
+                <h3 class="mb-[10px] font-semibold text-2xl">Thông tin gói</h3>
 
-            <div th:if="${isUsingTrial}">
-                <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
-                <p>Thời hạn đọc đến: <span
-                        th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span></p>
+                <p th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
+                <button th:if="${!isUsingTrial && currentUsingSubsPack == null}"
+                        class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                    <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
+
+
+                <div th:if="${isUsingTrial}">
+                    <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
+                    <p>Thời hạn đọc đến: <span
+                            th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
+                    </p>
+                    <p>Trạng thái: 
+                        <span th:if="${!isTrialExpired}" class="text-green-500 font-semibold">Đang hoạt động</span>
+                        <span th:if="${isTrialExpired}" class="text-red-500 font-semibold">Đã hết hạn</span>
+                    </p>
+
+                    <div class="flex gap-[10px]">
+                        <button th:if="${canUpgradeSubs && isUsingTrial}"
+                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                            <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
+
+                        <button th:if="${canUpgradeSubs && !isUsingTrial}"
+                                class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                            <a href="/user/upgrade-subscription" class="text-white">Nâng
+                                cấp gói</a>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div th:if="${currentUsingSubsPack != null}">
+                    <p>Bạn đang sử dụng gói
+                        <span th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}"></span>
+
+                    </p>
+                    <p>Thời hạn đọc đến: <span
+                            th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
+                    </p>
+                    <p>Trạng thái:
+                        <span th:if="${!isExpiredSub}" class="text-green-500 font-semibold">Đang hoạt động</span>
+                        <span th:if="${isExpiredSub}" class="text-red-500 font-semibold">Đã hết hạn</span>
+                    </p>
+                    <div class="flex gap-[10px]">
+                        <button th:if="${canUpgradeSubs}"
+                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                            <a href="/user/upgrade-subscription" class="text-white">Nâng
+                                cấp gói</a></button>
+
+                        <button th:if="${!isUsingTrial && isExpiredSub}"
+                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                            <a href="/user/renew_subscription_pack" class="text-white">Gia hạn lại</a></button>
+                    </div>
+
+                </div>
+
             </div>
-
-            <div th:if="${currentUsingSubsPack != null}">
-                <p>Bạn đang sử dụng gói
-                    <span th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}"></span>
-
-                </p>
-                <p>Thời hạn đọc đến: <span
-                        th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span></p>
-            </div>
-
         </div>
     </div>
-</div>
 </body>
+
 </html>

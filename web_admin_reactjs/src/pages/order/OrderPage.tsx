@@ -1,4 +1,4 @@
-import { Button, Input, PaginationProps, Popconfirm, Select, Space, Table, Tag } from "antd";
+import { Button, DatePicker, Input, PaginationProps, Popconfirm, Select, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -21,6 +21,7 @@ import { dateTimeFormat } from "../../utils/dateFormat";
 import UpgradeOrderModal, { UpgradeOrderModalProps } from "./components/UpgradeOrderModal";
 import { showNofification } from "../../stores/features/notification/notificationSlice";
 import DetailOrderModal, { DetailOrderModalProps } from "./components/DetailOrderModal";
+import { Dayjs } from "dayjs";
 
 const OrderPage: React.FC = () => {
     const { t } = useTranslation();
@@ -57,6 +58,10 @@ const OrderPage: React.FC = () => {
                 {
                     record.orderType === 'UPGRADE' && <span className="text-red-400"> ({t('order.table.upgrade')})</span>
                 }
+
+                {
+                    record.orderType === 'RENEW' && <span className="text-red-400"> ({t('order.table.renew')})</span>
+                }
             </>,
         },
         {
@@ -74,21 +79,20 @@ const OrderPage: React.FC = () => {
             render: (text) => <>{text}</>,
         },
         {
-            title: 'Email',
+            title: 'Số điện thoại',
             dataIndex: 'email',
             key: 'email',
             render: (_, record: IOrder) => <>{
-                record.user_id.email
+                record.user_id.phone
             }</>,
         },
         {
             title: t('order.table.status'),
             dataIndex: 'status',
             key: 'status',
-            render: (text) => <span style={{ border: '1px solid #d9d9d9' }} className="block text-center w-[120px] break-all rounded px-[5px]">
-                {
-                    t('order.eStatus.' + text)
-                }</span>,
+            render: (text: EORDER_STATUS) => <>
+                <Tag color={getColorForStatus(text)}>{t('order.eStatus.' + text)}</Tag>
+            </>,
         },
 
         {
@@ -120,7 +124,7 @@ const OrderPage: React.FC = () => {
             render: (text) => <>{dateTimeFormat(text)}</>,
         },
         {
-            title: 'Action',
+            title: 'Thao tác',
             key: 'action',
             render: (_, record: IOrder) => (
                 <>
@@ -145,8 +149,10 @@ const OrderPage: React.FC = () => {
                     </Space>
                     <br />
                     {
-                        record.status === 'COMPLETED' && !record.hasUpgradingOrder && record.orderType !== 'UPGRADE' && subscriptionPackList[subscriptionPackList.length - 1]?.id !== record.subs_pack_id.id &&
-                        <a onClick={() => showUpgradeModal(record)}>{t('order.table.upgradeSubs')}</a>
+                        record.status === 'USER_CONFIRMED_BANKING' &&
+                        <Link to={`/orders/handle/${record.id}`}>
+                            Xử lý TT
+                        </Link>
                     }
                 </>
             ),
@@ -154,11 +160,22 @@ const OrderPage: React.FC = () => {
         },
     ];
 
+    const getColorForStatus = (status: EORDER_STATUS) => {
+        if (status === 'COMPLETED') return '#1677ff';
+        if (status === 'PENDING_PAYMENT') return '#ff5722';
+        if (status === 'USER_CONFIRMED_BANKING') return '#ff5722';
+        if (status === 'CANCELED') return 'red';
+    }
+
     const [filterInput, setFilterInput] = useState<{
         q?: string,
-        status?: string,
+        status: string,
+        paymentMethod: 'ALL',
+        timeRange: Dayjs[],
     }>({
-        status: '',
+        status: 'ALL',
+        paymentMethod: 'ALL',
+        timeRange: []
     });
 
 
@@ -278,13 +295,11 @@ const OrderPage: React.FC = () => {
             detailOrderModal.visible = false;
             setDetailOrderModal(detailOrderModal);
         },
-        showEditModal: () => {
-            console.log('edit');
-
-            if (detailOrderModal.input)
-                openEditModal(detailOrderModal.input);
-        }
     });
+    const showEditModal = (record: IOrder) => {
+        console.log('edit');
+        openEditModal(record);
+    };
     const viewDetailOrder = (record: IOrder) => {
         detailOrderModal.input = record;
         setDetailOrderModal({
@@ -303,7 +318,10 @@ const OrderPage: React.FC = () => {
         orderService
             .filterOrder({
                 q: filterInput.q ? filterInput.q : undefined,
-                status: filterInput.status ? [filterInput.status] : undefined,
+                status: filterInput.status !== 'ALL' ? [filterInput.status] : undefined,
+                paymentMethod: filterInput.paymentMethod === 'ALL' ? undefined : filterInput.paymentMethod,
+                fromDate: filterInput.timeRange.length > 0 ? filterInput.timeRange[0].format('YYYY-MM-DD') : undefined,
+                toDate: filterInput.timeRange.length > 0 ? filterInput.timeRange[1].format('YYYY-MM-DD') : undefined,
             })
             .then((res: AxiosResponse<{
                 content: IOrder[],
@@ -338,16 +356,16 @@ const OrderPage: React.FC = () => {
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('order.page-title')}
                 </h1>
-                <Button onClick={() => setAddEditOrderModal({
+                {/* <Button onClick={() => setAddEditOrderModal({
                     ...addEditOrderModal,
                     visible: true
                 })}>
                     {t('order.addBtn')}
-                </Button>
+                </Button> */}
             </div>
 
-            <div className="flex justify-between items-center">
-                <div className="flex items-center space-x-3">
+            <div className="grid lg:flex items-center gap-3 bg-white px-[15px] py-[15px]">
+                <Space>
                     <label className="font-bold">{t('order.table.status')}: </label>
                     <Select className="min-w-[200px]"
                         onChange={val => {
@@ -356,7 +374,7 @@ const OrderPage: React.FC = () => {
                             onCallApi();
                         }}
                         value={filterInput.status}>
-                        <Select.Option value="">
+                        <Select.Option value="ALL">
                             {t('order.eStatus.ALL')}
                         </Select.Option>
 
@@ -367,12 +385,54 @@ const OrderPage: React.FC = () => {
                                 </Select.Option>)
                         }
                     </Select>
-                </div>
-                <Input.Search placeholder={`${t('placeholders.search')}`}
-                    value={filterInput.q} onChange={e => setFilterInput({ ...filterInput, q: e.target.value })}
-                    onSearch={onSearch}
-                    style={{ width: 200 }} />
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.paymentMethod')}: </label>
+                    <Select className="min-w-[200px]"
+                        onChange={val => {
+                            filterInput.paymentMethod = val;
+                            setFilterInput(filterInput);
+                            onCallApi();
+                        }}
+                        value={filterInput.paymentMethod}>
+                        <Select.Option value="ALL">
+                            {t('order.eStatus.ALL')}
+                        </Select.Option>
+
+                        <Select.Option value={'ATM'} >
+                            {t('order.ePaymentMethod.ATM')}
+                        </Select.Option>
+                        <Select.Option value={'VN_PAY'} >
+                            {t('order.ePaymentMethod.VN_PAY')}
+                        </Select.Option>
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.timeRange')}: </label>
+                    <DatePicker.RangePicker onChange={(val: any) => {
+                        console.log('val: ', val);
+
+                        if (!val)
+                            filterInput.timeRange = [];
+                        else
+                            filterInput.timeRange = [val[0], val[1]];
+
+                        setFilterInput(filterInput);
+                        onCallApi();
+                    }} />
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('order.table.keyword')}: </label>
+                    <Input.Search placeholder={`${t('placeholders.search')}`}
+                        value={filterInput.q} onChange={e => setFilterInput({ ...filterInput, q: e.target.value })}
+                        onSearch={onSearch}
+                        style={{ width: 200 }} />
+                </Space>
             </div>
+
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
             <AddEditOrderModal
@@ -393,7 +453,6 @@ const OrderPage: React.FC = () => {
         <DetailOrderModal
             visible={detailOrderModal.visible}
             onCancel={detailOrderModal.onCancel}
-            showEditModal={detailOrderModal.showEditModal}
             input={detailOrderModal.input}
         />
     </>)

@@ -5,9 +5,6 @@ public enum EOrderStatus {
       PAID,
       CANCELED,
       COMPLETED,
-      REFUND_CONFIRM_PENDING,
       USER_CONFIRMED_BANKING,
-      REFUNDING,
-      REFUNDED,
       DRAFTED
 }

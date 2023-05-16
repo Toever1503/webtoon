@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { showNofification } from "../../stores/features/notification/notificationSlice";
 import userService from "../../services/user/UserService";
 import { AxiosResponse } from "axios";
-import { setCookie } from "../../plugins/cookieUtil";
+import { hasAnyAuths, setCookie } from "../../plugins/cookieUtil";
 import { useNavigate } from "react-router-dom";
 
 
@@ -39,10 +39,21 @@ const LoginPage: React.FC = () => {
             .then((res: AxiosResponse<{
                 token: string,
                 validTimeIn: number,
+                auths: string[]
             }>) => {
                 console.log('login success: ', res.data);
-                setCookie('token', res.data.token, res.data.validTimeIn);
+                localStorage.setItem('auths', JSON.stringify(res.data.auths));
 
+                if (!hasAnyAuths(['ADMIN', 'EMP'])) {
+                    dispatch(showNofification({
+                        type: 'error',
+                        message: 'Vui lòng sử dụng tài khoản admin để đăng nhập!'
+                    }));
+                    navigate('/signin');
+                    return;
+                }
+
+                setCookie('token', res.data.token, res.data.validTimeIn);
                 dispatch(showNofification({
                     type: 'success',
                     message: t('login.errors.login-success')
@@ -69,7 +80,7 @@ const LoginPage: React.FC = () => {
 
     useEffect(() => {
         form.setFieldsValue({
-            username: 'test',
+            username: 'admin',
             password: 123456,
             rememberMe: false
         });

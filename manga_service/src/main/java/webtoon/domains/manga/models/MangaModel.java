@@ -40,6 +40,7 @@ public class MangaModel {
 	private Date modifiedAt;
 	private UserEntity createdBy;
 	private Boolean isFree;
+	private Boolean isShow;
 	private List<Long> authors;
 	private List<Long> genres;
 	private List<Long> tags;

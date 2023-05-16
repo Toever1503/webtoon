@@ -36,15 +36,18 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
 
         setIsSubmitting(true);
         const authorities: any = [];
-        form.getFieldValue('authorities').forEach((e: string | {
-            label: string;
-            value: string | number;
-        }) => {
-            if (typeof e === 'string')
-                authorities.push(e);
-            else
-                authorities.push(e.value);
-        });
+        let auths = form.getFieldValue('authorities');
+
+        if (auths)
+            auths.forEach((e: string | {
+                label: string;
+                value: string | number;
+            }) => {
+                if (typeof e === 'string')
+                    authorities.push(e);
+                else
+                    authorities.push(e.value);
+            });
 
         form.validateFields()
             .then((values: any) => {
@@ -134,7 +137,8 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
     };
 
     const phoneValidator = (rule: any, value: string) => {
-        if (!value) Promise.resolve();
+        console.log('val', value);
+        if (!value) return Promise.reject(`${t('user.form.errors.phone-required')}`);
         else if (value?.length > 255)
             return Promise.reject(`${t('user.form.errors.phone-max')}`);
         else if (!value.match(/^[0-9]{10,11}$/))
@@ -164,7 +168,8 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                         label: e.authorityName,
                         value: e.id
                     };
-                })
+                }),
+                role: props.userInput.role.id
             });
         }
 
@@ -205,7 +210,7 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                         }
                     ]}
                 >
-                    <Input />
+                    <Input readOnly={props.userInput != null} disabled={props.userInput != null} />
                 </Form.Item>
 
                 <Form.Item
@@ -243,11 +248,22 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                 </Form.Item>
 
                 <Form.Item
+                    label='Vai trò'
+                    name="role"
+                    rules={[
+                        { required: true, message: `${t('user.form.errors.role-required')}` },
+                    ]}
+                >
+                    <Select >
+                        {/* <Select.Option value={1}>Quản lý</Select.Option> */}
+                        <Select.Option value={2}>Nhân viên</Select.Option>
+                        <Select.Option value={3}>Khách hàng</Select.Option>
+                    </Select>
+                </Form.Item>
+
+                <Form.Item
                     label={t('user.form.authority')}
                     name="authorities"
-                    rules={[
-                        { required: true, message: `${t('user.form.errors.authority-required')}` },
-                    ]}
                 >
                     <Select mode="multiple"
                         showArrow>
@@ -263,7 +279,7 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                     label={t('user.form.phone')}
                     name="phone"
                     rules={[
-                        { validator: phoneValidator },
+                        { required: true, validator: phoneValidator },
                     ]}
                 >
                     <Input type='number' />

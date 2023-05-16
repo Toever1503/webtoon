@@ -13,6 +13,7 @@ import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.services.IOrderService;
 
+import javax.mail.MessagingException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -34,36 +35,46 @@ public class OrderResource {
         List<Specification<OrderEntity>> specs = new ArrayList<>();
         specs.add((root, query, criteriaBuilder) -> criteriaBuilder.isNull(root.get(OrderEntity_.DELETED_AT)));
         specs.add((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not());
-        
+
         if (input.getQ() != null) {
             input.setQ("%" + input.getQ() + "%");
             specs.add((root, query, cb) -> cb.or(
                     cb.like(root.get(OrderEntity_.MA_DON_HANG), input.getQ())
             ));
         }
-        if(input.getStatus() != null){
+        if (input.getStatus() != null) {
             specs.add((root, query, cb) -> root.get(OrderEntity_.STATUS).in(input.getStatus()));
         }
+        if (input.getPaymentMethod() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get(OrderEntity_.PAYMENT_METHOD), input.getPaymentMethod()));
+        }
+        if (input.getFromDate() != null) {
+            specs.add((root, query, cb) -> cb.between(root.get(OrderEntity_.CREATED_AT), input.getFromDate(), input.getToDate()));
+        }
         Specification<OrderEntity> finalSpec = null;
-        for(Specification<OrderEntity> spec : specs){
-            if(finalSpec == null){
+        for (Specification<OrderEntity> spec : specs) {
+            if (finalSpec == null) {
                 finalSpec = Specification.where(spec);
-            }else{
+            } else {
                 finalSpec = finalSpec.and(spec);
             }
         }
         return this.orderService.filter(pageable, finalSpec);
     }
 
-    @PutMapping("{id}")
-    public OrderDto updateOrder(@PathVariable Long id, @RequestBody OrderInput input){
-        input.setId(id);
+    @GetMapping("{id}")
+    public OrderDto getDetailById(@PathVariable Long id) {
+        return this.orderService.findById(id);
+    }
 
+    @PutMapping("{id}")
+    public OrderDto updateOrder(@PathVariable Long id, @RequestBody OrderInput input) {
+        input.setId(id);
         return this.orderService.updateOrder(input);
     }
 
     @PostMapping("upgrade-order")
-    public OrderDto upgradeOrder(@RequestBody UpgradeOrderInput input){
+    public OrderDto upgradeOrder(@RequestBody UpgradeOrderInput input) {
         return this.orderService.upgradeOrder(input);
     }
 
@@ -79,9 +90,10 @@ public class OrderResource {
 
 
     @PatchMapping("{id}/change-status")
-    public void changeStatusOrder (@PathVariable Long id, @RequestParam EOrderStatus status) {
+    public void changeStatusOrder(@PathVariable Long id, @RequestParam EOrderStatus status) {
         this.orderService.changeStatusOrder(id, status);
-    };
+    }
+
     @RequestMapping("dashboard")
     public Object dashboardToday() {
         Map<String, Object> map = new HashMap<>();
@@ -96,5 +108,11 @@ public class OrderResource {
     @RequestMapping("sum-revenue-in-last-7-days")
     public List<Object[]> sumRevenueInWeek() {
         return this.orderService.sumTotalRevenueInLast7Days();
+    }
+
+
+    @GetMapping("send-mail-renew-subscription-pack/{id}")
+    public void sendMailRenewSubscription(@PathVariable Long id) throws MessagingException {
+        this.orderService.sendMailRenewSubscription(id);
     }
 }

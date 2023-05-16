@@ -58,9 +58,6 @@ public class UserEntity {
     @Column(name = "has_blocked")
     private Boolean hasBlocked;
 
-    @Column(name = "number_of_failed_signin")
-    private Integer numberOfFailedSignIn;
-
     @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "created_at")
     @CreationTimestamp
@@ -71,6 +68,9 @@ public class UserEntity {
     @UpdateTimestamp
     private Date modifiedAt;
 
+    @ManyToOne
+    @JoinColumn(name = "role_id")
+    private RoleEntity role;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "tbl_user_authority",
@@ -98,4 +98,10 @@ public class UserEntity {
 
     @Column(name = "current_used_subs_id")
     private Long currentUsedSubsId;
+
+    @Column(name = "current_expired_subs_id")
+    private Long currentExpiredSubsId;
+
+    @Column(name = "has_send_renewal_email", columnDefinition = "boolean default false")
+    private Boolean hasSendRenewalEmail;
 }

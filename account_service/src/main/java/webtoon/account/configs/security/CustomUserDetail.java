@@ -6,7 +6,9 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import webtoon.account.entities.UserEntity;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Data
@@ -18,7 +20,13 @@ public class CustomUserDetail implements UserDetails {
     }
 
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return user.getAuthorities().stream().map(auth -> new SimpleGrantedAuthority(auth.getAuthorityName().name())).collect(Collectors.toList());
+        List<SimpleGrantedAuthority> auths = new ArrayList<>();
+        if (user.getAuthorities() != null)
+            auths.addAll(user.getAuthorities().stream().map(auth -> new SimpleGrantedAuthority(auth.getAuthorityName().name())).collect(Collectors.toList()));
+
+        if (user.getRole() != null)
+            auths.add(new SimpleGrantedAuthority(user.getRole().getRoleName().name()));
+        return auths;
     }
 
     @Override

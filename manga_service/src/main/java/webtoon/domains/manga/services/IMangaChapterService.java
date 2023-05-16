@@ -42,7 +42,7 @@ public interface IMangaChapterService {
 
     MangaChapterDto findById(Long id);
 
-    Long getLastChapterIndexForChapType(Long mangaId);
+    MangaChapterDto getLastChapterIndexForChapType(Long mangaId);
     Long getLastChapterIndexForVolType(Long volumeId);
 
     List<MangaChapterEntity> findByVolume(Long volume);

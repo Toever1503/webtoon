@@ -1,10 +1,10 @@
-import { Button, Input, PaginationProps, Popconfirm, Space, Table } from "antd";
+import { Button, Dropdown, Input, PaginationProps, Popconfirm, Space, Table, Tag } from "antd";
 import { ColumnsType } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import AddEditSubscriptionPackModal, { AddEditSubscriptionPackModalProps } from "./components/AddEditSubscriptionPackModal";
-import { SubscriptionPackState, addSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData, updateSubscriptionPack } from "../../stores/features/subscription-pack/subscriptionPackSlice";
+import { SubscriptionPackState, addSubscriptionPack, deleteSubscriptionPackById, setSubscriptionPackData, updateSubscriptionPack, updateSubscriptionStatus } from "../../stores/features/subscription-pack/subscriptionPackSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { RootState } from "../../stores";
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
@@ -36,10 +36,22 @@ const SubscriptionPackPage: React.FC = () => {
             key: 'index',
         },
         {
+            title: t('subscription-pack.table.subsCode'),
+            dataIndex: 'subsCode',
+            key: 'subsCode',
+            render: (text) => <>{text}</>,
+        },
+        {
             title: t('subscription-pack.table.name'),
             dataIndex: 'name',
             key: 'name',
             render: (text) => <>{text}</>,
+        },
+        {
+            title: t('subscription-pack.modal.description'),
+            dataIndex: 'description',
+            key: 'description',
+            render: (text) => <>{text ? text : '-'}</>,
         },
         {
             title: t('subscription-pack.table.price'),
@@ -52,33 +64,25 @@ const SubscriptionPackPage: React.FC = () => {
             </>,
         },
         {
-            title: t('subscription-pack.table.limitedDayCount'),
+            title: t('subscription-pack.table.limitedMonthCount'),
             dataIndex: 'monthCount',
             key: 'monthCount',
             render: (text) => <>
                 {text} {t('subscription-pack.modal.month')}
             </>,
         },
-        {
-            title: t('subscription-pack.table.createdAt'),
-            dataIndex: 'createdAt',
-            key: 'createdAt',
-            render: (text) => <>{dateTimeFormat(text)}</>,
-        },
+        // {
+        //     title: t('subscription-pack.table.createdAt'),
+        //     dataIndex: 'createdAt',
+        //     key: 'createdAt',
+        //     render: (text) => <>{dateTimeFormat(text)}</>,
+        // },
         {
             title: t('subscription-pack.table.modifiedAt'),
             dataIndex: 'modifiedAt',
             key: 'modifiedAt',
             render: (text) => <>{
                 dateTimeFormat(text)
-            }</>,
-        },
-        {
-            title: t('subscription-pack.table.createdBy'),
-            dataIndex: 'createdBy',
-            key: 'createdBy',
-            render: (text: IUserType) => <>{
-                text ? text.fullName : '-'
             }</>,
         },
         {
@@ -89,21 +93,35 @@ const SubscriptionPackPage: React.FC = () => {
                 text ? text.fullName : '-'
             }</>,
         },
+        // {
+        //     title: t('subscription-pack.table.status'),
+        //     dataIndex: 'status',
+        //     key: 'status',
+        //     render: (text) => <>
+        //         {
+        //             text ?
+        //                 <Tag color="#108ee9">{t('subscription-pack.table.active')}</Tag>
+        //                 : <Tag color='red'>
+        //                     {t('subscription-pack.table.inactive')}
+        //                 </Tag>
+        //         }
+        //     </>,
+        // },
         {
             title: 'Action',
             key: 'action',
-            render: (_, record) => (
+            render: (_, record: ISubscriptionPack) => (
                 <Space size="middle">
-                    <a onClick={() => showAddEditModal(record)}>Edit</a>
-                    <Popconfirm
-                        title={t('subscription-pack.table.sure-delete')}
-                        onConfirm={() => onDelete(record.id || 0)}
-                        okText={t('confirm-yes')}
-                        cancelText={t('confirm-no')}
-                    >
-                        <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">Delete</a>
-                    </Popconfirm>
-
+                    {/* <a onClick={() => changeRecordStatus(record)}>
+                        {
+                            record.status ? t('subscription-pack.table.actions.hide') :  t('subscription-pack.table.actions.show')
+                        }
+                    </a> */}
+                    <a onClick={() => showAddEditModal(record)}>
+                        {
+                            t('subscription-pack.table.edit')
+                        }
+                    </a>
                 </Space>
             ),
         },
@@ -154,28 +172,32 @@ const SubscriptionPackPage: React.FC = () => {
         });
     };
 
-    const onDelete = (id: number | string) => {
+    const changeRecordStatus = (record: ISubscriptionPack) => {
         if (tableLoading) return;
-        setTableLoading(true);
 
-        subscriptionPackService.deleteSubscriptionPack(id)
+        setTableLoading(true);
+        subscriptionPackService.toggleSubscriptionPackStatus(record.id || 0)
             .then(() => {
+                dispatch(updateSubscriptionStatus({
+                    id: record.id || 0,
+                    status: !record.status
+                }));
                 dispatch(showNofification({
                     type: 'success',
-                    message: t('subscription-pack.modal.form.delete-success')
+                    message: t('subscription-pack.modal.form.toggle-success')
                 }));
-                dispatch(deleteSubscriptionPackById({ id }));
             })
             .catch(err => {
-                console.log('delete subs pack failed: ', err);
-
+                console.log('toggle subs pack status failed: ', err);
                 dispatch(showNofification({
-                    type: 'success',
-                    message: t('subscription-pack.modal.form.delete-failed')
-                }))
-            })
-            .finally(() => setTableLoading(false));
+                    type: 'error',
+                    message: t('subscription-pack.modal.form.toggle-failed')
+                }));
 
+            })
+            .finally(() => {
+                setTableLoading(false);
+            })
     }
 
     const onCallApiFilter = () => {
@@ -224,7 +246,7 @@ const SubscriptionPackPage: React.FC = () => {
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('subscription-pack.page-title')}
                 </h1>
-                <Button type="primary" className="flex items-center" onClick={() => {
+                {/* <Button type="primary" className="flex items-center" onClick={() => {
                     setAddEditSubscriptionPackModal({
                         ...addEditSubscriptionPackModal,
                         visible: true,
@@ -233,7 +255,7 @@ const SubscriptionPackPage: React.FC = () => {
                     })
                 }}>
                     <span className="mr-2">{t('subscription-pack.addBtn')}</span>
-                </Button>
+                </Button> */}
             </div>
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} pagination={pageConfig} />

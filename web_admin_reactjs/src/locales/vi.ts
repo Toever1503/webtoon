@@ -4,7 +4,7 @@ export default {
         newOrderCount: 'Tổng đơn hàng mới',
         totalRevenue: 'Tổng doanh thu',
         paymentPending: 'Chờ thanh toán',
-        orderCompleted: 'Đã hoàn tất',
+        orderCompleted: 'Tổng đơn hàng hoàn tất tháng này',
         orderCancelledCount: 'Đã hủy',
         recentRevenueIn7Days: 'Doanh thu trong 7 ngày gần nhất',
 
@@ -12,10 +12,11 @@ export default {
             title: 'Đơn hàng mới nhất',
             table: {
                 orderNo: 'Mã đơn hàng',
-                createdBy: 'Người mua',
+                createdBy: 'Khách hàng',
                 subscriptionPack: 'Gói đăng ký',
                 price: 'Giá',
                 createdAt: 'Ngày tạo',
+                action: 'Thao tác',
             }
         }
     },
@@ -23,8 +24,8 @@ export default {
         revenue: {
             title: 'Thống kê doanh thu',
             totalRevenueThisMonth: 'Tổng doanh thu tháng này',
-            totalSubscriber: 'Số người đăng ký tháng này',
-            totalSubscriberOnTrial: 'Số người đăng ký dùng thử tháng này',
+            totalSubscriber: 'Tổng số người đăng ký tháng này',
+            totalSubscriberOnTrial: 'Tổng số người đăng ký dùng thử tháng này',
             totalRevenueBySubsPack: 'Doanh thu theo gói đăng ký',
             revenueByDay: 'Doanh thu theo ngày',
             monthlyRevenue: 'Doanh thu hàng tháng',
@@ -32,7 +33,7 @@ export default {
         registrationStatus: {
             title: 'Trạng thái đăng ký',
             table: {
-                'user': 'Người mua',
+                'user': 'Khách hàng',
                 'subscriptionPack': 'Gói đăng ký',
                 'expiredDate': 'Ngày hết hạn',
                 action: {
@@ -58,10 +59,10 @@ export default {
                 'tags-required': 'Vui lòng chọn thẻ',
                 'featured-image-required': 'Vui lòng chọn ảnh',
                 'featured-image-invalid': 'Định dạng không hợp lệ',
-                'volume-required': 'Please enter volume name!',
-                'chapter-name-required': 'Chapter name is required',
-                'chapter-images-required': 'Chapter image is required',
-                'chapter-content-required': 'Chapter content is required',
+                'volume-required': 'Vui lòng thêm tập!',
+                'chapter-name-required': 'Tiêu đề không được bỏ trống!',
+                'chapter-images-required': 'Ảnh không được để trống!',
+                'chapter-content-required': 'Nội dung không được để trống!',
                 'create-failed': 'Thêm thất bại!',
                 'create-success': 'Thêm thành công!',
                 'edit-failed': 'Sửa thất bại!',
@@ -120,6 +121,7 @@ export default {
             author: 'Tác giả',
             tag: 'Thẻ',
             action: 'Hành động',
+            status: 'Trạng thái',
         },
         eReleaseStatus: {
             'COMING': 'Sắp ra mắt',
@@ -132,6 +134,11 @@ export default {
         eMangaType: {
             'IMAGE': 'Truyện tranh',
             'TEXT': 'Truyện chữ',
+        },
+        eMangaStatus: {
+            'ALL': 'Tất cả',
+            'PUBLISHED': 'Đang hiển thị',
+            'HIDDEN': 'Đang ẩn',
         }
     },
     comment: {
@@ -156,6 +163,7 @@ export default {
             'avatar': 'Ảnh đại diện',
             'status': 'Trạng thái',
             'createdAt': 'Ngày tạo',
+            role: 'Vai trò',
             'accountType': 'Loại tài khoản',
             'action': 'Hành động',
             'status-item': {
@@ -167,6 +175,12 @@ export default {
                 FACEBOOK: 'Facebook',
                 GOOGLE: 'Google',
                 DATABASE: 'Tài khoản thường'
+            },
+            'role-item': {
+                ADMIN: 'Quản lý',
+                EMP: 'Nhân viên',
+                CUS: 'Khách hàng'
+                
             },
             'status-item-select': {
                 ACTIVED: 'Kích hoạt',
@@ -220,6 +234,7 @@ export default {
                 'confirm-password-not-match': 'Mật khẩu không khớp!',
                 'password-max': 'Mật khẩu không được quá 30 ký tự!',
                 'authority-required': 'Vui lòng chọn quyền',
+                'role-required': 'Vui lòng chọn vai trò',
 
             }
         },
@@ -272,13 +287,15 @@ export default {
             'orderType': 'Loại đơn hàng',
             'createdAt': 'Ngày tạo',
             'updatedAt': 'Ngày sửa',
-            'createdBy': 'Người tạo',
+            'createdBy': 'Khách hàng',
             'modifiedBy': 'Người sửa',
             'upgrade': 'Nâng cấp',
+            renew: 'Gia hạn',
             viewDetail: 'Chi tiết',
             upgradeSubs: 'Nâng cấp gói',
             originalOrderNumber: 'Mã đơn hàng gốc',
-
+            timeRange: 'Thời gian',
+            keyword: 'Từ khóa',
         },
         modal: {
             addTitle: 'Thêm mới',
@@ -291,7 +308,7 @@ export default {
                     price: 'Giá tiền',
                     paymentMethod: 'Phương thức thanh toán',
                     choosePaymentMethod: 'Chọn phương thức thanh toán',
-                    'createdBy': 'Người mua',
+                    'createdBy': 'Khách hàng',
                     status: 'Trạng thái',
                     chooseUser: 'Chọn người dùng',
                     'sure-complete': 'Bạn chắc chắn muốn hoàn tất đơn hàng này?',
@@ -333,23 +350,37 @@ export default {
             'CANCELED': 'Đã hủy',
             'COMPLETED': 'Hoàn tất',
             'USER_CONFIRMED_BANKING': 'Chờ kiểm tra CK',
+        },
+        ePaymentMethod: {
+            'ALL': 'Tất cả',
+            'ATM': 'Chuyển khoản',
+            'VN_PAY': 'VN Pay',
         }
     },
     'subscription-pack': {
         'page-title': 'Danh sách gói đọc',
         addBtn: 'Thêm mới',
         table: {
+            'subsCode': 'Mã gói',
             'name': 'Tên gói',
             'price': 'Giá gói',
-            'limitedDayCount': 'Số ngày đọc',
+            'limitedMonthCount': 'Số tháng đọc',
             'createdAt': 'Ngày tạo',
             'modifiedAt': 'Ngày sửa',
             'createdBy': 'Người tạo',
             'modifiedBy': 'Người sửa',
             'action': 'Hành động',
+            'status': 'Trạng thái hiển thị',
             'sure-delete': 'Bạn chắc chắn muốn xóa gói đọc này?',
             'all': 'Tất cả',
             'deleted': 'Xóa mềm',
+            active: 'Đang hiển thị',
+            'inactive': 'Đang ẩn',
+            edit: 'Chỉnh sửa',
+            actions: {
+                hide: 'Ẩn',
+                show: 'Hiển thị',
+            }
         },
         modal: {
             addTitle: "Thêm gói đọc mới",
@@ -360,6 +391,7 @@ export default {
             resetBtn: "Làm mới",
             saveBtn: "Lưu",
             dateCount: "Thời hạn gói",
+            description: "Mô tả",
             form: {
                 'add-success': 'Thêm thành công!',
                 'add-failed': 'Thêm thất bại!',
@@ -367,6 +399,8 @@ export default {
                 'edit-failed': 'Sửa thất bại!',
                 'delete-success': 'Xóa thành công!',
                 'delete-failed': 'Xóa thất bại!',
+                'toggle-failed': 'Thay đổi trạng thái thất bại!',
+                'toggle-success': 'Thay đổi trạng thái thành công!',
             },
             placeholders: {
                 title: "Nhập tên gói",
@@ -427,6 +461,10 @@ export default {
             'code-0': 'Lỗi server. Vui lòng thử lại sau!',
             'code-11': 'Tên đăng nhập đã tồn tại!',
             'code-12': 'Email đã tồn tại!',
+            'code-91': 'Tên đã tồn tại!',
+            'code-92': 'Slug đã tồn tại!',
+            'code-111': 'Tên đã tồn tại!',
+            'code-112': 'Slug đã tồn tại!',
         }
     },
     table: {

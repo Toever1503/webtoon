@@ -29,8 +29,6 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     @Override
     public SubscriptionPackDto addSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
         SubscriptionPackEntity subscriptionPackEntity = SubscriptionPackModel.toEntity(subscriptionPackModel);
-        subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
-        subscriptionPackEntity.setCreatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);
     }
@@ -45,10 +43,10 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     @Override
     public SubscriptionPackDto updateSubscriptionPack(SubscriptionPackModel subscriptionPackModel) {
         SubscriptionPackEntity subscriptionPackEntity = this.getById(subscriptionPackModel.getId());
-        subscriptionPackEntity.setName(subscriptionPackModel.getName());
-        subscriptionPackEntity.setDayCount(this.getDateCount(subscriptionPackModel.getMonthCount()));
+//        subscriptionPackEntity.setName(subscriptionPackModel.getName());
+        subscriptionPackEntity.setDescription(subscriptionPackModel.getDescription());
         subscriptionPackEntity.setPrice(subscriptionPackModel.getPrice());
-        subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
+//        subscriptionPackEntity.setMonthCount(subscriptionPackModel.getMonthCount());
         subscriptionPackEntity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
         this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
         return SubscriptionPackDto.toDto(subscriptionPackEntity);
@@ -82,6 +80,23 @@ public class SubscriptionPackServiceImpl implements ISubscriptionPackService {
     public List<SubscriptionPackMetadataDto> getAllPackMetadata() {
         return subscriptionPackRepository.findAll().stream().map(subscriptionPackEntity ->
                 SubscriptionPackMetadataDto.toDto(subscriptionPackEntity)).collect(Collectors.toList());
+    }
+
+    @Override
+    public void toggleStatus(Long id) {
+        SubscriptionPackEntity subscriptionPackEntity = this.getById(id);
+        subscriptionPackEntity.setUpdatedBy(SecurityUtils.getCurrentUser().getUser());
+        this.subscriptionPackRepository.saveAndFlush(subscriptionPackEntity);
+    }
+
+    @Override
+    public List<SubscriptionPackEntity> findAllEntity(Specification spec) {
+        return this.subscriptionPackRepository.findAll(spec);
+    }
+
+    @Override
+    public void renewSubscriptionPack(Integer userId) {
+
     }
 
     @Override

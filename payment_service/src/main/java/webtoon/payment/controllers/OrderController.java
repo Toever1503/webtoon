@@ -40,7 +40,6 @@ public class OrderController {
 //    SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd-HH:mm:ss");
 
     public OrderController(IOrderService orderService) {
-        super();
         this.orderService = orderService;
     }
 

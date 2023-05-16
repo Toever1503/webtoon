@@ -13,6 +13,7 @@ import webtoon.payment.inputs.OrderInput;
 import webtoon.payment.inputs.UpgradeOrderInput;
 import webtoon.payment.models.OrderModel;
 
+import javax.mail.MessagingException;
 import java.util.Date;
 import java.util.List;
 
@@ -81,4 +82,14 @@ public interface IOrderService {
     List<Object[]> sumRevenuePerSubsPackByMonth(String monthDate);
 
     List<Object[]> countSubscriberStatusPerMonthByYear(String year);
+
+    OrderDto findById(Long id);
+
+    Long countTotalCompletedOrderThisMonth();
+
+    void sendMailRenewSubscription(Long userId) throws MessagingException;
+
+    void plusReadTimeToUser(OrderEntity orderEntity);
+
+    Long count(Specification<OrderEntity> spec);
 }

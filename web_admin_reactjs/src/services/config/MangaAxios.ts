@@ -14,7 +14,6 @@ function getInstance(): AxiosInstance {
     //hook interceptor cài ở đây
     axiosInstance.interceptors.request.use((config) => {
         const token: string | null = getCookie('token');
-        console.log('token: ', token);
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }

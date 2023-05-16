@@ -5,6 +5,9 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.web.bind.annotation.*;
 import webtoon.domains.manga.dtos.MangaDto;
+import webtoon.domains.manga.entities.MangaAuthorEntity_;
+import webtoon.domains.manga.entities.MangaEntity;
+import webtoon.domains.manga.entities.MangaGenreEntity_;
 import webtoon.domains.manga.enums.EMangaDisplayType;
 import webtoon.domains.manga.enums.EMangaSTS;
 import webtoon.domains.manga.enums.EMangaType;
@@ -41,18 +44,31 @@ public class MangaResource2 {
         specs.add((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
         if (input.getStatus() != null)
-            if (!input.getStatus().equals(EMangaSTS.COMING.ALL))
-                specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), input.getStatus()));
+            specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus()));
 
         if (input.getQ() != null) {
             String qRegex = "%" + input.getQ() + "%";
             specs.add((root, query, cb) -> cb.like(root.get(MangaEntity_.TITLE), qRegex));
         }
-        Specification finalSpec = null;
-        for (Specification s : specs) {
+
+        if (input.getGenreId() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.join(MangaEntity_.GENRES).get(MangaGenreEntity_.ID), input.getGenreId()));
+        }
+        if (input.getAuthorId() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.join(MangaEntity_.AUTHORS).get(MangaAuthorEntity_.ID), input.getGenreId()));
+        }
+        if (input.getIsShow() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_SHOW), input.getIsShow()));
+        }
+        if (input.getReleaseYear() != null) {
+            specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus()));
+        }
+
+        Specification<MangaEntity> finalSpec = null;
+        for (Specification spec : specs) {
             if (finalSpec == null)
-                finalSpec = Specification.where(s);
-            else finalSpec.and(s);
+                finalSpec = Specification.where(spec);
+            else finalSpec.and(spec);
         }
         return this.mangaService.filter(page, finalSpec);
     }
@@ -66,6 +82,7 @@ public class MangaResource2 {
     public void setMangaTypeAndDisplayType(@PathVariable Long id, @RequestParam EMangaType mangaType, @RequestParam EMangaDisplayType displayType) {
         if (mangaType.equals(EMangaType.UNSET))
             throw new RuntimeException("type is not support");
+
         this.mangaService.setMangaTypeAndDisplayType(id, mangaType, displayType);
     }
 

@@ -6,6 +6,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import webtoon.domains.manga.entities.MangaVolumeEntity;
 
+import java.util.List;
+
 @Data
 @Builder
 @AllArgsConstructor
@@ -18,7 +20,8 @@ public class MangaVolumeDto {
 	private String name;
 	
 	private Integer volumeIndex;
-	
+
+
 	public static MangaVolumeDto toDto(MangaVolumeEntity entity) {
 		if(entity == null) return null;
 		

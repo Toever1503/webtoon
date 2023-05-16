@@ -541,8 +541,6 @@
                     <outputDirectory>${project.build.directory}/generated-sources/meta-model</outputDirectory>
                 </configuration>
             </plugin>
-
-
         </plugins>
     </reporting>
 </project>

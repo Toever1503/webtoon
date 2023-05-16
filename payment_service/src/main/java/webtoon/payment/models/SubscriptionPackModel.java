@@ -14,6 +14,7 @@ import webtoon.payment.entities.SubscriptionPackEntity;
 public class SubscriptionPackModel {
     private Long id;
     private String name;
+    private String description;
     private int monthCount;
     private Double price;
 
@@ -24,6 +25,7 @@ public class SubscriptionPackModel {
         return SubscriptionPackEntity.builder()
                 .id(model.getId())
                 .name(model.getName())
+                .description(model.getDescription())
                 .price(model.getPrice())
                 .monthCount(model.getMonthCount())
                 .build();

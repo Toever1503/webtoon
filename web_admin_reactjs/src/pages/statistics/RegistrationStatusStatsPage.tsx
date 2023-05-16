@@ -1,4 +1,4 @@
-import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button, Segmented } from "antd";
+import { Dropdown, Input, MenuProps, Popconfirm, Space, Table, Tooltip, Button, Segmented, Tag } from "antd";
 import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
@@ -10,12 +10,16 @@ import IUserType from "../user/types/IUserType";
 import ISubscriptionPack from "../../services/subscription_pack/types/ISubscriptionPack";
 import statisticService from "../../services/stats/StatisticService";
 import { useNavigate } from "react-router-dom";
+import orderService from "../../services/order/OrderService";
 
 
 
 interface IUserRegistrationStatus {
+    userId: number | string;
     user?: IUserType;
     subscriptionPack: ISubscriptionPack;
+    expiredDate: Date;
+    hasSendRenewalEmail: boolean
 }
 
 const RegistrationStatusStatsPage: React.FC = () => {
@@ -25,26 +29,7 @@ const RegistrationStatusStatsPage: React.FC = () => {
 
 
     const [tableLoading, setTableLoading] = useState<boolean>(false);
-    const [dataSource, setDataSource] = useState<IUserRegistrationStatus[]>([
-        {
-            user: {
-                id: 1,
-                email: 'fas',
-                fullName: 'fas',
-                phone: 'fas',
-                accountType: "FB",
-                sex: "FEMALE",
-                authorities: [],
-                username: 'fas',
-                status: "ACTIVED"
-            },
-            subscriptionPack: {
-                name: 'fas',
-                price: 1,
-                monthCount: 1,
-            },
-        }
-    ]);
+    const [dataSource, setDataSource] = useState<IUserRegistrationStatus[]>([]);
     const [pageConfig, setPageConfig] = useState({
         current: 1,
         pageSize: 10,
@@ -77,7 +62,7 @@ const RegistrationStatusStatsPage: React.FC = () => {
             title: t('statistic.registrationStatus.table.subscriptionPack'),
             dataIndex: 'subscriptionPack',
             key: 'subscriptionPack',
-            render: (_, record: IUserRegistrationStatus) => <>{record?.subscriptionPack?.name}</>,
+            render: (_, record: IUserRegistrationStatus) => <>{record.subscriptionPack ? record.subscriptionPack?.name : 'Gói dùng thử 3 ngày'}</>,
         },
         {
             title: t('statistic.registrationStatus.table.expiredDate'),
@@ -85,7 +70,14 @@ const RegistrationStatusStatsPage: React.FC = () => {
             key: 'expiredDate',
             render: (text) => <>{text}</>,
         },
-
+        {
+            title: 'Trạng thái gửi mail gia hạn',
+            dataIndex: 'hasSendRenewalEmail',
+            key: 'hasSendRenewalEmail',
+            render: (text) => <>{
+                text ? <Tag color="green">Đã gửi</Tag> : <Tag color="red">Chưa gửi</Tag>
+            }</>,
+        },
         {
             title: t('comment.table.action'),
             key: 'action',
@@ -94,7 +86,7 @@ const RegistrationStatusStatsPage: React.FC = () => {
                 <Space size="small">
                     {
                         userFilter.type == 'EXPIRING' ?
-                            <Button size="small">{
+                            <Button size="small" onClick={() => (sendMailRenew(record.userId))}>{
                                 t('statistic.registrationStatus.table.action.sendEmail')
                             }</Button>
                             : '-'
@@ -103,8 +95,6 @@ const RegistrationStatusStatsPage: React.FC = () => {
             ),
         },
     ];
-
-
 
     const onTblChange = (pagination: TablePaginationConfig) => {
         pageConfig.current = pagination.current || 1;
@@ -141,6 +131,7 @@ const RegistrationStatusStatsPage: React.FC = () => {
     }
 
     const [hasInitialized, setHasInitialized] = useState(false);
+
     useEffect(() => {
         if (!hasInitialized) {
             onCallApiFilterUserSubscriptionStatus();
@@ -154,10 +145,10 @@ const RegistrationStatusStatsPage: React.FC = () => {
             'label': 'Sắp hết hạn',
             'value': 'EXPIRING'
         },
-        {
-            'label': 'Đã hết hạn',
-            'value': 'EXPIRED'
-        }
+        // {
+        //     'label': 'Đã hết hạn',
+        //     'value': 'EXPIRED'
+        // }
     ];
 
     const onChangeStatus = (val: string) => {
@@ -165,6 +156,27 @@ const RegistrationStatusStatsPage: React.FC = () => {
         setUserFilter(userFilter);
         onCallApiFilterUserSubscriptionStatus();
     };
+
+    const sendMailRenew = (id: number | string) => {
+        if (tableLoading) return;
+        setTableLoading(true);
+        orderService.sendMailRenewSubscriptionPack(id)
+            .then(() => {
+                dispatch(showNofification({ type: 'success', message: 'Gửi mail thành công!' }));
+                let data = dataSource.map((item) => {
+                    if (item.userId == id) {
+                        item.hasSendRenewalEmail = true;
+                    }
+                    return item;
+                });
+            })
+            .catch(() => {
+                dispatch(showNofification({ type: 'error', message: 'Gửi mail thất bại!' }));
+            })
+            .finally(() => {
+                setTableLoading(false);
+            });
+    }
 
     return (<>
         <div className="space-y-3 py-3">

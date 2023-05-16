@@ -3,8 +3,6 @@ package webtoon.account.services.impl;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -14,21 +12,18 @@ import org.springframework.stereotype.Service;
 import webtoon.account.configs.security.CustomUserDetail;
 import webtoon.account.configs.security.jwt.JwtProvider;
 import webtoon.account.dtos.LoginResponseDto;
-import webtoon.account.entities.UserEntity_;
+import webtoon.account.entities.*;
 import webtoon.account.enums.EAccountType;
+import webtoon.account.enums.ESex;
 import webtoon.account.enums.EStatus;
 import webtoon.account.inputs.LoginInput;
-import webtoon.account.models.CreateUserModel;
+import webtoon.account.repositories.IRoleRepository;
 import webtoon.account.repositories.IUserRepository;
 import webtoon.account.services.IUserService;
 import webtoon.account.dtos.UserDto;
-import webtoon.account.entities.AuthorityEntity;
-import webtoon.account.entities.EAuthorityConstants;
-import webtoon.account.entities.UserEntity;
 import webtoon.account.inputs.UserInput;
 import webtoon.account.repositories.IAuthorityRepository;
 import webtoon.utils.exception.CustomHandleException;
-import webtoon.utils.exception.ResponseDto;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -47,12 +42,34 @@ public class UserServiceImpl implements IUserService {
     private final IAuthorityRepository authorityRepository;
     private final JwtProvider jwtProvider;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider) {
+    private final IRoleRepository roleRepository;
+
+    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider, IRoleRepository roleRepository) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.jwtProvider = jwtProvider;
+        this.roleRepository = roleRepository;
+
         initAuthority();
+
+        if ((userRepository.findById(1l).isEmpty())) {
+            UserEntity userEntity = UserEntity.builder()
+                    .id(1l)
+                    .email("admin@admin.com")
+                    .phone("0123456789")
+                    .username("admin")
+                    .password(passwordEncoder.encode("123456"))
+                    .status(EStatus.ACTIVED)
+                    .sex(ESex.FEMALE)
+                    .accountType(EAccountType.DATABASE)
+                    .hasBlocked(false)
+                    .fullName("Admin")
+                    .role(roleRepository.findById(1l).get())
+                    .avatar("")
+                    .build();
+            this.userRepository.saveAndFlush(userEntity);
+        }
     }
 
 
@@ -99,19 +116,19 @@ public class UserServiceImpl implements IUserService {
                         .build()
         );
 
-        // for user
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(6L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_USER)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(7L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_USER)
-                        .build()
-        );
+//        // for user
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(6L)
+//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_USER)
+//                        .build()
+//        );
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(7L)
+//                        .authorityName(EAuthorityConstants.ROLE_DELETE_USER)
+//                        .build()
+//        );
 
         // for order
         authorityRepository.saveAndFlush(
@@ -127,47 +144,47 @@ public class UserServiceImpl implements IUserService {
                         .build()
         );
 
-        // for category
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(10L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_CATEGORY)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(11L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_CATEGORY)
-                        .build()
-        );
+//        // for category
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(10L)
+//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_CATEGORY)
+//                        .build()
+//        );
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(11L)
+//                        .authorityName(EAuthorityConstants.ROLE_DELETE_CATEGORY)
+//                        .build()
+//        );
+//
+//        // for post
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(12L)
+//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_POST)
+//                        .build()
+//        );
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(13L)
+//                        .authorityName(EAuthorityConstants.ROLE_DELETE_POST)
+//                        .build()
+//        );
 
-        // for post
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(12L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_POST)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(13L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_POST)
-                        .build()
-        );
-
-        // for comment
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(14L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_COMMENT)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(15L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_COMMENT)
-                        .build()
-        );
+//        // for comment
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(14L)
+//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_COMMENT)
+//                        .build()
+//        );
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(15L)
+//                        .authorityName(EAuthorityConstants.ROLE_DELETE_COMMENT)
+//                        .build()
+//        );
 
         // for tag
         authorityRepository.saveAndFlush(
@@ -183,26 +200,30 @@ public class UserServiceImpl implements IUserService {
                         .build()
         );
 
-        // for statistic
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(18L)
-                        .authorityName(EAuthorityConstants.ROLE_VIEW_STATISTIC)
+//        // for statistic
+//        authorityRepository.saveAndFlush(
+//                AuthorityEntity.builder()
+//                        .id(18L)
+//                        .authorityName(EAuthorityConstants.ROLE_VIEW_STATISTIC)
+//                        .build()
+//        );
+
+        this.roleRepository.saveAndFlush(
+                RoleEntity.builder()
+                        .id(1l)
+                        .roleName(ERoleConstants.ADMIN)
                         .build()
         );
-
-        // for role
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(19l)
-                        .authorityName(EAuthorityConstants.ROLE_ADMIN)
+        this.roleRepository.saveAndFlush(
+                RoleEntity.builder()
+                        .id(2l)
+                        .roleName(ERoleConstants.EMP)
                         .build()
         );
-
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(20l)
-                        .authorityName(EAuthorityConstants.ROLE_USER)
+        this.roleRepository.saveAndFlush(
+                RoleEntity.builder()
+                        .id(3l)
+                        .roleName(ERoleConstants.CUS)
                         .build()
         );
 
@@ -225,53 +246,26 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public UserDto add(UserInput input) {
-
         UserEntity entity = UserInput.toEntity(input);
 
-        if(this.userRepository.findByUsername(input.getUsername()).isPresent())
+        if (this.userRepository.findByUsername(input.getUsername()).isPresent())
             throw new CustomHandleException(11);
 
         if (this.userRepository.existsByEmail(input.getEmail())) {
             throw new CustomHandleException(12);
         }
         entity.setHasBlocked(false);
-        entity.setNumberOfFailedSignIn(0);
         entity.setStatus(EStatus.ACTIVED);
         entity.setAccountType(EAccountType.DATABASE);
         entity.setPassword(this.passwordEncoder.encode(input.getPassword()));
-        entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
+
+        if (input.getRole() != null) {
+            entity.setRole(this.roleRepository.findById(input.getRole()).get());
+        }
+        if (input.getAuthorities() != null)
+            entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         this.userRepository.saveAndFlush(entity);
         return UserDto.toDto(entity);
-    }
-
-    @Override
-    public UserDto addDk(CreateUserModel userModel){
-            Long countEmail = this.userRepository.checkTrungEmail(userModel.getEmail());
-            Long countPhone = this.userRepository.checkTrungPhone(userModel.getPhone());
-        List<String> errorMessages = new ArrayList<>();  // Tạo danh sách thông báo lỗi ở đầu
-            try {
-                if (countEmail > 0) {
-                    errorMessages.add("Email đã tồn tại trong hệ thống");
-                }
-                if (countPhone > 0) {
-                    errorMessages.add("Số điện thoại đã tồn tại trong hệ thống");
-                }
-                if (!errorMessages.isEmpty()) {  // Nếu danh sách thông báo lỗi không rỗng
-                    throw new RuntimeException(String.join(", ", errorMessages));
-                }
-                UserEntity entity = UserEntity.builder()
-                        .username(userModel.getUsername())
-                        .password(this.passwordEncoder.encode(userModel.getPassword()))
-                        .email(userModel.getEmail())
-                        .fullName(userModel.getFullName())
-                        .build();
-                this.userRepository.saveAndFlush(entity);
-                return UserDto.toDto(entity);
-            }catch (Exception e){
-                errorMessages.add(e.getMessage());  // Thêm thông báo lỗi vào danh sách
-                return
-            }
-
     }
 
     @Transactional
@@ -291,6 +285,9 @@ public class UserServiceImpl implements IUserService {
         entity.setPhone(input.getPhone());
         entity.setSex(input.getSex());
 
+        if (input.getRole() != null) {
+            entity.setRole(this.roleRepository.findById(input.getRole()).get());
+        }
         if (input.getAuthorities() != null)
             entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         if (input.getPassword() != null)
@@ -343,9 +340,6 @@ public class UserServiceImpl implements IUserService {
         if (entity.getHasBlocked())
             throw new CustomHandleException(2);
 
-        entity.setNumberOfFailedSignIn(entity.getNumberOfFailedSignIn() + 1);
-        if (entity.getNumberOfFailedSignIn() >= 5)
-            entity.setHasBlocked(Boolean.TRUE);
 
         this.userRepository.saveAndFlush(entity);
     }
@@ -355,8 +349,6 @@ public class UserServiceImpl implements IUserService {
         UserEntity entity = this.getById(id);
 
         entity.setHasBlocked(Boolean.FALSE);
-        entity.setNumberOfFailedSignIn(0);
-
         this.userRepository.saveAndFlush(entity);
     }
 
@@ -392,9 +384,19 @@ public class UserServiceImpl implements IUserService {
                 validTimeIn
         );
 
+        List<String> auths = new ArrayList<>();
+        if (userEntity.getAuthorities() != null) {
+            for (AuthorityEntity authorityEntity : userEntity.getAuthorities()) {
+                auths.add(authorityEntity.getAuthorityName().name());
+            }
+        }
+        if (userEntity.getRole() != null) {
+            auths.add(userEntity.getRole().getRoleName().name());
+        }
         return LoginResponseDto.builder()
                 .token(token)
                 .validTimeIn(validTimeIn)
+                .auths(auths)
                 .build();
     }
 
