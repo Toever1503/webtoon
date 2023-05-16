@@ -73,18 +73,20 @@ public class SubscriptionPackController {
 
         boolean isUsingTrial = false;
         boolean hasExpiredTrial = false;
-        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
 
         boolean isExpiredSub = false;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        if(userEntity != null){
-            if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
-                int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+        if(loggedUser != null){
+            if (loggedUser.getPhone() == null)
+                return "redirect:/user/update_more_info";
+            if (loggedUser.getCurrentUsedSubsId() == null && loggedUser.getTrialRegisteredDate() != null) {
+                int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isUsingTrial = result >= 0;
                 hasExpiredTrial = result < 0;
             }
-            if (userEntity.getCurrentUsedSubsId() != null) {
-                int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            if (loggedUser.getCurrentUsedSubsId() != null) {
+                int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isExpiredSub = result < 0;
             }
         }

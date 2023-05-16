@@ -2,10 +2,10 @@
     <div
             class="w-[250px] h-auto border-solid border rounded-md border-gray-400"
     >
-        <div class="pl-16 pt-14">
+        <div class="py-[20px]">
             <img
-                    src="https://mdbcdn.b-cdn.net/img/new/avatars/1.webp"
-                    class="w-32 rounded-full shadow-lg"
+                    th:src="${session.loggedUser.avatar != null ? session.loggedUser.avatar : '/static/icons/avatar-icon.png'}"
+                    class="w-32 rounded-full shadow-lg border-solid mx-auto"
                     alt="Avatar"
             />
         </div>
@@ -52,6 +52,13 @@
                 </svg>
                 Thông tin cá nhân
             </button>
+
+            <button type="button" th:onclick="|window.location.href='/user/change_password'|"
+                    class="relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white">
+                <i class="fas fa-lock"></i>
+                <span> Đổi mật khẩu</span>
+            </button>
+
             <button
                     th:onclick="| window.location.href='/user/subscription-status'|"
                     type="button"

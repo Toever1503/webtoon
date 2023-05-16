@@ -3,6 +3,7 @@ package webtoon.account.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.web.multipart.MultipartFile;
 import webtoon.account.configs.security.jwt.IJwtService;
 import webtoon.account.dtos.LoginResponseDto;
 import webtoon.account.dtos.UserDto;
@@ -13,6 +14,7 @@ import webtoon.account.inputs.LoginInput;
 import webtoon.account.inputs.UserInput;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface IUserService extends IJwtService {
 
@@ -48,4 +50,9 @@ public interface IUserService extends IJwtService {
     Long countTotalRegisterTrialThisMonth();
 
     void saveUserEntity(UserEntity entity);
+
+    UserEntity changePassword(Long id, String newPassword);
+
+    Optional<UserEntity> findByPhone(String phone);
+
 }

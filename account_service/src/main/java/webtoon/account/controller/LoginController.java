@@ -12,6 +12,7 @@ import org.springframework.security.oauth2.client.authentication.OAuth2Authentic
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import webtoon.account.entities.UserEntity;
 import webtoon.account.models.LoginModel;
 import webtoon.account.services.ILoginService;
 import webtoon.utils.exception.CustomHandleException;
@@ -35,10 +36,14 @@ public class LoginController {
     public String loginHandle(LoginModel model, HttpSession session, HttpServletRequest req, HttpServletResponse res) throws IOException {
         try {
             this.loginService.login(model, req);
-
             String redirectTo = (String) session.getAttribute("redirectTo");
             if (session != null)
                 session.removeAttribute("redirectTo");
+
+            UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+            if (loggedUser.getPhone() == null)
+                return "redirect:/user/update_more_info";
+
             res.sendRedirect("/" + (redirectTo.isEmpty() ? "" : "/" + redirectTo));
         } catch (CustomHandleException e) {
             if (e.getCode() == 0) {
@@ -62,6 +67,10 @@ public class LoginController {
             String redirectTo = (String) session.getAttribute("redirectTo");
             if (session != null)
                 session.removeAttribute("redirectTo");
+
+            UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+            if (loggedUser.getPhone() == null)
+                return "redirect:/user/update_more_info";
 
             if (redirectTo != null)
                 return "redirect:" + redirectTo + "?login-type=" + result;

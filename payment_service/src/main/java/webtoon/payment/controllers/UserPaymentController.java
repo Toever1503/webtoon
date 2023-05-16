@@ -6,10 +6,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.thymeleaf.expression.Dates;
 import webtoon.account.configs.security.SecurityUtils;
 import webtoon.account.entities.UserEntity;
@@ -25,6 +23,7 @@ import webtoon.payment.enums.EOrderType;
 import webtoon.payment.enums.EPaymentMethod;
 import webtoon.payment.services.IOrderService;
 import webtoon.payment.services.ISubscriptionPackService;
+import webtoon.storage.domain.services.IFileService;
 
 import javax.servlet.http.HttpSession;
 import java.text.DateFormat;
@@ -48,6 +47,9 @@ public class UserPaymentController {
 
     @Autowired
     private IUserService userService;
+
+    @Autowired
+    private IFileService fileService;
 
     public UserPaymentController() {
         System.out.println("okk");
@@ -134,14 +136,17 @@ public class UserPaymentController {
 
     @GetMapping("subscription-status")
     public String subscriptionStatus(Model model, HttpSession session) {
-        UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if (entity == null) {
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
             return "redirect:/signin?redirectTo=/user/subscription-status";
         } else {
+            if (loggedUser.getPhone() == null)
+                return "redirect:/user/update_more_info";
+
             boolean isUsingTrial = false;
             boolean isTrialExpired = false;
 
-            UserEntity userEntity = this.userService.getById(entity.getId());
+            UserEntity userEntity = this.userService.getById(loggedUser.getId());
             session.setAttribute("loggedUser", userEntity);
 
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
@@ -198,22 +203,24 @@ public class UserPaymentController {
 
     @GetMapping("upgrade-subscription")
     public String getFromUpgrade(Model model, HttpSession session) {
-        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
-        if (userEntity == null) {
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser == null) {
             return "redirect:/signin?redirectTo=/user/subscription-status";
         }
-        userEntity = this.userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
-        session.setAttribute("loggedUser", userEntity);
+        if (loggedUser.getPhone() == null)
+            return "redirect:/user/update_more_info";
+        loggedUser = this.userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
+        session.setAttribute("loggedUser", loggedUser);
         boolean isUsingTrial = false;
-        if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
+        if (loggedUser.getCurrentUsedSubsId() == null && loggedUser.getTrialRegisteredDate() != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             isUsingTrial = result >= 0;
         }
 
         Double currentPrice = Double.valueOf(0);
         if (!isUsingTrial) {
-            SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+            SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(loggedUser.getCurrentUsedSubsId());
             model.addAttribute("currentUsingSubsPack", subscriptionPack);
             currentPrice = subscriptionPack.getPrice();
         }
@@ -223,8 +230,8 @@ public class UserPaymentController {
         List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(null);
         List<SubscriptionPackEntity> canUpgradeList = new ArrayList<>();
 
-        if (userEntity.getCurrentUsedSubsId() != null) {
-            UserEntity finalUserEntity = userEntity;
+        if (loggedUser.getCurrentUsedSubsId() != null) {
+            UserEntity finalUserEntity = loggedUser;
             canUpgradeList = upgradeList.stream().filter(sub -> sub.getId() > finalUserEntity.getCurrentUsedSubsId()).collect(Collectors.toList());
         } else canUpgradeList = upgradeList;
 
@@ -237,21 +244,24 @@ public class UserPaymentController {
 
     @GetMapping("handle-upgrade-subscription")
     public String handleUpgradeSubscription(@RequestParam Long subscriptionId,
-                                            @RequestParam EPaymentMethod paymentMethod) {
+                                            @RequestParam EPaymentMethod paymentMethod,
+                                            HttpSession session) {
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser.getPhone() == null)
+            return "redirect:/user/update_more_info";
         SubscriptionPackEntity newUpgradeSub = this.subscriptionPackService.getById(subscriptionId);
 
-        UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
         boolean isUsingTrial = false;
 
-        if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
+        if (loggedUser.getCurrentUsedSubsId() == null && loggedUser.getTrialRegisteredDate() != null) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             isUsingTrial = result >= 0;
         }
 
         Double currentPrice = Double.valueOf(0);
         if (!isUsingTrial) { // for upgrade from existed order
-            SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+            SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(loggedUser.getCurrentUsedSubsId());
             currentPrice = subscriptionPack.getPrice();
         }
 
@@ -279,23 +289,26 @@ public class UserPaymentController {
 
     @GetMapping("renew_subscription_pack")
     public String renewSubscriptionPack(Model model, HttpSession session) {
-        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
-        if (userEntity == null)
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser == null)
             return "redirect:/signin?redirectTo=/user/renew_subscription_pack";
-        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+        if (loggedUser.getPhone() == null)
+            return "redirect:/user/update_more_info";
+        SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(loggedUser.getCurrentUsedSubsId());
 
-        model.addAttribute("userEntity", userEntity);
+        model.addAttribute("userEntity", loggedUser);
         model.addAttribute("sub", subscriptionPack);
         return "payments/user/renew_subscription_form";
     }
 
     @GetMapping("handle_renew_subscription_pack")
     public String handleRenew(@RequestParam EPaymentMethod paymentMethod, HttpSession session) {
-        UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
-        if (userEntity == null)
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser == null)
             return "redirect:/signin?redirectTo=/user/renew_subscription_pack";
-
-        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+        if (loggedUser.getPhone() == null)
+            return "redirect:/user/update_more_info";
+        SubscriptionPackEntity subscriptionPackEntity = this.subscriptionPackService.getById(loggedUser.getCurrentUsedSubsId());
         OrderEntity orderEntity = this.orderService.createDraftedOrder(subscriptionPackEntity, paymentMethod);
         orderEntity.setOrderType(EOrderType.RENEW);
         this.orderService.saveOrderEntity(orderEntity);
@@ -304,6 +317,24 @@ public class UserPaymentController {
         }
         return "redirect:/order/bank-info/" + orderEntity.getId();
 
+    }
+
+    @PostMapping("update-avatar")
+    public String updateAvatar(@RequestPart MultipartFile avatar, HttpSession session, Model model) {
+        UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
+        if (loggedUser == null)
+            return "redirect:/signin?redirectTo=/user/profile";
+        try {
+            loggedUser.setAvatar(fileService.uploadFile(avatar, "user" + loggedUser.getId() + "/").getUrl());
+            this.userService.saveUserEntity(loggedUser);
+            session.setAttribute("loggedUser", loggedUser);
+            model.addAttribute("notifySuccessMessage", "Cập nhật ảnh đại diện thành công!");
+            return "redirect:/user/profile";
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error_message", "Cập nhật ảnh đại diện thất bại!");
+        }
+        return "redirect:/user/profile";
     }
 
     public static void main(String[] args) {

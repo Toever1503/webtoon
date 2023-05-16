@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 
@@ -70,6 +71,7 @@ public class UserServiceImpl implements IUserService {
                     .build();
             this.userRepository.saveAndFlush(userEntity);
         }
+
     }
 
 
@@ -323,6 +325,19 @@ public class UserServiceImpl implements IUserService {
     @Override
     public void saveUserEntity(UserEntity entity) {
         this.userRepository.saveAndFlush(entity);
+    }
+
+    @Override
+    public UserEntity changePassword(Long id, String newPassword) {
+        UserEntity userEntity = this.getById(id);
+        userEntity.setPassword(this.passwordEncoder.encode(newPassword.trim()));
+        this.userRepository.saveAndFlush(userEntity);
+        return userEntity;
+    }
+
+    @Override
+    public Optional<UserEntity> findByPhone(String phone) {
+        return this.userRepository.findByPhone(phone);
     }
 
     @Override
