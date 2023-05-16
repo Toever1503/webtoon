@@ -92,16 +92,18 @@ public class IMangaServiceImpl implements IMangaService {
 
         mangaEntity.setCreatedBy(SecurityUtils.getCurrentUser().getUser());
         mangaEntity.setModifiedBy(mangaEntity.getCreatedBy());
+
+        if (model.getFeaturedImageFile() != null) {
+            FileDto fileDto = fileService.uploadFile(model.getFeaturedImageFile(), "manga/" + mangaEntity.getId() +"/featured/");
+            mangaEntity.setFeaturedImage(fileDto.getUrl());
+        }
+
         this.mangaRepository.saveAndFlush(mangaEntity);
         if (model.getTags() != null)
             mangaEntity.setTags(tagService.saveTagRelation(mangaEntity.getId(), model.getTags(), ETagType.MANGA));
         else
             mangaEntity.setTags(Collections.EMPTY_LIST);
 
-        if (model.getFeaturedImageFile() != null) {
-            FileDto fileDto = fileService.uploadFile(model.getFeaturedImageFile(), "manga/" + mangaEntity.getId() +"/");
-            mangaEntity.setFeaturedImage(fileDto.getUrl());
-        }
 
         return this.mangaMapper.toDto(mangaEntity);
     }

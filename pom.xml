@@ -19,7 +19,6 @@
         <module>manga_service</module>
         <module>payment_service</module>
         <module>utils_service</module>
-        <module>main_app</module>
     </modules>
 
     <parent>

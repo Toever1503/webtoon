@@ -40,6 +40,7 @@ export async function autoSaveMangaInfo(mangaInput: MangaInput) {
         const res = await mangaService.addMangaInfo(getMangaInputFormData(mangaInput));
         console.log('auto save manga success', res.data);
         mangaInput.id = res.data.id;
+        mangaInput.featuredImage = res.data.featuredImage;
     }
     catch (err) {
         console.log('auto save manga failed');
