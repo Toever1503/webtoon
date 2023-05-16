@@ -180,7 +180,6 @@ public class PaymentController {
             } catch (Exception e) {
                 System.out.printf("send mail failed!");
                 e.printStackTrace();
-
             }
 
             model.addAttribute("maDonHang", maDonHang);

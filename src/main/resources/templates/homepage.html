@@ -79,7 +79,7 @@
                                  th:src="${item.featuredImage}">
 
                             <div class="absolute top-0 right-0 w-full h-full"
-                                 style="background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(0, 0, 0, 0.9));">
+                                 th:style="${'background-image: url('+item.featuredImage+')'}">
                             </div>
                             <h2 class="absolute bottom-2 hover:bottom-3 left-3 text-xl font-bold text-[#fff] ease-in-out duration-200"
                                 th:text="${item.title}">

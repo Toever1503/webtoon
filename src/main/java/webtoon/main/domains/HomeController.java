@@ -48,7 +48,7 @@ public class HomeController {
         System.out.printf("HomeController init\n");
     }
 
-    @RequestMapping("/")
+    @RequestMapping(value = {"/", "/index"})
     public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
         Specification mangaSpec = Specification.where(
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()

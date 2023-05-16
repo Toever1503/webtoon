@@ -32,9 +32,12 @@ public class LoginController {
         return "account/login-form";
     }
 
-    @ResponseBody
     @PostMapping("signin")
-    public String loginHandle(LoginModel model, HttpSession session, HttpServletRequest req, HttpServletResponse res) throws IOException {
+    public String loginHandle(LoginModel model,
+                              HttpSession session,
+                              HttpServletRequest req,
+                              HttpServletResponse res,
+                              Model modelS) throws IOException {
         try {
             this.loginService.login(model, req);
             String redirectTo = (String) session.getAttribute("redirectTo");
@@ -47,12 +50,20 @@ public class LoginController {
 
             res.sendRedirect("/" + (redirectTo.isEmpty() ? "" : "/" + redirectTo));
         } catch (CustomHandleException e) {
+            e.printStackTrace();
             if (e.getCode() == 0) {
                 return "login error";
             }
+            modelS.addAttribute("message", "Tài khoản hoặc mật khẩu không chính xác!");
+            return "account/login-form";
+        }
+        catch (Exception e){
+            e.printStackTrace();
+            modelS.addAttribute("message", "Tài khoản hoặc mật khẩu không chính xác!");
+            return "account/login-form";
         }
 
-        return null;
+        return "redirect:/";
     }
 
 

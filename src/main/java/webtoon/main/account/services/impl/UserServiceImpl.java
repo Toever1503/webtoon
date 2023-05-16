@@ -72,6 +72,10 @@ public class UserServiceImpl implements IUserService {
             this.userRepository.saveAndFlush(userEntity);
         }
 
+//        UserEntity userEntity = this.userRepository.findById(3l).get();
+//        userEntity.setPassword(this.passwordEncoder.encode("1234567"));
+//        this.userRepository.saveAndFlush(userEntity);
+
     }
 
 
