@@ -15,6 +15,8 @@
     <artifactId>webtoon-main-app</artifactId>
     <packaging>jar</packaging>
     <version>1.0.0-SNAPSHOT</version>
+    <name>webtoon</name>
+    <description>webtoon</description>
 
     <properties>
         <maven.compiler.source>11</maven.compiler.source>
@@ -27,28 +29,7 @@
         <springboot.version>2.7.8</springboot.version>
     </properties>
 
-    <repositories>
-        <repository>
-            <id>mvn2s</id>
-            <url>https://repo1.maven.org/maven2/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>true</enabled>
-            </snapshots>
-        </repository>
-        <repository>
-            <id>egovframe</id>
-            <url>https://maven.egovframe.go.kr/maven/</url>
-            <releases>
-                <enabled>true</enabled>
-            </releases>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
+
 
     <dependencies>
         <dependency>
@@ -145,6 +126,13 @@
             <artifactId>spring-boot-starter-validation</artifactId>
             <version>${springboot.version}</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+            <version>${springboot.version}</version>
+        </dependency>
+
 
 
         <!-- https://mvnrepository.com/artifact/org.springframework.session/spring-session-jdbc -->
@@ -176,35 +164,6 @@
             <artifactId>junit</artifactId>
             <version>3.8.1</version>
             <scope>test</scope>
-        </dependency>
-
-        <!-- 표준프레임워크 실행환경 -->
-        <dependency>
-            <groupId>org.egovframe.rte</groupId>
-            <artifactId>org.egovframe.rte.ptl.mvc</artifactId>
-            <version>${org.egovframe.rte.version}</version>
-            <exclusions>
-                <exclusion>
-                    <artifactId>commons-logging</artifactId>
-                    <groupId>commons-logging</groupId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>org.egovframe.rte</groupId>
-            <artifactId>org.egovframe.rte.psl.dataaccess</artifactId>
-            <version>${org.egovframe.rte.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.egovframe.rte</groupId>
-            <artifactId>org.egovframe.rte.fdl.idgnr</artifactId>
-            <version>${org.egovframe.rte.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.egovframe.rte</groupId>
-            <artifactId>org.egovframe.rte.fdl.property</artifactId>
-            <version>${org.egovframe.rte.version}</version>
         </dependency>
 
         <dependency>
@@ -303,110 +262,89 @@
             <scope>runtime</scope>
         </dependency>
 
-        <dependency>
-            <groupId>jstl</groupId>
-            <artifactId>jstl</artifactId>
-            <version>1.2</version>
-        </dependency>
-
 
     </dependencies>
     <build>
-        <pluginManagement>
-            <plugins>
-                <plugin>
-                    <groupId>org.apache.tomcat.maven</groupId>
-                    <artifactId>tomcat7-maven-plugin</artifactId>
-                    <version>2.2</version>
-                    <configuration>
-                        <port>80</port>
-                        <path>/</path>
-                        <systemProperties>
-                            <JAVA_OPTS>-Xms256m -Xmx768m -XX:MaxPermSize=256m</JAVA_OPTS>
-                        </systemProperties>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-compiler-plugin</artifactId>
-                    <configuration>
-                        <source>1.8</source>
-                        <target>1.8</target>
-                        <encoding>UTF-8</encoding>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-war-plugin</artifactId>
-                    <version>2.4</version>
-                    <configuration>
-                        <failOnMissingWebXml>false</failOnMissingWebXml>
-                    </configuration>
-                </plugin>
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>hibernate3-maven-plugin</artifactId>
-                    <version>3.0</version>
-                    <configuration>
-                        <components>
-                            <component>
-                                <name>hbm2ddl</name>
-                                <implementation>annotationconfiguration</implementation>
-                            </component>
-                        </components>
-                    </configuration>
-                    <dependencies>
-                        <dependency>
-                            <groupId>org.hsqldb</groupId>
-                            <artifactId>hsqldb</artifactId>
-                            <version>2.5.0</version>
-                        </dependency>
-                    </dependencies>
-                </plugin>
-                <!-- EMMA -->
-                <plugin>
-                    <groupId>org.codehaus.mojo</groupId>
-                    <artifactId>emma-maven-plugin</artifactId>
-                    <version>1.0-alpha-3</version>
-                </plugin>
-                <!-- PMD manven plugin -->
-                <plugin>
-                    <groupId>org.apache.maven.plugins</groupId>
-                    <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.12.0</version>
-                </plugin>
-            </plugins>
-        </pluginManagement>
+        <!--        <pluginManagement>-->
+        <!--            <plugins>-->
+        <!--                <plugin>-->
+        <!--                    <groupId>org.apache.tomcat.maven</groupId>-->
+        <!--                    <artifactId>tomcat7-maven-plugin</artifactId>-->
+        <!--                    <version>2.2</version>-->
+        <!--                    <configuration>-->
+        <!--                        <port>80</port>-->
+        <!--                        <path>/</path>-->
+        <!--                        <systemProperties>-->
+        <!--                            <JAVA_OPTS>-Xms256m -Xmx768m -XX:MaxPermSize=256m</JAVA_OPTS>-->
+        <!--                        </systemProperties>-->
+        <!--                    </configuration>-->
+        <!--                </plugin>-->
+        <!--                <plugin>-->
+        <!--                    <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                    <artifactId>maven-compiler-plugin</artifactId>-->
+        <!--                    <configuration>-->
+        <!--                        <source>1.8</source>-->
+        <!--                        <target>1.8</target>-->
+        <!--                        <encoding>UTF-8</encoding>-->
+        <!--                    </configuration>-->
+        <!--                </plugin>-->
+        <!--                <plugin>-->
+        <!--                    <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                    <artifactId>maven-war-plugin</artifactId>-->
+        <!--                    <version>2.4</version>-->
+        <!--                    <configuration>-->
+        <!--                        <failOnMissingWebXml>false</failOnMissingWebXml>-->
+        <!--                    </configuration>-->
+        <!--                </plugin>-->
+
+        <!--                <plugin>-->
+        <!--                    <groupId>org.codehaus.mojo</groupId>-->
+        <!--                    <artifactId>hibernate3-maven-plugin</artifactId>-->
+        <!--                    <version>3.0</version>-->
+        <!--                    <configuration>-->
+        <!--                        <components>-->
+        <!--                            <component>-->
+        <!--                                <name>hbm2ddl</name>-->
+        <!--                                <implementation>annotationconfiguration</implementation>-->
+        <!--                            </component>-->
+        <!--                        </components>-->
+        <!--                    </configuration>-->
+        <!--                    <dependencies>-->
+        <!--                        <dependency>-->
+        <!--                            <groupId>org.hsqldb</groupId>-->
+        <!--                            <artifactId>hsqldb</artifactId>-->
+        <!--                            <version>2.5.0</version>-->
+        <!--                        </dependency>-->
+        <!--                    </dependencies>-->
+        <!--                </plugin>-->
+        <!--                &lt;!&ndash; EMMA &ndash;&gt;-->
+        <!--                <plugin>-->
+        <!--                    <groupId>org.codehaus.mojo</groupId>-->
+        <!--                    <artifactId>emma-maven-plugin</artifactId>-->
+        <!--                    <version>1.0-alpha-3</version>-->
+        <!--                </plugin>-->
+        <!--                &lt;!&ndash; PMD manven plugin &ndash;&gt;-->
+        <!--                <plugin>-->
+        <!--                    <groupId>org.apache.maven.plugins</groupId>-->
+        <!--                    <artifactId>maven-pmd-plugin</artifactId>-->
+        <!--                    <version>3.12.0</version>-->
+        <!--                </plugin>-->
+        <!--            </plugins>-->
+        <!--        </pluginManagement>-->
+
         <plugins>
-            <!-- EMMA -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-surefire-plugin</artifactId>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <skipTests>true</skipTests>
-                    <forkMode>once</forkMode>
-                    <reportFormat>xml</reportFormat>
                     <excludes>
-                        <exclude>**/Abstract*.java</exclude>
-                        <exclude>**/*Suite.java</exclude>
+                        <exclude>
+                            <groupId>org.projectlombok</groupId>
+                            <artifactId>lombok</artifactId>
+                        </exclude>
                     </excludes>
-                    <includes>
-                        <include>**/*Test.java</include>
-                    </includes>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>emma-maven-plugin</artifactId>
-                <inherited>true</inherited>
-            </plugin>
-            <!-- JavaDoc -->
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
-            </plugin>
-
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -416,28 +354,6 @@
                 </configuration>
             </plugin>
 
-            <plugin>
-                <artifactId>maven-assembly-plugin</artifactId>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>single</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.package.MainClass</mainClass>
-                        </manifest>
-                    </archive>
-                    <descriptorRefs>
-                        <descriptorRef>jar-with-dependencies</descriptorRef>
-                    </descriptorRefs>
-                </configuration>
-            </plugin>
         </plugins>
     </build>
 
