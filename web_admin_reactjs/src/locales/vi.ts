@@ -125,7 +125,7 @@ export default {
         },
         eReleaseStatus: {
             'COMING': 'Sắp ra mắt',
-            'ONGOING': 'Đang ra',
+            'GOING': 'Đang ra',
             'COMPLETED': 'Đã hoàn thành',
             'CANCELLED': 'Đã hủy',
             'ON_STOPPING': 'Tạm ngừng',

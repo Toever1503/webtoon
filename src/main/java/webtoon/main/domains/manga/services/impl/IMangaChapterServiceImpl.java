@@ -179,13 +179,17 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
             List<Integer> imageIndexes = new ArrayList<>();
 
             List<MultipartFile> needUploadFiles = new ArrayList<>();
-            if (input.getId() == null)
+            AtomicInteger currentIndex = new AtomicInteger(0);
+            if (input.getId() == null) {
                 multipartFiles.forEach(f -> body.add("files", f.getResource()));
+                multipartFiles.stream().forEach(f -> {
+                    imageIndexes.add(currentIndex.getAndIncrement());
+                    needUploadFiles.add(f);
+                });
+            }
             else {
                 List<Long> keepingImageIds = new ArrayList<>();
 
-
-                AtomicInteger currentIndex = new AtomicInteger(0);
                 multipartFiles.forEach((f) -> {
                     if (f.getOriginalFilename().matches("id-\\d+")) {
                         Long imageId = Long.valueOf(f.getOriginalFilename().split("-")[1]);

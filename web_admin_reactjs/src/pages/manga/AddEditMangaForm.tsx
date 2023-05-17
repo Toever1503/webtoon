@@ -277,6 +277,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                             authors: res.data.authors.map((author: AuthorInput) => author.id),
                             genres: res.data.genres.map((genre: GenreInput) => genre.id),
                             tags: res.data.tags.map((tag: GenreInput) => tag.id),
+                            releaseYear: res.data.releaseYear || null,
+
                         });
                     })
                     .catch((err) => {
@@ -354,9 +356,9 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                 <Select
                                     className='min-w-[150px]'
                                     defaultValue={mangaInput.isShow}
-                                    onChange={(val) => { 
+                                    onChange={(val) => {
                                         setMangaInput({ ...mangaInput, isShow: Boolean(val) });
-                                     }}
+                                    }}
                                     options={[
                                         { value: true, label: 'Đăng ngay' },
                                         { value: false, label: 'Ẩn' },
@@ -368,7 +370,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                 <span className='text-[14px] font-bold'>Tình trạng phát hành:</span>
                                 <Select
                                     className='min-w-[150px]'
-                                    defaultValue="COMING"
+                                    defaultValue={mangaInput.mangaStatus}
                                     onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
                                     options={[
                                         { value: 'COMING', label: 'Sắp ra mắt' },
@@ -423,3 +425,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 }
 
 export default AddEditMangaForm;
+
+function moment(releaseYear: any): string | undefined {
+    throw new Error('Function not implemented.');
+}

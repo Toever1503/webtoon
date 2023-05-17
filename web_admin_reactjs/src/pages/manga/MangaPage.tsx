@@ -22,7 +22,7 @@ const mangaStatus: MangaStatus[] = [
 ];
 
 const releaseStatus: ReleaseStatus[] = [
-    'COMING', 'ONGOING', 'ON_STOPPING', 'CANCELLED', 'COMPLETED'
+    'COMING', 'GOING', 'ON_STOPPING', 'CANCELLED', 'COMPLETED'
 ];
 
 
@@ -389,7 +389,7 @@ const MangaPage: React.FC = () => {
                             {t('manga.eMangaStatus.ALL')}
                         </Select.Option>
                         {
-                            ['COMING', 'ONGOING', 'ON_STOPPING', 'COMPLETED'].map((status, index) => (
+                            ['COMING', 'GOING', 'ON_STOPPING', 'COMPLETED'].map((status, index) => (
                                 <Select.Option key={index} value={status} >
                                     {t('manga.eReleaseStatus.' + status)}
                                 </Select.Option>)
