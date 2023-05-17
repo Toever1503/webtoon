@@ -103,7 +103,7 @@ public class OrderController {
         this.orderService.cancelOrder(id);
         redirectAttributes.addAttribute("showNotification", true);
         redirectAttributes.addAttribute("notificationMessage", "Hủy thành công!");
-        return "redirect:/user/userOrder" + (page == 0 ? "" : "?page=" + page);
+        return "redirect:/user/order-history" + (page == 0 ? "" : "?page=" + page);
     }
 
     @GetMapping("repay/{id}")

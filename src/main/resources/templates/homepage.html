@@ -4,24 +4,36 @@
 <body>
 <div layout:fragment="content" >
     <section
-            class="manga-genres w-full h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-end items-center">
+            class="manga-genres w-full h-[54px] relative mx-auto shadow-sm px-[5px] flex justify-between items-center">
 
-        <!--  seach button -->
-        <div id="search_modal" class="h-[30px]">
-            <form action="/search" method="get" class="flex space-x-2 text-sm h-full">
-                <input name="q" class="rounded py-1 px-2 h-full" placeholder="Nhập tên truyện, tác giả,..."
-                       style="border: 1px solid gainsboro;"/>
-                <button type="submit">
-                    <i class="fas fa-search text-black hover:text-neutral-200"></i>
-                </button>
-            </form>
-        </div>
+            <div class="flex gap-[20px] item-center">
+                <span class="mr-[10px] text-2xl font-semibold">Thể loại: </span>
+                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"
+                   th:each="item,iter : ${genreList}"
+                   th:href="${'/genre/' + item.slug + '/' + item.id}"
+                   th:if="${iter.index < 5}"
+                   th:text="${item.name}"></a>
+                <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer view-detail-genes">Xêm thêm
+                    <i class="fas fa-chevron-right text-[14px] font-bold"></i>
+                </a>
+            </div>
+            <!--  seach button -->
+            <div id="search_modal" class="h-[30px]">
+                <form action="/search" method="get" class="flex space-x-2 text-sm h-full">
+                    <input name="q" class="rounded py-1 px-2 h-full" placeholder="Nhập tên truyện, tác giả,..."
+                           style="border: 1px solid gainsboro;"/>
+                    <button type="submit">
+                        <i class="fas fa-search text-black hover:text-neutral-200"></i>
+                    </button>
+                </form>
+            </div>
 
         <ul class="detail-genres-list hidden absolute w-full bg-[#f3f3f3] top-[55px] z-[1000] left-0 px-[15px]
              py-[10px] border-t-[1px] border-t-[#ebebeb] border-[#eb3349] border-b-[2px] flex-wrap gap-[20px]
              ease-in-out duration-300"
             style="border-right: 1px solid #ebebeb; border-left: 1px solid #ebebeb">
             <a class="hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"
+               th:href="${'/genre/' + item.slug + '/' + item.id}"
                th:each="item : ${genreList}" th:text="${item.name}"></a>
 
         </ul>
@@ -75,15 +87,18 @@
                          th:each="item : ${mangaSlider}">
                         <a th:href="@{'/manga/'+${item.mangaName}+'/'+${item.id}}"
                            class="block w-full h-full m-0 bg-red-500 relative z-[10] hover:scale-[0.95] ease-in-out duration-200">
-                            <img class="block w-full h-full border border-neutral-200"
-                                 th:src="${item.featuredImage}">
+<!--                            <img class="block w-full h-full border border-neutral-200"-->
+<!--                                 th:src="${item.featuredImage}">-->
 
                             <div class="absolute top-0 right-0 w-full h-full"
-                                 th:style="${'background-image: url('+item.featuredImage+')'}">
+                                 th:style="${'background-image: url('+item.featuredImage+')'}"
+                            >
                             </div>
-                            <h2 class="absolute bottom-2 hover:bottom-3 left-3 text-xl font-bold text-[#fff] ease-in-out duration-200"
-                                th:text="${item.title}">
-                            </h2>
+                            <div class="absolute bg-[#00000040] w-full bottom-2 hover:bottom-3 left-0 pl-3 text-xl font-bold text-[#fff] ease-in-out duration-200">
+                                <h2
+                                    th:text="${item.title}">
+                                </h2>
+                            </div>
                         </a>
                     </div>
 
@@ -123,91 +138,263 @@
 
         <div class="main-layout flex max-w-[1100px] mx-auto py-[50px] bg-white px-[15px]">
 
-            <section class="w-[800px]">
-                <h3 class="font-bold text-2xl mb-[15px]">
-                    Danh sách truyện mới nhất
-                </h3>
+            <div class="w-[800px]">
+                <section class="w-full">
+                    <h3 class="font-bold text-2xl mb-[15px]">
+                        Truyện mới cập nhật
+                    </h3>
 
-                <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
+                    <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
 
-                <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
+                    <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
 
-                    <li class="w-[130px] bg-white h-[400px] relative box-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
-                        <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
-                            <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
-                                 th:src="${manga.featuredImage}"/>
-                            <div class="manga-info block m-0 h-full py-[10px]">
-                                <h4 class="font-bold leading-0 m-0">
-                                    <a th:text="${manga.title}"
-                                       th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
-                                       class="hover:text-[#eb3349] text-[14px]"></a>
+                        <li class="w-[130px] bg-white h-[400px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                            <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
+                                <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
+                                     th:src="${manga.featuredImage}"/>
+                                <div class="manga-info block m-0 h-full py-[10px] px-[5px]">
+                                    <h4 class="font-bold leading-0 m-0">
+                                        <a th:text="${manga.title}"
+                                           th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
+                                           class="hover:text-[#eb3349] text-[14px]"></a>
 
-                                    <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
-                                        <ul>
-                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 1 ? 'color: #ffeb3b;' : ''}"></i>
-                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 2 ? 'color: #ffeb3b;' : ''}"></i>
-                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 3 ? 'color: #ffeb3b;' : ''}"></i>
-                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 4 ? 'color: #ffeb3b;' : ''}"></i>
-                                            <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
-                                        </ul>
+                                        <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
+                                            <ul>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 1 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 2 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 3 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 4 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
+                                            </ul>
 
-                                        <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
-                                    </div>
+                                            <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+                                        </div>
 
-                                </h4>
+                                    </h4>
 
-                                <!--  for display chapter by vol-->
+                                    <!--  for display chapter by vol-->
 
-                                <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
-                                    class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
-                                    th:each="volume,volI : ${manga.volumeEntities}">
-                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+                                    <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
+                                        class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                        th:each="volume,volI : ${manga.volumeEntities}">
+                                        <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
-                                        <div class="gap-[5px] flex items-center">
+                                            <div class="gap-[5px] flex items-center">
+                                                <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
+                                                   th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                   style="border: 1px solid #ebebeb"
+                                                   class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                </a>
+                                                <span class="text-[12px] text-[#666666]"
+                                                      th:text="${'Tập ' + (volume.volumeIndex + 1)}">
+                                        </span>
+                                            </div>
+                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </li>
+                                    </ul>
+                                    <!--  for display chapter by chap -->
+                                    <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
+                                        <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
+                                            th:if="${iter.index < 2}"
+                                        >
                                             <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
                                                th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                style="border: 1px solid #ebebeb"
                                                class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
                                             </a>
-                                            <span class="text-[12px] text-[#666666]"
-                                                  th:text="${'Tập ' + (volume.volumeIndex + 1)}">
-                                        </span>
-                                        </div>
-                                         <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
-                                    </li>
-                                </ul>
-                                <!--  for display chapter by chap -->
-                                <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
-                                    <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
-                                        th:if="${iter.index < 2}"
-                                    >
-                                        <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
-                                           th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
-                                           style="border: 1px solid #ebebeb"
-                                           class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                        </a>
-                                        <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
-                                    </li>
-                                </ul>
+                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </li>
+                                    </ul>
 
-                            </div>
-                        </a>
+                                </div>
+                            </a>
 
-                        <div class="absolute w-fit h-fit top-[-14px] right-0">
+                            <div class="absolute w-fit h-fit top-[-14px] right-0">
                             <span th:if="${manga.isFree}"
                                   class="manga-title-badget inline-block bg-[#37b7da] w-[50px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
                                     Miễn phí
                                 </span>
-                            <span th:if="${!manga.isFree}"
-                                  class="manga-title-badget inline-block bg-[#eb3349] w-[40px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                <span th:if="${!manga.isFree}"
+                                      class="manga-title-badget inline-block bg-[#eb3349] w-[40px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
                                     Trả phí
                                 </span>
-                        </div>
-                    </li>
+                            </div>
+                        </li>
 
-                </ul>
+                    </ul>
 
-            </section>
+                </section>
+                <section class="w-full">
+                    <h3 class="font-bold text-2xl mb-[15px]">
+                        Truyện sắp ra mắt
+                    </h3>
+
+                    <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
+
+                    <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
+
+                        <li class="w-[130px] bg-white h-[400px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                            <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
+                                <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
+                                     th:src="${manga.featuredImage}"/>
+                                <div class="manga-info block m-0 h-full py-[10px] px-[5px]">
+                                    <h4 class="font-bold leading-0 m-0">
+                                        <a th:text="${manga.title}"
+                                           th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
+                                           class="hover:text-[#eb3349] text-[14px]"></a>
+
+                                        <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
+                                            <ul>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 1 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 2 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 3 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 4 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
+                                            </ul>
+
+                                            <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+                                        </div>
+
+                                    </h4>
+
+                                    <!--  for display chapter by vol-->
+
+                                    <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
+                                        class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                        th:each="volume,volI : ${manga.volumeEntities}">
+                                        <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+
+                                            <div class="gap-[5px] flex items-center">
+                                                <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
+                                                   th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                   style="border: 1px solid #ebebeb"
+                                                   class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                </a>
+                                                <span class="text-[12px] text-[#666666]"
+                                                      th:text="${'Tập ' + (volume.volumeIndex + 1)}">
+                                        </span>
+                                            </div>
+                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </li>
+                                    </ul>
+                                    <!--  for display chapter by chap -->
+                                    <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
+                                        <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
+                                            th:if="${iter.index < 2}"
+                                        >
+                                            <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
+                                               th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                               style="border: 1px solid #ebebeb"
+                                               class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                            </a>
+                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </a>
+
+                            <div class="absolute w-fit h-fit top-[-14px] right-0">
+                            <span th:if="${manga.isFree}"
+                                  class="manga-title-badget inline-block bg-[#37b7da] w-[50px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    Miễn phí
+                                </span>
+                                <span th:if="${!manga.isFree}"
+                                      class="manga-title-badget inline-block bg-[#eb3349] w-[40px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    Trả phí
+                                </span>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </section>
+                <section class="w-full">
+                    <h3 class="font-bold text-2xl mb-[15px]">
+                        Truyện miễn phí
+                    </h3>
+
+                    <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
+
+                    <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
+
+                        <li class="w-[130px] bg-white h-[400px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                            <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
+                                <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
+                                     th:src="${manga.featuredImage}"/>
+                                <div class="manga-info block m-0 h-full py-[10px] px-[5px]">
+                                    <h4 class="font-bold leading-0 m-0">
+                                        <a th:text="${manga.title}"
+                                           th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
+                                           class="hover:text-[#eb3349] text-[14px]"></a>
+
+                                        <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
+                                            <ul>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 1 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 2 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 3 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 4 ? 'color: #ffeb3b;' : ''}"></i>
+                                                <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
+                                            </ul>
+
+                                            <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+                                        </div>
+
+                                    </h4>
+
+                                    <!--  for display chapter by vol-->
+
+                                    <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
+                                        class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                        th:each="volume,volI : ${manga.volumeEntities}">
+                                        <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
+
+                                            <div class="gap-[5px] flex items-center">
+                                                <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
+                                                   th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                   style="border: 1px solid #ebebeb"
+                                                   class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                </a>
+                                                <span class="text-[12px] text-[#666666]"
+                                                      th:text="${'Tập ' + (volume.volumeIndex + 1)}">
+                                        </span>
+                                            </div>
+                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </li>
+                                    </ul>
+                                    <!--  for display chapter by chap -->
+                                    <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
+                                        <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
+                                            th:if="${iter.index < 2}"
+                                        >
+                                            <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
+                                               th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                               style="border: 1px solid #ebebeb"
+                                               class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                            </a>
+                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                        </li>
+                                    </ul>
+
+                                </div>
+                            </a>
+
+                            <div class="absolute w-fit h-fit top-[-14px] right-0">
+                            <span th:if="${manga.isFree}"
+                                  class="manga-title-badget inline-block bg-[#37b7da] w-[50px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    Miễn phí
+                                </span>
+                                <span th:if="${!manga.isFree}"
+                                      class="manga-title-badget inline-block bg-[#eb3349] w-[40px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
+                                    Trả phí
+                                </span>
+                            </div>
+                        </li>
+
+                    </ul>
+
+                </section>
+            </div>
 
             <div class="w-[300px] mx-auto mt-2 divide-y">
 
@@ -339,16 +526,19 @@
                         Thể loại
                     </h3>
 
-                    <ul class="grid grid-cols-2 justify-between gap-[10px] mt-[15px]">
-                        <a class="block w-fit hover:text-[#eb3349] font-bold ease-in-out duration-200 cursor-pointer"
-                           th:each="item,iter : ${genreList}" th:if="${iter.index < 8}" th:text="${item.name}"
-                           th:href="@{'/genre/' + ${item.slug} + '/' + ${item.id}}"
-                        ></a>
+                    <ul class="grid grid-cols-2 space-x-2 mt-[20px]">
+                        <li class="flex items-center space-x-2" th:each="item: ${genreList}">
+                            <i class="fas fa-caret-right" style="color: #343537;"></i>
+                            <a th:href="@{'/genre/' + ${item.slug} + '/' + ${item.id} }" class="cursor-pointer hover:text-[#eb3349]"
+                               th:text="${item.name}"></a>
+                        </li>
                     </ul>
                 </div>
 
             </div>
         </div>
+
+
 
     </div>
 </div>

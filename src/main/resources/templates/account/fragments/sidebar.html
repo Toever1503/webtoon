@@ -1,6 +1,6 @@
-<div th:fragment="user-sidebar" class="mt-4">
+<div th:fragment="user-sidebar" class="pt-4 w-[275px] bg-white bordered border-r-[1px]">
     <div
-            class="w-[250px] h-auto border-solid border rounded-md border-gray-400"
+            class="w-full h-auto rounded-md"
     >
         <div class="py-[20px]">
             <img
@@ -30,12 +30,12 @@
 
         </div>
     </div>
-    <div class="my-10 w-[250px] h-[154px]">
+    <div class="my-10 w-full h-[154px]">
         <div class="w-full text-gray-900 bg-white rounded-lg">
             <button
                     th:onclick="| window.location.href='/user/profile'|"
                     type="button"
-                    class="relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
+                    th:class="${'relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white '}"
             >
                 <svg
                         aria-hidden="true"

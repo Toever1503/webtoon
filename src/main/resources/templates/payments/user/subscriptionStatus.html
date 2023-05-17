@@ -13,16 +13,16 @@
 </head>
 
 <body>
-    <div class="w-[1100px] mx-auto" layout:fragment="content">
+    <div class="w-[1100px] mx-auto bg-white" layout:fragment="content">
         <div class="grid grid-cols-4 min-h-[670px]">
             <div th:replace="account/fragments/sidebar :: user-sidebar" />
 
-            <div class="col-span-3  w-[780px] p-4 border border-gray-400 mt-4 bg-white">
+            <div class="col-span-3 w-[780px] p-4 mt-4 bg-white">
                 <h3 class="mb-[10px] font-semibold text-2xl">Thông tin gói</h3>
 
-                <p th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
+                <p class="mb-[15px]" th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
                 <button th:if="${!isUsingTrial && currentUsingSubsPack == null}"
-                        class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                        class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                     <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
 
 
@@ -36,13 +36,13 @@
                         <span th:if="${isTrialExpired}" class="text-red-500 font-semibold">Đã hết hạn</span>
                     </p>
 
-                    <div class="flex gap-[10px]">
+                    <div class="flex gap-[10px] mt-[15px]">
                         <button th:if="${canUpgradeSubs && isUsingTrial}"
-                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                             <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
 
                         <button th:if="${canUpgradeSubs && !isUsingTrial}"
-                                class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                             <a href="/user/upgrade-subscription" class="text-white">Nâng
                                 cấp gói</a>
                         </button>
@@ -64,14 +64,16 @@
                     </p>
                     <div class="flex gap-[10px]">
                         <button th:if="${canUpgradeSubs}"
-                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                             <a href="/user/upgrade-subscription" class="text-white">Nâng
                                 cấp gói</a></button>
 
                         <button th:if="${!isUsingTrial && isExpiredSub}"
-                            class="mt-[15px] bg-[#eb3349] hover:bg-[#f54a5e] border-none px-[10px] py-[5px] rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out ">
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                             <a href="/user/renew_subscription_pack" class="text-white">Gia hạn lại</a></button>
                     </div>
+
+
 
                 </div>
 

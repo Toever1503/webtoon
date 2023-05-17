@@ -13,29 +13,29 @@
 
 <body>
 
-    <div class="w-[1100px] mx-auto" layout:fragment="content">
+    <div class="w-[1100px] mx-auto bg-white" layout:fragment="content">
         <div class="grid grid-cols-4 min-h-[670px]">
             <div th:replace="account/fragments/sidebar :: user-sidebar" />
 
-            <div class="col-span-3 mx-auto w-[780px] p-4 border border-gray-400 mt-4 bg-white">
+            <div class="col-span-3 mx-auto w-[780px] p-4 mt-4 bg-white">
                 <h3 class="mb-[10px] font-semibold text-2xl">Nâng cấp gói</h3>
 
                 <form action="/user/handle-upgrade-subscription">
-                    <div>
-                        <label class="font-semibold"> Gói hiện tại:</label>
-                        <span th:if="${!isUsingTrial}" th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}">Gói
-                            1 tháng</span>
-                        <span th:if="${isUsingTrial}">Gói dùng thử 3 ngày</span>
-                    </div>
-
-                    <div class="grid gap-[5px]">
-                        <label class="font-semibold">Chọn gói cần nâng cấp</label>
-                        <select id="subscriptionId" name="subscriptionId" class="border px-[10px] w-fit">
-                            <option th:id="${'subs-'+item.id}" th:value="${item.id}" th:data-price="${item.price}"
-                                th:data-name="${item.name}" th:each="item : ${upgradeSubscriptionList}"
-                                th:text="${item.name + ' - ' + item.price +'đ'}">Gói 3 tháng</option>
-                        </select>
-
+<!--                    <div>-->
+<!--                        <label class="font-medium text-slate-700 pb-2"> Gói hiện tại:</label>-->
+<!--                        <span th:if="${!isUsingTrial}" th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}">Gói-->
+<!--                            1 tháng</span>-->
+<!--                        <span th:if="${isUsingTrial}">Gói dùng thử 3 ngày</span>-->
+<!--                    </div>-->
+                    <div class="flex flex-col space-y-5 mt-[15px]">
+                        <label for="subscriptionId">
+                            <p class="font-medium text-slate-700 pb-2">Chọn gói cần nâng cấp</p>
+                            <select id="subscriptionId" name="subscriptionId"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option th:id="${'subs-'+item.id}" th:value="${item.id}" th:data-price="${item.price}"
+                                        th:data-name="${item.name}" th:each="item : ${upgradeSubscriptionList}"
+                                        th:text="${item.name + ' - ' + item.price +'đ'}">Gói 3 tháng</option>
+                            </select>
+                        </label>
                         <script th:inline="javascript">
                             /*<![CDATA[*/
 
@@ -43,7 +43,7 @@
                             window.addEventListener('DOMContentLoaded', () => {
                                 document.getElementById('subscriptionId').addEventListener('change', e => {
                                     let optionTag = document.getElementById(`subs-${e.target.value}`)
-                                    document.getElementById('newSubsLabel').innerText = `(${optionTag.dataset.name})`;
+                                    document.getElementById('newSubsLabel').innerText = `${optionTag.dataset.name}`;
                                     document.getElementById('newSubsValue').innerText = Math.round(optionTag.dataset.price) + 'đ';
 
                                     let finalPrice = Math.round(optionTag.dataset.price) - currentSubPrice;
@@ -54,36 +54,42 @@
                         </script>
                     </div>
 
-                    <div class="grid gap-[5px]">
-                        <label class="font-semibold">Chọn phương thức thanh toán</label>
-                        <select name="paymentMethod" class="border px-[10px] w-fit">
-                            <option value="VN_PAY">Thanh toán VN_PAY</option>
-                            <option value="ATM">Chuyển khoản</option>
-                        </select>
+                    <div class="flex flex-col space-y-5 mt-[15px]">
+                        <label for="paymentMethod">
+                            <p class="font-medium text-slate-700 pb-2">Chọn phương thức thanh toán</p>
+                            <select id="paymentMethod" name="paymentMethod"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="VN_PAY">Thanh toán VN_PAY</option>
+                                <option value="ATM">Chuyển khoản</option>
+                            </select>
+                        </label>
                     </div>
 
-                    <div class="grid gap-[5px]">
-                        <label class="font-semibold">Tổng tiền cần thanh toán:</label>
+                    <div class="flex flex-col  mt-[15px]">
+                        <label class="font-medium text-slate-700 pb-2">Tổng tiền cần thanh toán:</label>
                         <span>
                             <span id="newSubsValue" th:text="${upgradeSubscriptionList.get(0).getPrice()}">
-                                50000d
+
                             </span>
 
-                            <span id="newSubsLabel" th:text="${upgradeSubscriptionList.get(0).getName()}">(Gói 12 tháng)</span>
+                            (<span id="newSubsLabel" th:text="${upgradeSubscriptionList.get(0).getName()}">(Gói 12 tháng)</span>)
+
                             -
+
                             <span th:if="${!isUsingTrial}" th:text="${currentUsingSubsPack.price + 'đ'}"></span>
                             <span th:if="${isUsingTrial}">0đ </span>
 
                             <span>
                                 (<span th:if="${!isUsingTrial}"
                                     th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}">Gói 1 tháng</span>
-                                <span th:if="${isUsingTrial}">Gói dùng thử 3 ngày</span>)
+                                <span th:if="${isUsingTrial}">Gói dùng thử 3 ngày</span>
+                                - còn lại <span th:text="${(session.loggedUser.getCanReadUntilDate().getTime() - T(java.sql.Date).valueOf(#dates.format(#dates.createNow(),'YYYY-MM-dd')).getTime()) / (1000 * 60 * 60 * 24) + ' ngày.'}"/>
+                                )
                             </span>
                             = <span id="finalPrice" class="text-[#f44336] font-semibold" th:text="${finalPrice + 'đ'}">40000d</span>
                         </span>
                     </div>
 
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                    <div class="px-4 py-3">
                         <button type="button"
                             class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
                             <a href="/user/subscription-status">Quay lại</a>
