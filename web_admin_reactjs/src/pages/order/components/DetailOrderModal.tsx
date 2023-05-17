@@ -78,6 +78,12 @@ const DetailOrderModal: React.FC<DetailOrderModalProps> = (props: DetailOrderMod
                     }
                 </Descriptions.Item>
 
+                <Descriptions.Item label={t('order.table.phone')}>
+                    {
+                        order?.user_id?.phone
+                    }
+                </Descriptions.Item>
+
                 <Descriptions.Item label={t('order.table.createdAt')}>{
                     dateTimeFormat(order?.created_at)
                 }</Descriptions.Item>
@@ -89,7 +95,7 @@ const DetailOrderModal: React.FC<DetailOrderModalProps> = (props: DetailOrderMod
                 </Descriptions.Item>
 
 
-                <Descriptions.Item span={2} label={t('order.table.modifiedBy')}>
+                <Descriptions.Item label={t('order.table.modifiedBy')}>
                     {
                         order?.modifiedBy?.fullName
                     }

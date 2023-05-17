@@ -288,7 +288,7 @@ export default {
             'createdAt': 'Ngày tạo',
             'updatedAt': 'Ngày sửa',
             'createdBy': 'Khách hàng',
-            'modifiedBy': 'Người sửa',
+            'modifiedBy': 'Người cập nhật',
             'upgrade': 'Nâng cấp',
             renew: 'Gia hạn',
             viewDetail: 'Chi tiết',

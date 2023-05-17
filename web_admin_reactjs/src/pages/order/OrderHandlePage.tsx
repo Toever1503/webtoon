@@ -129,6 +129,9 @@ const OrderHandlePage: React.FC = () => {
                                         order?.user_id?.fullName
                                     }
                                 </Descriptions.Item>
+                                <Descriptions.Item label={t('order.table.phone')}>{
+                                    order?.user_id?.phone
+                                }</Descriptions.Item>
 
                                 <Descriptions.Item label={t('order.table.createdAt')}>{
                                     dateTimeFormat(order?.created_at)
