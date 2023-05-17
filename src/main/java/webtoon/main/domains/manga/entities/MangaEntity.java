@@ -40,7 +40,7 @@ public class MangaEntity {
     @Column(name = "excerpt")
     private String excerpt;
 
-    @Column(name = "description")
+    @Column(name = "description", length = 1000)
     private String description;
 
     @Column(name = "manga_name")

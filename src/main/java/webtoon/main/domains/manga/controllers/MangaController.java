@@ -87,6 +87,8 @@ public class MangaController {
         this.mangaService.increaseView(id);// tang view
 
         UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
+
+        boolean canReadChapter = false;
         if (userEntity != null) {
             ReadHistory readHistory = this.historyService.findByCBAndMG(userEntity.getId(), mangaEntity.getId());
             if (readHistory != null) {
@@ -94,7 +96,12 @@ public class MangaController {
                 model.addAttribute("chapterHistory", mangaChapterEntity);
                 System.out.println(mangaChapterEntity);
             }
+
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+            canReadChapter = result >= 0;
         }
+        model.addAttribute("canReadChapter", canReadChapter);
 
         // tinh tong so tap va chuong
         if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL)) {

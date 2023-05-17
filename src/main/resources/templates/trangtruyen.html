@@ -129,14 +129,12 @@
         </div>
         <div class="flex flex-col  mt-2">
             <div class="p-2">
-                <div class="flex justify-center">
-                    <div class="bg-slate-100  shadow-lg ">
-                        <img class="h-[300px] w-[200px]" th:src="${model.featuredImage}">
-                    </div>
+                <div class="flex justify-center gap-[15px]">
+                    <img class="border h-[300px] w-[200px] shadow-lg" th:src="${model.featuredImage}">
                     <div class="w-2/3" style="padding: 0 20px">
                         <div class="flex justify-between">
 
-                            <div>
+                            <div class="grid gap-[5px]">
                                 <div class="w-2/3 flex flex-col ">
                                     <div class=" flex flex-row ">
                                         <div class="rating ml-4" data-rating="2" id="myElement">
@@ -454,7 +452,7 @@
                         </div>
 
                         <!--                        for display alert to buy subscription-->
-                        <div th:if="${!model.isFree}"
+                        <div th:if="${!model.isFree && !canReadChapter}"
                              class="bg-orange-100 border-l-4 border-orange-500 p-4 w-fit my-[15px]" role="alert">
                             <p class="text-orange-700">Bạn cần phải đăng ký gói đọc để mở khóa các chương bên dưới!</p>
                             <a>Bấm vào <a href="/subscription_pack/load"
@@ -498,22 +496,29 @@
                             <li class="gap-[5px] flex justify-between"
                                 th:each="chapter,iter: ${itemvolume.chapterEntities}">
                                 <div class="flex justify-between items-center px-[10px] space-x-3 full">
-                                    <a th:href="${chapter.requiredVip ? '#' : '/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                    <a th:if="${!canReadChapter}"
                                        th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
                                        class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                     </a>
-                                    <span th:if="${!model.isFree && chapter.requiredVip}"
+
+                                    <a th:if="${canReadChapter}" th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                    </a>
+                                    <span th:if="${!model.isFree && chapter.requiredVip && !canReadChapter}"
                                           class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
-                                    Vui lòng đăng ký gói để đọc chương này
-                                </span>
-                                    <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
+                                            Vui lòng đăng ký gói để đọc chương này
+                                    </span>
+
+                                    <i th:if="${!model.isFree && chapter.requiredVip && !canReadChapter}" class="fas fa-lock"></i>
+                                    <i th:if="${canReadChapter && chapter.requiredVip}" class="fas fa-lock-open"></i>
 
                                     <span th:if="${!chapter.requiredVip && !model.isFree}"
                                           class="text-[12px] text-green-600">
                                         Đọc thử miễn phí
                                 </span>
                                 </div>
-                                <span th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                <span  class="text-[13px]" th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
                             </li>
                         </ul>
                     </div>
@@ -538,28 +543,29 @@
                     <ul th:else class="latest-chapters grid mt-[10px] ml-[15px] gap-[5px] divide-y">
                         <li class="gap-[5px] flex justify-between" th:each="chapter,iter: ${chapterEntities}">
                             <div class="flex justify-between items-center px-[10px] space-x-3 full">
-                                <a th:href="${chapter.requiredVip ? '#' : '/manga/' + model.mangaName + '/chapter/' + chapter.id}"
+                                <a th:if="${!canReadChapter}"
                                    th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
                                    class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
                                 </a>
-                                <span th:if="${!model.isFree && chapter.requiredVip}"
+
+                                <a th:if="${canReadChapter}" th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                </a>
+                                <span th:if="${!model.isFree && chapter.requiredVip && !canReadChapter}"
                                       class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
-                                    Vui lòng đăng ký gói để đọc chương này
-                                </span>
-                                <i th:if="${!model.isFree && chapter.requiredVip}" class="fas fa-lock"></i>
+                                            Vui lòng đăng ký gói để đọc chương này
+                                    </span>
+
+                                <i th:if="${!model.isFree && chapter.requiredVip && !canReadChapter}" class="fas fa-lock"></i>
+                                <i th:if="${canReadChapter && chapter.requiredVip}" class="fas fa-lock-open"></i>
 
                                 <span th:if="${!chapter.requiredVip && !model.isFree}"
                                       class="text-[12px] text-green-600">
                                         Đọc thử miễn phí
                                 </span>
-
-                                <span th:if="${!chapter.requiredVip && model.isFree}"
-                                      class="text-[12px] text-green-600">
-                                        Đọc miễn phí
-                                </span>
-
                             </div>
-                            <span th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                            <span class="text-[13px]" th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
                         </li>
                     </ul>
                 </div>
