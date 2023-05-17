@@ -249,6 +249,11 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
+    public List<MangaEntity> filter5MangaEntities(Specification<MangaEntity> specs) {
+        return this.mangaRepository.findAll(specs, PageRequest.of(0, 5)).getContent();
+    }
+
+    @Override
     public MangaDto findById(Long id) {
         MangaEntity entity = this.getById(id);
         return MangaDto.toDto(entity);

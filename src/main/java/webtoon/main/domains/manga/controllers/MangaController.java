@@ -55,10 +55,32 @@ public class MangaController {
     }
 
     @GetMapping("list-manga")
-    public String mangaList(Model model, Pageable pageable) {
+    public String mangaList(Model model, Pageable pageable, @RequestParam(required = false, name = "type") String type) {
         Specification mangaSpec = Specification.where(
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()
         ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
+
+        Specification  mangaSpecFree = Specification.where(
+                        (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not())
+                .and((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_FREE), true))
+                .and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
+
+        Specification mangaSpecComing = Specification.where(
+                        (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not())
+                .and((root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), EMangaSTS.COMING))
+                .and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
+
+        model.addAttribute("typeStatus", "");
+
+        if (type != null) {
+            if (type.equals("free")) {
+                mangaSpec = mangaSpecFree;
+                model.addAttribute("typeStatus", type);
+            } else if (type.equals("coming")) {
+                mangaSpec = mangaSpecComing;
+                model.addAttribute("typeStatus", type);
+            }
+        }
 
         Page<MangaEntity> mangaEntities = this.mangaService.filterEntities(pageable, mangaSpec);
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();

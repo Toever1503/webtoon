@@ -47,6 +47,7 @@ public interface IMangaService {
 
     Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
     Page<MangaEntity> filterEntities(Pageable pageable, Specification<MangaEntity> specs);
+    List<MangaEntity> filter5MangaEntities(Specification<MangaEntity> specs);
 
     MangaDto findById(Long id);
 
