@@ -12,6 +12,7 @@ import webtoon.main.account.entities.UserEntity;
 import webtoon.main.account.services.IUserService;
 import webtoon.main.payment.entities.OrderEntity;
 import webtoon.main.payment.entities.SubscriptionPackEntity;
+import webtoon.main.payment.enums.EOrderType;
 import webtoon.main.payment.enums.EPaymentMethod;
 import webtoon.main.payment.models.OrderModel;
 import webtoon.main.payment.services.IOrderService;
@@ -68,14 +69,21 @@ public class OrderController {
     @GetMapping("/bank-info/{id}")
     public String getBankInfoForOrder(@PathVariable Long id, Model model, HttpSession session) {
         UserEntity entity = (UserEntity) session.getAttribute("loggedUser");
-        if (!SecurityUtils.isAuthenticated()) {
+        if (entity == null) {
             return "redirect:/signin";
         } else {
             OrderEntity orderEntity = this.orderService.getById(id);
             SubscriptionPackEntity subscriptionPackEntity = orderEntity.getSubs_pack_id();
+            String subTitle = null;
+            if (orderEntity.getOrderType().equals(EOrderType.UPGRADE)) {
+                subTitle = "(Nâng cấp)";
+            } else if (orderEntity.getOrderType().equals(EOrderType.RENEW)) {
+                subTitle = "(Gia hạn)";
+            }
+
             model.addAttribute("name", subscriptionPackEntity.getName());
-            Double price = subscriptionPackEntity.getPrice();
-            model.addAttribute("price", price);
+            model.addAttribute("subTitle", subTitle);
+            model.addAttribute("price", orderEntity.getFinalPrice());
             model.addAttribute("id", subscriptionPackEntity.getId());
             model.addAttribute("subscriptionPackId", subscriptionPackEntity.getId());
             model.addAttribute("maDonHang", orderEntity.getMaDonHang());

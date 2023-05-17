@@ -84,15 +84,15 @@ public class UserEntity {
     private Date deletedAt;
     // count date
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "trial_registered_date")
     private Date trialRegisteredDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "can_read_until_date")
     private Date canReadUntilDate;
 
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "first_bought_subs_date")
     private Date firstBoughtSubsDate;
 
@@ -104,4 +104,13 @@ public class UserEntity {
 
     @Column(name = "has_send_renewal_email", columnDefinition = "boolean default false")
     private Boolean hasSendRenewalEmail;
+
+    public static void main(String[] args) {
+
+        Double originP = 50000d;
+        Double price = 1.6d;
+        Double val = price * 3;
+        System.out.println(originP / 30);
+
+    }
 }

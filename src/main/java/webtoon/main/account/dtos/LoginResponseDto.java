@@ -14,6 +14,7 @@ import java.util.List;
 public class LoginResponseDto {
     private String token;
     private long validTimeIn;
-
     private List<String> auths;
+
+    private String fullName;
 }

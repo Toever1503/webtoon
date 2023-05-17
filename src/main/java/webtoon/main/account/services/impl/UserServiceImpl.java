@@ -416,6 +416,7 @@ public class UserServiceImpl implements IUserService {
                 .token(token)
                 .validTimeIn(validTimeIn)
                 .auths(auths)
+                .fullName(userEntity.getFullName())
                 .build();
     }
 

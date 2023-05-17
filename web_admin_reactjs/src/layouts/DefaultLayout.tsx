@@ -116,7 +116,11 @@ const App: React.FC = () => {
 
                 <Sider theme="light" collapsible width={'220px'} collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className='flex items-center justify-center' style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
-                        <span className='font-bold text-2xl'>Admin</span>
+                        <span className='font-bold text-base'>
+                         {
+                            localStorage.getItem('fullName')
+                         }
+                        </span>
                     </div>
                     <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={items} />
 

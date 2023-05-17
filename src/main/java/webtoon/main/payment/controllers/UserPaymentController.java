@@ -193,20 +193,31 @@ public class UserPaymentController {
             return "redirect:/user/update_more_info";
         loggedUser = this.userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
         session.setAttribute("loggedUser", loggedUser);
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         boolean isUsingTrial = false;
         if (loggedUser.getCurrentUsedSubsId() == null && loggedUser.getTrialRegisteredDate() != null) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             isUsingTrial = result >= 0;
         }
 
-        Double currentPrice = Double.valueOf(0);
+        Double currentPrice;
+        int remainDays = 0;
+        Double remainPrice = Double.valueOf(0);
+
         if (!isUsingTrial) {
             SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(loggedUser.getCurrentUsedSubsId());
             model.addAttribute("currentUsingSubsPack", subscriptionPack);
             currentPrice = subscriptionPack.getPrice();
+
+            remainDays = (int) ((loggedUser.getCanReadUntilDate().getTime() - java.sql.Date.valueOf(formatter.format(Calendar.getInstance().getTime())).getTime()) / (1000 * 60 * 60 * 24));
+            Double pricePerDay = currentPrice / (subscriptionPack.getMonthCount() * 30);
+            remainPrice = pricePerDay * Double.valueOf(remainDays);
         }
-        model.addAttribute("currentPrice", currentPrice);
+
+        model.addAttribute("remainPrice", remainPrice.intValue());
+        model.addAttribute("remainDays", remainDays);
+
         model.addAttribute("isUsingTrial", isUsingTrial);
 
         List<SubscriptionPackEntity> upgradeList = this.subscriptionPackService.findAllEntity(null);
@@ -218,7 +229,7 @@ public class UserPaymentController {
         } else canUpgradeList = upgradeList;
 
 
-        model.addAttribute("finalPrice", canUpgradeList.get(0).getPrice() - currentPrice);
+        model.addAttribute("finalPrice", canUpgradeList.get(0).getPrice() - remainPrice.intValue());
         model.addAttribute("upgradeSubscriptionList", canUpgradeList);
 
         return "payments/user/upgradeSubscription";
@@ -233,18 +244,23 @@ public class UserPaymentController {
             return "redirect:/user/update_more_info";
         SubscriptionPackEntity newUpgradeSub = this.subscriptionPackService.getById(subscriptionId);
 
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         boolean isUsingTrial = false;
 
         if (loggedUser.getCurrentUsedSubsId() == null && loggedUser.getTrialRegisteredDate() != null) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             isUsingTrial = result >= 0;
         }
 
         Double currentPrice = Double.valueOf(0);
+        int remainDays = 0;
+        Double remainPrice = Double.valueOf(0);
         if (!isUsingTrial) { // for upgrade from existed order
             SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(loggedUser.getCurrentUsedSubsId());
             currentPrice = subscriptionPack.getPrice();
+            remainDays = (int) ((loggedUser.getCanReadUntilDate().getTime() - java.sql.Date.valueOf(formatter.format(Calendar.getInstance().getTime())).getTime()) / (1000 * 60 * 60 * 24));
+            Double pricePerDay = currentPrice / (subscriptionPack.getMonthCount() * 30);
+            remainPrice = pricePerDay * Double.valueOf(remainDays);
         }
 
         String orderNumber = VnPayConfig.getRandomNumber(10);
@@ -257,7 +273,7 @@ public class UserPaymentController {
                 .subs_pack_id(newUpgradeSub)
                 .paymentMethod(paymentMethod)
                 .status(EOrderStatus.DRAFTED)
-                .finalPrice(newUpgradeSub.getPrice() - currentPrice)
+                .finalPrice(newUpgradeSub.getPrice() - remainPrice.intValue())
                 .user_id(SecurityUtils.getCurrentUser().getUser())
                 .modifiedBy(SecurityUtils.getCurrentUser().getUser())
                 .build();

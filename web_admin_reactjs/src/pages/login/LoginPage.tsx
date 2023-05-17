@@ -39,7 +39,8 @@ const LoginPage: React.FC = () => {
             .then((res: AxiosResponse<{
                 token: string,
                 validTimeIn: number,
-                auths: string[]
+                auths: string[],
+                fullName: string
             }>) => {
                 console.log('login success: ', res.data);
                 localStorage.setItem('auths', JSON.stringify(res.data.auths));
@@ -47,13 +48,14 @@ const LoginPage: React.FC = () => {
                 if (!hasAnyAuths(['ADMIN', 'EMP'])) {
                     dispatch(showNofification({
                         type: 'error',
-                        message: 'Vui lòng sử dụng tài khoản admin để đăng nhập!'
+                        message: 'Vui lòng sử dụng tài khoản đc cấp quyền để đăng nhập!'
                     }));
                     navigate('/signin');
                     return;
                 }
 
                 setCookie('token', res.data.token, res.data.validTimeIn);
+                localStorage.setItem('fullName', res.data.fullName);
                 dispatch(showNofification({
                     type: 'success',
                     message: t('login.errors.login-success')

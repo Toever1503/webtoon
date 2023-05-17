@@ -39,14 +39,15 @@
                         <script th:inline="javascript">
                             /*<![CDATA[*/
 
-                            let currentSubPrice = [[${ currentPrice }]]
+                            let remainPrice = [[${ remainPrice }]];
+
                             window.addEventListener('DOMContentLoaded', () => {
                                 document.getElementById('subscriptionId').addEventListener('change', e => {
                                     let optionTag = document.getElementById(`subs-${e.target.value}`)
                                     document.getElementById('newSubsLabel').innerText = `${optionTag.dataset.name}`;
                                     document.getElementById('newSubsValue').innerText = Math.round(optionTag.dataset.price) + 'đ';
 
-                                    let finalPrice = Math.round(optionTag.dataset.price) - currentSubPrice;
+                                    let finalPrice = Math.round(optionTag.dataset.price) - remainPrice;
                                     document.getElementById('finalPrice').innerText = finalPrice + 'đ';
                                 })
                             });
@@ -75,15 +76,18 @@
 
                             -
 
-                            <span th:if="${!isUsingTrial}" th:text="${currentUsingSubsPack.price + 'đ'}"></span>
+                            <span th:if="${!isUsingTrial}" th:text="${remainPrice + 'đ'}"></span>
                             <span th:if="${isUsingTrial}">0đ </span>
 
                             <span>
                                 (<span th:if="${!isUsingTrial}"
-                                    th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}">Gói 1 tháng</span>
+                                    th:text="${'Gói ' + currentUsingSubsPack.getMonthCount() + ' tháng'}">Gói 1 tháng</span>
+
                                 <span th:if="${isUsingTrial}">Gói dùng thử 3 ngày</span>
-                                - còn lại <span th:text="${(session.loggedUser.getCanReadUntilDate().getTime() - T(java.sql.Date).valueOf(#dates.format(#dates.createNow(),'YYYY-MM-dd')).getTime()) / (1000 * 60 * 60 * 24) + ' ngày.'}"/>
-                                )
+
+                                <span th:if="${!isUsingTrial}">
+                                    - còn lại <span th:text="${remainDays + ' ngày'}"/>
+                                </span>)
                             </span>
                             = <span id="finalPrice" class="text-[#f44336] font-semibold" th:text="${finalPrice + 'đ'}">40000d</span>
                         </span>
