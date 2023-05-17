@@ -12,8 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.main.account.configs.security.SecurityUtils;
 import webtoon.main.domains.manga.dtos.MangaDto;
-import webtoon.main.domains.manga.entities.MangaEntity;
-import webtoon.main.domains.manga.entities.MangaGenreEntity;
+import webtoon.main.domains.manga.entities.*;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
 import webtoon.main.domains.manga.enums.EMangaSTS;
 import webtoon.main.domains.manga.enums.EMangaType;
@@ -22,7 +21,6 @@ import webtoon.main.domains.manga.mappers.MangaMapper;
 import webtoon.main.domains.manga.models.MangaModel;
 import webtoon.main.domains.tag.entity.enums.ETagType;
 import webtoon.main.domains.tag.service.ITagService;
-import webtoon.main.domains.manga.entities.MangaEntity_;
 import webtoon.main.domains.manga.repositories.*;
 import webtoon.main.domains.manga.services.IMangaService;
 import webtoon.main.storage.domain.dtos.FileDto;
@@ -64,6 +62,8 @@ public class IMangaServiceImpl implements IMangaService {
     @Autowired
     private IFileService fileService;
 
+    @Autowired
+    private IMangaViewCountEntityRepository mangaViewCountEntityRepository;
 
     @Override
     public MangaDto add(MangaModel model) {
@@ -172,9 +172,17 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public void increaseView(Long mangaId) {
         MangaEntity mangaEntity = this.getById(mangaId);
-        if(mangaEntity.getViewCount() == null)
-            mangaEntity.setViewCount(0);
-        mangaEntity.setViewCount(mangaEntity.getViewCount() + 1);
+
+        MangaViewCountEntity mangaViewCount = this.mangaViewCountEntityRepository.findViewCountTodayForMangaId(mangaId);
+        if (mangaViewCount == null)
+            mangaViewCount = MangaViewCountEntity.builder()
+                    .manga(mangaEntity)
+                    .count(1)
+                    .build();
+        else mangaViewCount.setCount(mangaViewCount.getCount() + 1);
+        this.mangaViewCountEntityRepository.saveAndFlush(mangaViewCount);
+
+        mangaEntity.setViewCount(this.mangaViewCountEntityRepository.countViewByMangaId(mangaId).intValue());
         this.mangaRepository.saveAndFlush(mangaEntity);
     }
 
