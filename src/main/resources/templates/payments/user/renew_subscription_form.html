@@ -20,9 +20,9 @@
             <div class="col-span-3 mx-auto w-[780px] p-4 mt-4 bg-white">
                 <h3 class="mb-[10px] font-semibold text-2xl">Gia hạn gói</h3>
 
-                <form action="/user/handle_renew_subscription_pack">
+                <form class="mt-[15px]" action="/user/handle_renew_subscription_pack">
                     <div class="grid gap-[5px] mb-[10px]">
-                        <label class="font-semibold">Thông tin gói</label>
+                        <p class="font-semibold text-slate-700 pb-2">Thông tin đơn hàng</p>
                         <span th:text="${sub.name}">
                             Gói 3 tháng
                         </span>
@@ -33,29 +33,31 @@
                         </span>
                     </div>
 
-                    <div class="grid gap-[5px]">
-                        <label class="font-semibold">Chọn phương thức thanh toán</label>
-                        <select name="paymentMethod" class="border px-[10px] w-fit">
-                            <option value="VN_PAY">Thanh toán VN_PAY</option>
-                            <option value="ATM">Chuyển khoản</option>
-                        </select>
+                    <div class="flex flex-col space-y-5 mt-[15px]">
+                        <label for="paymentMethod">
+                            <p class="font-semibold text-slate-700 pb-2">Chọn phương thức thanh toán</p>
+                            <select id="paymentMethod" name="paymentMethod"  class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                                <option value="VN_PAY">Thanh toán VN_PAY</option>
+                                <option value="ATM">Chuyển khoản</option>
+                            </select>
+                        </label>
                     </div>
 
                     <div class="grid gap-[5px] mt-[10px]">
-                        <label class="font-semibold">Tổng tiền cần thanh toán:</label>
+                        <p class="font-semibold text-slate-700 pb-2">Tổng tiền cần thanh toán:</p>
                         <span>
                             <span th:text="${#numbers.formatDecimal(sub.price, 0, 'POINT', 0, 'POINT') + 'đ' }">
                             </span>
                         </span>
                     </div>
 
-                    <div class="bg-gray-50 px-4 py-3 sm:px-6">
+                    <div class="px-4 py-3">
                         <button type="button"
-                            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
+                                class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
                             <a href="/user/subscription-status">Quay lại</a>
                         </button>
                         <button type="submit"
-                            class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Tiếp
+                                class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Tiếp
                             tục</button>
 
                     </div>

@@ -340,9 +340,25 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public List<Object[]> countSubscriberStatusPerMonthByYear(String year) {
         List<Object[]> ls = new ArrayList<>();
-        ls.addAll(this.orderRepository.calcRenewOrderPerMonthByYear(year));
-        ls.addAll(this.orderRepository.calcNotRenewOrderPerMonthByYear(year));
+        Map<Integer, Object> renew = new HashMap<>();
+        Map<Integer, Object> notRenew = new HashMap<>();
 
+        for (int i = 1; i <= 12; i++) {
+            renew.put(i, 0);
+            notRenew.put(i, 0);
+        }
+
+        this.orderRepository.calcRenewOrderPerMonthByYear(year)
+                .stream().forEach(item -> {
+                    renew.put(Integer.valueOf((String) item[0]), item[1]);
+                });
+        this.orderRepository.calcNotRenewOrderPerMonthByYear(year)
+                .stream().forEach(item -> {
+                    notRenew.put(Integer.valueOf((String) item[0]), item[1]);
+                });
+
+        renew.forEach((key, value) -> ls.add(new Object[]{key, value, "Gia hạn thêm"}));
+        notRenew.forEach((key, value) -> ls.add(new Object[]{key, value, "Không gia hạn"}));
         return ls;
     }
 

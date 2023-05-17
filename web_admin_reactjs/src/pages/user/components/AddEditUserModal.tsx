@@ -103,8 +103,8 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
             })
             .catch(err => {
                 onFinishFailed(err);
-            })
-            .finally(() => setIsSubmitting(false));
+                setIsSubmitting(false);
+            });
 
     }
 
@@ -149,14 +149,6 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
     useEffect(() => {
         form.resetFields();
         form.setFieldValue('sex', 'MALE');
-
-        // form.setFieldsValue({
-        //     fullName: 'Nguyen Van A',
-        //     username: 'nguyenvana' + (Math.random() * 1000000),
-        //     email: (Math.random() * 1000000) + 'fa@fa.ca',
-        //     password: 'fasfas',
-        //     'confirm-password': 'fasfas',
-        // });
         if (props.visible && props.userInput) {
             console.log('edit: ', props.userInput);
             form.setFieldsValue({
@@ -169,7 +161,8 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                         value: e.id
                     };
                 }),
-                role: props.userInput.role.id
+                role: props.userInput.role,
+                phone: props.userInput.phone,
             });
         }
 
@@ -296,7 +289,7 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                 </Form.Item>
 
                 <div className="flex justify-center space-x-3">
-                    <Button htmlType="reset">
+                    <Button htmlType="reset" loading={isSubmitting}>
                         {t('user.form.reset-btn')}
                     </Button>
                     <Button htmlType="submit" loading={isSubmitting} onClick={onSubmit}>

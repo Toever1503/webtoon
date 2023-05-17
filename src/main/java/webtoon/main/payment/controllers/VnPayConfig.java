@@ -129,6 +129,13 @@ public class VnPayConfig {
 	}
 
 	public static void main(String[] args) {
-		System.out.println(VnPayConfig.hmacSHA512("fsa", "FSafs:"));
+//		System.out.println(VnPayConfig.hmacSHA512("fsa", "FSafs:"));
+
+		Map<Integer, Integer> news = new HashMap<>();
+		news.put(1, 12);
+		news.put(2, 15);
+
+		System.out.println(news.get(1));
+		System.out.println(news.get(2));
 	}
 }

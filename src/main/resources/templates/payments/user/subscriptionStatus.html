@@ -28,7 +28,7 @@
 
                 <div th:if="${isUsingTrial}">
                     <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
-                    <p>Thời hạn đọc đến hết ngày: <span
+                    <p>Thời hạn đọc đến: <span
                             th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
                     </p>
                     <p>Trạng thái: 
@@ -55,20 +55,20 @@
                         <span th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}"></span>
 
                     </p>
-                    <p>Thời hạn đọc đến hết ngày: <span
+                    <p>Thời hạn đọc đến: <span
                             th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
                     </p>
                     <p>Trạng thái:
                         <span th:if="${!isExpiredSub}" class="text-green-500 font-semibold">Đang hoạt động</span>
                         <span th:if="${isExpiredSub}" class="text-red-500 font-semibold">Đã hết hạn</span>
                     </p>
-                    <div class="flex gap-[10px]">
+                    <div class="flex gap-[10px] mt-[15px]">
                         <button th:if="${canUpgradeSubs}"
                                 class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                             <a href="/user/upgrade-subscription" class="text-white">Nâng
                                 cấp gói</a></button>
 
-                        <button th:if="${!isUsingTrial && isExpiredSub}"
+                        <button th:if="${!isUsingTrial && isExpiredSub && canUpgradeSubs}"
                                 class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                             <a href="/user/renew_subscription_pack" class="text-white">Gia hạn lại</a></button>
                     </div>
