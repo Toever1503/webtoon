@@ -18,6 +18,7 @@ import webtoon.main.domains.manga.dtos.MangaChapterDto;
 import webtoon.main.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.main.domains.manga.entities.MangaEntity;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
+import webtoon.main.domains.manga.enums.EMangaSTS;
 import webtoon.main.domains.manga.mappers.MangaChapterMapper;
 import webtoon.main.domains.manga.models.MangaChapterFilterInput;
 import webtoon.main.domains.manga.models.MangaChapterModel;
@@ -34,6 +35,7 @@ import webtoon.main.storage.domain.services.IFileService;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -43,7 +45,6 @@ import java.util.zip.ZipInputStream;
 @Service
 @Transactional
 public class IMangaChapterServiceImpl implements IMangaChapterService {
-
 
     private final IMangaChapterRepository chapterRepository;
 
@@ -117,6 +118,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
+        mangaEntity.setMangaStatus(EMangaSTS.GOING);
+        if (!mangaEntity.getIsFree())
+            mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
 
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                 .id(input.getId())
@@ -139,15 +143,17 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         mangaChapterEntity.setManga(mangaEntity);
 
         this.chapterRepository.saveAndFlush(mangaChapterEntity);
+        this.mangaService.saveEntity(mangaEntity);
         return MangaChapterDto.toDto(mangaChapterEntity);
     }
 
     @Override
     public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
-
-
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
+            mangaEntity.setMangaStatus(EMangaSTS.GOING);
+            if (!mangaEntity.getIsFree())
+                mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
 
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
@@ -236,6 +242,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 }).collect(Collectors.toList());
                 this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
             }
+            this.mangaService.saveEntity(mangaEntity);
             return MangaChapterDto.toDto(this.getById(mangaChapterEntity.getId()));
         } catch (Exception e) {
             e.printStackTrace();

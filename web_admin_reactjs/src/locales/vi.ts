@@ -127,7 +127,6 @@ export default {
             'COMING': 'Sắp ra mắt',
             'GOING': 'Đang ra',
             'COMPLETED': 'Đã hoàn thành',
-            'CANCELLED': 'Đã hủy',
             'ON_STOPPING': 'Tạm ngừng',
             'STOPPED': 'Đã ngừng',
         },

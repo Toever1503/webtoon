@@ -6,16 +6,13 @@ import org.springframework.data.jpa.domain.Specification;
 
 import webtoon.main.domains.manga.dtos.MangaDto;
 import webtoon.main.domains.manga.entities.MangaEntity;
-import webtoon.main.domains.manga.entities.MangaGenreEntity;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
 import webtoon.main.domains.manga.enums.EMangaSTS;
 import webtoon.main.domains.manga.enums.EMangaType;
 import webtoon.main.domains.manga.enums.EStatus;
 import webtoon.main.domains.manga.models.MangaModel;
 
-import javax.servlet.http.HttpSession;
 import java.util.List;
-import java.util.Set;
 
 public interface IMangaService {
 
@@ -25,7 +22,7 @@ public interface IMangaService {
 
     void increaseView(Long mangaId);
 
-
+    MangaEntity saveEntity(MangaEntity mangaEntity);
 
     MangaEntity getByIdAndCb(Long mangaId, Long createId);
 
@@ -47,7 +44,7 @@ public interface IMangaService {
 
     Page<MangaDto> filter(Pageable pageable, Specification<MangaEntity> specs);
     Page<MangaEntity> filterEntities(Pageable pageable, Specification<MangaEntity> specs);
-    List<MangaEntity> filter5MangaEntities(Specification<MangaEntity> specs);
+    List<MangaEntity> filter5LatestMangas(Specification<MangaEntity> specs);
 
     MangaDto findById(Long id);
 

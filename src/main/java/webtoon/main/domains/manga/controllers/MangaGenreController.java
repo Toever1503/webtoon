@@ -54,6 +54,6 @@ public class MangaGenreController {
         model.addAttribute("hasNextPage", mangaEntityPage.hasNext());
         model.addAttribute("currentPage", mangaEntityPage.getNumber());
         model.addAttribute("totalPage", mangaEntityPage.getTotalPages());
-        return "/manga/genrePage";
+        return "manga/genre-page";
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import org.springframework.transaction.annotation.Transactional;
 import webtoon.main.domains.manga.entities.MangaGenreEntity;
 import webtoon.main.domains.tag.entity.ITagRelationRepository;
 import webtoon.main.domains.tag.entity.ITagRepository;
@@ -19,6 +20,7 @@ import webtoon.main.utils.ASCIIConverter;
 import webtoon.main.utils.exception.CustomHandleException;
 
 @Service
+@Transactional
 public class TagServiceImpl implements ITagService {
 
     private final ITagRepository tagRepository;

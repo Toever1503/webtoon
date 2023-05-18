@@ -36,15 +36,16 @@
                     <h2 th:if="${mangalist == null}">Không có dữ liệu!</h2>
                     <ul th:else class="manga-list grid grid-cols-4 items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
 
-                        <li class="w-[170px] bg-white h-[420px] relative box-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                        <li class="w-[170px] bg-white relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
                             <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
                                 <img class="w-full h-[200px] hover:scale-[1.05] ease-in-out duration-200"
                                      th:src="${manga.featuredImage}"/>
-                                <div class="manga-info block m-0 h-full py-[10px]">
+                                <div class="manga-info block m-0 py-[10px] px-[5px]">
                                     <h4 class="font-bold leading-0 m-0">
-                                        <a th:text="${manga.title}"
+                                        <a th:text="${manga.title.length() > 20 ? manga.title.substring(0, 12) + '...' : manga.title}"
                                            th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
-                                           class="hover:text-[#eb3349] text-[14px]"></a>
+                                           class="hover:text-[#eb3349] text-[14px] w-10/12"
+                                        ></a>
 
                                         <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
                                             <ul>
@@ -55,50 +56,51 @@
                                                 <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
                                             </ul>
 
-                                            <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+
                                         </div>
 
                                     </h4>
 
-                                    <!--  for display chapter by vol-->
+                                    <div th:if="${typeStatus != 'coming'}">
+                                        <!--  for display chapter by vol-->
+                                        <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
+                                            class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
+                                            th:each="volume,volI : ${manga.volumeEntities}">
+                                            <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
 
-                                    <ul th:if="${manga.volumeEntities.size() > 0 && volI.index < 1}"
-                                        class="latest-chapters grid space-y-2 mt-[10px] gap-[5px] p-0"
-                                        th:each="volume,volI : ${manga.volumeEntities}">
-                                        <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 2}">
-
-                                            <div class="gap-[5px] flex items-center">
+                                                <div class="gap-[5px] flex items-center">
+                                                    <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
+                                                       th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
+                                                       style="border: 1px solid #ebebeb"
+                                                       class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                                    </a>
+                                                    <span class="text-[12px] text-[#666666]"
+                                                          th:text="${'Tập ' + (volume.volumeIndex + 1)}">
+                                        </span>
+                                                </div>
+                                                <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                            </li>
+                                        </ul>
+                                        <!--  for display chapter by chap -->
+                                        <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
+                                            <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
+                                                th:if="${iter.index < 2}"
+                                            >
                                                 <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
                                                    th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
                                                    style="border: 1px solid #ebebeb"
                                                    class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
                                                 </a>
-                                                <span class="text-[12px] text-[#666666]"
-                                                      th:text="${'Tập ' + (volume.volumeIndex + 1)}">
-                                        </span>
-                                            </div>
-                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
-                                        </li>
-                                    </ul>
-                                    <!--  for display chapter by chap -->
-                                    <ul th:else class="latest-chapters grid mt-[10px] gap-[10px] p-0">
-                                        <li class="gap-[5px] grid" th:each="chapter,iter: ${manga.chapters}"
-                                            th:if="${iter.index < 2}"
-                                        >
-                                            <a th:href="@{'/manga/'+${manga.mangaName}+'/chapter/'+${chapter.id}}"
-                                               th:text="${'Chương ' + (chapter.chapterIndex + 1)}"
-                                               style="border: 1px solid #ebebeb"
-                                               class="block min-w-[80px] max-w-[120px] py-[2px] h-full text-center text-[12px] text-[#666666] hover:text-white hover:bg-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                            </a>
-                                            <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
-                                        </li>
-                                    </ul>
+                                                <span class="text-[10px] text-[#666666] text-center"  th:text="${#dates.format(chapter.createdAt, 'dd-MM-yyyy')}"></span>
+                                            </li>
+                                        </ul>
+                                    </div>
 
                                 </div>
                             </a>
 
-                            <div class="absolute w-fit h-fit top-[-14px] right-0">
-                            <span th:if="${manga.isFree}"
+                            <div th:if="${typeStatus != 'coming'}" class="absolute w-fit h-fit top-[-14px] right-0">
+                                <span th:if="${manga.isFree}"
                                   class="manga-title-badget inline-block bg-[#37b7da] w-[50px] h-[24px] rounded-full text-center text-[10px] text-white leading-[26px] font-bold rotate-[-10deg]">
                                     Miễn phí
                                 </span>

@@ -138,25 +138,26 @@
                                 <div class="w-2/3 flex flex-col ">
                                     <div class=" flex flex-row ">
                                         <div class="rating ml-4" data-rating="2" id="myElement">
+
                                             <input class="rating-input" type="radio" name="rating" value="5"
                                                    id="rating-5">
-                                            <label class="rating-star" for="rating-5">★</label>
+                                            <label th:class="${model.getRating().intValue() >= 5 ? 'rating-star rated' : 'rating-star'}" for="rating-5">★</label>
 
                                             <input class="rating-input" type="radio" name="rating" value="4"
                                                    id="rating-4">
-                                            <label class="rating-star" for="rating-4">★</label>
+                                            <label th:class="${model.getRating().intValue() >= 4 ? 'rating-star rated' : 'rating-star'}" for="rating-4">★</label>
 
                                             <input class="rating-input" type="radio" name="rating" value="3"
                                                    id="rating-3">
-                                            <label class="rating-star" for="rating-3">★</label>
+                                            <label th:class="${model.getRating().intValue() >= 3 ? 'rating-star rated' : 'rating-star'}" for="rating-3">★</label>
 
                                             <input class="rating-input" type="radio" name="rating" value="2"
                                                    id="rating-2">
-                                            <label class="rating-star" for="rating-2">★</label>
+                                            <label th:class="${model.getRating().intValue() >= 2 ? 'rating-star rated' : 'rating-star'}" for="rating-2">★</label>
 
                                             <input class="rating-input" type="radio" name="rating" value="1"
                                                    id="rating-1">
-                                            <label class="rating-star" for="rating-1">★</label>
+                                            <label th:class="${model.getRating().intValue() >= 1 ? 'rating-star rated' : 'rating-star'}" for="rating-1">★</label>
                                         </div>
                                     </div>
 
@@ -496,15 +497,29 @@
                             <li class="gap-[5px] flex justify-between"
                                 th:each="chapter,iter: ${itemvolume.chapterEntities}">
                                 <div class="flex justify-between items-center px-[10px] space-x-3 full">
-                                    <a th:if="${!canReadChapter}"
-                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
-                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                    </a>
 
-                                    <a th:if="${canReadChapter}" th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
-                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
-                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                    </a>
+
+                                    <div th:if="${canReadChapter}">
+                                        <a
+                                           th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                           th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                           class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                        </a>
+                                    </div>
+                                    <div th:if="${!canReadChapter}">
+                                        <a th:if="${chapter.requiredVip}"
+                                           th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                           class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                        </a>
+
+                                        <a th:if="${!chapter.requiredVip}"
+                                                th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                                th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                                class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                        </a>
+                                    </div>
+
+
                                     <span th:if="${!model.isFree && chapter.requiredVip && !canReadChapter}"
                                           class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
                                             Vui lòng đăng ký gói để đọc chương này
@@ -543,15 +558,26 @@
                     <ul th:else class="latest-chapters grid mt-[10px] ml-[15px] gap-[5px] divide-y">
                         <li class="gap-[5px] flex justify-between" th:each="chapter,iter: ${chapterEntities}">
                             <div class="flex justify-between items-center px-[10px] space-x-3 full">
-                                <a th:if="${!canReadChapter}"
-                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
-                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                </a>
+                                <div th:if="${canReadChapter}">
+                                    <a
+                                            th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                            th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                            class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                    </a>
+                                </div>
+                                <div th:if="${!canReadChapter}">
+                                    <a th:if="${chapter.requiredVip}"
+                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                    </a>
 
-                                <a th:if="${canReadChapter}" th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
-                                   th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
-                                   class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
-                                </a>
+                                    <a th:if="${!chapter.requiredVip}"
+                                       th:href="${'/manga/'+model.mangaName+'/chapter/'+chapter.id}"
+                                       th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"
+                                       class="px-[16px] font-bold cursor-pointer text-[#666666] hover:text-[#eb3349] duration-300 ease-in rounded-[10px]">
+                                    </a>
+                                </div>
+
                                 <span th:if="${!model.isFree && chapter.requiredVip && !canReadChapter}"
                                       class="bg-yellow-200rounded-full text-[12px] text-yellow-600">
                                             Vui lòng đăng ký gói để đọc chương này
@@ -640,7 +666,7 @@
                                         <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
                                     </ul>
 
-                                    <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+
                                 </div>
 
                             </h4>
