@@ -81,7 +81,7 @@ public class IMangaServiceImpl implements IMangaService {
             mangaEntity.setRating(originalEntity.getRating());
             mangaEntity.setViewCount(originalEntity.getViewCount());
             mangaEntity.setCommentCount(originalEntity.getCommentCount());
-            
+
             if (model.getMangaStatus().equals(EMangaSTS.COMING)) {
                 mangaEntity.setMangaStatus(originalEntity.getMangaStatus());
             }
