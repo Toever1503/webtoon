@@ -315,7 +315,15 @@
         <!--                </plugin>-->
         <!--            </plugins>-->
         <!--        </pluginManagement>-->
-
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+                <includes>
+                    <include>application.properties</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
