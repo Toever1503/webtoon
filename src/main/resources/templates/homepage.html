@@ -140,23 +140,27 @@
 
             <div class="w-[800px]">
                 <section class="w-full">
-                    <h3 class="font-bold text-2xl mb-[15px]">
-                        Truyện mới cập nhật
-                    </h3>
+                    <div class="c-blog__heading style-2 border-b-2 border-gray-200 mb-7 w-[93%]">
+                        <h3 class="flex items-center font-bold text-2xl">
+                            <i class="far fa-star text-white bg-gradient-to-r from-red-500 to-orange-500 p-1 mr-2"></i>
+                            Truyện mới cập nhật
+                        </h3>
+                    </div>
 
                     <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
 
                     <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
 
-                        <li class="w-[130px] bg-white h-[400px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                        <li class="w-[130px] bg-white h-[370px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
                             <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
                                 <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
                                      th:src="${manga.featuredImage}"/>
                                 <div class="manga-info block m-0 h-full py-[10px] px-[5px]">
                                     <h4 class="font-bold leading-0 m-0">
-                                        <a th:text="${manga.title}"
+                                        <a th:text="${manga.title.length() > 20 ? manga.title.substring(0, 12) + '...' : manga.title}"
                                            th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
-                                           class="hover:text-[#eb3349] text-[14px]"></a>
+                                           class="hover:text-[#eb3349] text-[14px] truncate w-10/12"
+                                        ></a>
 
                                         <div class="flex gap-[10px] items-center text-[12px] text-[#9e9e9e]">
                                             <ul>
@@ -220,26 +224,39 @@
                                 </span>
                             </div>
                         </li>
-
                     </ul>
+
+                    <div class="p-10">
+                        <div class="dropdown  relative">
+                            <a href="/manga/list-manga">
+                                <button class="bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded inline-flex justify-center items-center w-[90%]">
+                                    <span class="mr-4">Xem Tất Cả</span>
+                                    <i class="fas fa-caret-down"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
 
                 </section>
-                <section class="w-full">
-                    <h3 class="font-bold text-2xl mb-[15px]">
-                        Truyện sắp ra mắt
-                    </h3>
+                <section class="w-full mt-[30px]">
+                    <div class="c-blog__heading style-2 border-b-2 border-gray-200 mb-7 w-[93%]">
+                        <h3 class="flex items-center font-bold text-2xl">
+                            <i class="far fa-bell text-white bg-gradient-to-r from-red-500 to-orange-500 p-1 mr-2"></i>
+                            Truyện sắp ra mắt
+                        </h3>
+                    </div>
 
-                    <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
+                    <h5 th:if="${mangalistComing == null}"> Không có dữ liệu!</h5>
 
                     <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
 
-                        <li class="w-[130px] bg-white h-[400px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                        <li class="w-[130px] bg-white h-[370px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalistComing}">
                             <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
                                 <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
                                      th:src="${manga.featuredImage}"/>
                                 <div class="manga-info block m-0 h-full py-[10px] px-[5px]">
                                     <h4 class="font-bold leading-0 m-0">
-                                        <a th:text="${manga.title}"
+                                        <a th:text="${manga.title.length() > 20 ? manga.title.substring(0, 12) + '...' : manga.title}"
                                            th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
                                            class="hover:text-[#eb3349] text-[14px]"></a>
 
@@ -305,26 +322,39 @@
                                 </span>
                             </div>
                         </li>
-
                     </ul>
+
+                    <div class="p-10">
+                        <div class="dropdown  relative">
+                            <a href="/manga/list-manga?type=coming">
+                                <button class="bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded inline-flex justify-center items-center w-[90%]">
+                                        <span class="mr-4">Xem Tất Cả</span>
+                                        <i class="fas fa-caret-down"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
 
                 </section>
-                <section class="w-full">
-                    <h3 class="font-bold text-2xl mb-[15px]">
-                        Truyện miễn phí
-                    </h3>
+                <section class="w-full mt-[30px]">
+                    <div class="c-blog__heading style-2 border-b-2 border-gray-200 mb-7 w-[93%]">
+                        <h3 class="flex items-center font-bold text-2xl">
+                            <i class="fas fa-unlock text-white bg-gradient-to-r from-red-500 to-orange-500 p-1 mr-2"></i>
+                            Truyện miễn phí
+                        </h3>
+                    </div>
 
-                    <h5 th:if="${mangalist == null}"> Không có dữ liệu!</h5>
+                    <h5 th:if="${mangalistFree == null}"> Không có dữ liệu!</h5>
 
                     <ul th:else class="manga-list flex flex-wrap items-center p-[0px] gap-x-[15px] gap-y-[25px] mt-[20px]">
 
-                        <li class="w-[130px] bg-white h-[400px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalist}">
+                        <li class="w-[130px] bg-white h-[370px] relative box-shadow drop-shadow" style="1px 1px #bfbbbb38;" th:each="manga : ${mangalistFree}">
                             <a th:href="@{'/manga/'+${manga.mangaName}+'/'+${manga.id}}">
                                 <img class="w-full h-[176px] hover:scale-[1.05] ease-in-out duration-200"
                                      th:src="${manga.featuredImage}"/>
                                 <div class="manga-info block m-0 h-full py-[10px] px-[5px]">
                                     <h4 class="font-bold leading-0 m-0">
-                                        <a th:text="${manga.title}"
+                                        <a th:text="${manga.title.length() > 20 ? manga.title.substring(0, 12) + '...' : manga.title}"
                                            th:href="@{'/manga/'+${manga.title}+'/'+${manga.id}}"
                                            class="hover:text-[#eb3349] text-[14px]"></a>
 
@@ -390,8 +420,18 @@
                                 </span>
                             </div>
                         </li>
-
                     </ul>
+
+                    <div class="p-10">
+                        <div class="dropdown  relative">
+                            <a href="/manga/list-manga?type=free">
+                                <button class="bg-gray-100 text-gray-700 font-semibold py-2 px-4 rounded inline-flex justify-center items-center w-[90%]">
+                                        <span class="mr-4">Xem Tất Cả</span>
+                                        <i class="fas fa-caret-down"></i>
+                                </button>
+                            </a>
+                        </div>
+                    </div>
 
                 </section>
             </div>
