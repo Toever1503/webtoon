@@ -14,49 +14,83 @@
     <div layout:fragment="content"  class="max-w-[1100px] mx-auto flex bg-white pt-[20px]">
         <div class="form-search w-[300px] border-r">
             <form th:action="@{'/search'}" class="grid space-y-5 justify-center">
-                <div class="grid items-center">
-                    <label for="keyword" class="block min-w-[180px] font-medium">Từ khóa:</label>
-                    <input id="keyword" name="q" type="text" placeholder="tên truyện, tác giả..."
-                        class="rounded px-[5px]" style="border: 1px solid #ebebeb;" th:value="${filterInput.q}"/>
+                <div class="flex flex-col space-y-5">
+                    <label for="keyword">
+                        <p class="font-semibold text-slate-700 pb-2">Từ khóa:</p>
+                        <input id="keyword" name="keyword" type="text" required
+                               class="w-full py-[5px] border border-slate-200 rounded-lg px-[10px] focus:outline-none focus:border-slate-500 hover:shadow"
+                               placeholder="tên truyện, tác giả..." th:value="${filterInput.q}">
+                    </label>
                 </div>
 
-                <div class="grid  items-center">
-                    <label for="genres" class="block min-w-[180px] font-medium">Thể loại:</label>
-                    <select name="genreId" id="genres" class="min-w-[200px] rounded"
-                            style="border: 1px solid #ebebeb;">
-                        <option value="" th:text="'Chọn thể loại'"> </option>
-                        <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" th:selected="${filterInput.genreId == gener.id}"></option>
-                    </select>
+                <div class="flex flex-col space-y-5 mt-[15px]">
+                    <label for="genres">
+                        <p class="font-semibold text-slate-700 pb-2">Thể loại:</p>
+                        <select name="genreId" id="genres" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                style="border: 1px solid #ebebeb;">
+                            <option value="" th:text="'Chọn thể loại'"> </option>
+                            <option th:each="gener : ${mangaGenre}" th:text="${gener.name}" th:value="${gener.id}" th:selected="${filterInput.genreId == gener.id}"></option>
+                        </select>
+                    </label>
                 </div>
 
-                <div class="grid  items-center">
-                    <label for="releaseStatus" class="block min-w-[180px] font-medium">Tình trạng phát hành:</label>
-                    <select name="status" id="releaseStatus" class="min-w-[200px] rounded"
-                        style="border: 1px solid #ebebeb;">
-                        <option value="" th:text="'Chọn trạng thái'"></option>
-                        <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey().name()}"  th:selected="${filterInput.status != null && filterInput.status.equals(trangthai.getKey())}"></option>
-
-                    </select>
+                <div class="flex flex-col space-y-5 mt-[15px]">
+                    <label for="releaseStatus">
+                        <p class="font-semibold text-slate-700 pb-2">Tình trạng phát hành:</p>
+                        <select name="status" id="releaseStatus" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                style="border: 1px solid #ebebeb;">
+                            <option value="" th:text="'Chọn trạng thái'"></option>
+                            <option th:each="trangthai : ${trangThai}" th:text="${trangthai.getValue()}" th:value="${trangthai.getKey().name()}"  th:selected="${filterInput.status != null && filterInput.status.equals(trangthai.getKey())}"></option>
+                        </select>
+                    </label>
                 </div>
 
-                <div class="grid  items-center">
-                    <label for="releaseYear" class="block min-w-[180px] font-medium">Năm phát hành:</label>
-                    <select name="releaseYear" id="releaseYear" class="min-w-[200px] rounded"
-                        style="border: 1px solid #ebebeb;">
-                        <option value="" th:text="'Chọn năm phát hành'"></option>
-                        <option value="2023">2023</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                    </select>
+
+                <div class="flex flex-col space-y-5 mt-[15px]">
+                    <label for="releaseStatus">
+                        <p class="font-semibold text-slate-700 pb-2">Năm phát hành:</p>
+                        <select name="releaseYear" id="releaseYear" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                style="border: 1px solid #ebebeb;">
+                            <option value="" th:text="'Chọn năm phát hành'"></option>
+                            <option value="2023">2023</option>
+                            <option value="2021">2021</option>
+                            <option value="2020">2020</option>
+                        </select>
+                    </label>
                 </div>
 
-                <div class="flex space-x-5 justify-center items-center text-sm">
-                    <button type="submit" class="border py-[5px] px-[10px] rounded hover:bg-neutral-100">
-                        Tìm kiếm
-                    </button>
-                    <!-- <button type="reset" class="border py-[5px] px-[10px] rounded hover:bg-neutral-100">
+
+                <div class="flex flex-col space-y-5 mt-[15px]">
+                    <label for="mangaType">
+                        <p class="font-semibold text-slate-700 pb-2">Loại truyện:</p>
+                        <select name="mangaType" id="mangaType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                style="border: 1px solid #ebebeb;">
+                            <option value="" th:text="'Chọn loại truyện'"></option>
+                            <option value="TEXT">Truyện ảnh</option>
+                            <option value="IMAGE">Truyện chữ</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="flex flex-col space-y-5 mt-[15px]">
+                    <label for="isFree">
+                        <p class="font-semibold text-slate-700 pb-2">Hình thức trả phí:</p>
+                        <select name="isFree" id="isFree" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                style="border: 1px solid #ebebeb;">
+                            <option value="true" selected>Trả phí</option>
+                            <option value="false">Miễn phí</option>
+                        </select>
+                    </label>
+                </div>
+
+                <div class="px-4 py-3">
+                    <button type="reset"
+                            class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:mt-0 sm:w-auto">
                         Làm mới
-                    </button> -->
+                    </button>
+                    <button type="submit"
+                            class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">Tìm kiếm</button>
+
                 </div>
             </form>
 

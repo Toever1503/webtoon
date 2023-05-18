@@ -1014,6 +1014,10 @@ video {
   height: 24px;
 }
 
+.h-\[270px\] {
+  height: 270px;
+}
+
 .h-\[300px\] {
   height: 300px;
 }
@@ -1024,6 +1028,10 @@ video {
 
 .h-\[32px\] {
   height: 32px;
+}
+
+.h-\[370px\] {
+  height: 370px;
 }
 
 .h-\[400px\] {
@@ -1061,14 +1069,6 @@ video {
 
 .h-full {
   height: 100%;
-}
-
-.h-\[350px\] {
-  height: 350px;
-}
-
-.h-\[370px\] {
-  height: 370px;
 }
 
 .min-h-\[250px\] {
@@ -1435,6 +1435,10 @@ video {
   gap: 10px;
 }
 
+.gap-\[12px\] {
+  gap: 12px;
+}
+
 .gap-\[15px\] {
   gap: 15px;
 }
@@ -1477,6 +1481,10 @@ video {
 .gap-x-\[5px\] {
   -moz-column-gap: 5px;
        column-gap: 5px;
+}
+
+.gap-y-\[12px\] {
+  row-gap: 12px;
 }
 
 .gap-y-\[15px\] {
@@ -2043,6 +2051,11 @@ video {
   padding-right: 10px;
 }
 
+.px-\[12px\] {
+  padding-left: 12px;
+  padding-right: 12px;
+}
+
 .px-\[15px\] {
   padding-left: 15px;
   padding-right: 15px;
@@ -2126,6 +2139,16 @@ video {
 .py-\[5px\] {
   padding-top: 5px;
   padding-bottom: 5px;
+}
+
+.py-\[8px\] {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.py-\[4px\] {
+  padding-top: 4px;
+  padding-bottom: 4px;
 }
 
 .pb-2 {

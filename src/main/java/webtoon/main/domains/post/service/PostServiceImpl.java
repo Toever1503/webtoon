@@ -3,6 +3,7 @@ package webtoon.main.domains.post.service;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import webtoon.main.domains.post.entities.IPostRepository;
 import webtoon.main.domains.post.entities.PostEntity;
 import webtoon.main.domains.post.entities.dtos.PostDto;
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
 public class PostServiceImpl implements IPostService {
     private final IPostRepository postRepository;
     private final ITagRepository tagRepository;

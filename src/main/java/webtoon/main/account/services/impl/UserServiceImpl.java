@@ -35,6 +35,7 @@ import java.util.stream.Collectors;
 
 
 @Service
+@org.springframework.transaction.annotation.Transactional
 public class UserServiceImpl implements IUserService {
     private final PasswordEncoder passwordEncoder;
 

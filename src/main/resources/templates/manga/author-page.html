@@ -8,7 +8,7 @@
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Thẻ</title>
+  <title>Tác giả</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
     integrity="sha512-1ycn6IcaQQ40/MKBW2W4Rhis/DbILU74C1vSrLJxCq57o941Ym01SwNsOMqvEBFlcgUa6xLiPY/NS5R+E6ztJQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -27,12 +27,13 @@
           <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
           </li>
           <li><a href="#"
-                 class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400">Thẻ</a>
+                 class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400">Tác
+              giả truyện</a>
           </li>
           <li><span class="mx-2 text-neutral-500 dark:text-neutral-400">/</span>
           </li>
           <li><a class="text-sm text-primary transition duration-150 ease-in-out text-neutral-500 dark:text-neutral-400"
-              th:text="${tag.tagName}">
+              th:text="${author.name}">
             </a>
           </li>
         </ol>
@@ -63,8 +64,6 @@
                       <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 4 ? 'color: #ffeb3b;' : ''}"></i>
                       <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
                     </ul>
-
-                    <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
                   </div>
 
                 </h4>
@@ -124,13 +123,13 @@
       </div>
 
       <div class="list-genre min-w-[200px] h-fit border p-[10px] mt-[15px] rounded">
-        <h3 class="border w-fit text-sm text-white font-medium rounded bg-[#eb3349] py-[5px] px-[10px]">Thẻ</h3>
+        <h3 class="border w-fit text-sm text-white font-medium rounded bg-[#eb3349] py-[5px] px-[10px]">Tác giả</h3>
 
-        <ul class="grid grid-cols-2 space-x-2 mt-[20px]">
-          <li class="flex items-center space-x-2" th:each="item: ${tagList}">
+        <ul class="grid grid-cols-2 space-x-2 mt-[20px] gap-y-[12px]">
+          <li class="flex items-center space-x-2" th:each="item: ${authorList}">
             <i class="fas fa-caret-right" style="color: #343537;"></i>
-            <a th:href="@{'/tag/' + ${item.slug} + '/' + ${item.id} }" class="cursor-pointer hover:text-[#eb3349]"
-              th:text="${item.tagName}"></a>
+            <a th:href="@{'/author/' + ${item.slug} + '/' + ${item.id} }" class="cursor-pointer hover:text-[#eb3349]"
+              th:text="${item.name}"></a>
           </li>
 
         </ul>

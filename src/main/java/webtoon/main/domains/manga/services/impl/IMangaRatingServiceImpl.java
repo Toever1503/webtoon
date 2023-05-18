@@ -51,12 +51,13 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
         }else {
             System.out.println(model.getMangaEntity() + "manga" + user.getId());
             MangaRatingEntity checkId = this.getById(model.getMangaEntity(), user.getId());
+
             if (checkId != null ){
                 checkId.setRate(Float.valueOf(model.getRate()));
                 this.ratingRepository.saveAndFlush(checkId);
                 Double entity1 =  this.ratingRepository.findRatingByMangaAndCb(checkId.getMangaId(), user.getId());
                 if (entity1 != null){
-                    MangaEntity mangaEntity = this.mangaService.getByIdAndCb(checkId.getMangaId(), checkId.getCreatedBy());
+                    MangaEntity mangaEntity = this.mangaService.getById(checkId.getMangaId());
                     mangaEntity.setRating(entity1.floatValue());
                     this.mangaRepository.saveAndFlush(mangaEntity);
                 }
@@ -76,7 +77,7 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
                 this.ratingRepository.saveAndFlush(entity);
                 Double entity1 =  this.ratingRepository.findRatingByMangaAndCb(entity.getMangaId(), user.getId());
                 if (entity1 != null){
-                    MangaEntity mangaEntity = this.mangaService.getByIdAndCb(entity.getMangaId(), user.getId());
+                    MangaEntity mangaEntity = this.mangaService.getById(checkId.getMangaId());
                     if (mangaEntity != null){
                         mangaEntity.setRating(entity1.floatValue());
                         this.mangaRepository.saveAndFlush(mangaEntity);

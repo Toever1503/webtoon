@@ -64,7 +64,7 @@
                       <i class="fas fa-star" th:style="${manga.getRating().intValue() >= 5 ? 'color: #ffeb3b;' : ''}"></i>
                     </ul>
 
-                    <span th:text="${manga.rating < 1 ? '0' : manga.rating}"></span>
+
                   </div>
 
                 </h4>
@@ -126,7 +126,7 @@
       <div class="list-genre min-w-[200px] h-fit border p-[10px] mt-[15px] rounded">
         <h3 class="border w-fit text-sm text-white font-medium rounded bg-[#eb3349] py-[5px] px-[10px]">Thể loại</h3>
 
-        <ul class="grid grid-cols-2 space-x-2 mt-[20px]">
+        <ul class="grid grid-cols-2 space-x-2 mt-[20px] gap-y-[12px]">
           <li class="flex items-center space-x-2" th:each="item: ${genreList}">
             <i class="fas fa-caret-right" style="color: #343537;"></i>
             <a th:href="@{'/genre/' + ${item.slug} + '/' + ${item.id} }" class="cursor-pointer hover:text-[#eb3349]"

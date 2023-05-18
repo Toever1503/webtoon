@@ -186,6 +186,12 @@ public class IMangaServiceImpl implements IMangaService {
         this.mangaRepository.saveAndFlush(mangaEntity);
     }
 
+    @Override
+    public MangaEntity saveEntity(MangaEntity mangaEntity) {
+        this.mangaRepository.saveAndFlush(mangaEntity);
+        return mangaEntity;
+    }
+
 
     @Override
     public MangaEntity getByIdAndCb(Long mangaId, Long createId){
@@ -257,8 +263,10 @@ public class IMangaServiceImpl implements IMangaService {
     }
 
     @Override
-    public List<MangaEntity> filter5MangaEntities(Specification<MangaEntity> specs) {
-        return this.mangaRepository.findAll(specs, PageRequest.of(0, 5)).getContent();
+    public List<MangaEntity> filter5LatestMangas(Specification<MangaEntity> specs) {
+        return this.mangaRepository.findAll(specs, PageRequest.of(0, 5)
+                        .withSort(Sort.Direction.DESC, MangaEntity_.MODIFIED_AT))
+                .getContent();
     }
 
     @Override

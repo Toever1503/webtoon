@@ -82,7 +82,8 @@ public class MangaController {
             }
         }
 
-        Page<MangaEntity> mangaEntities = this.mangaService.filterEntities(pageable, mangaSpec);
+        Page<MangaEntity> mangaEntities = this.mangaService.filterEntities(PageRequest.of(pageable.getPageNumber(), 12)
+                .withSort(Sort.Direction.DESC, MangaEntity_.MODIFIED_AT), mangaSpec);
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
 
         model.addAttribute("genreList", mangaGenreEntity);

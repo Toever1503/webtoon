@@ -52,6 +52,6 @@ public class MangaAuthorController {
         model.addAttribute("hasNextPage", mangaEntityPage.hasNext());
         model.addAttribute("currentPage", mangaEntityPage.getNumber());
         model.addAttribute("totalPage", mangaEntityPage.getTotalPages());
-        return "manga/authorPage";
+        return "manga/author-page";
     }
 }

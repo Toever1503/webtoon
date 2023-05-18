@@ -2,7 +2,6 @@ package webtoon.main.domains;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -17,12 +16,14 @@ import webtoon.main.domains.manga.entities.MangaEntity_;
 import webtoon.main.domains.manga.entities.MangaGenreEntity;
 import webtoon.main.domains.manga.enums.EMangaSTS;
 import webtoon.main.domains.manga.enums.EStatus;
+import webtoon.main.domains.manga.services.IMangaAuthorService;
 import webtoon.main.domains.post.service.ICategoryService;
 import webtoon.main.domains.post.service.IPostService;
 import webtoon.main.domains.manga.services.IMangaChapterService;
 import webtoon.main.domains.manga.services.IMangaGenreService;
 import webtoon.main.domains.manga.services.IMangaService;
 import webtoon.main.domains.post.entities.PostEntity;
+import webtoon.main.domains.tag.service.ITagService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -45,13 +46,19 @@ public class HomeController {
     @Autowired
     private IPostService postService;
 
+    @Autowired
+    private IMangaAuthorService mangaAuthorService;
+
+    @Autowired
+    private ITagService tagService;
+
     public HomeController() {
         System.out.printf("HomeController init\n");
     }
 
     @RequestMapping(value = {"/", "/index"})
     public String homepage(Model model, Pageable pageable, @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
-        Specification mangaSpec = Specification.where(
+        Specification latestMangaSpec = Specification.where(
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()
         ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
@@ -66,15 +73,14 @@ public class HomeController {
                 .and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
 
-        List<MangaEntity> mangaSliders = this.mangaService.filterEntities(PageRequest.of(0, 10, Sort.Direction.DESC, MangaEntity_.VIEW_COUNT), mangaSpec).getContent();
+        List<MangaEntity> mangaSliders = this.mangaService.filterEntities(PageRequest.of(0, 10, Sort.Direction.DESC, MangaEntity_.VIEW_COUNT), latestMangaSpec).getContent();
         model.addAttribute("mangaSlider", mangaSliders);
 
 //        Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(pageable, mangaSpec);
-        List<MangaEntity> mangaEntity5Update = this.mangaService.filter5MangaEntities(mangaSpec);
-        List<MangaEntity> mangaEntity5Coming = this.mangaService.filter5MangaEntities(mangaSpecComing);
-        List<MangaEntity> mangaEntity5Free = this.mangaService.filter5MangaEntities(mangaSpecFree);
+        List<MangaEntity> filter5LatestMangas = this.mangaService.filter5LatestMangas(latestMangaSpec);
+        List<MangaEntity> mangaEntity5Coming = this.mangaService.filterEntities(PageRequest.of(0, 5), mangaSpecComing).getContent();
+        List<MangaEntity> mangaEntity5Free = this.mangaService.filterEntities(PageRequest.of(0, 5), mangaSpecFree).getContent();
 //        List<CategoryEntity> categoryEntity = this.categoryService.findAllCate();
-
 
 
         List<MangaGenreEntity> mangaGenreEntity = this.mangaGenreService.findAllGenre();
@@ -82,9 +88,11 @@ public class HomeController {
         List<PostEntity> postEntity = this.postService.findAllPost();
 
         model.addAttribute("genreList", mangaGenreEntity);
+        model.addAttribute("authorList", mangaAuthorService.filterAuthor(null, Pageable.unpaged()).getContent());
+        model.addAttribute("tagList", tagService.findAll(Pageable.unpaged()));
 //        model.addAttribute("cateList", categoryEntity);
 //        model.addAttribute("mangalist", mangaEntity.getContent());
-        model.addAttribute("mangalist", mangaEntity5Update);
+        model.addAttribute("mangalist", filter5LatestMangas);
         model.addAttribute("mangalistComing", mangaEntity5Coming);
         model.addAttribute("mangalistFree", mangaEntity5Free);
         model.addAttribute("postList", postEntity);
