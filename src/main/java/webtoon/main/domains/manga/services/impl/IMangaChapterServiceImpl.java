@@ -18,6 +18,7 @@ import webtoon.main.domains.manga.dtos.MangaChapterDto;
 import webtoon.main.domains.manga.entities.MangaChapterImageEntity;
 import webtoon.main.domains.manga.entities.MangaEntity;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
+import webtoon.main.domains.manga.enums.EMangaSTS;
 import webtoon.main.domains.manga.mappers.MangaChapterMapper;
 import webtoon.main.domains.manga.models.MangaChapterFilterInput;
 import webtoon.main.domains.manga.models.MangaChapterModel;
@@ -117,6 +118,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
+        mangaEntity.setMangaStatus(EMangaSTS.GOING);
         if (!mangaEntity.getIsFree())
             mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
 
@@ -149,6 +151,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
+            mangaEntity.setMangaStatus(EMangaSTS.GOING);
             if (!mangaEntity.getIsFree())
                 mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
 

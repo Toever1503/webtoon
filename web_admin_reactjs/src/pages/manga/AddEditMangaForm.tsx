@@ -262,6 +262,8 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
 
     let { id } = useParams();
     const [isFetchingMangaInfo, setIsFetchingMangaInfo] = useState<boolean>(true);
+
+    const [mangaReleaseStatusList, setMangaReleaseStatusList] = useState<any[]>([]);
     useEffect(() => {
         if (props.type === 'EDIT') {
             if (id) {
@@ -292,7 +294,23 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
             }
         }
         else setIsFetchingMangaInfo(false);
-    }, []);
+
+        if (mangaInput.id && mangaInput.mangaStatus == 'COMING') {
+            setMangaReleaseStatusList([
+                { value: 'GOING', label: 'Đang ra' },
+                { value: 'ON_STOPPING', label: 'Đang tạm dừng' },
+                { value: 'COMPLETED', label: 'Đã hoàn thành' },
+            ]);
+        }
+        else {
+            setMangaReleaseStatusList([
+                { value: 'COMING', label: 'Sắp ra mắt' },
+                { value: 'GOING', label: 'Đang ra' },
+                { value: 'ON_STOPPING', label: 'Đang tạm dừng' },
+                { value: 'COMPLETED', label: 'Đã hoàn thành' },
+            ]);
+        }
+    }, [mangaInput.mangaStatus]);
 
 
     return (
@@ -372,12 +390,7 @@ const AddEditMangaForm: React.FC<AddEditMangaFormProps> = (props: AddEditMangaFo
                                     className='min-w-[150px]'
                                     defaultValue={mangaInput.mangaStatus}
                                     onChange={(val: ReleaseStatus) => { setMangaInput({ ...mangaInput, mangaStatus: val }) }}
-                                    options={[
-                                        { value: 'COMING', label: 'Sắp ra mắt' },
-                                        { value: 'GOING', label: 'Đang ra' },
-                                        { value: 'ON_STOPPING', label: 'Đang tạm dừng' },
-                                        { value: 'COMPLETED', label: 'Đã hoàn thành' },
-                                    ]}
+                                    options={mangaReleaseStatusList}
                                 />
                             </div>
 

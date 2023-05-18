@@ -30,10 +30,8 @@ public class MangaResource2 {
         this.mangaService = mangaService;
     }
 
-
     @GetMapping("{id}")
     public MangaDto findById(@PathVariable Long id) {
-//        MangaEntity_
         return this.mangaService.findById(id);
     }
 
