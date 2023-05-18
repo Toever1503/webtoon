@@ -2,19 +2,31 @@ package webtoon.main.domains.manga.services.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import webtoon.main.domains.manga.dtos.MangaChapterDto;
+import webtoon.main.domains.manga.dtos.MangaDto;
 import webtoon.main.domains.manga.dtos.ReadHistoryDto;
+import webtoon.main.domains.manga.dtos.ReadHistoryDto2;
 import webtoon.main.domains.manga.entities.ReadHistory;
 import webtoon.main.domains.manga.models.ReadHistoryModel;
 import webtoon.main.domains.manga.repositories.IReadHistoryRepository;
+import webtoon.main.domains.manga.services.IMangaChapterService;
+import webtoon.main.domains.manga.services.IMangaService;
 import webtoon.main.domains.manga.services.IReadHistoryService;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
 public class IReadHistoryServiceImpl implements IReadHistoryService {
 
     private final IReadHistoryRepository  historyRepository;
-    public IReadHistoryServiceImpl(IReadHistoryRepository historyRepository) {
+    private final IMangaService mangaService;
+    private final IMangaChapterService mangaChapterService;
+    public IReadHistoryServiceImpl(IReadHistoryRepository historyRepository, IMangaService mangaService, IMangaChapterService mangaChapterService) {
         this.historyRepository = historyRepository;
+        this.mangaService = mangaService;
+        this.mangaChapterService = mangaChapterService;
     }
 
     @Override
@@ -71,7 +83,23 @@ public class IReadHistoryServiceImpl implements IReadHistoryService {
 
     @Override
     public ReadHistory save(ReadHistory item) {
-        return historyRepository.save(item);
+        return historyRepository.saveAndFlush(item);
     }
+
+    @Override
+    public List<ReadHistoryDto2> findAllByCreatedBy(Long id) {
+
+        List<ReadHistory> readHistories = this.historyRepository.findAllByCreatedBy(id);
+
+        List<ReadHistoryDto2> readHistoryDto2s = readHistories.stream()
+                .map(readHistory -> {
+                    MangaDto mangaDto = this.mangaService.findById(readHistory.getMangaEntity());
+                    MangaChapterDto mangaChapterDto = this.mangaChapterService.findById(readHistory.getChapterEntity());
+                    return ReadHistoryDto2.toDto(readHistory, mangaDto.getTitle(), mangaDto.getFeaturedImage(), mangaChapterDto.getChapterIndex() +1);
+                })
+                .collect(Collectors.toList());
+        return readHistoryDto2s;
+    }
+
 
 }

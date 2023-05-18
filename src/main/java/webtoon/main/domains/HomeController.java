@@ -2,6 +2,7 @@ package webtoon.main.domains;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -15,8 +16,10 @@ import webtoon.main.account.entities.UserEntity;
 import webtoon.main.domains.manga.entities.MangaEntity;
 import webtoon.main.domains.manga.entities.MangaEntity_;
 import webtoon.main.domains.manga.entities.MangaGenreEntity;
+import webtoon.main.domains.manga.entities.ReadHistory;
 import webtoon.main.domains.manga.enums.EMangaSTS;
 import webtoon.main.domains.manga.enums.EStatus;
+import webtoon.main.domains.manga.services.IReadHistoryService;
 import webtoon.main.domains.post.service.ICategoryService;
 import webtoon.main.domains.post.service.IPostService;
 import webtoon.main.domains.manga.services.IMangaChapterService;
@@ -98,6 +101,7 @@ public class HomeController {
 
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         model.addAttribute("logger",loggedUser);
+
         return "homepage";
     }
 
