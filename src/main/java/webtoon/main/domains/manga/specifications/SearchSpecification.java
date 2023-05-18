@@ -16,23 +16,20 @@ import java.util.Date;
 import java.util.List;
 
 public class SearchSpecification {
-    public static Specification<MangaEntity> byYear(String year){
+    public static Specification<MangaEntity> byYear(Integer year) {
+        return (root, query, criteriaBuilder) -> criteriaBuilder.equal(
+                root.get(MangaEntity_.RELEASE_YEAR), year
+        );
+    }
+
+    public static Specification<MangaEntity> byGener(Long generId) {
+
         return ((root, query, criteriaBuilder) -> {
-           new Date();
-            return criteriaBuilder.like(
-                    root.get(MangaEntity_.CREATED_AT),"%" + year + "%"
-            );
+            return criteriaBuilder.equal(root.join(MangaEntity_.GENRES).get(MangaGenreEntity_.ID), generId);
         });
     }
 
-    public static Specification<MangaEntity> byGener(Long generId){
-
-        return ((root, query, criteriaBuilder) -> {
-           return criteriaBuilder.equal(root.join(MangaEntity_.GENRES).get(MangaGenreEntity_.ID),generId);
-        });
-    }
-
-    public static Specification<MangaEntity> byStatus(EMangaSTS sts){
+    public static Specification<MangaEntity> byStatus(EMangaSTS sts) {
         return (root, query, criteriaBuilder) ->
             criteriaBuilder.equal(root.get(MangaEntity_.MANGA_STATUS),sts);
     }
@@ -50,26 +47,33 @@ public class SearchSpecification {
     public static Specification<MangaEntity> filter(MangaFilterInput model){
         List<Specification> specs = new ArrayList<>();
 
-        if (model.getQ() != null){
+        if (model.getQ() != null) {
             specs.add(like(model.getQ()));
         }
-        if(model.getStatus() != null){
+        if (model.getStatus() != null) {
             specs.add(byStatus(model.getStatus()));
         }
-        if (model.getGenreId() != null){
+        if (model.getGenreId() != null) {
             specs.add(byGener(model.getGenreId()));
         }
-//        if (model.getReleaseYear() != null){
-//            specs.add(byYear(model.getReleaseYear()));
-//        }
+        if (model.getReleaseYear() != null) {
+            specs.add(byYear(model.getReleaseYear()));
+        }
+        if (model.getIsShow() != null)
+            specs.add(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(MangaEntity_.IS_SHOW), true)));
+        if (model.getMangaType() != null)
+            specs.add(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(MangaEntity_.MANGA_TYPE), model.getMangaType())));
+
         Specification<MangaEntity> finalSpec = null;
-        for (Specification<MangaEntity> spec : specs ){
-            if (finalSpec == null){
+        for (Specification<MangaEntity> spec : specs) {
+            if (finalSpec == null) {
                 finalSpec = Specification.where(spec);
-            }else {
+            } else {
                 finalSpec = finalSpec.and(spec);
             }
         }
         return finalSpec;
     }
+
+
 }

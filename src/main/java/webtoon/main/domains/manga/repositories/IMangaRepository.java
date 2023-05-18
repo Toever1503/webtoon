@@ -35,4 +35,7 @@ public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaS
     @Query(value = "SELECT a.* FROM tbl_manga_entity a LEFT JOIN tbl_manga_genre_relation b ON b.manga_id = a.id WHERE b.genre_id in :ids",
             nativeQuery = true)
     List<MangaEntity> findByGenresIn(@Param("ids") List<Long> ids);
+
+    @Query("select distinct m.releaseYear from MangaEntity m where m.releaseYear is not null")
+    List<Integer> findAllReleaseYear();
 }

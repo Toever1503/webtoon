@@ -134,6 +134,8 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
 
     const onCallApiSearch = (page: number = 0, size: number = 10) => {
         console.log('on call api search');
+        if (isSearching) return;
+        setIsSearching(true);
         chapterService.filterChapter({
             volumeId: props.mangaInput.displayType === "VOL" ? props.volumeId : null,
             mangaId: props.mangaInput.displayType === "VOL" ? null : props.mangaInput.id,
@@ -175,7 +177,7 @@ const ChapterSetting: React.FC<ChapterSettingProps> = (props: ChapterSettingProp
                     });
         }
 
-    }, []); // changed
+    }, [props.volumeId]); // changed
 
     return <div className="mt-[20px]">
 

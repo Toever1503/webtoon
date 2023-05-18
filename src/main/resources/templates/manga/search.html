@@ -17,7 +17,7 @@
                 <div class="flex flex-col space-y-5">
                     <label for="keyword">
                         <p class="font-semibold text-slate-700 pb-2">Từ khóa:</p>
-                        <input id="keyword" name="keyword" type="text" required
+                        <input id="keyword" name="q" type="text"
                                class="w-full py-[5px] border border-slate-200 rounded-lg px-[10px] focus:outline-none focus:border-slate-500 hover:shadow"
                                placeholder="tên truyện, tác giả..." th:value="${filterInput.q}">
                     </label>
@@ -52,9 +52,11 @@
                         <select name="releaseYear" id="releaseYear" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 style="border: 1px solid #ebebeb;">
                             <option value="" th:text="'Chọn năm phát hành'"></option>
-                            <option value="2023">2023</option>
-                            <option value="2021">2021</option>
-                            <option value="2020">2020</option>
+                            <option th:value="${year}"
+                                    th:text="${year}"
+                                    th:each="year : ${releaseYearList}"
+                                    th:selected="${filterInput.releaseYear != null && filterInput.releaseYear == year}"
+                            />
                         </select>
                     </label>
                 </div>
@@ -63,11 +65,12 @@
                 <div class="flex flex-col space-y-5 mt-[15px]">
                     <label for="mangaType">
                         <p class="font-semibold text-slate-700 pb-2">Loại truyện:</p>
-                        <select name="mangaType" id="mangaType" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                        <select name="mangaType" id="mangaType"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 style="border: 1px solid #ebebeb;">
                             <option value="" th:text="'Chọn loại truyện'"></option>
-                            <option value="TEXT">Truyện ảnh</option>
-                            <option value="IMAGE">Truyện chữ</option>
+                            <option value="TEXT" th:selected="${filterInput.mangaType != null && filterInput.mangaType.name()== 'TEXT'}">Truyện ảnh</option>
+                            <option value="IMAGE" th:selected="${filterInput.mangaType != null && filterInput.mangaType.name()== 'IMAGE'}">Truyện chữ</option>
                         </select>
                     </label>
                 </div>
@@ -75,10 +78,11 @@
                 <div class="flex flex-col space-y-5 mt-[15px]">
                     <label for="isFree">
                         <p class="font-semibold text-slate-700 pb-2">Hình thức trả phí:</p>
-                        <select name="isFree" id="isFree" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                style="border: 1px solid #ebebeb;">
-                            <option value="true" selected>Trả phí</option>
-                            <option value="false">Miễn phí</option>
+                        <select name="isFree" id="isFree"
+                                class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                               >
+                            <option value="true" th:selected="${filterInput.isFree != null && !filterInput.isFree}">Trả phí</option>
+                            <option value="false" th:selected="${filterInput.isFree != null && filterInput.isFree}">Miễn phí</option>
                         </select>
                     </label>
                 </div>
@@ -97,7 +101,13 @@
         </div>
         <h3 th:if="${mangaEntity.content == null}">Không có dữ liệu!</h3>
         <div th:else class="mx-2 p-4">
-            <h1 class="mb-5 font-bold text-xl" th:text="${mangaEntity.content.size() + ' kết quả tìm kiếm'}"></h1>
+            <div class="flex justify-between">
+                <span class="mb-5 font-bold text-xl" th:text="${mangaEntity.getTotalElements() + ' kết quả tìm kiếm'}"></span>
+
+                <span class="border rounded p-[5px] h-fit">
+                  <span th:text="${mangaEntity.getNumber() + 1}"/>/<span th:text="${mangaEntity.getTotalPages()}" />
+                </span>
+            </div>
             <hr class="border border-zinc-600">
             <div class="manga-list">
                 <!-- Cards 1 -->
@@ -115,9 +125,7 @@
                                 </div>
                                 <div class="p-4 bg-[#f6f6f6] w-full gap-x-[40px] grid grid-cols-2">
                                     <div class="flex  justify-between">
-                                        <div class="py-2">
-                                            <h4 class="font-medium text-sm">Thể loại</h4>
-                                        </div>
+                                        <p class="font-semibold text-slate-700 pb-2">Thể loại:</p>
                                         <div class="py-2" th:inline="text">
                                             <span th:each="itemgenre,iter : ${mangaE.genres}">
                                             <span th:text="${itemgenre.name}"></span>
@@ -127,17 +135,17 @@
                                     </div>
 
                                     <div class="flex  justify-between">
-                                        <div class="py-2">
-                                            <h4 class="font-medium text-sm">Tác giả</h4>
-                                        </div>
+                                        <p class="font-semibold text-slate-700 pb-2">Tác giả::</p>
                                         <div class="py-2">
                                             <span>tes1,test</span>
                                         </div>
                                     </div>
 
                                     <div class="flex  justify-between">
-                                        <div class="py-2">
-                                            <h4 class="font-medium text-sm">Trạng thái <br /> phát hành</h4>
+                                        <div class="py-2 bg-[#]">
+                                            <p class="font-semibold text-slate-700 pb-2">
+                                                Trạng thái phát hành
+                                            </p>
                                         </div>
                                         <div class="py-2">
                                             <span th:text="${trangThai[mangaE.mangaStatus]}"></span>
@@ -145,9 +153,7 @@
                                     </div>
 
                                     <div class="flex  justify-between space-x-2">
-                                        <div class="py-2">
-                                            <h4 class="font-medium text-sm">Năm phát hành</h4>
-                                        </div>
+                                        <p class="font-semibold text-slate-700 pb-2">Năm phát hành:</p>
                                         <div class="py-2">
                                             <span th:text="${mangaE.releaseYear}"></span>
                                         </div>
@@ -155,7 +161,7 @@
 
                                     <div class="flex  justify-between space-x-2">
                                         <div class="py-2">
-                                            <h4 class="font-medium text-sm">Lượt đánh giá</h4>
+                                            <p class="font-semibold text-slate-700 pb-2">Lượt đánh giá</p>
                                         </div>
                                         <div class="py-2">
                                             <span>5/1</span>

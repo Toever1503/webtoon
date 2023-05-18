@@ -1930,6 +1930,10 @@ video {
   background-color: rgb(234 179 8 / var(--tw-bg-opacity));
 }
 
+.bg-\[\#\] {
+  background-color: #;
+}
+
 .bg-opacity-75 {
   --tw-bg-opacity: 0.75;
 }

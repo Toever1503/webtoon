@@ -67,4 +67,6 @@ public interface IMangaService {
     List<Object[]> calculateTotalMangaEachStatus(String q);
 
     Page<MangaEntity> filterEntitiesByTag(Long id);
+
+    List<Integer> findAllReleaseYear();
 }

@@ -327,4 +327,9 @@ public class IMangaServiceImpl implements IMangaService {
     public Page<MangaEntity> filterEntitiesByTag(Long id) {
         return null;
     }
+
+    @Override
+    public List<Integer> findAllReleaseYear() {
+        return this.mangaRepository.findAllReleaseYear();
+    }
 }
