@@ -15,7 +15,7 @@ public class MangaUploadChapterInput {
     private Integer chapterIndex;
     private Long volumeId;
     private Long mangaID;
-    private Boolean isRequiredVip;
+    private Boolean requiredVip;
 
     private String content;
     private List<String> chapterImages;

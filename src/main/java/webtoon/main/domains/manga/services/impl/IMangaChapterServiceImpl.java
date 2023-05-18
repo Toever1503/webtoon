@@ -1,6 +1,5 @@
 package webtoon.main.domains.manga.services.impl;
 
-import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -127,7 +126,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 .chapterIndex(input.getChapterIndex())
                 .chapterName(input.getChapterName())
                 .content(input.getContent())
-                .requiredVip(input.getIsRequiredVip())
+                .requiredVip(input.getRequiredVip())
                 .build();
 
         if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL)) {
@@ -158,7 +157,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
                     .chapterName(input.getChapterName())
-                    .requiredVip(input.getIsRequiredVip())
+                    .requiredVip(input.getRequiredVip())
                     .build();
 
             if (mangaEntity.getDisplayType().equals(EMangaDisplayType.VOL)) {
