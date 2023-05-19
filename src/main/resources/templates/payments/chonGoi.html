@@ -103,7 +103,8 @@
 
           <div class="flex justify-center"
             th:if="${session.loggedUser == null || session.loggedUser.getTrialRegisteredDate() == null}">
-            <a th:if="${session.loggedUser != null}" href="/order/register-trial"
+
+            <a th:if="${session.loggedUser != null && session.loggedUser.role.roleName.name() == 'CUS'}" href="/order/register-trial"
               class="mt-[20px] bg-red-500 hover:bg-red-600 text-white text-xl py-[10px] px-[20px] rounded">Đăng
               ký ngay</a>
 
@@ -141,7 +142,7 @@
 
           <div class="flex justify-center">
 
-            <span th:if="${session.loggedUser != null}" th:data-id="${item.id}" th:data-name="${item.name}"
+            <span th:if="${session.loggedUser != null && session.loggedUser.role.roleName.name() == 'CUS'}" th:data-id="${item.id}" th:data-name="${item.name}"
               th:data-price="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'POINT') }"
               th:onclick="showPaymentModal(this)"
               class="mt-[20px] bg-red-500 hover:bg-red-600 text-white text-xl py-[10px] px-[20px] rounded cursor-pointer">

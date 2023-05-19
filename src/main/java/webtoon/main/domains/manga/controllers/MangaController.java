@@ -11,6 +11,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import webtoon.main.account.entities.ERoleConstants;
 import webtoon.main.account.entities.UserEntity;
 import webtoon.main.domains.manga.dtos.MangaChapterDto;
 import webtoon.main.domains.manga.dtos.MangaDto;
@@ -112,7 +113,7 @@ public class MangaController {
         UserEntity userEntity = (UserEntity) session.getAttribute("loggedUser");
 
         boolean canReadChapter = false;
-        if (userEntity != null) {
+        if (userEntity != null && userEntity.getCanReadUntilDate() != null) {
             ReadHistory readHistory = this.historyService.findByCBAndMG(userEntity.getId(), mangaEntity.getId());
             if (readHistory != null) {
                 MangaChapterEntity mangaChapterEntity = this.mangaChapterService.getById(readHistory.getChapterEntity());
@@ -123,7 +124,12 @@ public class MangaController {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             canReadChapter = result >= 0;
+
+            // if user is emp or admin, allow to read
+            if (!userEntity.getRole().getRoleName().equals(ERoleConstants.CUS))
+                canReadChapter = true;
         }
+
         model.addAttribute("canReadChapter", canReadChapter);
 
         // tinh tong so tap va chuong
@@ -191,10 +197,13 @@ public class MangaController {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
             if (loggedUser != null) {
                 int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
-                canReadChapter = result >=0;
+                canReadChapter = result >= 0;
             }
-        }
-        else canReadChapter = true;
+        } else canReadChapter = true;
+
+        // if user is emp or admin, allow to read
+        if (loggedUser != null && !loggedUser.getRole().getRoleName().equals(ERoleConstants.CUS))
+            canReadChapter = true;
         model.addAttribute("canReadChapter", canReadChapter);
 
         MangaEntity mangaEntity = null;

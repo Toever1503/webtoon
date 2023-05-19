@@ -20,13 +20,15 @@
             <div class="col-span-3 w-[780px] p-4 mt-4 bg-white">
                 <h3 class="mb-[10px] font-semibold text-2xl">Thông tin gói</h3>
 
-                <p class="mb-[15px]" th:if="${!isUsingTrial && currentUsingSubsPack == null}">Hiện bạn chưa sử dụng gói nào!</p>
-                <button th:if="${!isUsingTrial && currentUsingSubsPack == null}"
+                <p class="mb-[15px]" th:if="${!isUsingTrial && currentUsingSubsPack == null && session.loggedUser.role.roleName.name() == 'CUS'}">Hiện bạn chưa sử dụng gói nào!</p>
+
+                <p th:if="${session.loggedUser.role.roleName.name() != 'CUS'}" class="mb-[15px]">Bạn được đọc miễn phí tất cả truyện!</p>
+
+                <button th:if="${!isUsingTrial && currentUsingSubsPack == null && session.loggedUser.role.roleName.name() == 'CUS'}"
                         class="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto">
                     <a href="/subscription_pack/load" class="text-white">Mua gói</a></button>
 
-
-                <div th:if="${isUsingTrial}">
+                <div th:if="${isUsingTrial && session.loggedUser.role.roleName.name() == 'CUS'}">
                     <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
                     <p>Thời hạn đọc đến: <span
                             th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
@@ -50,7 +52,7 @@
                     </div>
                 </div>
 
-                <div th:if="${currentUsingSubsPack != null}">
+                <div th:if="${currentUsingSubsPack != null && session.loggedUser.role.roleName.name() == 'CUS'}">
                     <p>Bạn đang sử dụng gói
                         <span th:text="${currentUsingSubsPack.getMonthCount() + ' tháng.'}"></span>
 
