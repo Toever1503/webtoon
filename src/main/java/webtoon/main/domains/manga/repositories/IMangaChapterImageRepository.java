@@ -13,7 +13,7 @@ import java.util.List;
 
 public interface IMangaChapterImageRepository extends JpaRepository<MangaChapterImageEntity, Long>, JpaSpecificationExecutor<MangaChapterImageEntity> {
 
-    List<MangaChapterImageEntity> findAllByIdNotIn(List<Long> oldImageIds);
+    List<MangaChapterImageEntity> findAllByIdNotInAndMangaChapterId(List<Long> oldImageIds, Long chapId);
 
     @Modifying
     @Query(value = "DELETE FROM `tbl_manga_chapter_image_entity` WHERE manga_chapter_id = :id", nativeQuery = true)

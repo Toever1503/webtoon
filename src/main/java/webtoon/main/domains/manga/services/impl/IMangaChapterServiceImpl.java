@@ -208,7 +208,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                         imageIndexes.add(currentIndex.getAndIncrement());
                     }
                 });
-                List<MangaChapterImageEntity> oldImageEntities = this.chapterImageRepository.findAllByIdNotIn(keepingImageIds);
+                List<MangaChapterImageEntity> oldImageEntities = this.chapterImageRepository.findAllByIdNotInAndMangaChapterId(keepingImageIds, mangaChapterEntity.getId());
                 // task: need call storage api to remove
                 System.out.println(oldImageEntities.size());
                 this.chapterImageRepository.deleteAllById(oldImageEntities.stream().map(MangaChapterImageEntity::getId).collect(Collectors.toList()));
