@@ -122,6 +122,10 @@ export default {
             tag: 'Thẻ',
             action: 'Hành động',
             status: 'Trạng thái',
+            createdBy: 'Người tạo',
+            modifiedBy: 'Người cập nhật',
+            createdAt: 'Ngày tạo',
+            modifiedAt: 'Ngày cập nhật'
         },
         eReleaseStatus: {
             'COMING': 'Sắp ra mắt',

@@ -12,6 +12,7 @@ import debounce from '../../utils/debounce';
 import { useTranslation } from 'react-i18next';
 import { useDispatch } from 'react-redux';
 import { showNofification } from '../../stores/features/notification/notificationSlice';
+import { dateTimeFormat } from '../../utils/dateFormat';
 
 
 const { Search } = Input;
@@ -175,6 +176,22 @@ const MangaPage: React.FC = () => {
         //         </Dropdown>
         //     </>,
         // },
+        {
+            title: t('manga.table.modifiedBy'),
+            dataIndex: 'modifiedBy',
+            key: 'modifiedBy',
+            render: (text) => <>{
+                text?.fullName
+            }</>,
+        },
+        {
+            title: t('manga.table.modifiedAt'),
+            dataIndex: 'modifiedAt',
+            key: 'modifiedAt',
+            render: (text) => <>{
+               dateTimeFormat(text)
+            }</>,
+        },
         {
             title: t('manga.table.action'),
             key: 'action',

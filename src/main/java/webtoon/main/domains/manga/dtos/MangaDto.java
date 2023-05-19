@@ -10,6 +10,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import webtoon.main.account.dtos.UserDto;
 import webtoon.main.account.entities.UserEntity;
 import webtoon.main.domains.manga.dtos.MangaAuthorDto;
 import webtoon.main.domains.manga.dtos.MangaGenreDto;
@@ -38,13 +39,17 @@ public class MangaDto {
     private Integer releaseYear;
     private EMangaType mangaType;
     private EMangaDisplayType displayType;
-    private Date createdAt;
-    private Date modifiedAt;
+
     private Float rating;
     private Integer viewCount;
     private Boolean isFree;
     private Boolean isShow;
-    private UserEntity createdBy;
+
+    private Date createdAt;
+    private Date modifiedAt;
+
+    private UserDto createdBy;
+    private UserDto modifiedBy;
 
     private List<MangaAuthorDto> authors;
     private List<MangaGenreDto> genres;
@@ -68,12 +73,14 @@ public class MangaDto {
                 .displayType(mangaEntity.getDisplayType())
                 .rating(mangaEntity.getRating())
                 .viewCount(mangaEntity.getViewCount())
-                .createdAt(mangaEntity.getCreatedAt())
                 .modifiedAt(mangaEntity.getModifiedAt())
                 .genres(mangaEntity.getGenres() != null ? mangaEntity.getGenres().stream().map(MangaGenreDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .authors(mangaEntity.getAuthors() != null ? mangaEntity.getAuthors().stream().map(MangaAuthorDto::toDto).collect(Collectors.toList()) : Collections.EMPTY_LIST)
                 .tags(mangaEntity.getTags())
-                .createdBy(mangaEntity.getCreatedBy())
+                .createdAt(mangaEntity.getCreatedAt())
+                .modifiedAt(mangaEntity.getModifiedAt())
+                .createdBy(UserDto.toDto(mangaEntity.getCreatedBy()))
+                .modifiedBy(UserDto.toDto(mangaEntity.getModifiedBy()))
                 .isFree(mangaEntity.getIsFree())
                 .isShow(mangaEntity.getIsShow())
                 .build();

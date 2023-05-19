@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import webtoon.main.account.configs.security.SecurityUtils;
+import webtoon.main.account.dtos.UserDto;
 import webtoon.main.domains.manga.dtos.MangaDto;
 import webtoon.main.domains.manga.entities.*;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
@@ -221,7 +222,7 @@ public class IMangaServiceImpl implements IMangaService {
                 .id(entity.getId())
                 .mangaName(entity.getMangaName())
                 .title(entity.getTitle())
-                .createdBy(entity.getCreatedBy())
+                    .createdBy(UserDto.toDto(entity.getCreatedBy()))
                 .featuredImage(entity.getFeaturedImage())
                 .build();
     }
