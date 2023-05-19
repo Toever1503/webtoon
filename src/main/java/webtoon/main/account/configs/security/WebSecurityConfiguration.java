@@ -58,7 +58,8 @@ public class WebSecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-//        http.httpBasic().disable();
+
+        http.httpBasic().disable();
         http.cors().and().csrf().disable();
         http.formLogin().disable()
                 .logout().disable();
@@ -81,17 +82,17 @@ public class WebSecurityConfiguration {
 
 
         // for redirect to login page
-//       PortMapperImpl portMapper = new PortMapperImpl();
-//        portMapper.setPortMappings(Collections.singletonMap(serverPort, serverPort));
-//        PortResolverImpl portResolver = new PortResolverImpl();
-//        portResolver.setPortMapper(portMapper);
-//        LoginUrlAuthenticationEntryPoint entryPoint = new LoginUrlAuthenticationEntryPoint(
-//                "/login");
-//        entryPoint.setPortMapper(portMapper);
-//        entryPoint.setPortResolver(portResolver);
-//        http
-//                .exceptionHandling()
-//                .authenticationEntryPoint(entryPoint);
+       PortMapperImpl portMapper = new PortMapperImpl();
+        portMapper.setPortMappings(Collections.singletonMap(serverPort, serverPort));
+        PortResolverImpl portResolver = new PortResolverImpl();
+        portResolver.setPortMapper(portMapper);
+        LoginUrlAuthenticationEntryPoint entryPoint = new LoginUrlAuthenticationEntryPoint(
+                "/login");
+        entryPoint.setPortMapper(portMapper);
+        entryPoint.setPortResolver(portResolver);
+        http
+                .exceptionHandling()
+                .authenticationEntryPoint(entryPoint);
 
 
         return http.build();
