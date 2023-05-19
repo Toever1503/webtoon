@@ -28,7 +28,7 @@ public class MangaChapterImageEntity {
 	@ManyToOne
 	private MangaChapterEntity mangaChapter;
 	
-	@Column(name = "image")
+	@Column(name = "image", length = 1000)
 	private String image;
 
 	@Column(name = "file_id")
