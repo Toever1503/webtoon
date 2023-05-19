@@ -6,6 +6,7 @@ import IOrder from "../../../services/order/types/IOrder";
 import orderService from "../../../services/order/OrderService";
 import formatVnCurrency from "../../../utils/formatVnCurrency";
 import { dateTimeFormat } from "../../../utils/dateFormat";
+import { hasAnyAuths } from "../../../plugins/cookieUtil";
 
 const OrderDashboard: React.FC = () => {
     const { t } = useTranslation();
@@ -115,12 +116,14 @@ const OrderDashboard: React.FC = () => {
                                             </tr>
                                         }
 
-                                        <tr>
-                                            <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
-                                                <Link to='/orders'>
-                                                    Xem tất cả</Link>
-                                            </td>
-                                        </tr>
+                                        {
+                                            hasAnyAuths(['ROLE_MANAGE_ORDER']) && <tr>
+                                                <td colSpan={5} className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                                                    <Link to='/orders'>
+                                                        Xem tất cả</Link>
+                                                </td>
+                                            </tr>
+                                        }
 
 
                                     </tbody>

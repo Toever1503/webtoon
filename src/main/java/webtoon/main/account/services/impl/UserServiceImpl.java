@@ -85,135 +85,31 @@ public class UserServiceImpl implements IUserService {
         authorityRepository.saveAndFlush(
                 AuthorityEntity.builder()
                         .id(1L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(2L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA)
+                        .authorityName(EAuthorityConstants.ROLE_MANAGE_MANGA)
                         .build()
         );
 
-        // for manga author
+        // for order
         authorityRepository.saveAndFlush(
                 AuthorityEntity.builder()
                         .id(2L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA_AUTHOR)
+                        .authorityName(EAuthorityConstants.ROLE_MANAGE_ORDER)
                         .build()
         );
         authorityRepository.saveAndFlush(
                 AuthorityEntity.builder()
                         .id(3L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA_AUTHOR)
-                        .build()
-        );
-
-        // for manga genre
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(4L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_MANGA_GENRE)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(5L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_MANGA_GENRE)
-                        .build()
-        );
-
-//        // for user
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(6L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_USER)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(7L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_USER)
-//                        .build()
-//        );
-
-        // for order
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(8L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_ORDER)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(9L)
                         .authorityName(EAuthorityConstants.ROLE_DELETE_ORDER)
                         .build()
         );
 
-//        // for category
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(10L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_CATEGORY)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(11L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_CATEGORY)
-//                        .build()
-//        );
-//
-//        // for post
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(12L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_POST)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(13L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_POST)
-//                        .build()
-//        );
-
-//        // for comment
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(14L)
-//                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_COMMENT)
-//                        .build()
-//        );
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(15L)
-//                        .authorityName(EAuthorityConstants.ROLE_DELETE_COMMENT)
-//                        .build()
-//        );
-
-        // for tag
         authorityRepository.saveAndFlush(
                 AuthorityEntity.builder()
-                        .id(16L)
-                        .authorityName(EAuthorityConstants.ROLE_ADD_EDIT_TAG)
-                        .build()
-        );
-        authorityRepository.saveAndFlush(
-                AuthorityEntity.builder()
-                        .id(17L)
-                        .authorityName(EAuthorityConstants.ROLE_DELETE_TAG)
+                        .id(4L)
+                        .authorityName(EAuthorityConstants.ROLE_VIEW_STATISTIC)
                         .build()
         );
 
-//        // for statistic
-//        authorityRepository.saveAndFlush(
-//                AuthorityEntity.builder()
-//                        .id(18L)
-//                        .authorityName(EAuthorityConstants.ROLE_VIEW_STATISTIC)
-//                        .build()
-//        );
 
         this.roleRepository.saveAndFlush(
                 RoleEntity.builder()

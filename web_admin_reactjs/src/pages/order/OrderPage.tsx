@@ -22,6 +22,7 @@ import UpgradeOrderModal, { UpgradeOrderModalProps } from "./components/UpgradeO
 import { showNofification } from "../../stores/features/notification/notificationSlice";
 import DetailOrderModal, { DetailOrderModalProps } from "./components/DetailOrderModal";
 import { Dayjs } from "dayjs";
+import { hasAnyAuths } from "../../plugins/cookieUtil";
 
 const OrderPage: React.FC = () => {
     const { t } = useTranslation();
@@ -134,24 +135,26 @@ const OrderPage: React.FC = () => {
                         {
                             <a onClick={() => viewDetailOrder(record)}>{t('order.table.viewDetail')}</a>
                         }
-                        <Popconfirm
-                            title={t('manga.form.sure-delete')}
-                            onConfirm={(e) => {
-                                e?.stopPropagation();
-                                handleDeleteOrder(record);
-                            }}
-                            okText={t('confirm-yes')}
-                            cancelText={t('confirm-no')}
-                        >
-                            <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">{
-                                t('buttons.delete')
-                            }</a>
-                        </Popconfirm>
+                        {
+                            hasAnyAuths(['ROLE_DELETE_ORDER']) && <Popconfirm
+                                title={t('manga.form.sure-delete')}
+                                onConfirm={(e) => {
+                                    e?.stopPropagation();
+                                    handleDeleteOrder(record);
+                                }}
+                                okText={t('confirm-yes')}
+                                cancelText={t('confirm-no')}
+                            >
+                                <a onClick={e => e.stopPropagation()} className="text-red-400 hover:text-red-500">{
+                                    t('buttons.delete')
+                                }</a>
+                            </Popconfirm>
+                        }
 
                     </Space>
                     <br />
                     {
-                        record.status === 'USER_CONFIRMED_BANKING' &&
+                        record.status === 'USER_CONFIRMED_BANKING' && hasAnyAuths(['ROLE_MANAGE_ORDER']) &&
                         <Link to={`/orders/handle/${record.id}`}>
                             Xử lý TT
                         </Link>
@@ -441,7 +444,7 @@ const OrderPage: React.FC = () => {
             </div>
 
 
-            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} onChange={onChangeTable}/>
+            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} onChange={onChangeTable} />
             <AddEditOrderModal
                 visible={addEditOrderModal.visible}
                 title={addEditOrderModal.title}

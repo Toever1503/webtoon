@@ -32,34 +32,7 @@ function getItem(
     } as MenuItem;
 }
 
-const items: MenuItem[] = [
-    getItem('Bảng điều khiển', '/', <DashboardOutlined />),
-    getItem('Quản lý đơn hàng', 'orders', <ShoppingCartOutlined />),
-    getItem('Thống kê', '/stats', <AreaChartOutlined />, [
-        getItem('Doanh thu', '/stats/revenue'),
-        // getItem('Tỉ lệ đăng ký gói', '/stats/registration-rate'),
-        getItem('Trạng thái đăng ký', '/stats/registration-status'),
-    ]),
 
-    getItem('Quản lý gói đọc', '/subscription-packs', <AppstoreOutlined />),
-
-    getItem('Quản lý truyện', 'parent-mangas', <FormOutlined />, [
-        getItem('Tất cả truyện', '/mangas'),
-        getItem('Quản lý thể loại', '/mangas/genres'),
-        getItem('Quản lý tác giả', '/mangas/authors'),
-        getItem('Thẻ', '/tag')
-    ]),
-
-    // getItem('Tin tức', 'parent-posts', <FormOutlined />, [
-    //     getItem('All Posts', 'posts'),
-    //     getItem('Categories', 'categories')
-    // ]),
-    // getItem('Bình luận', 'comments', <CommentOutlined />),
-    getItem('Người dùng', 'parent-users', <UserOutlined />, [
-        getItem('Quản lý người dùng', 'users'),
-        // getItem('My Profile', 'user-profile'),
-    ]),
-];
 
 
 
@@ -75,6 +48,10 @@ const App: React.FC = () => {
     const {
         token: { colorBgContainer },
     } = theme.useToken();
+
+    const [menuItems, setMenuItems] = useState<MenuItem[]>([
+        getItem('Bảng điều khiển', '/', <DashboardOutlined />)
+    ]);
 
     const onMenuClick = (item: MenuItem) => {
         console.log('onMenuClick', item?.key);
@@ -107,6 +84,60 @@ const App: React.FC = () => {
         }
         getCookie('token') ? null : navigate('/signin');
 
+
+        let mMenu: MenuItem[] = [getItem('Bảng điều khiển', '/', <DashboardOutlined />)];
+
+        if (hasAnyAuths(['ROLE_VIEW_STATISTIC']))
+            mMenu.push(getItem('Thống kê', '/stats/revenue', <AreaChartOutlined />));
+            
+        if (hasAnyAuths(['ROLE_MANAGE_ORDER']))
+            mMenu.push(getItem('Quản lý đơn hàng', 'orders', <ShoppingCartOutlined />, [
+                getItem('Danh sách đơn hàng', '/orders'),
+                getItem('Trạng thái đăng ký', '/stats/registration-status'),
+            ]));
+
+        if (hasAnyAuths(['ADMIN']))
+            mMenu.push(getItem('Quản lý gói đọc', '/subscription-packs', <AppstoreOutlined />,));
+
+        if (hasAnyAuths(['ROLE_MANAGE_MANGA']))
+            mMenu.push(getItem('Quản lý truyện', 'parent-mangas', <FormOutlined />, [
+                getItem('Tất cả truyện', '/mangas'),
+                getItem('Quản lý thể loại', '/mangas/genres'),
+                getItem('Quản lý tác giả', '/mangas/authors'),
+                getItem('Thẻ', '/tag')
+            ]),)
+        if (hasAnyAuths(['ADMIN'])) {
+            mMenu.push(getItem('Người dùng', 'parent-users', <UserOutlined />, [
+                getItem('Danh sách người dùng', 'users'),
+                // getItem('My Profile', 'user-profile'),
+            ]));
+        }
+        // [
+        //     getItem('Bảng điều khiển', '/', <DashboardOutlined />),
+        // getItem('Thống kê', '/stats', <AreaChartOutlined />, [
+        //     getItem('Doanh thu', '/stats/revenue'),
+        //     // getItem('Tỉ lệ đăng ký gói', '/stats/registration-rate'),
+        //     getItem('Trạng thái đăng ký', '/stats/registration-status'),
+        // ]),
+        //     getItem('Quản lý gói đọc', '/subscription-packs', <AppstoreOutlined />),
+        //     getItem('Quản lý truyện', 'parent-mangas', <FormOutlined />, [
+        //         getItem('Tất cả truyện', '/mangas'),
+        //         getItem('Quản lý thể loại', '/mangas/genres'),
+        //         getItem('Quản lý tác giả', '/mangas/authors'),
+        //         getItem('Thẻ', '/tag')
+        //     ]),
+
+        //     // getItem('Tin tức', 'parent-posts', <FormOutlined />, [
+        //     //     getItem('All Posts', 'posts'),
+        //     //     getItem('Categories', 'categories')
+        //     // ]),
+        //     // getItem('Bình luận', 'comments', <CommentOutlined />),
+        //     getItem('Người dùng', 'parent-users', <UserOutlined />, [
+        //         getItem('Quản lý người dùng', 'users'),
+        //         // getItem('My Profile', 'user-profile'),
+        //     ]),
+        // ]
+        setMenuItems(mMenu);
     }, []);
 
     return (
@@ -117,12 +148,12 @@ const App: React.FC = () => {
                 <Sider theme="light" collapsible width={'220px'} collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
                     <div className='flex items-center justify-center' style={{ height: 64, boxShadow: '0 1px 9px -3px rgba(0,0,0,.2)', zIndex: 1, position: 'relative' }} >
                         <span className='font-bold text-base'>
-                         {
-                            localStorage.getItem('fullName')
-                         }
+                            {
+                                localStorage.getItem('fullName')
+                            }
                         </span>
                     </div>
-                    <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={items} />
+                    <Menu onSelect={onMenuClick} triggerSubMenuAction='click' defaultSelectedKeys={['1']} mode="inline" items={menuItems} />
 
                     <Divider />
                     <a className='flex items-center justify-center space-x-2' onClick={logout}>
