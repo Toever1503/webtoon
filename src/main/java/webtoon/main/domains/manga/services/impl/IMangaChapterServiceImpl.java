@@ -150,9 +150,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-            mangaEntity.setMangaStatus(EMangaSTS.GOING);
-            if (!mangaEntity.getIsFree())
-                mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
+//            mangaEntity.setMangaStatus(EMangaSTS.GOING);
+//            if (!mangaEntity.getIsFree())
+//                mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
 
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
@@ -211,7 +211,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 List<MangaChapterImageEntity> oldImageEntities = this.chapterImageRepository.findAllByIdNotIn(keepingImageIds);
                 // task: need call storage api to remove
                 System.out.println(oldImageEntities.size());
-                this.chapterImageRepository.deleteAll(oldImageEntities);
+                this.chapterImageRepository.deleteAllById(oldImageEntities.stream().map(MangaChapterImageEntity::getId).collect(Collectors.toList()));
             }
 
             if (body.size() > 0 && needUploadFiles.size() > 0) {
@@ -241,7 +241,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 }).collect(Collectors.toList());
                 this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
             }
-            this.mangaService.saveEntity(mangaEntity);
+//            this.mangaService.saveEntity(mangaEntity);
             return MangaChapterDto.toDto(this.getById(mangaChapterEntity.getId()));
         } catch (Exception e) {
             e.printStackTrace();
