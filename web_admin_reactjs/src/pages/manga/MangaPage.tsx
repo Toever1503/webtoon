@@ -148,7 +148,7 @@ const MangaPage: React.FC = () => {
             render: (_, record) => (
                 <>
                     {
-                        record?.tags.length > 0 ?
+                        record?.tags?.length > 0 ?
                             // @ts-ignore
                             record.tags.map((tag: TagInput) => {
                                 return <Tag key={tag.id}>{tag.tagName}</Tag>

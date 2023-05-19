@@ -110,19 +110,19 @@ public class MangaEntity {
     @OrderBy("chapter_index desc")
     private Set<MangaChapterEntity> chapters;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH},fetch = FetchType.EAGER)
+    @ManyToMany
     @JoinTable(name = "tbl_manga_genre_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "genre_id")
     )
-    private Set<MangaGenreEntity> genres;
+    private List<MangaGenreEntity> genres;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @ManyToMany
     @JoinTable(name = "tbl_manga_author_relation",
             joinColumns = @JoinColumn(name = "manga_id"),
             inverseJoinColumns = @JoinColumn(name = "author_id")
     )
-    private Set<MangaAuthorEntity> authors;
+    private List<MangaAuthorEntity> authors;
 
     @Transient
     private List<TagEntity> tags;

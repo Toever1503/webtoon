@@ -1,5 +1,5 @@
 import { Button, DatePicker, Input, PaginationProps, Popconfirm, Select, Space, Table, Tag } from "antd";
-import { ColumnsType } from "antd/es/table";
+import { ColumnsType, TablePaginationConfig } from "antd/es/table";
 import { useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -309,6 +309,12 @@ const OrderPage: React.FC = () => {
         });
     };
 
+    const onChangeTable = (page: TablePaginationConfig) => {
+        console.log('page', page);
+        pageConfig.current = page.current || 1;
+        onCallApi();
+    }
+
     const onSearch = debounce(() => {
         onCallApi();
     });
@@ -435,7 +441,7 @@ const OrderPage: React.FC = () => {
             </div>
 
 
-            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} />
+            <Table columns={columns} loading={tableLoading} dataSource={dataSource} pagination={pageConfig} onChange={onChangeTable}/>
             <AddEditOrderModal
                 visible={addEditOrderModal.visible}
                 title={addEditOrderModal.title}

@@ -37,38 +37,44 @@ public class MangaResource2 {
 
     @PostMapping("filter")
     public Page<MangaDto> filter(@RequestBody MangaFilterInput input, Pageable page) {
-        List<Specification> specs = new ArrayList<>();
-        specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not());
-        specs.add((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
+        List<Specification<MangaEntity>> listSpecs = new ArrayList<Specification<MangaEntity>>();
 
         if (input.getStatus() != null)
-            specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus()));
+        {
+            Specification s = (root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus());
+            listSpecs.add(s);
+        }
 
         if (input.getQ() != null) {
             String qRegex = "%" + input.getQ() + "%";
-            specs.add((root, query, cb) -> cb.like(root.get(MangaEntity_.TITLE), qRegex));
+            listSpecs.add((root, query, cb) -> cb.or(
+                    cb.like(root.get(MangaEntity_.TITLE), qRegex),
+                    cb.like(root.get(MangaEntity_.mangaName), qRegex)
+            ));
         }
 
         if (input.getGenreId() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.join(MangaEntity_.GENRES).get(MangaGenreEntity_.ID), input.getGenreId()));
+            listSpecs.add((root, query, cb) -> root.join(MangaEntity_.GENRES).get(MangaGenreEntity_.ID).in(input.getGenreId()));
         }
         if (input.getAuthorId() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.join(MangaEntity_.AUTHORS).get(MangaAuthorEntity_.ID), input.getGenreId()));
+            listSpecs.add((root, query, cb) ->  root.join(MangaEntity_.AUTHORS).get(MangaAuthorEntity_.ID).in(input.getAuthorId()));
         }
         if (input.getIsShow() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_SHOW), input.getIsShow()));
-        }
-        if (input.getReleaseYear() != null) {
-            specs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus()));
+            listSpecs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_SHOW), input.getIsShow()));
         }
 
+        listSpecs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not());
+        listSpecs.add((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
+
         Specification<MangaEntity> finalSpec = null;
-        for (Specification spec : specs) {
+        for (Specification spec : listSpecs) {
             if (finalSpec == null)
                 finalSpec = Specification.where(spec);
             else finalSpec.and(spec);
         }
+
         return this.mangaService.filter(page, finalSpec);
+//        return this.mangaService.filter(page, Specification.where((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_SHOW), input.getIsShow())));
     }
 
     @PostMapping

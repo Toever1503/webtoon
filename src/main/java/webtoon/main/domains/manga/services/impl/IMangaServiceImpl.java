@@ -92,8 +92,8 @@ public class IMangaServiceImpl implements IMangaService {
             mangaEntity.setCommentCount(0);
         }
 
-        mangaEntity.setGenres(genreRepository.findAllById(model.getGenres()).stream().collect(Collectors.toSet()));
-        mangaEntity.setAuthors(authorRepository.findAllById(model.getAuthors()).stream().collect(Collectors.toSet()));
+        mangaEntity.setGenres(genreRepository.findAllById(model.getGenres()).stream().collect(Collectors.toList()));
+        mangaEntity.setAuthors(authorRepository.findAllById(model.getAuthors()).stream().collect(Collectors.toList()));
 
         mangaEntity.setCreatedBy(SecurityUtils.getCurrentUser().getUser());
         mangaEntity.setModifiedBy(mangaEntity.getCreatedBy());
