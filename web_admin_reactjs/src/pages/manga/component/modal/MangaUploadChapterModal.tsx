@@ -288,7 +288,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     formdata.append('id', chapterInput.id.toString());
                 formdata.append('chapterIndex', chapterInput?.chapterIndex?.toString() || '0');
                 formdata.append('chapterName', chapterInput.chapterName);
-                formdata.append('isRequiredVip', isRequireVipChapter.toString());
+                formdata.append('requiredVip', isRequireVipChapter.toString());
                 formdata.append('volumeId', chapterInput?.volumeId?.toString() || '0');
 
 

@@ -182,6 +182,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void deleteById(Long id) {
         OrderEntity entity = this.getById(id);
+        entity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         entity.setDeletedAt(Calendar.getInstance().getTime());
         this.orderRepository.saveAndFlush(entity);
     }
@@ -306,9 +307,9 @@ public class OrderServiceImpl implements IOrderService {
         orderEntity.setStatus(status);
         if (status.equals(EOrderStatus.COMPLETED)) { // need send mail
             this.plusReadTimeToUser(orderEntity);
-
             this.sendOrderInfoToMail(orderEntity);
         }
+        orderEntity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
         this.orderRepository.saveAndFlush(orderEntity);
     }
 

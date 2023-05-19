@@ -107,9 +107,11 @@ const OrderPage: React.FC = () => {
             title: t('order.table.modifiedBy'),
             dataIndex: 'modifiedBy',
             key: 'modifiedBy',
-            render: (text: IUserType) => <>{
-                text ? text.fullName : '-'
-            }</>,
+            render: (text: IUserType, record: IOrder) => <>
+                {
+                    record.modifiedBy && record.user_id.id != record.modifiedBy.id ? text.fullName : '-'
+                }
+            </>,
         },
         {
             title: t('order.table.createdAt'),
