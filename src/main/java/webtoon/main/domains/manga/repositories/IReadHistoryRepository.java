@@ -15,7 +15,10 @@ public interface IReadHistoryRepository extends JpaRepository<ReadHistory, Long>
     @Query("SELECT a FROM ReadHistory a where a.mangaEntity = ?1 ")
     ReadHistory findAllByManga( Long mangaEntity );
 
-    @Query("SELECT a FROM ReadHistory a where a.mangaEntity = ?1 and a.createdBy = ?2 ")
+    @Query("SELECT a FROM ReadHistory a where a.mangaEntity = ?2 and a.createdBy = ?1 ")
     ReadHistory findAllByCBAndMG( Long CreatByID, Long MangaID );
+
+    @Query(value = "SELECT * FROM tbl_read_history where created_by = ?1 ORDER BY created_date DESC LIMIT 0,5", nativeQuery = true)
+    List<ReadHistory> findAllByCreatedBy(Long CreatById);
 
 }

@@ -210,80 +210,78 @@
 
                             <div id="card-list" class="card-container manga-history-sidebar grid space-y-2">
                             </div>
+
                             <!--sự kiện đọc lịch sử từ localstorage-->
-
                             <script th:inline="javascript">
-                                    /*<![CDATA[*/
-                                    document.addEventListener('DOMContentLoaded',function () {
+                                document.addEventListener('DOMContentLoaded',function () {
 
-                                        const logger = /*[[${logger}]]*/ 'default';
-                                        if (typeof logger === "undefined" || logger === null) {
-                                            // Đọc thông tin từ Local Storage
-                                            const loggedUserJson = localStorage.getItem("users");
-                                            const loggedUser = JSON.parse(loggedUserJson) || [];
-                                            const cardList = document.getElementById('card-list');
-                                            for (let i = 0; i < loggedUser.length; i++) {
-                                                const user = loggedUser[i];
-                                                const chapterId = user.chapterId;
-                                                const mangaId = user.mangaId;
+                                    const logger = /*[[${logger}]]*/ 'default';
+                                    if (typeof logger === "undefined" || logger === null) {
+                                        // Đọc thông tin từ Local Storage
+                                        const loggedUserJson = localStorage.getItem("users");
+                                        const loggedUser = JSON.parse(loggedUserJson) || [];
+                                        const cardList = document.getElementById('card-list');
+                                        for (let i = 0; i < loggedUser.length; i++) {
+                                            const user = loggedUser[i];
+                                            const chapterId = user.chapterId;
+                                            const mangaId = user.mangaId;
 
-                                                fetch('http://localhost:8080/mangaTest/getManga/' + mangaId,{
-                                                    method: 'GET'
+                                            fetch('http://localhost:8080/mangaTest/getManga/' + mangaId,{
+                                                method: 'GET'
+                                            })
+                                                .then(res => {
+                                                    if (!res.ok){
+                                                        throw new Error('Network response was not ok');
+                                                    }
+                                                    return res.json();
                                                 })
-                                                    .then(res => {
-                                                        if (!res.ok){
-                                                            throw new Error('Network response was not ok');
-                                                        }
-                                                        return res.json();
-                                                    })
-                                                    .then(data => {
+                                                .then(data => {
 
-                                                        // Tạo thẻ card mới
-                                                        const cardContainer = document.createElement('div');
-                                                        cardContainer.setAttribute('class', 'card-container w-full flex gap-[10px] h-[90px]');
-                                                        const cardImage = document.createElement('div');
-                                                        cardImage.setAttribute('class', 'card-image w-[90px] h-full');
-                                                        const img = document.createElement('img');
-                                                        img.setAttribute('src', data.featuredImage);
-                                                        img.setAttribute('class','w-full h-full');
-                                                        cardImage.appendChild(img);
-                                                        const cardText = document.createElement('div');
-                                                        cardText.setAttribute('class', 'card-text ml-1');
-                                                        const cardTitle = document.createElement('h2');
-                                                        cardTitle.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
+                                                    // Tạo thẻ card mới
+                                                    const cardContainer = document.createElement('div');
+                                                    cardContainer.setAttribute('class', 'card-container w-full flex gap-[10px] h-[90px]');
+                                                    const cardImage = document.createElement('div');
+                                                    cardImage.setAttribute('class', 'card-image w-[90px] h-full');
+                                                    const img = document.createElement('img');
+                                                    img.setAttribute('src', data.featuredImage);
+                                                    img.setAttribute('class','w-full h-full');
+                                                    cardImage.appendChild(img);
+                                                    const cardText = document.createElement('div');
+                                                    cardText.setAttribute('class', 'card-text ml-1');
+                                                    const cardTitle = document.createElement('h2');
+                                                    cardTitle.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
+                                                    cardTitle.innerHTML = data.title;
+
+                                                    /*
+                                                    const MAX_LENGTH = 14; // Tối đa chiều cao của thẻ card-title
+                                                    if (data.title.length > MAX_LENGTH) {
+                                                        // Nếu tiêu đề vượt quá giới hạn, cắt giảm chiều dài và thêm dấu ba chấm
+                                                        cardTitle.innerHTML = data.title.slice(0, MAX_LENGTH) + '...';
+                                                    } else {
                                                         cardTitle.innerHTML = data.title;
+                                                    }
+                                                    */
+                                                    const cardLink  = document.createElement('a');
+                                                    console.log(data.title + ' title ')
+                                                    cardLink.setAttribute('class', 'card-link text-blue-500 hover:underline');
+                                                    cardLink.setAttribute('href', 'http://localhost:8080/manga/' + data.title + '/chapter/' + chapterId);
+                                                    cardLink.innerHTML = 'Đọc tiếp';
 
-                                                        /*
-                                                        const MAX_LENGTH = 14; // Tối đa chiều cao của thẻ card-title
-                                                        if (data.title.length > MAX_LENGTH) {
-                                                            // Nếu tiêu đề vượt quá giới hạn, cắt giảm chiều dài và thêm dấu ba chấm
-                                                            cardTitle.innerHTML = data.title.slice(0, MAX_LENGTH) + '...';
-                                                        } else {
-                                                            cardTitle.innerHTML = data.title;
-                                                        }
-                                                        */
-                                                        const cardLink  = document.createElement('a');
-                                                        console.log(data.title + ' title ')
-                                                        cardLink.setAttribute('class', 'card-link text-blue-500 hover:underline');
-                                                        cardLink.setAttribute('href', 'http://localhost:8080/manga/' + data.title + '/chapter/' + chapterId);
-                                                        cardLink.innerHTML = 'Đọc tiếp';
-
-                                                        cardText.appendChild(cardTitle);
-                                                        cardText.appendChild(cardLink);
-                                                        cardContainer.appendChild(cardImage);
-                                                        cardContainer.appendChild(cardText);
-                                                        cardList.appendChild(cardContainer);
-                                                    })
-                                                    .catch(error => {
-                                                        console.error('Error:', error);
-                                                    });
-                                            }
+                                                    cardText.appendChild(cardTitle);
+                                                    cardText.appendChild(cardLink);
+                                                    cardContainer.appendChild(cardImage);
+                                                    cardContainer.appendChild(cardText);
+                                                    cardList.appendChild(cardContainer);
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                });
                                         }
-                                    })
-                                    /*]]>*/
-
+                                    }
+                                })
                             </script>
                             <!--Kết thúc sự kiện đọc lịch sử từ localstorage-->
+
                         </div>
                         <div class="list-genre min-w-[200px] h-fit border p-[10px] mt-[15px] rounded">
                             <h3 class="border w-fit text-sm text-white font-medium rounded bg-[#eb3349] py-[5px] px-[10px]">

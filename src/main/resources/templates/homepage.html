@@ -400,13 +400,11 @@
 
                     <div id="card-list" class="card-container manga-history-sidebar grid space-y-2">
                     </div>
+
                     <!--sự kiện đọc lịch sử từ localstorage-->
-
                     <script th:inline="javascript">
-                        /*<![CDATA[*/
-                        document.addEventListener('DOMContentLoaded',function () {
-
-                            const logger = /*[[${logger}]]*/ 'default';
+                        document.addEventListener('DOMContentLoaded',async function () {
+                            const logger = [[${logger}]] /*'default'*/;
                             if (typeof logger === "undefined" || logger === null) {
                                 // Đọc thông tin từ Local Storage
                                 const loggedUserJson = localStorage.getItem("users");
@@ -415,13 +413,14 @@
                                 for (let i = 0; i < loggedUser.length; i++) {
                                     const user = loggedUser[i];
                                     const chapterId = user.chapterId;
+                                    const chapterIndex = user.chapterIndex;
                                     const mangaId = user.mangaId;
 
-                                    fetch('http://localhost:8080/mangaTest/getManga/' + mangaId,{
+                                    fetch('/mangaTest/getManga/' + mangaId, {
                                         method: 'GET'
                                     })
                                         .then(res => {
-                                            if (!res.ok){
+                                            if (!res.ok) {
                                                 throw new Error('Network response was not ok');
                                             }
                                             return res.json();
@@ -435,7 +434,7 @@
                                             cardImage.setAttribute('class', 'card-image w-[90px] h-full');
                                             const img = document.createElement('img');
                                             img.setAttribute('src', data.featuredImage);
-                                            img.setAttribute('class','w-full h-full');
+                                            img.setAttribute('class', 'w-full h-full');
                                             cardImage.appendChild(img);
                                             const cardText = document.createElement('div');
                                             cardText.setAttribute('class', 'card-text ml-1');
@@ -443,22 +442,27 @@
                                             cardTitle.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
                                             cardTitle.innerHTML = data.title;
 
-                                            /*
-                                            const MAX_LENGTH = 14; // Tối đa chiều cao của thẻ card-title
+                                            const cardChapter = document.createElement('h3');
+                                            cardChapter.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
+                                            cardChapter.innerHTML = 'Chương ' + chapterIndex;
+
+
+                                            const MAX_LENGTH = 20; // Tối đa chiều cao của thẻ card-title
                                             if (data.title.length > MAX_LENGTH) {
                                                 // Nếu tiêu đề vượt quá giới hạn, cắt giảm chiều dài và thêm dấu ba chấm
                                                 cardTitle.innerHTML = data.title.slice(0, MAX_LENGTH) + '...';
                                             } else {
                                                 cardTitle.innerHTML = data.title;
                                             }
-                                            */
-                                            const cardLink  = document.createElement('a');
+
+                                            const cardLink = document.createElement('a');
                                             console.log(data.title + ' title ')
                                             cardLink.setAttribute('class', 'card-link text-blue-500 hover:underline');
-                                            cardLink.setAttribute('href', 'http://localhost:8080/manga/' + data.title + '/chapter/' + chapterId);
+                                            cardLink.setAttribute('href', '/manga/' + data.title + '/chapter/' + chapterId);
                                             cardLink.innerHTML = 'Đọc tiếp';
 
                                             cardText.appendChild(cardTitle);
+                                            cardText.appendChild(cardChapter);
                                             cardText.appendChild(cardLink);
                                             cardContainer.appendChild(cardImage);
                                             cardContainer.appendChild(cardText);
@@ -468,13 +472,124 @@
                                             console.error('Error:', error);
                                         });
                                 }
+                            } else { // khi người dùng đăng nhập
+                                // Đọc thông tin từ Local Storage
+                                const logerId = logger.id;
+                                const loggedUserJson = localStorage.getItem("users");
+                                const loggedUser = JSON.parse(loggedUserJson) || [];
+                                const cardList = document.getElementById('card-list');
+                                for (let i = 0; i < loggedUser.length; i++) {
+                                    const user = loggedUser[i];
+                                    const chapterId0 = user.chapterId;
+                                    const mangaId0 = user.mangaId;
+
+                                    // gọi API để update thông tin lịch sử đọc truyện
+                                    await fetch('/history/updateReadHistoryAfterLogin/' + mangaId0 + '/' + chapterId0, {
+                                        method: 'GET'
+                                    })
+                                        .then(res => {
+                                            if (!res.ok) {
+                                                throw new Error('Network response was not ok');
+                                            }
+                                            return res.json();
+                                        })
+                                        .then(data => {
+                                            if (!data) {
+                                                throw new Error('Không thể cập nhật lịch sử đọc truyện');
+                                            }
+                                        })
+                                        .catch(error => {
+                                            console.error('Error:', error);
+                                        });
+                                }
+
+                                localStorage.removeItem("users");
+
+                                console.log("logerId: " + logerId);
+                                // gọi API để lấy thông tin lịch sử đọc truyện và hiển thị
+                                fetch('/history/getReadHistory/' + logerId, {
+                                    method: 'GET'
+                                })
+                                    .then(res => {
+                                        if (!res.ok) {
+                                            throw new Error('Network response was not ok');
+                                        }
+                                        return res.json();
+                                    })
+                                    .then(data => {
+                                        console.log("data: ", data);
+                                        for (let i = 0; i < data.length; i++) {
+                                            const data1 = data[i];
+                                            const chapterId1 = data1.chapterId;
+                                            const mangaId1 = data1.mangaId;
+                                            fetch('/mangaTest/getManga/' + mangaId1, {
+                                                method: 'GET'
+                                            })
+                                                .then(res => {
+                                                    if (!res.ok) {
+                                                        throw new Error('Network response was not ok');
+                                                    }
+                                                    return res.json();
+                                                })
+                                                .then(data => {
+
+                                                    // Tạo thẻ card mới
+                                                    const cardContainer = document.createElement('div');
+                                                    cardContainer.setAttribute('class', 'card-container w-full flex gap-[10px] h-[90px]');
+                                                    const cardImage = document.createElement('div');
+                                                    cardImage.setAttribute('class', 'card-image w-[90px] h-full');
+                                                    const img = document.createElement('img');
+                                                    img.setAttribute('src', data1.featuredImage);
+                                                    img.setAttribute('class', 'w-full h-full');
+                                                    cardImage.appendChild(img);
+                                                    const cardText = document.createElement('div');
+                                                    cardText.setAttribute('class', 'card-text ml-1');
+                                                    const cardTitle = document.createElement('h2');
+                                                    cardTitle.setAttribute('class', 'card-title text-[15px] font-semibold m-0 w-[140px]');
+                                                    cardTitle.innerHTML = data1.title;
+
+                                                    const cardChapter = document.createElement('h3');
+                                                    cardChapter.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
+                                                    cardChapter.innerHTML = 'Chương ' + data1.chapterIndex;
+
+
+                                                    const MAX_LENGTH = 20; // Tối đa chiều cao của thẻ card-title
+                                                    if (data1.title.length > MAX_LENGTH) {
+                                                        // Nếu tiêu đề vượt quá giới hạn, cắt giảm chiều dài và thêm dấu ba chấm
+                                                        cardTitle.innerHTML = data1.title.slice(0, MAX_LENGTH) + '...';
+                                                    } else {
+                                                        cardTitle.innerHTML = data1.title;
+                                                    }
+
+                                                    const cardLink = document.createElement('a');
+                                                    console.log(data1.title + ' title ')
+                                                    cardLink.setAttribute('class', 'card-link text-blue-500 hover:underline');
+                                                    cardLink.setAttribute('href', '/manga/' + data1.title + '/chapter/' + chapterId1);
+                                                    cardLink.innerHTML = 'Đọc tiếp';
+
+                                                    cardText.appendChild(cardTitle);
+                                                    cardText.appendChild(cardChapter);
+                                                    cardText.appendChild(cardLink);
+                                                    cardContainer.appendChild(cardImage);
+                                                    cardContainer.appendChild(cardText);
+                                                    cardList.appendChild(cardContainer);
+                                                })
+                                                .catch(error => {
+                                                    console.error('Error:', error);
+                                                });
+                                        }
+
+
+                                    })
+                                    .catch(error => {
+                                        console.error('Error:', error);
+                                    });
+
                             }
                         })
-                        /*]]>*/
                     </script>
-
-
                     <!--Kết thúc sự kiện đọc lịch sử từ localstorage-->
+
                 </div>
 
 

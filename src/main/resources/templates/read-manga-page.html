@@ -222,6 +222,7 @@
         <script th:inline="javascript">
             /*<![CDATA[*/
             const mangaId = /*[[${mangaData.getId()}]]*/ 'default';
+            const chapterIndex = /*[[${chapterData.chapterIndex}]]*/ 'default';
 
             window.addEventListener('DOMContentLoaded', function () {
                 // Kiểm tra xem trang đã được truy cập thông qua một liên kết chưa
@@ -241,7 +242,7 @@
                 let userIndex = users.findIndex((user) => user.mangaId === mangaId);
 
                 if (userIndex === -1) { // một mangaId chưa từng tồn tại trong mảng
-                    const newUser = { mangaId, chapterId };
+                    const newUser = { mangaId, chapterId, chapterIndex };
                     users.push(newUser);
                 } else { // mangaId đã có trong mảng
                     users[userIndex].chapterId = chapterId;
