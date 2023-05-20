@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.main.account.entities.ERoleConstants;
 import webtoon.main.account.entities.UserEntity;
 import webtoon.main.domains.manga.dtos.MangaChapterDto;
-import webtoon.main.domains.manga.dtos.MangaDto;
 import webtoon.main.domains.manga.entities.*;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
 import webtoon.main.domains.manga.enums.EMangaSTS;
@@ -166,7 +165,15 @@ public class MangaController {
             pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()).withSort(Sort.Direction.DESC, "id");
             Page<MangaVolumeEntity> volumeEntities = this.mangaVolumeService.filterEntity(pageable, Specification.where(spec));
 
+
+            if (!volumeEntities.isEmpty()) {
+                MangaChapterEntity firstChapterId = this.mangaChapterService.getFirstIdForVolType(volumeEntities.getContent().get(volumeEntities.getContent().size() - 1).getId());
+                model.addAttribute("firstChapterId", firstChapterId.getId());
+            }
+
             model.addAttribute("volumeEntities", volumeEntities.getContent());
+
+            model.addAttribute("freeChapters", this.mangaChapterService.getFreeChaptersForVolType(mangaEntity.getId()));
 
             model.addAttribute("hasPrevPage", volumeEntities.hasPrevious());
             model.addAttribute("hasNextPage", volumeEntities.hasNext());
@@ -178,10 +185,17 @@ public class MangaController {
             Page<MangaChapterEntity> chapterEntities = this.mangaChapterService.filter(pageable, Specification.where(spec));
             model.addAttribute("chapterEntities", chapterEntities.getContent());
 
+            model.addAttribute("freeChapters", this.mangaChapterService.getFreeChaptersForChapType(mangaEntity.getId()));
+
             model.addAttribute("hasPrevPage", chapterEntities.hasPrevious());
             model.addAttribute("hasNextPage", chapterEntities.hasNext());
             model.addAttribute("currentPage", chapterEntities.getNumber());
             model.addAttribute("totalPage", chapterEntities.getTotalPages());
+
+            if(!chapterEntities.isEmpty()){
+                MangaChapterEntity firstChapterId = this.mangaChapterService.getFirstIdForChapType(mangaEntity.getId());
+                model.addAttribute("firstChapterId", firstChapterId.getId());
+            }
         }
 
 

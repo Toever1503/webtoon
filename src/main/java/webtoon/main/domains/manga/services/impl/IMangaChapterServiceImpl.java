@@ -381,6 +381,11 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         return this.chapterRepository.getLastChapterIndexForVolType(volumeId).orElse(-1L);
     }
 
+    @Override
+    public MangaChapterEntity getFirstIdForVolType(Long volId) {
+        return this.chapterRepository.getFirstIdForVolType(volId);
+    }
+
     public static void main(String[] args) {
         String test = "id-9140";
         System.out.println(test.matches("id-\\d+"));
@@ -431,6 +436,21 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     @Override
     public Long countTotalChapterForMangaTypeVol(Long id) {
         return this.chapterRepository.countByMangaId(id);
+    }
+
+    @Override
+    public MangaChapterEntity getFirstIdForChapType(Long mangaId) {
+        return this.chapterRepository.getFirstIdForChapType(mangaId);
+    }
+
+    @Override
+    public List<MangaChapterEntity> getFreeChaptersForVolType(Long mangaId) {
+        return this.chapterRepository.getFreeChaptersForVolType(mangaId);
+    }
+
+    @Override
+    public List<MangaChapterEntity> getFreeChaptersForChapType(Long mangaId) {
+        return this.chapterRepository.getFreeChaptersForChapType(mangaId);
     }
 
 }
