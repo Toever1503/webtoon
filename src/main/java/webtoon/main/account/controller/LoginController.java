@@ -38,6 +38,8 @@ public class LoginController {
                               HttpServletRequest req,
                               Model modelS) {
         try {
+            model.setUsername(model.getUsername().trim().toLowerCase());
+            model.setPassword(model.getPassword().trim().toLowerCase());
             this.loginService.login(model, req);
             String redirectTo = (String) session.getAttribute("redirectTo");
             if(redirectTo== null) redirectTo = "";

@@ -332,7 +332,7 @@
                                 <ul th:if="${model.volumeEntities.size() > 0 && volI.index < 1}"
                                     class="grid mt-[10px] gap-[5px] p-0 px-[15px]"
                                     th:each="volume,volI : ${model.volumeEntities}">
-                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 5}">
+                                    <li th:each="chapter,iter: ${volume.chapterEntities}" th:if="${iter.index < 3}">
                                         <a th:href="@{'/manga/'+${model.mangaName}+'/chapter/'+${chapter.id}}"
                                            class="hover:underline"
                                            th:text="${'Chương ' + (chapter.chapterIndex + 1) + (chapter.chapterName.length() > 0 ? (': ' + chapter.chapterName) : '')}"

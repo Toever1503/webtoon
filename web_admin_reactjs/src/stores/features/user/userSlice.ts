@@ -24,6 +24,8 @@ export const userSlice = createSlice({
       state.data = [action.payload.data, ...state.data]
     },
     editUser: (state, action: PayloadAction<IUserType>) => {
+      console.log('action.payload', action.payload);
+      
       state.data = state.data.map((item: IUserType) => {
         if (item.id === action.payload.id) {
           return action.payload;

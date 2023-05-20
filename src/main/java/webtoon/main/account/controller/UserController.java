@@ -37,6 +37,7 @@ public class UserController {
         }
         UserEntity user = userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
         model.addAttribute("user", user);
+        model.addAttribute("currentTab", "profile");
         return "account/profile";
     }
 
@@ -59,6 +60,8 @@ public class UserController {
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         if (loggedUser == null)
             return "redirect:/signin?redirectTo=/user/change_password";
+
+        model.addAttribute("currentTab", "change_password");
         return "account/change_password";
     }
 
@@ -90,10 +93,12 @@ public class UserController {
     }
 
     @RequestMapping("update_more_info")
-    public String updateMoreInfo(HttpSession session) {
+    public String updateMoreInfo(HttpSession session, Model model) {
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         if (loggedUser == null)
             return "redirect:/signin?redirectTo=/user/update_more_info";
+
+        model.addAttribute("currentTab", "profile");
         return "account/update_more_info";
     }
 

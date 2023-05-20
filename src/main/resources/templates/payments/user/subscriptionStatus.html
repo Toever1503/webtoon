@@ -17,7 +17,7 @@
         <div class="grid grid-cols-4 min-h-[670px]">
             <div th:replace="account/fragments/sidebar :: user-sidebar" />
 
-            <div class="col-span-3 w-[780px] p-4 mt-4 bg-white">
+            <div class="col-span-3 mx-auto w-[780px] p-4 mt-4 bg-white">
                 <h3 class="mb-[10px] font-semibold text-2xl">Thông tin gói</h3>
 
                 <p class="mb-[15px]" th:if="${!isUsingTrial && currentUsingSubsPack == null && session.loggedUser.role.roleName.name() == 'CUS'}">Hiện bạn chưa sử dụng gói nào!</p>
@@ -31,7 +31,7 @@
                 <div th:if="${isUsingTrial && session.loggedUser.role.roleName.name() == 'CUS'}">
                     <p>Bạn đang sử dụng gói dùng thử 3 ngày.</p>
                     <p>Thời hạn đọc đến: <span
-                            th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
+                            th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy HH:mm')}"></span>
                     </p>
                     <p>Trạng thái: 
                         <span th:if="${!isTrialExpired}" class="text-green-500 font-semibold">Đang hoạt động</span>
@@ -58,7 +58,7 @@
 
                     </p>
                     <p>Thời hạn đọc đến: <span
-                            th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy')}"></span>
+                            th:text="${#dates.format(session.loggedUser.getCanReadUntilDate(), 'dd-MM-yyyy HH:mm')}"></span>
                     </p>
                     <p>Trạng thái:
                         <span th:if="${!isExpiredSub}" class="text-green-500 font-semibold">Đang hoạt động</span>

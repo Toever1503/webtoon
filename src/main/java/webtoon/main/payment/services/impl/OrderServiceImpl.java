@@ -391,12 +391,11 @@ public class OrderServiceImpl implements IOrderService {
         // update user current used subs
         if (orderEntity.getUser_id().getCurrentUsedSubsId() == null) {
             orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
-            orderEntity.getUser_id().setFirstBoughtSubsDate(Calendar.getInstance().getTime());
-
         }  if (orderEntity.getSubs_pack_id().getId() > orderEntity.getUser_id().getCurrentUsedSubsId()) {
             orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
         }
 
+        orderEntity.getUser_id().setFirstBoughtSubsDate(Calendar.getInstance().getTime());
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if(orderEntity.getUser_id().getCanReadUntilDate() == null){
             canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);

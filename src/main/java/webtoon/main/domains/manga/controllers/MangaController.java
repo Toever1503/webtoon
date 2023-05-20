@@ -61,7 +61,7 @@ public class MangaController {
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()
         ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
-        Specification  mangaSpecFree = Specification.where(
+        Specification mangaSpecFree = Specification.where(
                         (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not())
                 .and((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_FREE), true))
                 .and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
@@ -125,10 +125,11 @@ public class MangaController {
             int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             canReadChapter = result >= 0;
 
-            // if user is emp or admin, allow to read
-            if (!userEntity.getRole().getRoleName().equals(ERoleConstants.CUS))
-                canReadChapter = true;
         }
+
+        // if user is emp or admin, allow to read
+        if (userEntity != null && !userEntity.getRole().getRoleName().equals(ERoleConstants.CUS))
+            canReadChapter = true;
 
         model.addAttribute("canReadChapter", canReadChapter);
 
@@ -195,7 +196,7 @@ public class MangaController {
         boolean canReadChapter = false;
         if (chapterEntity.getRequiredVip() == true) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            if (loggedUser != null) {
+            if (loggedUser != null && loggedUser.getRole().getRoleName().equals(ERoleConstants.CUS)) {
                 int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 canReadChapter = result >= 0;
             }

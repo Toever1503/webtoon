@@ -10,7 +10,7 @@
             />
         </div>
         <div>
-            <h2 class="text-center text-xl" th:text="${session.loggedUser.fullName}"></h2>
+            <h2 class="text-center text-[17px] font-semibold" th:text="${session.loggedUser.fullName}"></h2>
         </div>
         <div class="text-[13px] text-center mb-[15px]">
             Thời hạn đọc còn lại:
@@ -35,7 +35,7 @@
             <button
                     th:onclick="| window.location.href='/user/profile'|"
                     type="button"
-                    th:class="${'relative inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white '}"
+                    th:class="${'relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white ' + (currentTab != null && currentTab == 'profile' ? ' bg-red-400 text-white': ' bg-white')}"
             >
                 <svg
                         aria-hidden="true"
@@ -54,7 +54,7 @@
             </button>
 
             <button type="button" th:onclick="|window.location.href='/user/change_password'|"
-                    class="relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white">
+                    th:class="${'relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white ' + (currentTab != null && currentTab == 'change_password' ? ' bg-red-400 text-white': ' bg-white')}">
                 <i class="fas fa-lock"></i>
                 <span> Đổi mật khẩu</span>
             </button>
@@ -62,14 +62,13 @@
             <button
                     th:onclick="| window.location.href='/user/subscription-status'|"
                     type="button"
-                    class="relative gap-[10px] inline-flex items-center w-full px-4 py-2 text-sm font-medium border-b rounded-t-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white"
-            >
+                    th:class="${'relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white ' + (currentTab != null && currentTab == 'subscription-status' ? ' bg-red-400 text-white': ' bg-white')}">
                 <i class="fas fa-window-maximize"></i>
                 <span>Gói của bạn</span>
             </button>
 
             <button type="button" th:onclick="| window.location.href='/user/order-history?status=COMPLETED&search='|"
-                    class="relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 bg-white focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white">
+                    th:class="${'relative inline-flex gap-[10px] items-center w-full px-4 py-2 text-sm font-medium border-b rounded-b-md border-gray-200 focus:z-10 focus:ring-2 hover:bg-red-400 hover:text-white ' + (currentTab != null && currentTab == 'order-history' ? ' bg-red-400 text-white': ' bg-white')}">
                 <i class="fas fa-history"></i>
                 <span>Lịch sử mua</span>
             </button>
