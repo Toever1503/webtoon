@@ -112,7 +112,7 @@
                                 class="px-6 py-4"
                                 th:text="${item.subs_pack_id.monthCount + ' tháng'}"
                         ></td>
-                        <td class="px-6 py-4" th:text="${#dates.format(item.created_at, 'dd-MM-yyyy HH:mm:ss')}">
+                        <td class="px-6 py-4" th:text="${#dates.format(item.createdAt, 'dd-MM-yyyy HH:mm:ss')}">
                         </td>
 
                         <td th:switch="${status}">
