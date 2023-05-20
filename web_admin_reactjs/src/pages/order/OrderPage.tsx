@@ -339,6 +339,10 @@ const OrderPage: React.FC = () => {
             }>) => {
                 console.log('order data: ', res.data);
                 dispatch(setOrderData(res.data.content));
+                setPageConfig({
+                    ...pageConfig,
+                    total: res.data.totalElements,
+                });
             })
             .catch(err => {
                 console.log('filter error: ', err);

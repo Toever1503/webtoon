@@ -7,7 +7,7 @@ import IUpgradeOrderInput from "./types/IUpgradeOrderInput";
 
 const basePath: String = "/orders";
 
-const filterOrder = async (input: IOrderFilterInput) => mangaAxios.post(`${basePath}/filter?sort=id,desc`, input);
+const filterOrder = async (input: IOrderFilterInput) => mangaAxios.post(`${basePath}/filter?sort=createdAt,desc`, input);
 
 
 

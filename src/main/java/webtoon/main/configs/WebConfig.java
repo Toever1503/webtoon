@@ -41,7 +41,9 @@ public class WebConfig implements WebMvcConfigurer {
         // session.getAttribute("loggedUser");
         // PUBLIC PATH  
         return new OrRequestMatcher(
+                new AntPathRequestMatcher("/fakeData"),
                 new AntPathRequestMatcher("/index"),
+
                 new AntPathRequestMatcher("/signin"),
                 new AntPathRequestMatcher("/static/**")
                 , new AntPathRequestMatcher("/")

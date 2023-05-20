@@ -56,7 +56,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderDto add(OrderModel orderModel) {
         OrderEntity orderEntity = OrderEntity.builder()
-                .created_at(orderModel.getCreated_at())
+                .createdAt(orderModel.getCreated_at())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
@@ -73,7 +73,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderDto update(OrderModel orderModel) {
         OrderEntity orderEntity = this.getById(orderModel.getId());
-        orderEntity.setCreated_at(orderModel.getCreated_at());
+        orderEntity.setCreatedAt(orderModel.getCreated_at());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());

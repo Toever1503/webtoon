@@ -48,7 +48,7 @@ public class OrderDto {
 
         return OrderDto.builder()
                 .id(orderEntity.getId())
-                .created_at(orderEntity.getCreated_at())
+                .created_at(orderEntity.getCreatedAt())
                 .modifiedAt(orderEntity.getModifiedAt())
                 .finalPrice(orderEntity.getFinalPrice())
                 .orderType(orderEntity.getOrderType())
