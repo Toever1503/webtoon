@@ -143,8 +143,8 @@ public class MangaController {
 //		hiển thị số sao và sô bản ghi ratingy
         List<Map> list = this.ratingService.getRating(mangaEntity.getId());
         Map<EMangaSTS, String> mangaStatusMap = new HashMap<>();
-        mangaStatusMap.put(EMangaSTS.COMING, "Đang bắt đầu");
-        mangaStatusMap.put(EMangaSTS.GOING, "Đang thực hiện");
+        mangaStatusMap.put(EMangaSTS.COMING, "Sắp ra mắt");
+        mangaStatusMap.put(EMangaSTS.GOING, "Đang ra");
         mangaStatusMap.put(EMangaSTS.ON_STOPPING, "Đang tạm dừng");
         mangaStatusMap.put(EMangaSTS.COMPLETED, "Đã hoàn thành");
 

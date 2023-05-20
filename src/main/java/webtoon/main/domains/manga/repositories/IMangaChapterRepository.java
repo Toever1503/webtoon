@@ -48,8 +48,12 @@ public interface IMangaChapterRepository extends JpaRepository<MangaChapterEntit
     List<MangaChapterEntity> findPrevChapterForDisplayChapType(Long chapterID, Long mangaId, Pageable page);
 
     @Modifying
-    @Query("UPDATE  FROM MangaChapterEntity c set c.chapterIndex = c.chapterIndex-1 where c.chapterIndex > ?1")
-    void reindexChapterAfterIndex(Integer index);
+    @Query("UPDATE  FROM MangaChapterEntity c set c.chapterIndex = c.chapterIndex-1 where c.chapterIndex > ?1 and c.manga.id = ?2")
+    void reindexChapterAfterIndex(Integer index, Long mangaId);
+
+    @Modifying
+    @Query("UPDATE  FROM MangaChapterEntity c set c.chapterIndex = c.chapterIndex-1 where c.chapterIndex > ?1 and c.mangaVolume.id = ?2")
+    void reindexChapterAfterIndexForVol(Integer index, Long volId);
 
     @Query("select p from MangaChapterEntity  p where  p.mangaVolume.id = ?1")
     List<MangaChapterEntity> findByVolumeId(@Param("id") Long id);
