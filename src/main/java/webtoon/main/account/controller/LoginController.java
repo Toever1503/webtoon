@@ -47,7 +47,7 @@ public class LoginController {
             UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
             if (loggedUser.getPhone() == null)
                 return "redirect:/user/update_more_info";
-            return "redirect:/" + (redirectTo.isEmpty() ? "" : "/" + redirectTo);
+            return "redirect:" + (redirectTo.isEmpty() ? "/" : redirectTo);
         } catch (CustomHandleException e) {
             e.printStackTrace();
             if (e.getCode() == 0) {
