@@ -79,7 +79,7 @@ public class MangaSearchController {
         model.addAttribute("mangaGenre", mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);
 
-        return "/manga/search";
+        return "manga/search";
     }
 
 }
