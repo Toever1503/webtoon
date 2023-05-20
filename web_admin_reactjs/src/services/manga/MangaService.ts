@@ -49,6 +49,7 @@ export type MangaFilterInput = {
     q?: string;
     releaseStatus: string;
     timeRange?: Dayjs[];
+    mangaType: MangaType;
 }
 const findById = async (id: number | string) => mangaAxios.get(`${basePath}/${id}`);
 
