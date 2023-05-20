@@ -101,7 +101,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
             Long volId = null;
             Integer index = entity.getChapterIndex();
 
-            if (entity.getManga() == null)
+            if (entity.getMangaVolume() != null)
                 volId = entity.getMangaVolume().getId();
             else mangaId = entity.getManga().getId();
 
