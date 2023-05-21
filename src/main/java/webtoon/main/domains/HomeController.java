@@ -61,7 +61,7 @@ public class HomeController {
 
         @RequestMapping(value = { "/", "/index" })
         public String homepage(Model model, Pageable pageable,
-                        @RequestParam(required = false, name = "login-type") Integer hasLogged, HttpSession session) {
+                        @RequestParam(required = false, name = "loginType") Integer hasLogged, HttpSession session) {
                 Specification latestMangaSpec = Specification.where(
                                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not())
                                 .and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));

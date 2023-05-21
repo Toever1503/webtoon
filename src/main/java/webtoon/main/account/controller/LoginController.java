@@ -49,14 +49,7 @@ public class LoginController {
             UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
             if (loggedUser.getPhone() == null)
                 return "redirect:/user/update_more_info";
-            return "redirect:" + (redirectTo.isEmpty() ? "/" : redirectTo);
-        } catch (CustomHandleException e) {
-            e.printStackTrace();
-            if (e.getCode() == 0) {
-                return "login error";
-            }
-            modelS.addAttribute("message", "Tài khoản hoặc mật khẩu không chính xác!");
-            return "account/login-form";
+            return "redirect:" + (redirectTo.isEmpty() ? "/?loginType=0" : redirectTo);
         }
         catch (Exception e){
             e.printStackTrace();
@@ -84,9 +77,9 @@ public class LoginController {
                 return "redirect:/user/update_more_info";
 
             if (redirectTo != null)
-                return "redirect:" + redirectTo + "?login-type=" + result;
+                return "redirect:" + redirectTo + "?loginType=" + result;
             else
-                return "redirect:/index?login-type=" + result;
+                return "redirect:/index?loginType=" + result;
         }
 
     }
