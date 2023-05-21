@@ -153,7 +153,7 @@
               th:onclick="showPaymentModal(this)"
               class="mt-[20px] bg-red-500 hover:bg-red-600 text-white text-xl py-[10px] px-[20px] rounded cursor-pointer">
 
-              <span th:text="${session.loggedUser.canReadUntilDate.after(#dates.createNow()) ? 'Mua thêm': 'Chọn'}">Chọn</span>
+              <span th:text="${session.loggedUser.canReadUntilDate != null && session.loggedUser.canReadUntilDate.after(#dates.createNow()) ? 'Mua thêm': 'Chọn'}">Chọn</span>
             </span>
 
             <a th:if="${session.loggedUser == null}" href="/signin?redirectTo=/subscription_pack/load"
