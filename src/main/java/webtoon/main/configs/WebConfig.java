@@ -97,7 +97,8 @@ public class WebConfig implements WebMvcConfigurer {
                         .allowedOrigins(
                                 "http://localhost:5173",
                                 "http://127.0.0.1:5173",
-                                "http://35.229.243.12:5173"
+                                "http://35.229.243.12:5173",
+                                "https://shikishiki.site"
                         )
                         .allowedOriginPatterns("*.*.*.*:*")
                         .allowCredentials(true)
