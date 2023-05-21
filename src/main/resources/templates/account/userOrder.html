@@ -29,13 +29,13 @@
 
               <!-- Tabs -->
               <ul id="tabs" class="inline-flex pt-2 px-1 w-full border-b">
-                <li th:class="${status == 'PENDING_PAYMENT'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'">
-                  <a href="/user/order-history?status=PENDING_PAYMENT&search=">
-                    Chờ thanh toán
-                    <span class="text-red-500" th:if="${pendingPaymentCount > 0}">
-                      (<span th:text="${pendingPaymentCount}"> </span>)
-                    </span>
-                  </a></li>
+<!--                <li th:class="${status == 'PENDING_PAYMENT'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'">-->
+<!--                  <a href="/user/order-history?status=PENDING_PAYMENT&search=">-->
+<!--                    Chờ thanh toán-->
+<!--                    <span class="text-red-500" th:if="${pendingPaymentCount > 0}">-->
+<!--                      (<span th:text="${pendingPaymentCount}"> </span>)-->
+<!--                    </span>-->
+<!--                  </a></li>-->
 
                 <li th:class="${status == 'USER_CONFIRMED_BANKING'} ? 'bg-white border-t border-r border-l -mb-px px-4 text-gray-800 font-semibold py-2 rounded-t':'px-4 text-gray-800 font-semibold py-2 rounded-t'">
                   <a href="/user/order-history?status=USER_CONFIRMED_BANKING&search=">Chờ admin xác nhận

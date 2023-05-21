@@ -24,9 +24,10 @@ export default {
         revenue: {
             title: 'Thống kê doanh thu',
             totalRevenueThisMonth: 'Tổng doanh thu tháng này',
-            totalSubscriber: 'Tổng số người đăng ký tháng này',
+            totalNewSubscriber: 'Tổng số người đăng ký mới tháng này',
             totalSubscriberOnTrial: 'Tổng số người đăng ký dùng thử tháng này',
             totalRevenueBySubsPack: 'Doanh thu theo gói đăng ký',
+            totalRegisterPeopleBySubsPack: 'Số người mua theo từng gói',
             revenueByDay: 'Doanh thu theo ngày',
             monthlyRevenue: 'Doanh thu hàng tháng',
         },
@@ -42,7 +43,7 @@ export default {
             }
         },
         registrationRate: {
-            title: 'Tỉ lệ người đăng ký hàng tháng',
+            title: 'Số người gia hạn hàng tháng',
         },
     },
     manga: {
@@ -289,6 +290,7 @@ export default {
                     chooseUser: 'Chọn người dùng',
                     'sure-complete': 'Bạn chắc chắn muốn hoàn tất đơn hàng này?',
                     'mark-complete': 'Cập nhật hoàn tất',
+                    sure: 'Bạn chắc chắn?',
                 }
             },
             actions: {

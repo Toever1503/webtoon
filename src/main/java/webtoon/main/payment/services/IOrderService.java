@@ -72,7 +72,7 @@ public interface IOrderService {
 
     Long totalRevenueThisMonth();
 
-    Long countTotalRegisterThisMonth();
+    Long countTotalNewRegisterThisMonth();
 
     List<Object[]> sumRevenuePerMonthByYear(String year);
 
@@ -91,4 +91,6 @@ public interface IOrderService {
     void plusReadTimeToUser(OrderEntity orderEntity);
 
     Long count(Specification<OrderEntity> spec);
+
+    List<Object[]> countTotalPeoplePerSubsPackByMonth(String monthDate);
 }

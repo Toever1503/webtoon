@@ -57,8 +57,8 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
     @Query("select sum(o.finalPrice) from tbl_order o where o.status = 'COMPLETED' and function('date_format', o.createdAt, '%Y, %m') = function('date_format', CURRENT_DATE, '%Y, %m')")
     Long totalRevenueThisMonth();
 
-    @Query("select count(o) from tbl_order o where o.status = 'COMPLETED' AND function('date_format', o.createdAt, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
-    Long countTotalRegisterThisMonth();
+    @Query("select count(o) from tbl_order o where o.orderType = 'NEW' and o.status = 'COMPLETED' AND function('date_format', o.createdAt, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
+    Long countTotalNewRegisterThisMonth();
 
 
     @Query(value = "SELECT DATE_FORMAT(created_at, \"%Y-%m\") as k, SUM(final_price) as v FROM `tbl_order` \n" +
@@ -118,4 +118,13 @@ public interface IOrderRepository extends JpaRepository<OrderEntity, Long>, JpaS
     List<Object[]> calcNotRenewOrderPerMonthByYear(@Param("year") String year);
 
 
+    @Query(value = "SELECT s.id, s.subs_name as name, COUNT(o.id) as value FROM tbl_order as o\n" +
+            "join tbl_subscription_pack as s on s.id = o.subs_pack_id\n" +
+            "where o.status = 'COMPLETED' and DATE_FORMAT(o.created_at, '%Y-%m') = :monthDate \n" +
+            "group by s.subs_name\n" +
+            "order by s.id", nativeQuery = true)
+    List<Object[]> countTotalPeoplePerSubsPackByMonth(@Param("monthDate") String monthDate);
+
+    @Query("select count(o) from tbl_order o where o.status = 'COMPLETED' AND function('date_format', o.createdAt, '%Y, %m') >= function('date_format', CURRENT_DATE, '%Y, %m')")
+    Long countTotalCompletedOrderThisMonth();
 }

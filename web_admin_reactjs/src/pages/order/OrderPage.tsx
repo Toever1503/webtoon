@@ -332,13 +332,13 @@ const OrderPage: React.FC = () => {
                 paymentMethod: filterInput.paymentMethod === 'ALL' ? undefined : filterInput.paymentMethod,
                 fromDate: filterInput.timeRange.length > 0 ? filterInput.timeRange[0].format('YYYY-MM-DD') : undefined,
                 toDate: filterInput.timeRange.length > 0 ? filterInput.timeRange[1].format('YYYY-MM-DD') : undefined,
-            })
+            }, pageConfig.current ? pageConfig.current - 1 : 0, pageConfig.pageSize)
             .then((res: AxiosResponse<{
                 content: IOrder[],
                 totalElements: number
             }>) => {
                 console.log('order data: ', res.data);
-                dispatch(setOrderData(res.data.content));
+                setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, res.data.content));
                 setPageConfig({
                     ...pageConfig,
                     total: res.data.totalElements,
@@ -361,8 +361,7 @@ const OrderPage: React.FC = () => {
             setHasInitialized(true);
         }
 
-        setDataSource(reIndexTbl(pageConfig.current || 1, pageConfig.pageSize || 0, orderState.data));
-    }, [orderState]);
+    }, []);
 
     return (<>
         <div className="space-y-3 py-3">

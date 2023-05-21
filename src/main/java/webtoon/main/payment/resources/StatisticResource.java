@@ -50,9 +50,9 @@ public class StatisticResource {
         return this.orderService.totalRevenueThisMonth();
     }
 
-    @GetMapping("count-total-register-this-month")
-    public Long countTotalRegisterThisMonth() {
-        return this.orderService.countTotalRegisterThisMonth();
+    @GetMapping("count-total-new-register-this-month")
+    public Long countTotalNewRegisterThisMonth() {
+        return this.orderService.countTotalNewRegisterThisMonth();
     }
 
     @GetMapping("count-total-register-trial-this-month")
@@ -72,8 +72,12 @@ public class StatisticResource {
 
     @GetMapping("sum-revenue-per-subsPack-by-month")
     public List<Object[]> sumRevenuePerSubsPackByMonth(@RequestParam String monthDate) {
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM");
         return this.orderService.sumRevenuePerSubsPackByMonth(monthDate);
+    }
+
+    @GetMapping("count-total-people-per-subsPack-by-month")
+    public List<Object[]> countTotalPeoplePerSubsPackByMonth(@RequestParam String monthDate){
+        return this.orderService.countTotalPeoplePerSubsPackByMonth(monthDate);
     }
 
     @GetMapping("count-total-subscriber-status-per-month-by-year")

@@ -59,6 +59,11 @@
           </li>
         </ul>
       </div>
+
+      <p th:if="${hasConfirmingOrder}" class="text-center mt-[15px] bg-orange-100 border-l-4 border-orange-500 text-orange-700 p-4">
+        Bạn có đơn hàng đang chờ admin xác nhận. Vui lòng đợi admin xác nhận xong để có thể mua thêm. <br/>
+        <span>Bấm vào <a href="/user/order-history?status=USER_CONFIRMED_BANKING&search=" class="text-blue-400 hover:text-blue-500">đây</a> để xem chi tiết.</span>
+      </p>
     </div>
 
     <!-- begin subscription list -->
@@ -75,6 +80,7 @@
     </script>
 
     <div class="subscription-list mt-[50px]">
+
 
       <ul class="flex flex-wrap gap-[10px] justify-center">
 
@@ -142,11 +148,12 @@
 
           <div class="flex justify-center">
 
-            <span th:if="${session.loggedUser != null && session.loggedUser.role.roleName.name() == 'CUS'}" th:data-id="${item.id}" th:data-name="${item.name}"
+            <span th:if="${session.loggedUser != null && session.loggedUser.role.roleName.name() == 'CUS' && !hasConfirmingOrder}" th:data-id="${item.id}" th:data-name="${item.name}"
               th:data-price="${#numbers.formatDecimal(item.price, 0, 'POINT', 0, 'POINT') }"
               th:onclick="showPaymentModal(this)"
               class="mt-[20px] bg-red-500 hover:bg-red-600 text-white text-xl py-[10px] px-[20px] rounded cursor-pointer">
-              Chọn
+
+              <span th:text="${session.loggedUser.canReadUntilDate.after(#dates.createNow()) ? 'Mua thêm': 'Chọn'}">Chọn</span>
             </span>
 
             <a th:if="${session.loggedUser == null}" href="/signin?redirectTo=/subscription_pack/load"
@@ -158,6 +165,7 @@
 
       </ul>
 
+      <p class="text-[12px] text-center mt-[10px]">Lưu ý: Giá trên đã bao gồm VAT</p>
     </div>
 
     <!-- end subscription list -->
