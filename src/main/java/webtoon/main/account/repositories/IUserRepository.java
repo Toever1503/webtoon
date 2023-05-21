@@ -16,6 +16,8 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long>, JpaSpe
 
     boolean existsByEmail(String email);
 
+    boolean existsByPhone(String phone);
+
     boolean existsByUsernameAndIdNotLike(String username, Long id);
 
     boolean existsByEmailAndIdNotLike(String email, Long id);

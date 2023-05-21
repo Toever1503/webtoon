@@ -9,6 +9,8 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
+import org.springframework.validation.BindingResult;
+import org.thymeleaf.util.StringUtils;
 import webtoon.main.account.configs.security.CustomUserDetail;
 import webtoon.main.account.configs.security.jwt.JwtProvider;
 import webtoon.main.account.dtos.LoginResponseDto;
@@ -19,6 +21,7 @@ import webtoon.main.account.enums.ESex;
 import webtoon.main.account.enums.EStatus;
 import webtoon.main.account.inputs.LoginInput;
 import webtoon.main.account.inputs.UserInput;
+import webtoon.main.account.models.CreateUserModel;
 import webtoon.main.account.repositories.IAuthorityRepository;
 import webtoon.main.account.repositories.IRoleRepository;
 import webtoon.main.account.repositories.IUserRepository;
@@ -28,6 +31,7 @@ import webtoon.main.utils.exception.CustomHandleException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.transaction.Transactional;
+import javax.validation.ValidationException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -170,6 +174,56 @@ public class UserServiceImpl implements IUserService {
         this.userRepository.saveAndFlush(entity);
         return UserDto.toDto(entity);
     }
+
+    @Override
+    public UserDto addDK(CreateUserModel input, BindingResult bindingResult) {
+        UserEntity entity = new UserEntity();
+
+        List<String> errors = new ArrayList<>();
+
+        // Kiểm tra xem email đã được sử dụng chưa
+        if (userRepository.existsByEmail(input.getEmail())) {
+            errors.add("Email này đã được sử dụng để đăng kí!");
+        }
+
+        // Kiểm tra xem số điện thoại đã được sử dụng chưa
+        if (userRepository.existsByPhone(input.getPhone())) {
+            errors.add("Số điện thoại này đã được sử dụng để đăng kí!");
+        }
+
+        // Kiểm tra xem password và confirm password có khớp nhau hay không
+        if (!input.getPassword().equals(input.getRePassword())) {
+            errors.add("Mật khẩu nhập lại không khớp!");
+        }
+
+        if (!errors.isEmpty()) {
+            throw new ValidationException(errors.toString());
+        }
+
+        entity.setPassword(this.passwordEncoder.encode(input.getPassword()));
+        entity.setPhone(input.getPhone());
+        entity.setUsername(input.getUsername());
+        entity.setFullName(input.getFullName());
+        entity.setEmail(input.getEmail());
+
+        this.userRepository.saveAndFlush(entity);
+        return UserDto.toDto(entity);
+    }
+
+
+    @Override
+    public void validateUser(CreateUserModel createUserModel, List<String> errors){
+        if (userRepository.existsByEmail(createUserModel.getEmail())) {
+            errors.add("Email đã được sử dụng!");
+        }
+        if (userRepository.existsByPhone(createUserModel.getPhone())) {
+            errors.add("Số điện thoại đã được sử dụng!");
+        }
+        if (!createUserModel.getPassword().equals(createUserModel.getRePassword())) {
+            errors.add("Password không khớp nhau!");
+        }
+    }
+
 
     @Transactional
     @Override

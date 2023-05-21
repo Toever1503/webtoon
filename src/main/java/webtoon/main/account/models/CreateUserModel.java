@@ -23,4 +23,6 @@ public class CreateUserModel {
 
     private ESex sex;
 
+    private String phone;
+
 }

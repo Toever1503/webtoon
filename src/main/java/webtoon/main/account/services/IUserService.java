@@ -3,6 +3,7 @@ package webtoon.main.account.services;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.validation.BindingResult;
 import webtoon.main.account.configs.security.jwt.IJwtService;
 import webtoon.main.account.dtos.LoginResponseDto;
 import webtoon.main.account.dtos.UserDto;
@@ -11,6 +12,7 @@ import webtoon.main.account.entities.UserEntity;
 import webtoon.main.account.enums.EStatus;
 import webtoon.main.account.inputs.LoginInput;
 import webtoon.main.account.inputs.UserInput;
+import webtoon.main.account.models.CreateUserModel;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,6 +33,12 @@ public interface IUserService extends IJwtService {
     List<AuthorityEntity> getAllAuthorities();
 
     UserDto add(UserInput input);
+
+    UserDto addDK(CreateUserModel input, BindingResult bindingResult);
+
+
+    void validateUser(CreateUserModel createUserModel, List<String> errors);
+
     UserDto update(UserInput input);
 
     void changeStatus(Long id, EStatus status);
