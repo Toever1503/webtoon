@@ -401,6 +401,10 @@
                     <div id="card-list" class="card-container manga-history-sidebar grid space-y-2">
                     </div>
 
+                    <div class="flex justify-center pt-[10px]">
+                        <a id="view_all_read_history" class="text-center text-blue-500 hover:underline text-[14px] hidden" href="/user/read-history">Xem tất cả</a>
+                    </div>
+
                     <!--sự kiện đọc lịch sử từ localstorage-->
                     <script th:inline="javascript">
                         document.addEventListener('DOMContentLoaded',async function () {
@@ -411,6 +415,7 @@
                                 const loggedUser = JSON.parse(loggedUserJson) || [];
                                 const cardList = document.getElementById('card-list');
                                 for (let i = 0; i < loggedUser.length; i++) {
+                                    if(i > 4) break;
                                     const user = loggedUser[i];
                                     const chapterId = user.chapterId;
                                     const chapterIndex = user.chapterIndex;
@@ -519,6 +524,10 @@
                                     .then(data => {
                                         console.log("data: ", data);
                                         for (let i = 0; i < data.length; i++) {
+                                            if(i > 4) {
+                                                document.getElementById('view_all_read_history').classList.remove('hidden');
+                                                break;
+                                            }
                                             const data1 = data[i];
                                             const chapterId1 = data1.chapterId;
                                             const mangaId1 = data1.mangaId;

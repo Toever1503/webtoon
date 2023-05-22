@@ -198,6 +198,7 @@ public class MangaController {
             }
         }
 
+        model.addAttribute("logger", userEntity);
 
         return "trangtruyen";
     }
