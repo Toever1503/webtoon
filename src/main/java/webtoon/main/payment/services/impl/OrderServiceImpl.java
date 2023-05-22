@@ -377,7 +377,9 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public void sendMailRenewSubscription(Long userId) throws MessagingException {
         UserEntity userEntity = this.userService.getById(userId);
+        userEntity.setHasSendRenewalEmail(true);
         SubscriptionPackEntity subscriptionPack = this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId());
+        this.userService.saveUserEntity(userEntity);
 
         sendEmailService.sendMail("payments/mail-templates/renew_subscription.html",
                 userEntity.getEmail(), "Thông báo gia hạn gói đăng ký",

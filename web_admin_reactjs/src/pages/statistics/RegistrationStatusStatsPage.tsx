@@ -11,6 +11,7 @@ import ISubscriptionPack from "../../services/subscription_pack/types/ISubscript
 import statisticService from "../../services/stats/StatisticService";
 import { useNavigate } from "react-router-dom";
 import orderService from "../../services/order/OrderService";
+import { dateTimeFormat } from "../../utils/dateFormat";
 
 
 
@@ -59,6 +60,12 @@ const RegistrationStatusStatsPage: React.FC = () => {
             render: (_, record: IUserRegistrationStatus) => <>{record?.user?.fullName}</>,
         },
         {
+            title: t('statistic.registrationStatus.table.phone'),
+            dataIndex: 'phone',
+            key: 'phone',
+            render: (_, record: IUserRegistrationStatus) => <>{record?.user?.phone}</>,
+        },
+        {
             title: t('statistic.registrationStatus.table.subscriptionPack'),
             dataIndex: 'subscriptionPack',
             key: 'subscriptionPack',
@@ -68,7 +75,9 @@ const RegistrationStatusStatsPage: React.FC = () => {
             title: t('statistic.registrationStatus.table.expiredDate'),
             dataIndex: 'expiredDate',
             key: 'expiredDate',
-            render: (text) => <>{text}</>,
+            render: (text) => <>{
+                dateTimeFormat(text)
+            }</>,
         },
         {
             title: 'Trạng thái gửi mail gia hạn',
@@ -184,9 +193,9 @@ const RegistrationStatusStatsPage: React.FC = () => {
                 <h1 className="text-[23px] font-[400] m-0">
                     {t('statistic.registrationStatus.title')}
                 </h1>
-                <Button>
+                {/* <Button>
                     Gửi email gia hạn cho tất cả
-                </Button>
+                </Button> */}
 
             </div>
             <div className="flex justify-between items-center">

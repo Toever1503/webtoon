@@ -35,10 +35,11 @@ export default {
             title: 'Trạng thái đăng ký',
             table: {
                 'user': 'Khách hàng',
+                phone: 'Số điện thoại',
                 'subscriptionPack': 'Gói đăng ký',
                 'expiredDate': 'Ngày hết hạn',
                 action: {
-                    sendEmail: 'Gửi email',
+                    sendEmail: 'Gửi lại email',
                 }
             }
         },

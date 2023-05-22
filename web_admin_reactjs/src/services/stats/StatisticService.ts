@@ -18,7 +18,7 @@ const countTotalPeoplePerSubsPackByMonth = async (yearMonth: string) => mangaAxi
 const countSubscriberStatusPerMonthByYear = async (year: number) => mangaAxios.get(`${basePath}/count-total-subscriber-status-per-month-by-year?year=${year}`);
 
 
-const filterUserSubscriptionPackStatus = async (q: string = '', type: string = 'ALL', page: number = 0, size: number = 10) => mangaAxios.get(`${basePath}/filter-user-subscriptionPack-status?page=${page}&size=${size}&q=${q}&type=${type}`);
+const filterUserSubscriptionPackStatus = async (q: string = '', type: string = 'ALL', page: number = 0, size: number = 10) => mangaAxios.get(`${basePath}/filter-user-subscriptionPack-status?page=${page}&size=${size}&q=${q}&type=${type}&sort=canReadUntilDate,desc`);
 
 
 const statisticService = {

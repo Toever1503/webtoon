@@ -47,13 +47,13 @@ public class ComponentLoaderConfiguration {
         subscriptionPackEntities = subscriptionPackRepository.findAll();
         this.roleRepository = roleRepository;
 
-//        readFileName();
+        readFileName();
     }
 
-//    @RequestMapping
+    @RequestMapping
     public String fake()  {
-        for (int i = 0; i < 15; i++) {
-            java.util.Date createdAt =  Date.valueOf("2023-04-21");
+        for (int i = 0; i < 10; i++) {
+            java.util.Date createdAt =  Date.valueOf("2023-05-22");
             UserEntity userEntity = generateUser();
 
             int subIndex = generateRange(0, 2);
@@ -61,7 +61,6 @@ public class ComponentLoaderConfiguration {
                 subIndex = generateRange(0, 2);
             }
             SubscriptionPackEntity subs = subscriptionPackEntities.get(subIndex);
-
 
             String madonhang = VnPayConfig.getRandomNumber(10); // need check
 
@@ -76,18 +75,18 @@ public class ComponentLoaderConfiguration {
                     .maDonHang(madonhang)
                     .modifiedBy(userEntity)
                     .subs_pack_id(subs)
-                    .status(EOrderStatus.COMPLETED)
+                    .status(EOrderStatus.USER_CONFIRMED_BANKING)
                     .createAtFake(createdAt)
                     .build();
 
             userEntity.setCreateAtFake(createdAt);
-            userEntity.setCurrentUsedSubsId(subs.getId());
-            userEntity.setFirstBoughtSubsDate(createdAt);
+//            userEntity.setCurrentUsedSubsId(subs.getId());
+//            userEntity.setFirstBoughtSubsDate(createdAt);
 
-            Calendar canReadUntil = Calendar.getInstance();
-            canReadUntil.setTime(createdAt);
-            canReadUntil.set(Calendar.MONTH, canReadUntil.get(Calendar.MONTH) + subs.getMonthCount());
-            userEntity.setCanReadUntilDate(canReadUntil.getTime());
+//            Calendar canReadUntil = Calendar.getInstance();
+//            canReadUntil.setTime(createdAt);
+//            canReadUntil.set(Calendar.MONTH, canReadUntil.get(Calendar.MONTH) + subs.getMonthCount());
+//            userEntity.setCanReadUntilDate(canReadUntil.getTime());
 
             this.userRepository.saveAndFlush(userEntity);
             this.orderRepository.saveAndFlush(order);
