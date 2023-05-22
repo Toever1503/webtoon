@@ -37,6 +37,7 @@ public class LoginController {
                               HttpSession session,
                               HttpServletRequest req,
                               Model modelS) {
+        modelS.addAttribute("username", model.getUsername());
         try {
             this.loginService.login(model, req);
             String redirectTo = (String) session.getAttribute("redirectTo");
