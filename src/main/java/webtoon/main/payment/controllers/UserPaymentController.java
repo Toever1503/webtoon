@@ -123,7 +123,8 @@ public class UserPaymentController {
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
         if (loggedUser == null) {
             return "redirect:/signin?redirectTo=/user/subscription-status";
-        } else {
+        }
+        else {
             if (loggedUser.getPhone() == null)
                 return "redirect:/user/update_more_info";
 
@@ -133,7 +134,7 @@ public class UserPaymentController {
             UserEntity userEntity = this.userService.getById(loggedUser.getId());
             session.setAttribute("loggedUser", userEntity);
 
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
             if (userEntity.getCurrentUsedSubsId() == null && userEntity.getTrialRegisteredDate() != null) {
                 int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isUsingTrial = result >= 0;
@@ -150,6 +151,15 @@ public class UserPaymentController {
             }
 
             boolean canUpgradeSubs = false;
+            boolean canRenewSubs = false;
+            if(userEntity.getCurrentUsedSubsId() != null && userEntity.getCanReadUntilDate() != null){
+                Calendar currentDate = Calendar.getInstance();
+                currentDate.add(Calendar.DATE, 5);
+                if(userEntity.getCanReadUntilDate().before(currentDate.getTime())){
+                    canRenewSubs = true;
+                }
+            }
+            model.addAttribute("canRenewSubs", canRenewSubs);
             if (userEntity.getCurrentUsedSubsId() != null) {
                 isUsingTrial = false;
                 model.addAttribute("currentUsingSubsPack", this.subscriptionPackService.getById(userEntity.getCurrentUsedSubsId()));
@@ -194,6 +204,7 @@ public class UserPaymentController {
         }
         if (loggedUser.getPhone() == null)
             return "redirect:/user/update_more_info";
+
         loggedUser = this.userService.getById(SecurityUtils.getCurrentUser().getUser().getId());
         session.setAttribute("loggedUser", loggedUser);
 

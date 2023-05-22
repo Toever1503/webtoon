@@ -17,6 +17,7 @@ import webtoon.main.account.inputs.UserInput;
 import webtoon.main.account.models.ChangePasswordModel;
 import webtoon.main.account.models.UpdateUserInfo;
 import webtoon.main.account.services.IUserService;
+import webtoon.main.utils.PhoneUtil;
 
 import javax.servlet.http.HttpSession;
 
@@ -42,16 +43,48 @@ public class UserController {
     }
 
     @PostMapping("/profile")
-    public String updateProfile(@ModelAttribute("user") UserInput user, BindingResult result){
+    public String updateProfile(@ModelAttribute("user") UserInput user,
+                                Model model
+    ) {
+        if (!SecurityUtils.isAuthenticated()) {
+            return "redirect:/signin?redirectTo=/user/profile";
+        }
         UserEntity userEntity = SecurityUtils.getCurrentUser().getUser();
-        if (result.hasErrors()) {
-            System.out.println("Error");
+        user.setEmail(user.getEmail().toLowerCase());
+
+        try {
+            UserEntity userCheck = this.userService.findByEmail(user.getEmail());
+            if (userCheck != null && !userCheck.getId().equals(userEntity.getId())) {
+                model.addAttribute("error", "Email đã tồn tại!");
+                return "account/profile";
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            model.addAttribute("error", "Email không hợp lệ!");
             return "account/profile";
         }
+
+        try{
+            UserEntity userCheck = this.userService.findByPhone(user.getPhone()).orElse(null);
+            if (userCheck != null && !userCheck.getId().equals(userEntity.getId())) {
+                model.addAttribute("error", "Số điện thoại đã tồn tại!");
+                return "account/profile";
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            model.addAttribute("error", "Số điện thoại đã tồn tại!");
+            return "account/profile";
+        }
+
+        if (!PhoneUtil.validateVNPhoneNumber(user.getPhone())) {
+            model.addAttribute("error", "Số điện thoại không hợp lệ!");
+            return "account/profile";
+        }
+
         user.setId(userEntity.getId());
         userService.update(user);
-        System.out.println("Success");
-        return "redirect:/user/profile";
+        model.addAttribute("success", "Cập nhật thông tin thành công!");
+        return "account/profile";
     }
 
 
@@ -110,6 +143,10 @@ public class UserController {
 
         if (this.userService.findByPhone(updateUserInfo.getPhone()).isPresent()) {
             model.addAttribute("error_message", "Số điện thoại đã được sử dụng!");
+            return "account/update_more_info";
+        }
+        if (PhoneUtil.validateVNPhoneNumber(updateUserInfo.getPhone()) == false) {
+            model.addAttribute("error_message", "Số điện thoại không hợp lệ!");
             return "account/update_more_info";
         }
         try {

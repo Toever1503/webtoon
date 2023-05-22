@@ -99,7 +99,7 @@ public class StatisticResource {
         switch (type) {
             case "EXPIRING": {
                 Calendar calendar = Calendar.getInstance();
-                calendar.add(Calendar.DATE, 4);
+                calendar.add(Calendar.DATE, 5);
                 Date curentDate = Calendar.getInstance().getTime();
                 specs.add(((root, query, criteriaBuilder) -> criteriaBuilder.between(root.get(UserEntity_.CAN_READ_UNTIL_DATE), curentDate, calendar.getTime())));
                 break;

@@ -393,7 +393,12 @@ public class OrderServiceImpl implements IOrderService {
         // update user current used subs
         if (orderEntity.getUser_id().getCurrentUsedSubsId() == null) {
             orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
-        }  if (orderEntity.getSubs_pack_id().getId() > orderEntity.getUser_id().getCurrentUsedSubsId()) {
+        }
+        if (orderEntity.getSubs_pack_id().getId() > orderEntity.getUser_id().getCurrentUsedSubsId()) {
+            orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
+        }
+
+        if(orderEntity.getUser_id().getCanReadUntilDate() != null && orderEntity.getUser_id().getCanReadUntilDate().before(canReadUntilDate.getTime()) ){
             orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
         }
 
@@ -412,7 +417,6 @@ public class OrderServiceImpl implements IOrderService {
             }
         }
         orderEntity.getUser_id().setCanReadUntilDate(canReadUntilDate.getTime());
-
         userService.saveUserEntity(orderEntity.getUser_id());
     }
 
