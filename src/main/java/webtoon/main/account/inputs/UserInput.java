@@ -27,10 +27,10 @@ public class UserInput {
         return UserEntity.builder()
                 .id(input.getId())
                 .fullName(input.getFullName())
-                .username(input.getUsername())
-                .email(input.getEmail())
+                .username(input.getUsername().trim().toLowerCase())
+                .email(input.getEmail().trim().toLowerCase())
                 .sex(input.getSex())
-                .phone(input.getPhone())
+                .phone(input.getPhone().trim().toLowerCase())
                 .build();
     }
 }

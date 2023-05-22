@@ -4,7 +4,7 @@ import { useTranslation } from "react-i18next";
 import { useDispatch, useSelector } from "react-redux";
 import { showNofification } from "../../../stores/features/notification/notificationSlice";
 import { RootState } from "../../../stores";
-import { UserState } from "../../../stores/features/user/userSlice";
+import { UserState, editUser } from "../../../stores/features/user/userSlice";
 import userService from "../../../services/user/UserService";
 import IUserType from "../types/IUserType";
 import { AxiosError, AxiosResponse } from "axios";
@@ -84,11 +84,12 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                         })
                         .then((res: AxiosResponse<IUserType>) => {
                             console.log('edit new user: ', res.data);
-                            props.onOk(res.data);
+                            dispatch(editUser(res.data));
                             dispatch(showNofification({
                                 type: 'success',
                                 message: `${t('user.form.edit-success')}`
                             }));
+                            props.cancel();
                         })
                         .catch((err: AxiosError<{
                             code: string;
@@ -161,7 +162,7 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
                         value: e.id
                     };
                 }),
-                role: props.userInput.role,
+                role: props.userInput.role.id,
                 phone: props.userInput.phone,
             });
         }

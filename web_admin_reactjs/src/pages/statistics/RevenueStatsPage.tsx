@@ -10,6 +10,7 @@ import ISubscriptionPack from "../../services/subscription_pack/types/ISubscript
 import subscriptionPackService from "../../services/subscription_pack/subscriptionPackService";
 import React from "react";
 import TopSection from "../dashboard/components/TopSection";
+import PieChart from "./components/PieChart";
 
 
 const RevenueStatsPage: React.FC = () => {
@@ -35,9 +36,9 @@ const RevenueStatsPage: React.FC = () => {
 
 
     const [totalRevenueThisMonth, setTotalRevenueThisMonth] = useState<number>(0);
-    const [totalSubscriber, setTotalSubscriber] = useState<number>(0);
+    const [totalCompletedOrderThisMonth, setTotalCompletedOrderThisMonth] = useState<number>(0);
+    const [totalNewSubscriber, setTotalNewSubscriber] = useState<number>(0);
     const [totalSubscriberOnTrial, setTotalSubscriberOnTrial] = useState<number>(0);
-
 
     const [revenueByDayDate, setRevenueByDayDate] = useState<Dayjs | null>(dayjs());
     const [revenueByDayData, setRevenueByDayData] = useState<LineDataType[]>([]);
@@ -109,6 +110,31 @@ const RevenueStatsPage: React.FC = () => {
 
     const [revenuePerSubDate, setRevenuePerSubDate] = useState<Dayjs | null>(dayjs());
     const [revenuePerSubData, setRevenuePerSubData] = useState<BarDataType[]>([]);
+
+
+    const [totalPeoplePerSubDate, setTotalPeoplePerSubDate] = useState<Dayjs | null>(dayjs());
+    const [totalPeoplePerSubData, setTotalPeoplePerSubData] = useState<BarDataType[]>([{
+        name: '-',
+        value: 0
+    }]);
+
+    const onCallApiCountTotalPeoplePerSub = (date: Dayjs) => {
+        statisticService
+            .countTotalPeoplePerSubsPackByMonth(date.format('YYYY-MM'))
+            .then(res => {
+                console.log("people per subs:", res.data);
+                if (res.data.length > 0)
+                    setTotalPeoplePerSubData(res.data.map((item: [number, string, number]) => ({
+                        name: item[1],
+                        value: item[2]
+                    })));
+                else setTotalPeoplePerSubData([{
+                    name: '-',
+                    value: 0
+                }]);
+            });
+    };
+
     const [subscriptionPackData, setSubscriptionPackData] = useState<ISubscriptionPack[]>([]);
     const [forceInitializeRevenuePerSubs, setForceInitializeRevenuePerSubs] = useState<boolean>(false);
 
@@ -157,8 +183,11 @@ const RevenueStatsPage: React.FC = () => {
         statisticService.sumRevenueThisMonth().then((res) => {
             setTotalRevenueThisMonth(res.data);
         });
-        statisticService.countTotalRegisterThisMonth().then((res) => {
-            setTotalSubscriber(res.data);
+        statisticService.countTotalCompletedOrderThisMonth().then((res) => {
+            setTotalCompletedOrderThisMonth(res.data);
+        });
+        statisticService.countTotalNewRegisterThisMonth().then((res) => {
+            setTotalNewSubscriber(res.data);
         });
         statisticService.countTotalRegisterTrialThisMonth().then((res) => {
             setTotalSubscriberOnTrial(res.data);
@@ -173,6 +202,7 @@ const RevenueStatsPage: React.FC = () => {
         callApiGetRevenueByDay(revenueByDayDate || dayjs());
         onCallApiGetMonthlyRevenue(monthlyRevenueDate || dayjs());
         onCallApiGetRateSubscriber(rateSubscriberDate || dayjs());
+        onCallApiCountTotalPeoplePerSub(totalPeoplePerSubDate || dayjs());
 
     }, []);
 
@@ -199,19 +229,20 @@ const RevenueStatsPage: React.FC = () => {
                         title={<h3 className="text-[18px] text-center">
                             {t('dashboard.orderCompleted')}
                         </h3>}
-                        value={totalSubscriber}
+                        value={totalCompletedOrderThisMonth}
                         valueStyle={{ textAlign: 'center' }}
                     />
                 </Card>
-{/* 
+
                 <Card className="w-1/4" bordered={false}>
                     <Statistic
                         title={<h3 className="font-semibold text-xl">
-                            {t('statistic.revenue.totalSubscriber')}
+                            {t('statistic.revenue.totalNewSubscriber')}
                         </h3>}
-                        value={totalSubscriber}
+                        value={totalNewSubscriber}
                     />
                 </Card>
+                {/* 
 
                 <Card className="w-1/4" bordered={false}>
                     <Statistic
@@ -264,12 +295,28 @@ const RevenueStatsPage: React.FC = () => {
                     <DatePicker picker="month" value={revenuePerSubDate} onChange={e => {
                         setRevenuePerSubDate(e);
                         onCallApiGetRevenuePerSub(e || dayjs(), subscriptionPackData);
+
+                        setTotalPeoplePerSubDate(e);
+                        onCallApiCountTotalPeoplePerSub(e || dayjs());
                     }} />
                 </Space>
 
                 <BarChart data={revenuePerSubData} />
 
+                <Space className="mb-[15px] mt-[25px]">
+                    <h3>
+                        {t('statistic.revenue.totalRegisterPeopleBySubsPack')}
+                    </h3>
+
+                    {/* <DatePicker picker="month" value={totalPeoplePerSubDate} onChange={e => {
+                        setTotalPeoplePerSubDate(e);
+                        onCallApiCountTotalPeoplePerSub(e || dayjs());
+                    }} /> */}
+                </Space>
+
+                <PieChart data={totalPeoplePerSubData} />
             </Card>
+
 
             <Card bordered={false} style={{ width: '100%', height: '100%' }}>
                 <Space className="mb-[15px]">

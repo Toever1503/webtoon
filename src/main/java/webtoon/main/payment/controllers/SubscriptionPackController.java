@@ -1,7 +1,9 @@
 package webtoon.main.payment.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
@@ -9,8 +11,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import webtoon.main.account.entities.UserEntity;
+import webtoon.main.account.entities.UserEntity_;
+import webtoon.main.payment.dtos.OrderDto;
 import webtoon.main.payment.dtos.SubscriptionPackDto;
+import webtoon.main.payment.entities.OrderEntity_;
 import webtoon.main.payment.entities.SubscriptionPackEntity;
+import webtoon.main.payment.enums.EOrderStatus;
 import webtoon.main.payment.models.SubscriptionPackModel;
 import webtoon.main.payment.services.IOrderService;
 import webtoon.main.payment.services.ISubscriptionPackService;
@@ -76,6 +82,7 @@ public class SubscriptionPackController {
         UserEntity loggedUser = (UserEntity) session.getAttribute("loggedUser");
 
         boolean isExpiredSub = false;
+        boolean hasOtherPendingOrder = false;
         SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
         if(loggedUser != null){
             if (loggedUser.getPhone() == null)
@@ -89,7 +96,18 @@ public class SubscriptionPackController {
                 int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 isExpiredSub = result < 0;
             }
+
+            Specification pendingOrderSpec = ((root, query, criteriaBuilder) -> criteriaBuilder.and(
+                    criteriaBuilder.equal(root.get(OrderEntity_.STATUS), EOrderStatus.DRAFTED).not(),
+                    root.get(OrderEntity_.STATUS).in(List.of(EOrderStatus.PENDING_PAYMENT, EOrderStatus.USER_CONFIRMED_BANKING)),
+                    criteriaBuilder.equal(root.join(OrderEntity_.USER_ID).get(UserEntity_.ID), loggedUser.getId())
+            ));
+
+            Page<OrderDto> pendingOrderPage = this.orderService.filter(Pageable.unpaged(), pendingOrderSpec);
+            if (!pendingOrderPage.getContent().isEmpty())
+                hasOtherPendingOrder = true;
         }
+        model.addAttribute("hasConfirmingOrder", hasOtherPendingOrder);
 
         model.addAttribute("isExpiredSub", isExpiredSub);
         model.addAttribute("items", subscriptionPackEntities);

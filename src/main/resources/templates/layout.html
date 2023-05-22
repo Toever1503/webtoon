@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
+    <!--    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">-->
     <link href="../../static/main.css" rel="stylesheet">
     <link href="/static/main.css" rel="stylesheet">
 
@@ -43,11 +43,12 @@
            font-family: 'Poppins', sans-serif;
         }
 
+
     </style>
 </head>
 
 <body>
-<div th:replace="fragments/toast :: toast-component" />
+<div th:replace="fragments/toast :: toast-component"/>
 <header th:replace="fragments/header-component :: header"/>
 
 <div class="main-layout w-[1100px] mx-auto shadown-sm bg-white p-[15px]" layout:fragment="content">
@@ -62,16 +63,18 @@
 </div>
 
 <footer th:replace="fragments/footer-component :: footer"/>
-<script th:if="${hasLogged != null}" th:inline="javascript">
+<script th:if="${param != null && param.loginType != null}" th:inline="javascript">
+/*<![CDATA[*/
+        const loginType =  [[${ param.loginType }]]
 
         window.addEventListener("DOMContentLoaded", (event) => {
             setTimeout(() => {
-            window.Toast.success(/*[[${hasLogged}]]*/);
+            window.Toast.success(loginType[0] == '0' ? 'Đăng nhập thành công!' : 'Đăng ký thành công!');
             }, 300);
         });
+/*]]>*/
 
 </script>
-
 
 
 </body>

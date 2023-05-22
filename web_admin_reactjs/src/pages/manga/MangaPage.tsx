@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Button, Space, Table, TablePaginationConfig, Tag, Input, Dropdown, MenuProps, Popconfirm, Tooltip, Select, DatePicker } from 'antd';
 import type { ColumnsType } from 'antd/es/table';
-import mangaService, { MangaFilterInput, MangaInput, MangaStatus, ReleaseStatus } from '../../services/manga/MangaService';
+import mangaService, { MangaFilterInput, MangaInput, MangaStatus, MangaType, ReleaseStatus } from '../../services/manga/MangaService';
 import { Link, useNavigate } from 'react-router-dom';
 import { AxiosResponse } from 'axios';
 import { TagInput } from '../../services/TagService';
@@ -226,6 +226,7 @@ const MangaPage: React.FC = () => {
         releaseStatus: 'ALL',
         q: '',
         timeRange: [],
+        mangaType: 'UNSET'
     });
 
     const onChangeTable = (page: TablePaginationConfig) => {
@@ -250,6 +251,7 @@ const MangaPage: React.FC = () => {
             authorId: mangaFilter.author !== 'ALL' ? mangaFilter.author : undefined,
             isShow: mangaFilter.status !== 'ALL' ? (mangaFilter.status === 'PUBLISHED' ? true : false) : undefined,
             status: mangaFilter.releaseStatus !== 'ALL' ? mangaFilter.releaseStatus : undefined,
+            mangaType: mangaFilter.mangaType !== 'UNSET' ? mangaFilter.mangaType : undefined,
         }, (pageConfig?.current || 1) - 1, (pageConfig.pageSize || 10))
             .then((res: AxiosResponse<{
                 totalElements: number | undefined;
@@ -435,6 +437,27 @@ const MangaPage: React.FC = () => {
                                     {t('manga.eMangaStatus.' + status)}
                                 </Select.Option>)
                         }
+                    </Select>
+                </Space>
+
+                <Space>
+                    <label className="font-bold">{t('manga.table.mangaType')}: </label>
+                    <Select className="min-w-[120px]"
+                        onChange={(val: MangaType) => {
+                            mangaFilter.mangaType = val;
+                            setMangaFilter(mangaFilter);
+                            onfilterManga();
+                        }}
+                        value={mangaFilter.mangaType}>
+                        <Select.Option value="UNSET">
+                            {t('manga.eMangaStatus.ALL')}
+                        </Select.Option>
+                        <Select.Option value="TEXT">
+                            Truyện chữ
+                        </Select.Option>
+                        <Select.Option value="IMAGE">
+                            Truyện ảnh
+                        </Select.Option>
                     </Select>
                 </Space>
 

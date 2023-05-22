@@ -50,22 +50,22 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
             return null;
         }else {
             System.out.println(model.getMangaEntity() + "manga" + user.getId());
-            MangaRatingEntity checkId = this.getById(model.getMangaEntity(), user.getId());
+            MangaRatingEntity mangaRatingCheck = this.getById(model.getMangaEntity(), user.getId());
 
-            if (checkId != null ){
-                checkId.setRate(Float.valueOf(model.getRate()));
-                this.ratingRepository.saveAndFlush(checkId);
-                Double entity1 =  this.ratingRepository.findRatingByMangaAndCb(checkId.getMangaId(), user.getId());
-                if (entity1 != null){
-                    MangaEntity mangaEntity = this.mangaService.getById(checkId.getMangaId());
-                    mangaEntity.setRating(entity1.floatValue());
+            if (mangaRatingCheck != null ){
+                mangaRatingCheck.setRate(Float.valueOf(model.getRate()));
+                this.ratingRepository.saveAndFlush(mangaRatingCheck);
+                Double newRate =  this.ratingRepository.findRatingByMangaAndCb(mangaRatingCheck.getMangaId());
+                if (newRate != null){
+                    MangaEntity mangaEntity = this.mangaService.getById(mangaRatingCheck.getMangaId());
+                    mangaEntity.setRating(newRate.floatValue());
                     this.mangaRepository.saveAndFlush(mangaEntity);
                 }
 
                 return MangaRatingDto.builder()
-                        .id(checkId.getId())
-                        .rate(checkId.getRate())
-                        .mangaEntity(checkId.getMangaId())
+                        .id(mangaRatingCheck.getId())
+                        .rate(mangaRatingCheck.getRate())
+                        .mangaEntity(mangaRatingCheck.getMangaId())
                         .build();
             }else {
                 MangaRatingEntity entity = MangaRatingEntity.builder()
@@ -75,11 +75,11 @@ public class IMangaRatingServiceImpl implements IMangaRatingService {
                         .mangaId(model.getMangaEntity())
                         .build();
                 this.ratingRepository.saveAndFlush(entity);
-                Double entity1 =  this.ratingRepository.findRatingByMangaAndCb(entity.getMangaId(), user.getId());
-                if (entity1 != null){
-                    MangaEntity mangaEntity = this.mangaService.getById(checkId.getMangaId());
+                Double newRate =  this.ratingRepository.findRatingByMangaAndCb(entity.getMangaId());
+                if (newRate != null){
+                    MangaEntity mangaEntity = this.mangaService.getById(model.getMangaEntity());
                     if (mangaEntity != null){
-                        mangaEntity.setRating(entity1.floatValue());
+                        mangaEntity.setRating(newRate.floatValue());
                         this.mangaRepository.saveAndFlush(mangaEntity);
                     }
 

@@ -41,11 +41,11 @@ public class OrderEntity {
     @Column(unique = true)
     private String maDonHang;
 
-     @Column
+     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     @DateTimeFormat(pattern = "yyyy-MM-dd-HH:mm:ss")
     @CreationTimestamp
-    private Date created_at;
+    private Date createdAt;
 
     @Column
     @Temporal(TemporalType.TIMESTAMP)
@@ -72,6 +72,10 @@ public class OrderEntity {
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
 
+
+    @Column(name = "created_fake")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createAtFake;
 
     @OneToOne(mappedBy = "orderId")
     private PaymentEntity paymentEntity;

@@ -72,7 +72,7 @@ const CreateImageHtmlElement: React.FC<CreateImageHtmlElementProps> = ({ file, i
 const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: MangaUploadChapterModalProps) => {
     const { t } = useTranslation();
     const dispatch = useDispatch();
-    const [isRequireVipChapter, setIsRequireVipChapter] = useState<boolean>(false);
+    const [requireVipChapter, setRequireVipChapter] = useState<boolean>(false);
 
     const [chapterContentEditorRef, setChapterContentEditorRef] = useState<RichTextEditorComponent>();
     const onReadyMangaContentEditor = (rteObj: RichTextEditorComponent, setContent: Function) => {
@@ -232,7 +232,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
             chapterContent: '',
             chapterImages: '',
         });
-        setIsRequireVipChapter(false);
+        setRequireVipChapter(false);
         setMangaTextChapter('');
         setImageChapterFiles([]);
         setOldImageChapterFiles([]);
@@ -288,7 +288,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     formdata.append('id', chapterInput.id.toString());
                 formdata.append('chapterIndex', chapterInput?.chapterIndex?.toString() || '0');
                 formdata.append('chapterName', chapterInput.chapterName);
-                formdata.append('requiredVip', isRequireVipChapter.toString());
+                formdata.append('requiredVip', requireVipChapter.toString());
                 formdata.append('volumeId', chapterInput?.volumeId?.toString() || '0');
 
 
@@ -333,7 +333,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     chapterIndex: chapterInput.chapterIndex ? chapterInput.chapterIndex : 0,
                     chapterName: chapterInput.chapterName,
                     content: chapterContent,
-                    requiredVip: isRequireVipChapter,
+                    requiredVip: requireVipChapter,
                     volumeId: chapterInput.volumeId || 0,
                     chapterImages: []
                 }, props.mangaInput.id)
@@ -396,7 +396,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                             )));
 
                         // @ts-ignore
-                        setIsRequireVipChapter(res.data.requiredVip);
+                        setRequireVipChapter(res.data.requiredVip);
                     })
                     .catch(err => {
                         console.log('get chapter error:', err);
@@ -440,7 +440,7 @@ const MangaUploadChapterModal: React.FC<MangaUploadChapterModalProps> = (props: 
                     <label className='text-[16px] font-bold mb-[5px] flex items-center gap-[2px] mt-[10px]'>
                         <span>Chương có yêu cầu trả phí?:</span>
                     </label>
-                    <Checkbox className="mt-[5px]" checked={isRequireVipChapter} onChange={(val: CheckboxChangeEvent) => setIsRequireVipChapter(val.target.checked)} />
+                    <Checkbox className="mt-[5px]" checked={requireVipChapter} onChange={(val: CheckboxChangeEvent) => setRequireVipChapter(val.target.checked)} />
                 </section>
             }
 

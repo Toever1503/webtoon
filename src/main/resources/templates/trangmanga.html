@@ -252,6 +252,10 @@
                                                     cardTitle.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
                                                     cardTitle.innerHTML = data.title;
 
+                                                    const cardChapter = document.createElement('h3');
+                                                    cardChapter.setAttribute('class', 'card-title text-sm m-0 w-[140px]');
+                                                    cardChapter.innerHTML = 'Chương ' + chapterIndex;
+
                                                     /*
                                                     const MAX_LENGTH = 14; // Tối đa chiều cao của thẻ card-title
                                                     if (data.title.length > MAX_LENGTH) {
@@ -268,6 +272,7 @@
                                                     cardLink.innerHTML = 'Đọc tiếp';
 
                                                     cardText.appendChild(cardTitle);
+                                                    cardText.appendChild(cardChapter);
                                                     cardText.appendChild(cardLink);
                                                     cardContainer.appendChild(cardImage);
                                                     cardContainer.appendChild(cardText);

@@ -46,7 +46,7 @@ public class MangaSearchController {
                             @RequestParam(required = false) Boolean isFree
     ) {
         MangaFilterInput filterInput;
-        if (pageable.getPageNumber() <= 1) {
+        if (pageable.getPageNumber() <= 0) {
             filterInput = new MangaFilterInput();
             filterInput.setQ(q);
             filterInput.setGenreId(genreId);
@@ -61,7 +61,7 @@ public class MangaSearchController {
         }
         session.setAttribute("searchModel", filterInput);
 
-        Page<MangaEntity> mangaEntity = this.mangaService.filterEntities(PageRequest.of(pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber() - 1, 5).withSort(Sort.Direction.DESC, MangaEntity_.MODIFIED_AT),
+        Page<MangaEntity> mangaEntityPage = this.mangaService.filterEntities(PageRequest.of(pageable.getPageNumber() == 0 ? 0 : pageable.getPageNumber(), 5).withSort(Sort.Direction.DESC, MangaEntity_.MODIFIED_AT),
                 SearchSpecification.filter(filterInput));
         List<MangaGenreEntity> mangaGenre = this.genreService.findAllGenre();
 
@@ -75,11 +75,15 @@ public class MangaSearchController {
         model.addAttribute("releaseYearList", releaseYearList);
 
         model.addAttribute("filterInput", filterInput);
-        model.addAttribute("mangaEntity", mangaEntity);
+        model.addAttribute("mangaEntity", mangaEntityPage);
         model.addAttribute("mangaGenre", mangaGenre);
         model.addAttribute("trangThai", mangaStatusMap);
 
-        return "/manga/search";
+        model.addAttribute("hasPrevPage", mangaEntityPage.hasPrevious());
+        model.addAttribute("hasNextPage", mangaEntityPage.hasNext());
+        model.addAttribute("currentPage", mangaEntityPage.getNumber());
+        model.addAttribute("totalPage", mangaEntityPage.getTotalPages());
+        return "manga/search";
     }
 
 }

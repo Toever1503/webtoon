@@ -22,6 +22,20 @@ const DetailOrderModal: React.FC<DetailOrderModalProps> = (props: DetailOrderMod
 
     const [order, setOrder] = useState<IOrder>();
 
+
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    // const handleReturn = async () => {
+    //     if (isLoading) return;
+    //     setIsLoading(true);
+
+    //     orderService.changeStatus(order ? (order.id || 0) : 0, 'RETURNED')
+    //         .then(res => { })
+    //         .catch(err => { })
+    //         .finally(() => {
+    //             setIsLoading(false);
+    //         });
+    // };
+
     useEffect(() => {
         if (props.input) {
             setOrder(props.input);
@@ -47,7 +61,7 @@ const DetailOrderModal: React.FC<DetailOrderModalProps> = (props: DetailOrderMod
         footer={null}
     >
         {
-            order && <Descriptions bordered labelStyle={{fontWeight: '600'}}>
+            order && <Descriptions bordered labelStyle={{ fontWeight: '600' }}>
                 <Descriptions.Item label={t('order.table.orderNumber')}>{order?.maDonHang}</Descriptions.Item>
 
                 <Descriptions.Item label={t('order.table.subscription')}>
@@ -121,6 +135,20 @@ const DetailOrderModal: React.FC<DetailOrderModalProps> = (props: DetailOrderMod
 
             </Descriptions>
         }
+
+        {/* <Popconfirm
+            title={t('order.modal.form.labels.sure')}
+            onConfirm={(e) => {
+                e?.stopPropagation();
+                handleReturn();
+            }}
+            okText={t('confirm-yes')}
+            cancelText={t('confirm-no')}
+        >
+            <Button className="mt-[15px]" type='primary' loading={isLoading}>
+                Hoàn tiền
+            </Button>
+        </Popconfirm> */}
 
 
     </Modal>

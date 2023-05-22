@@ -97,10 +97,20 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     public boolean deleteById(Long id) {
         try {
             MangaChapterEntity entity = this.chapterRepository.getById(id);
+            Long mangaId = null;
+            Long volId = null;
             Integer index = entity.getChapterIndex();
+
+            if (entity.getMangaVolume() != null)
+                volId = entity.getMangaVolume().getId();
+            else mangaId = entity.getManga().getId();
+
             this.chapterImageRepository.deleteByChapterId(id);
             this.chapterRepository.deleteById(entity.getId());
-            this.chapterRepository.reindexChapterAfterIndex(index);
+
+            if (mangaId != null)
+                this.chapterRepository.reindexChapterAfterIndex(index, mangaId);
+            else this.chapterRepository.reindexChapterAfterIndexForVol(index, volId);
             // task: need reindex chapter
             return true;
         } catch (Exception e) {
@@ -150,9 +160,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     public MangaChapterDto saveImageChapter(MangaUploadChapterInput input, List<MultipartFile> multipartFiles) {
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
-            mangaEntity.setMangaStatus(EMangaSTS.GOING);
-            if (!mangaEntity.getIsFree())
-                mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
+//            mangaEntity.setMangaStatus(EMangaSTS.GOING);
+//            if (!mangaEntity.getIsFree())
+//                mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
 
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
@@ -191,8 +201,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                     imageIndexes.add(currentIndex.getAndIncrement());
                     needUploadFiles.add(f);
                 });
-            }
-            else {
+            } else {
                 List<Long> keepingImageIds = new ArrayList<>();
 
                 multipartFiles.forEach((f) -> {
@@ -208,10 +217,10 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                         imageIndexes.add(currentIndex.getAndIncrement());
                     }
                 });
-                List<MangaChapterImageEntity> oldImageEntities = this.chapterImageRepository.findAllByIdNotIn(keepingImageIds);
+                List<MangaChapterImageEntity> oldImageEntities = this.chapterImageRepository.findAllByIdNotInAndMangaChapterId(keepingImageIds, mangaChapterEntity.getId());
                 // task: need call storage api to remove
                 System.out.println(oldImageEntities.size());
-                this.chapterImageRepository.deleteAll(oldImageEntities);
+                this.chapterImageRepository.deleteAllById(oldImageEntities.stream().map(MangaChapterImageEntity::getId).collect(Collectors.toList()));
             }
 
             if (body.size() > 0 && needUploadFiles.size() > 0) {
@@ -241,7 +250,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 }).collect(Collectors.toList());
                 this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
             }
-            this.mangaService.saveEntity(mangaEntity);
+//            this.mangaService.saveEntity(mangaEntity);
             return MangaChapterDto.toDto(this.getById(mangaChapterEntity.getId()));
         } catch (Exception e) {
             e.printStackTrace();
@@ -299,11 +308,11 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
 
         List<MangaChapterEntity> nextChapters = this.chapterRepository
-                .findNextChapterForDisplayVolType(chapterID, mangaId,PageRequest.of(0,1));
+                .findNextChapterForDisplayVolType(chapterID, mangaId, PageRequest.of(0, 1));
         chapterDtos[1] = nextChapters.size() == 0 ? null : this.chapterMapper.toDto(nextChapters.get(0));
 
         List<MangaChapterEntity> prevChapters = this.chapterRepository
-                .findPrevChapterForDisplayVolType(chapterID, mangaId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+                .findPrevChapterForDisplayVolType(chapterID, mangaId, PageRequest.of(0, 1, Sort.Direction.DESC, "id"));
         chapterDtos[0] = prevChapters.size() == 0 ? null : this.chapterMapper.toDto(prevChapters.get(0));
 
         return chapterDtos;
@@ -314,11 +323,11 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         MangaChapterDto[] chapterDtos = new MangaChapterDto[2];
 
         List<MangaChapterEntity> nextChapters = this.chapterRepository
-                .findNextChapterForDisplayChapType(chapterID,mangaId,PageRequest.of(0,1));
+                .findNextChapterForDisplayChapType(chapterID, mangaId, PageRequest.of(0, 1));
         chapterDtos[1] = nextChapters.size() == 0 ? null : MangaChapterDto.toDto(nextChapters.get(0));
 
         List<MangaChapterEntity> prevChapters = this.chapterRepository
-                .findPrevChapterForDisplayChapType(chapterID,mangaId,PageRequest.of(0,1,Sort.Direction.DESC,"id"));
+                .findPrevChapterForDisplayChapType(chapterID, mangaId, PageRequest.of(0, 1, Sort.Direction.DESC, "id"));
         chapterDtos[0] = prevChapters.size() == 0 ? null : MangaChapterDto.toDto(prevChapters.get(0));
 
         return chapterDtos;
@@ -372,12 +381,18 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         return this.chapterRepository.getLastChapterIndexForVolType(volumeId).orElse(-1L);
     }
 
+    @Override
+    public MangaChapterEntity getFirstIdForVolType(Long volId) {
+        return this.chapterRepository.getFirstIdForVolType(volId);
+    }
+
     public static void main(String[] args) {
         String test = "id-9140";
         System.out.println(test.matches("id-\\d+"));
     }
+
     @Override
-    public List<MangaChapterEntity> findByVolume(Long volume){
+    public List<MangaChapterEntity> findByVolume(Long volume) {
         return chapterRepository.findByVolumeId(volume);
     }
 
@@ -393,12 +408,12 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 
     @Override
     public List<MangaChapterDto> findAllById(Long id) {
-        Pageable pageable = PageRequest.of(0,2).withSort(Sort.Direction.DESC,"id");
-        return  chapterRepository.findAllById(id,pageable);
+        Pageable pageable = PageRequest.of(0, 2).withSort(Sort.Direction.DESC, "id");
+        return chapterRepository.findAllById(id, pageable);
     }
 
     @Override
-    public List<MangaChapterEntity> findAllByMangaId(Long id){
+    public List<MangaChapterEntity> findAllByMangaId(Long id) {
         return chapterRepository.findByMangaId(id).stream().map(entity -> {
             return MangaChapterEntity.builder()
                     .id(entity.getId())
@@ -414,13 +429,28 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     }
 
     @Override
-    public MangaChapterEntity finByMangaId(Long id){
+    public MangaChapterEntity finByMangaId(Long id) {
         return chapterRepository.findByMangId(id);
     }
 
     @Override
     public Long countTotalChapterForMangaTypeVol(Long id) {
         return this.chapterRepository.countByMangaId(id);
+    }
+
+    @Override
+    public MangaChapterEntity getFirstIdForChapType(Long mangaId) {
+        return this.chapterRepository.getFirstIdForChapType(mangaId);
+    }
+
+    @Override
+    public List<MangaChapterEntity> getFreeChaptersForVolType(Long mangaId) {
+        return this.chapterRepository.getFreeChaptersForVolType(mangaId);
+    }
+
+    @Override
+    public List<MangaChapterEntity> getFreeChaptersForChapType(Long mangaId) {
+        return this.chapterRepository.getFreeChaptersForChapType(mangaId);
     }
 
 }

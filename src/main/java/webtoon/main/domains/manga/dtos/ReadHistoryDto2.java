@@ -26,8 +26,9 @@ public class ReadHistoryDto2 {
     private Integer chapterIndex;
 
     private Date createdDate;
+    private Boolean isFree;
 
-    public static ReadHistoryDto2  toDto(ReadHistory entity, String title, String featuredImage, Integer chapterIndex){
+    public static ReadHistoryDto2  toDto(ReadHistory entity, String title, String featuredImage, Integer chapterIndex, Boolean isFree){
         return ReadHistoryDto2.builder()
                 .id(entity.getId())
                 .mangaId(entity.getMangaEntity())
@@ -37,6 +38,7 @@ public class ReadHistoryDto2 {
                 .featuredImage(featuredImage)
                 .chapterIndex(chapterIndex)
                 .createdDate(entity.getCreatedDate())
+                .isFree(isFree)
                 .build();
     }
 

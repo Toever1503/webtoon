@@ -184,8 +184,8 @@ public class UserServiceImpl implements IUserService {
             throw new CustomHandleException(12);
         }
         entity.setFullName(input.getFullName());
-        entity.setEmail(input.getEmail());
-        entity.setPhone(input.getPhone());
+        entity.setEmail(input.getEmail().trim().toUpperCase());
+        entity.setPhone(input.getPhone().trim().toUpperCase());
         entity.setSex(input.getSex());
 
         if (input.getRole() != null) {
@@ -194,7 +194,7 @@ public class UserServiceImpl implements IUserService {
         if (input.getAuthorities() != null)
             entity.setAuthorities(this.authorityRepository.findAllById(input.getAuthorities()).stream().collect(Collectors.toSet()));
         if (input.getPassword() != null)
-            entity.setPassword(this.passwordEncoder.encode(input.getPassword()));
+            entity.setPassword(this.passwordEncoder.encode(input.getPassword().trim().toUpperCase()));
 
         return UserDto.toDto(this.userRepository.saveAndFlush(entity));
     }

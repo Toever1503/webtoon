@@ -95,8 +95,9 @@ public class IReadHistoryServiceImpl implements IReadHistoryService {
                 .map(readHistory -> {
                     MangaDto mangaDto = this.mangaService.findById(readHistory.getMangaEntity());
                     MangaChapterDto mangaChapterDto = this.mangaChapterService.findById(readHistory.getChapterEntity());
-                    return ReadHistoryDto2.toDto(readHistory, mangaDto.getTitle(), mangaDto.getFeaturedImage(), mangaChapterDto.getChapterIndex() +1);
+                    return ReadHistoryDto2.toDto(readHistory, mangaDto.getTitle(), mangaDto.getFeaturedImage(), mangaChapterDto.getChapterIndex() +1, mangaDto.getIsFree());
                 })
+                .sorted((p1, p2)-> Boolean.compare(p1.getIsFree(), p2.getIsFree()))
                 .collect(Collectors.toList());
         return readHistoryDto2s;
     }

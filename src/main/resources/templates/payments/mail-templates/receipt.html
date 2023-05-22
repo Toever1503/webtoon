@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hóa đơn bán hàng</title>
+</head>
+
+<body>
+<div style="max-width: 800px; padding: 0 15px; margin: 0 auto; color: black;">
+    <style>
+            table,
+            th,
+            td {
+                border: 1px solid #c1cfd1;
+                border-collapse: collapse;
+            }
+
+            .flex {
+                display: flex;
+                justify-content: space-between;
+            }
+
+
+    </style>
+
+    <h1 style="text-align: center; font-weight: 600; font-size: 20px; margin-top: 20px;">Hóa đơn bán hàng</h1>
+
+    <div style="margin: 10px auto;">
+        <p>
+            <span style="font-weight: 600; color: black;">Ngày tạo:</span>
+            <span id="date" th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}"></span>
+        </p>
+        <p><span style="font-weight: 600; color: black;"> Mã hóa đơn:</span> <span id="id"
+                                                                                   th:text="${order.getMaDonHang()}"></span>
+        </p>
+        <p>
+                <span style="font-weight: 600; color: black;">
+                    Khách hàng:
+                </span>
+            <span id="customer" th:text="${order.getUser_id().getFullName()}"></span>
+        </p>
+        <p>
+                <span style="font-weight: 600; color: black;">
+                    Số điện thoại:
+                </span>
+            <span id="phone" th:text="${order.getUser_id().phone}"></span>
+        </p>
+
+    </div>
+
+
+    <table style="width: 100%; border-collapse: collapse; border: 1px solid #9E9E9E;" cellpadding="10"
+           cellspacing="10">
+        <thead>
+        <tr style="border: 1px solid">
+            <th>STT</th>
+            <th>Tên sản phẩm</th>
+            <th>Đơn giá</th>
+            <th>Số lượng</th>
+            <th>Thành tiền</th>
+        </tr>
+        </thead>
+        <tbody style="text-align: center;">
+        <tr style="border: 1px solid;">
+            <td>1</td>
+            <td>
+                <span th:text="${order.getSubs_pack_id().getName()}"></span>
+                <span th:if="${subTitle != null}" class="text-red-500" th:text="${subTitle}"></span>
+            </td>
+            <td
+                    th:text="${#numbers.formatDecimal(order.getFinalPrice() - (order.getFinalPrice()*0.10), 0, 'POINT', 0, 'POINT') + ' vnd'}">
+                100.000
+            </td>
+            <td>1</td>
+            <td
+                    th:text="${#numbers.formatDecimal(order.getFinalPrice() - (order.getFinalPrice()*0.10), 0, 'POINT', 0, 'POINT') + ' vnd'}">
+                100.000
+            </td>
+        </tr>
+        </tbody>
+        <tfoot>
+        <tr>
+            <td colspan="5" style="padding: 10px;">
+                <div class="flex" style="display: flex; justify-content: space-between;">
+                    <div style="margin: 0 10px;">
+                        <p style="font-weight: 600; color: black;">Tổng tiền:</p>
+                        <p style="font-weight: 600; color: black;">Thuế GTGT 10%: </p>
+                        <p style="font-weight: 600; color: black;">Thành tiền:</p>
+                    </div>
+                    <div>
+                        <p
+                                th:text="${#numbers.formatDecimal(order.getFinalPrice() - (order.getFinalPrice()*0.10), 0, 'POINT', 0, 'POINT') + ' vnd'}">
+                        </p>
+                        <p
+                                th:text="${#numbers.formatDecimal(order.getFinalPrice()*0.10, 0, 'POINT', 0, 'POINT') + ' vnd'}">
+                        </p>
+                        <p
+                                th:text="${#numbers.formatDecimal(order.getFinalPrice(), 0, 'POINT', 0, 'POINT') + ' vnd'}">
+                            1000.d</p>
+                    </div>
+                </div>
+
+            </td>
+        </tr>
+        </tfoot>
+    </table>
+    <p>
+        Cảm ơn bạn đã sử dụng dịch vụ của chúng tôi.
+    </p>
+</div>
+</body>
+
+</html>

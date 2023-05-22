@@ -172,17 +172,16 @@ const UserPage: React.FC = () => {
         title: 'Add new user',
         visible: false,
         cancel: () => {
-            setAddEditUserModal({ ...addEditUserModal, visible: false })
+            setAddEditUserModal({ ...addEditUserModal, visible: false, userInput: undefined })
         },
         onOk: (data: IUserType) => {
-            if (addEditUserModal.userInput)
-                dispatch(editUser(data))
-            else
-                dispatch(addNewUser({
-                    data,
-                    pageSize: pageConfig.pageSize
-                }));
-            setAddEditUserModal({ ...addEditUserModal, visible: false })
+            console.log('modal prop: ', addEditUserModal);
+
+            dispatch(addNewUser({
+                data,
+                pageSize: pageConfig.pageSize
+            }));
+            addEditUserModal.cancel();
         },
         authorityOptions: []
     });
@@ -323,13 +322,13 @@ const UserPage: React.FC = () => {
                 <Space>
                     <label className="font-bold">Từ khóa: </label>
                     <Input.Search placeholder={`${t('placeholders.search')}`} value={userFilter.q} onChange={e => setUserFilter({ ...userFilter, q: e.target.value })} onSearch={onSearch} style={{ width: 200 }} />
-            
-                    </Space>
+
+                </Space>
 
             </div>
             <AddEditUserModal visible={addEditUserModal.visible} authorityOptions={authorityOptions} cancel={addEditUserModal.cancel} onOk={addEditUserModal.onOk} title={addEditUserModal.title} userInput={addEditUserModal.userInput} />
             <div className="flex justify-end items-center">
-                </div>
+            </div>
 
             <Table columns={columns} loading={tableLoading} dataSource={dataSource} onChange={onTblChange} rowKey={(() => Math.random())} pagination={pageConfig} />
         </div>

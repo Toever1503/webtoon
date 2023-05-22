@@ -112,6 +112,8 @@ public class UserPaymentController {
             model.addAttribute("hasNextPage", orderPage.hasNext());
             model.addAttribute("currentPage", orderPage.getNumber());
             model.addAttribute("totalPage", orderPage.getTotalPages());
+
+            model.addAttribute("currentTab", "order-history");
             return "account/userOrder";
         }
     }
@@ -178,6 +180,7 @@ public class UserPaymentController {
             model.addAttribute("isExpiredSub", isExpiredSub);
             model.addAttribute("isUsingTrial", isUsingTrial);
 
+            model.addAttribute("currentTab", "subscription-status");
             return "payments/user/subscriptionStatus";
         }
     }
@@ -210,9 +213,14 @@ public class UserPaymentController {
             model.addAttribute("currentUsingSubsPack", subscriptionPack);
             currentPrice = subscriptionPack.getPrice();
 
-            remainDays = (int) ((loggedUser.getCanReadUntilDate().getTime() - java.sql.Date.valueOf(formatter.format(Calendar.getInstance().getTime())).getTime()) / (1000 * 60 * 60 * 24));
-            Double pricePerDay = currentPrice / (subscriptionPack.getMonthCount() * 30);
-            remainPrice = pricePerDay * Double.valueOf(remainDays);
+            if (formatter.format(loggedUser.getFirstBoughtSubsDate()).equals(formatter.format(Calendar.getInstance().getTime()))) {
+                remainPrice = subscriptionPack.getPrice();
+            } else {
+                remainDays = (int) ((loggedUser.getCanReadUntilDate().getTime() - java.sql.Date.valueOf(formatter.format(Calendar.getInstance().getTime())).getTime()) / (1000 * 60 * 60 * 24));
+                Double pricePerDay = currentPrice / (subscriptionPack.getMonthCount() * 30);
+                remainPrice = pricePerDay * Double.valueOf(remainDays);
+            }
+
         }
 
         model.addAttribute("remainPrice", remainPrice.intValue());
@@ -231,7 +239,7 @@ public class UserPaymentController {
 
         model.addAttribute("finalPrice", canUpgradeList.get(0).getPrice() - remainPrice.intValue());
         model.addAttribute("upgradeSubscriptionList", canUpgradeList);
-
+        model.addAttribute("currentTab", "subscription-status");
         return "payments/user/upgradeSubscription";
     }
 
@@ -296,6 +304,7 @@ public class UserPaymentController {
 
         model.addAttribute("userEntity", loggedUser);
         model.addAttribute("sub", subscriptionPack);
+        model.addAttribute("currentTab", "subscription-status");
         return "payments/user/renew_subscription_form";
     }
 

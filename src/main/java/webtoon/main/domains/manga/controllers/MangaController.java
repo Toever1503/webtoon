@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 import webtoon.main.account.entities.ERoleConstants;
 import webtoon.main.account.entities.UserEntity;
 import webtoon.main.domains.manga.dtos.MangaChapterDto;
-import webtoon.main.domains.manga.dtos.MangaDto;
 import webtoon.main.domains.manga.entities.*;
 import webtoon.main.domains.manga.enums.EMangaDisplayType;
 import webtoon.main.domains.manga.enums.EMangaSTS;
@@ -61,7 +60,7 @@ public class MangaController {
                 (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not()
         ).and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
 
-        Specification  mangaSpecFree = Specification.where(
+        Specification mangaSpecFree = Specification.where(
                         (root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not())
                 .and((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_FREE), true))
                 .and((root, query, cb) -> cb.isNull(root.get(MangaEntity_.DELETED_AT)));
@@ -125,10 +124,11 @@ public class MangaController {
             int result = formatter.format(userEntity.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
             canReadChapter = result >= 0;
 
-            // if user is emp or admin, allow to read
-            if (!userEntity.getRole().getRoleName().equals(ERoleConstants.CUS))
-                canReadChapter = true;
         }
+
+        // if user is emp or admin, allow to read
+        if (userEntity != null && !userEntity.getRole().getRoleName().equals(ERoleConstants.CUS))
+            canReadChapter = true;
 
         model.addAttribute("canReadChapter", canReadChapter);
 
@@ -143,8 +143,8 @@ public class MangaController {
 //		hiển thị số sao và sô bản ghi ratingy
         List<Map> list = this.ratingService.getRating(mangaEntity.getId());
         Map<EMangaSTS, String> mangaStatusMap = new HashMap<>();
-        mangaStatusMap.put(EMangaSTS.COMING, "Đang bắt đầu");
-        mangaStatusMap.put(EMangaSTS.GOING, "Đang thực hiện");
+        mangaStatusMap.put(EMangaSTS.COMING, "Sắp ra mắt");
+        mangaStatusMap.put(EMangaSTS.GOING, "Đang ra");
         mangaStatusMap.put(EMangaSTS.ON_STOPPING, "Đang tạm dừng");
         mangaStatusMap.put(EMangaSTS.COMPLETED, "Đã hoàn thành");
 
@@ -165,7 +165,15 @@ public class MangaController {
             pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize()).withSort(Sort.Direction.DESC, "id");
             Page<MangaVolumeEntity> volumeEntities = this.mangaVolumeService.filterEntity(pageable, Specification.where(spec));
 
+
+            if (!volumeEntities.isEmpty()) {
+                MangaChapterEntity firstChapterId = this.mangaChapterService.getFirstIdForVolType(volumeEntities.getContent().get(volumeEntities.getContent().size() - 1).getId());
+                model.addAttribute("firstChapterId", firstChapterId.getId());
+            }
+
             model.addAttribute("volumeEntities", volumeEntities.getContent());
+
+            model.addAttribute("freeChapters", this.mangaChapterService.getFreeChaptersForVolType(mangaEntity.getId()));
 
             model.addAttribute("hasPrevPage", volumeEntities.hasPrevious());
             model.addAttribute("hasNextPage", volumeEntities.hasNext());
@@ -177,10 +185,17 @@ public class MangaController {
             Page<MangaChapterEntity> chapterEntities = this.mangaChapterService.filter(pageable, Specification.where(spec));
             model.addAttribute("chapterEntities", chapterEntities.getContent());
 
+            model.addAttribute("freeChapters", this.mangaChapterService.getFreeChaptersForChapType(mangaEntity.getId()));
+
             model.addAttribute("hasPrevPage", chapterEntities.hasPrevious());
             model.addAttribute("hasNextPage", chapterEntities.hasNext());
             model.addAttribute("currentPage", chapterEntities.getNumber());
             model.addAttribute("totalPage", chapterEntities.getTotalPages());
+
+            if(!chapterEntities.isEmpty()){
+                MangaChapterEntity firstChapterId = this.mangaChapterService.getFirstIdForChapType(mangaEntity.getId());
+                model.addAttribute("firstChapterId", firstChapterId.getId());
+            }
         }
 
 
@@ -195,7 +210,7 @@ public class MangaController {
         boolean canReadChapter = false;
         if (chapterEntity.getRequiredVip() == true) {
             SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            if (loggedUser != null) {
+            if (loggedUser != null && loggedUser.getRole().getRoleName().equals(ERoleConstants.CUS)) {
                 int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 canReadChapter = result >= 0;
             }

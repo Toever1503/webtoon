@@ -37,12 +37,10 @@ public class MangaResource2 {
 
     @PostMapping("filter")
     public Page<MangaDto> filter(@RequestBody MangaFilterInput input, Pageable page) {
-        List<Specification<MangaEntity>> listSpecs = new ArrayList<Specification<MangaEntity>>();
+        List<Specification<MangaEntity>> listSpecs = new ArrayList<>();
 
-        if (input.getStatus() != null)
-        {
-            Specification s = (root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus());
-            listSpecs.add(s);
+        if (input.getStatus() != null) {
+            listSpecs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.MANGA_STATUS), input.getStatus()));
         }
 
         if (input.getQ() != null) {
@@ -57,10 +55,13 @@ public class MangaResource2 {
             listSpecs.add((root, query, cb) -> root.join(MangaEntity_.GENRES).get(MangaGenreEntity_.ID).in(input.getGenreId()));
         }
         if (input.getAuthorId() != null) {
-            listSpecs.add((root, query, cb) ->  root.join(MangaEntity_.AUTHORS).get(MangaAuthorEntity_.ID).in(input.getAuthorId()));
+            listSpecs.add((root, query, cb) -> root.join(MangaEntity_.AUTHORS).get(MangaAuthorEntity_.ID).in(input.getAuthorId()));
         }
         if (input.getIsShow() != null) {
             listSpecs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.IS_SHOW), input.getIsShow()));
+        }
+        if (input.getMangaType() != null) {
+            listSpecs.add(((root, query, criteriaBuilder) -> criteriaBuilder.equal(root.get(MangaEntity_.MANGA_TYPE), input.getMangaType())));
         }
 
         listSpecs.add((root, query, cb) -> cb.equal(root.get(MangaEntity_.STATUS), EStatus.DRAFTED).not());
@@ -68,9 +69,11 @@ public class MangaResource2 {
 
         Specification<MangaEntity> finalSpec = null;
         for (Specification spec : listSpecs) {
-            if (finalSpec == null)
+            if (finalSpec == null) {
                 finalSpec = Specification.where(spec);
-            else finalSpec.and(spec);
+            } else {
+                finalSpec = finalSpec.and(spec);
+            }
         }
 
         return this.mangaService.filter(page, finalSpec);
