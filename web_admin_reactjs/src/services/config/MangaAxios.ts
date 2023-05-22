@@ -8,7 +8,7 @@ function getInstance(): AxiosInstance {
     }
     axiosInstance = axios.create({
         baseURL: "http://34.81.192.98:8080/api",
-        // baseURL: "http://localhost:8080/api",
+        // baseURL: "http://34.81.192.98:8080/api",
         headers: {},
     });
 

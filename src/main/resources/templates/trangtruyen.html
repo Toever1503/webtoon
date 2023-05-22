@@ -175,7 +175,7 @@
                                             const model = /*[[${model.getId()}]]*/ 'default';
                                             const modelTitle = /*[[${model.getTitle()}]]*/ 'default';
                                             // Endpoint của REST API để gửi đánh giá sao lên server
-                                            const apiUrl = "http://localhost:8080/rating/add";
+                                            const apiUrl = "http://34.81.192.98:8080/rating/add";
 
                                             // Thiết lập sự kiện khi người dùng thay đổi đánh giá sao
                                             ratingContainer.find('.rating-input').on('change', function() {
@@ -420,7 +420,7 @@
                                                                 newLink.setAttribute(attr.name, attr.value);
                                                             }
                                                             // Thiết lập href mới cho thẻ a mới
-                                                            newLink.href = `http://localhost:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
+                                                            newLink.href = `http://34.81.192.98:8080/manga/${mangaText}/chapter/${chapterId}`; // Thiết lập URL cho thẻ a mới
                                                             // Thiết lập nội dung cho thẻ a mới (nếu muốn)
                                                             newLink.textContent = 'Đọc tiếp';
 
@@ -724,7 +724,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             // Lấy đánh giá sao từ REST API và hiển thị lên phần tử HTM
 
-            const getUrl = 'http://localhost:8080/mangaTest/getRating/'+ model;
+            const getUrl = 'http://34.81.192.98:8080/mangaTest/getRating/'+ model;
             // Tạo đối tượng Request
             const request = new Request(getUrl, {
                 method: 'GET'
