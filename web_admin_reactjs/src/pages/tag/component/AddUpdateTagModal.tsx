@@ -36,9 +36,16 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                     dispatch(addTag(res.data));
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Add tag successfully',
+                        message: 'Thêm thành công!',
                     }));
                     handleCancel();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    dispatch(showNofification({
+                        type: 'error',
+                        message: 'Thêm thất bại!',
+                    }));
                 })
                 .finally(() => {
                     setIsSubmitting(false);
@@ -52,9 +59,16 @@ const AddUpdateGenreModal: React.FC = ({ config }: AddUpdateGenreModalProps | an
                     dispatch(updateTag(res.data));
                     dispatch(showNofification({
                         type: 'success',
-                        message: 'Edit tag successfully',
+                        message: 'Sửa thành công!',
                     }));
                     handleCancel();
+                })
+                .catch((err) => {
+                    console.log(err);
+                    dispatch(showNofification({
+                        type: 'error',
+                        message: 'Thêm thất bại!',
+                    }));
                 })
                 .finally(() => {
                     setIsSubmitting(false);

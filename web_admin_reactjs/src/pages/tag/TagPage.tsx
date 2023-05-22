@@ -89,7 +89,7 @@ const TagPage: React.FC = () => {
 
     const updateTag = (record: TagModel) => {
         console.log('update  tag', record)
-        setAddUpdateTagModal({ ...addUpdateTagModal, visible: true, title: 'Update tag', type: 'update', record });
+        setAddUpdateTagModal({ ...addUpdateTagModal, visible: true, title: 'Chỉnh sửa', type: 'update', record });
     };
 
     const deleteTag = (record: TagModel) => {

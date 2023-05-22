@@ -34,7 +34,7 @@ const MangaGenrePage: React.FC = () => {
     });
 
     const [addUpdateGenreModal, setAddUpdateGenreModal] = useState<object>({
-        title: 'Add new genre',
+        title: 'Thêm mới thể loại',
         visible: false,
         type: 'add',
         setVisible: (visible: boolean) => setAddUpdateGenreModal({ ...addUpdateGenreModal, visible }),
@@ -92,14 +92,14 @@ const MangaGenrePage: React.FC = () => {
     };
 
     const addNewGenre = () => {
-        setAddUpdateGenreModal({ ...addUpdateGenreModal, visible: true, title: 'Add new genre', type: 'add' });
+        setAddUpdateGenreModal({ ...addUpdateGenreModal, visible: true, title: 'Thêm mới', type: 'add' });
         console.log('add new genre', addUpdateGenreModal);
 
     };
 
     const updateGenre = (record: GenreModel) => {
         console.log('update  genre', record)
-        setAddUpdateGenreModal({ ...addUpdateGenreModal, visible: true, title: 'Update tag', type: 'update', record });
+        setAddUpdateGenreModal({ ...addUpdateGenreModal, visible: true, title: 'Chỉnh sửa', type: 'update', record });
     };
 
     const deleteGenre = (record: GenreModel) => {

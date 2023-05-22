@@ -14,7 +14,7 @@ export default {
                 orderNo: 'Mã đơn hàng',
                 createdBy: 'Khách hàng',
                 subscriptionPack: 'Gói đăng ký',
-                price: 'Giá',
+                price: 'Số tiền',
                 createdAt: 'Ngày tạo',
                 action: 'Thao tác',
             }
