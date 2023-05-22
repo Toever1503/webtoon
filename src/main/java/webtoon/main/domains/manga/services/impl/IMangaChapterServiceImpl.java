@@ -165,6 +165,7 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
 //            mangaEntity.setMangaStatus(EMangaSTS.GOING);
             if (input.getId() == null) {
                 mangaEntity.setLastEditChapterAt(Calendar.getInstance().getTime());
+                this.mangaService.saveEntity(mangaEntity);
             }
 
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
@@ -253,7 +254,6 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
                 }).collect(Collectors.toList());
                 this.chapterImageRepository.saveAllAndFlush(mangaChapterImages);
             }
-//            this.mangaService.saveEntity(mangaEntity);
             return MangaChapterDto.toDto(this.getById(mangaChapterEntity.getId()));
         } catch (Exception e) {
             e.printStackTrace();

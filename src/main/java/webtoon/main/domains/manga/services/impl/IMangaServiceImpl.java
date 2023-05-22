@@ -94,6 +94,9 @@ public class IMangaServiceImpl implements IMangaService {
             if (model.getMangaStatus().equals(EMangaSTS.COMING)) {
                 mangaEntity.setMangaStatus(originalEntity.getMangaStatus());
             }
+            if(originalEntity.getLastEditChapterAt() == null){
+                mangaEntity.setLastEditChapterAt(Calendar.getInstance().getTime());
+            }
         } else {
             mangaEntity.setRating(0F);
             mangaEntity.setViewCount(0);
