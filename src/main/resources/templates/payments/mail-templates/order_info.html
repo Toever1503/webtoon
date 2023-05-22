@@ -41,7 +41,9 @@
         </thead>
         <tbody>
             <tr height="25" style="text-align: center">
-                <td th:text="${order.getSubs_pack_id().getName()}">
+                <td>
+                    <span th:text="${order.getSubs_pack_id().getName()}"></span>
+                    <span th:if="${subTitle != null}" class="text-red-500" th:text="${subTitle}"></span>
                 </td>
                 <td th:text="${#numbers.formatDecimal(order.getFinalPrice(), 0, 'POINT', 0, 'POINT') + ' vnd'}"></td>
                 <td th:text="${order.getPaymentMethod().name() == 'ATM' ? 'Chuyển khoản' : 'VN_PAY'}">

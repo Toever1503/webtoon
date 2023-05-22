@@ -10,11 +10,13 @@ import webtoon.main.payment.entities.OrderEntity;
 import webtoon.main.payment.entities.PaymentEntity;
 import webtoon.main.payment.entities.SubscriptionPackEntity;
 import webtoon.main.payment.enums.EOrderStatus;
+import webtoon.main.payment.enums.EOrderType;
 import webtoon.main.payment.services.IOrderService;
 import webtoon.main.payment.services.IPaymentService;
 import webtoon.main.payment.services.ISendEmailService;
 import webtoon.main.payment.services.ISubscriptionPackService;
 
+import javax.mail.MessagingException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -173,10 +175,31 @@ public class PaymentController {
             httpSession.setAttribute("loggedUser", orderEntity.getUser_id());
 
             try {
+                String subTitle = null;
+                if (orderEntity.getOrderType().equals(EOrderType.UPGRADE)) {
+                    subTitle = "(Nâng cấp)";
+                } else if (orderEntity.getOrderType().equals(EOrderType.RENEW)) {
+                    subTitle = "(Gia hạn)";
+                }
+
+                Map<String, Object> context = new HashMap<>();
+                context.put("order", orderEntity);
+                context.put("subTitle", subTitle);
+
                 this.sendEmailService.sendMail("payments/mail-templates/order_info.html",
                         orderEntity.getUser_id().getEmail(),
                         "Đơn hàng của bạn đã được thanh toán thành công!",
-                        Map.of("order", orderEntity));
+                        context);
+
+                new Thread(() -> {
+                    try {
+                        sendEmailService.sendMail("payments/mail-templates/receipt.html", orderEntity.getUser_id().getEmail(), "Hóa đơn bán hàng", context);
+                    } catch (MessagingException e) {
+                        e.printStackTrace();
+                        System.out.println("send receipt error");
+                    }
+                }).start();
+
             } catch (Exception e) {
                 System.out.printf("send mail failed!");
                 e.printStackTrace();
