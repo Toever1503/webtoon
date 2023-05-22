@@ -10,7 +10,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
-import org.thymeleaf.util.StringUtils;
 import webtoon.main.account.configs.security.CustomUserDetail;
 import webtoon.main.account.configs.security.jwt.JwtProvider;
 import webtoon.main.account.dtos.LoginResponseDto;
@@ -152,6 +151,22 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
+    public UserEntity findByEmail(String email){
+        return this.userRepository.findByEmail(email)
+                .orElseThrow(
+                        () -> new CustomHandleException(0)
+                );
+    }
+    @Override
+    public UserEntity findByUserName(String name){
+        return  this.userRepository.findByUsername(name)
+                .orElseThrow(
+                        () -> new CustomHandleException(0)
+                );
+
+    }
+
+    @Override
     public UserDto add(UserInput input) {
         UserEntity entity = UserInput.toEntity(input);
 
@@ -181,6 +196,10 @@ public class UserServiceImpl implements IUserService {
 
         List<String> errors = new ArrayList<>();
 
+        if (userRepository.existsByUsername(input.getUsername())){
+            errors.add("UserName đã được sử dụng!");
+        }
+
         // Kiểm tra xem email đã được sử dụng chưa
         if (userRepository.existsByEmail(input.getEmail())) {
             errors.add("Email này đã được sử dụng để đăng kí!");
@@ -205,7 +224,9 @@ public class UserServiceImpl implements IUserService {
         entity.setUsername(input.getUsername());
         entity.setFullName(input.getFullName());
         entity.setEmail(input.getEmail());
-
+        entity.setStatus(EStatus.ACTIVED);
+        entity.setAccountType(EAccountType.DATABASE);
+        entity.setRole(this.roleRepository.findById(3l).get());
         this.userRepository.saveAndFlush(entity);
         return UserDto.toDto(entity);
     }
@@ -213,6 +234,9 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void validateUser(CreateUserModel createUserModel, List<String> errors){
+        if (userRepository.existsByUsername(createUserModel.getUsername())){
+            errors.add("UserName đã được sử dụng!");
+        }
         if (userRepository.existsByEmail(createUserModel.getEmail())) {
             errors.add("Email đã được sử dụng!");
         }

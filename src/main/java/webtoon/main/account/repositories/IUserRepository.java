@@ -30,4 +30,6 @@ public interface IUserRepository extends JpaRepository<UserEntity, Long>, JpaSpe
 
 
     Optional<UserEntity> findByPhone(String phone);
+
+    Optional<UserEntity> findByEmail(String email);
 }

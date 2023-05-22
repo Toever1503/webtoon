@@ -32,6 +32,10 @@ public interface IUserService extends IJwtService {
 
     List<AuthorityEntity> getAllAuthorities();
 
+    UserEntity findByEmail(String email);
+
+    UserEntity findByUserName(String name);
+
     UserDto add(UserInput input);
 
     UserDto addDK(CreateUserModel input, BindingResult bindingResult);
