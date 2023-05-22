@@ -281,7 +281,7 @@ public class IMangaServiceImpl implements IMangaService {
     @Override
     public List<MangaEntity> filter5LatestMangas(Specification<MangaEntity> specs) {
         return this.mangaRepository.findAll(specs, PageRequest.of(0, 5)
-                        .withSort(Sort.Direction.DESC, MangaEntity_.MODIFIED_AT))
+                        .withSort(Sort.Direction.DESC, MangaEntity_.LAST_EDIT_CHAPTER_AT))
                 .getContent();
     }
 
