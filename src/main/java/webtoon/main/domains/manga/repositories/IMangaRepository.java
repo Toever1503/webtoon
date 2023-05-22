@@ -32,7 +32,8 @@ public interface IMangaRepository extends JpaRepository<MangaEntity, Long>, JpaS
     @Query("select p from MangaEntity p where p.id =?1 ")
     MangaEntity getByMangaId(Long id);
 
-    @Query(value = "SELECT distinct a.* FROM tbl_manga_entity a LEFT JOIN tbl_manga_genre_relation b ON b.manga_id = a.id WHERE b.genre_id in :ids and a.status != 'DRAFTED' limit 0,14",
+    @Query(value = "SELECT distinct a.* FROM tbl_manga_entity a LEFT JOIN tbl_manga_genre_relation b ON b.manga_id = a.id\n" +
+            " WHERE b.genre_id in :ids and a.status != 'DRAFTED' and a.deleted_at is null limit 0,14",
             nativeQuery = true)
     List<MangaEntity> findByGenresIn(@Param("ids") List<Long> ids);
 
