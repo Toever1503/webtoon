@@ -1,4 +1,4 @@
-package webtoon.main.domains.manga.controllers;
+package webtoon.main.domains.manga.resources2;
 
 import org.springframework.web.bind.annotation.*;
 import webtoon.main.account.entities.UserEntity;

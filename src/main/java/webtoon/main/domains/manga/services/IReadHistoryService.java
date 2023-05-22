@@ -1,5 +1,7 @@
 package webtoon.main.domains.manga.services;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import webtoon.main.domains.manga.dtos.ReadHistoryDto;
 import webtoon.main.domains.manga.dtos.ReadHistoryDto2;
 import webtoon.main.domains.manga.entities.MangaEntity;
@@ -25,4 +27,6 @@ public interface IReadHistoryService {
     ReadHistory save(ReadHistory item);
 
     List<ReadHistoryDto2> findAllByCreatedBy(Long id);
+
+    Page<ReadHistoryDto2> findAllByCreatedBy(Long userId, Pageable pageable);
 }

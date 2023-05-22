@@ -130,4 +130,8 @@ public class MangaEntity {
     @Column(name = "deleted_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date deletedAt;
+
+    @Column(name = "last_edit_chapter_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date lastEditChapterAt;
 }

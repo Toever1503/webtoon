@@ -45,6 +45,7 @@ public class WebConfig implements WebMvcConfigurer {
                 new AntPathRequestMatcher("/index"),
 
                 new AntPathRequestMatcher("/signin"),
+                new AntPathRequestMatcher("/reset-password"),
                 new AntPathRequestMatcher("/static/**")
                 , new AntPathRequestMatcher("/")
                 , new AntPathRequestMatcher("/**", HttpMethod.OPTIONS.name())

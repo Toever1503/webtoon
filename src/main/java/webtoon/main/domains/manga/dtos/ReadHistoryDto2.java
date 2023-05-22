@@ -22,13 +22,16 @@ public class ReadHistoryDto2 {
     private Long createdBy;
 
     private String title;
+
+    private String mangaName;
+
     private String featuredImage;
     private Integer chapterIndex;
 
     private Date createdDate;
     private Boolean isFree;
 
-    public static ReadHistoryDto2  toDto(ReadHistory entity, String title, String featuredImage, Integer chapterIndex, Boolean isFree){
+    public static ReadHistoryDto2  toDto(ReadHistory entity, String title, String featuredImage, Integer chapterIndex, Boolean isFree, String mangaName){
         return ReadHistoryDto2.builder()
                 .id(entity.getId())
                 .mangaId(entity.getMangaEntity())
@@ -39,6 +42,7 @@ public class ReadHistoryDto2 {
                 .chapterIndex(chapterIndex)
                 .createdDate(entity.getCreatedDate())
                 .isFree(isFree)
+                .mangaName(mangaName)
                 .build();
     }
 

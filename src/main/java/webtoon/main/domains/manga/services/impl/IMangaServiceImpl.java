@@ -90,6 +90,7 @@ public class IMangaServiceImpl implements IMangaService {
             mangaEntity.setRating(0F);
             mangaEntity.setViewCount(0);
             mangaEntity.setCommentCount(0);
+            mangaEntity.setLastEditChapterAt(Calendar.getInstance().getTime());
         }
 
         mangaEntity.setGenres(genreRepository.findAllById(model.getGenres()).stream().collect(Collectors.toList()));
@@ -128,6 +129,7 @@ public class IMangaServiceImpl implements IMangaService {
         mangaEntity.setCreatedAt(model.getCreatedAt());
         mangaEntity.setModifiedAt(model.getModifiedAt());
         mangaEntity.setModifiedBy(SecurityUtils.getCurrentUser().getUser());
+        mangaEntity.setLastEditChapterAt(Calendar.getInstance().getTime());
         mangaRepository.saveAndFlush(mangaEntity);
         return MangaDto.builder()
                 .title(mangaEntity.getTitle())

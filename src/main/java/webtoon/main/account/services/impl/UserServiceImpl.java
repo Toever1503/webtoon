@@ -24,6 +24,7 @@ import webtoon.main.account.models.CreateUserModel;
 import webtoon.main.account.repositories.IAuthorityRepository;
 import webtoon.main.account.repositories.IRoleRepository;
 import webtoon.main.account.repositories.IUserRepository;
+import webtoon.main.account.services.IForgotPasswordService;
 import webtoon.main.account.services.IUserService;
 import webtoon.main.utils.exception.CustomHandleException;
 
@@ -49,12 +50,16 @@ public class UserServiceImpl implements IUserService {
 
     private final IRoleRepository roleRepository;
 
-    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider, IRoleRepository roleRepository) {
+
+    private final IForgotPasswordService forgotPasswordService;
+
+    public UserServiceImpl(PasswordEncoder passwordEncoder, IUserRepository userRepository, IAuthorityRepository authorityRepository, JwtProvider jwtProvider, IRoleRepository roleRepository, IForgotPasswordService forgotPasswordService) {
         this.passwordEncoder = passwordEncoder;
         this.userRepository = userRepository;
         this.authorityRepository = authorityRepository;
         this.jwtProvider = jwtProvider;
         this.roleRepository = roleRepository;
+        this.forgotPasswordService = forgotPasswordService;
 
         initAuthority();
 
@@ -358,9 +363,12 @@ public class UserServiceImpl implements IUserService {
 
     @Override
     public void forgotPassword(String email) {
-
-        UserEntity userEntity = this.findByUsername(email);
-        // task: need send mail
+        try {
+            UserEntity userEntity = this.findByUsername(email);
+            forgotPasswordService.sendResetPasswordEmail(email);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override

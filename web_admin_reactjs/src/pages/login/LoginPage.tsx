@@ -95,7 +95,6 @@ const LoginPage: React.FC = () => {
             <div className="min-w-[350px] mx-auto">
                 <Card >
                     <div className='{styles.logo}'>
-                        <img alt="logo" src='{config.logoPath}' />
                         <h3 className="text-center text-xl">   Webtoon Admin </h3>
                     </div>
                     <Form

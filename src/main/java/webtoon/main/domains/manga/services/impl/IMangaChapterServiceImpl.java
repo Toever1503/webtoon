@@ -128,8 +128,10 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
     public MangaChapterDto saveTextChapter(MangaUploadChapterInput input) {
         MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
         mangaEntity.setMangaStatus(EMangaSTS.GOING);
-        if (!mangaEntity.getIsFree())
-            mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
+
+        if (input.getId() == null) {
+            mangaEntity.setLastEditChapterAt(Calendar.getInstance().getTime());
+        }
 
         MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                 .id(input.getId())
@@ -161,8 +163,9 @@ public class IMangaChapterServiceImpl implements IMangaChapterService {
         try {
             MangaEntity mangaEntity = this.mangaService.getById(input.getMangaID());
 //            mangaEntity.setMangaStatus(EMangaSTS.GOING);
-//            if (!mangaEntity.getIsFree())
-//                mangaEntity.setModifiedAt(Calendar.getInstance().getTime());
+            if (input.getId() == null) {
+                mangaEntity.setLastEditChapterAt(Calendar.getInstance().getTime());
+            }
 
             MangaChapterEntity mangaChapterEntity = MangaChapterEntity.builder()
                     .id(input.getId())
