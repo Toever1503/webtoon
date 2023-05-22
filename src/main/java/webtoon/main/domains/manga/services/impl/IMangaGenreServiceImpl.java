@@ -112,5 +112,18 @@ public class IMangaGenreServiceImpl implements IMangaGenreService {
         return this.genreRepository.findAll();
     }
 
+    @Override
+    public void refreshGenreCount(List<Long> genreIds) {
+        genreIds.forEach(genreId -> {
+            try {
+                MangaGenreEntity genreEntity = this.getById(genreId);
+                genreEntity.setMangaCount(this.genreRepository.countTotalManga(genreId).intValue());
+                this.genreRepository.saveAndFlush(genreEntity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
 
 }

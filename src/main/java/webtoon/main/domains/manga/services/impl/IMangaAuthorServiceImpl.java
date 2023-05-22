@@ -95,6 +95,19 @@ public class IMangaAuthorServiceImpl implements IMangaAuthorService {
     }
 
     @Override
+    public void refreshAuthorCount(List<Long> authorIds) {
+        authorIds.forEach(authorId -> {
+            try {
+                MangaAuthorEntity authorEntity = this.getById(authorId);
+                authorEntity.setMangaCount(this.mangaAuthorRepository.countTotalMangaByAuthorId(authorId).intValue());
+                this.mangaAuthorRepository.saveAndFlush(authorEntity);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    @Override
     public boolean deleteById(Long id) {
         try {
             this.mangaAuthorRepository.deleteById(id);

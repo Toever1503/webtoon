@@ -27,4 +27,7 @@ public interface IMangaAuthorService {
 	void deleteAuthorByIds(List<Long> ids);
 
     List<MangaAuthorEntity> getAll();
+
+
+	void refreshAuthorCount(List<Long> authorIds);
 }

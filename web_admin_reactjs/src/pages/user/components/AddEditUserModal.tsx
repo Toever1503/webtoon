@@ -52,6 +52,8 @@ const AddEditUserModal: React.FC<AddEditUserModalProps> = (props: AddEditUserMod
         form.validateFields()
             .then((values: any) => {
                 console.log('ok', values);
+                values.email = values.email.trim();
+                values.username = values.username.trim();
                 if (!props.userInput) // for add
                     userService
                         .addNewUser({

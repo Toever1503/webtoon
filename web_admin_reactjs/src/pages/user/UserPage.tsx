@@ -29,6 +29,7 @@ const UserPage: React.FC = () => {
         current: 1,
         pageSize: 10,
         total: 0,
+        showSizeChanger: false,
     });
     const [userFilter, setUserFilter] = useState<any>({
         role: 'ALL',

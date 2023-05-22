@@ -19,7 +19,7 @@ const { confirm } = Modal;
 const MangaGenrePage: React.FC = () => {
     const genreData = useSelector((state: RootState) => state.genre);
 
-    const {t} = useTranslation();
+    const { t } = useTranslation();
     const dispatch = useDispatch();
 
     const [dataSource, setDataSource] = useState<GenreModel[]>([]);
@@ -61,6 +61,11 @@ const MangaGenrePage: React.FC = () => {
             title: 'Tổng số truyện',
             dataIndex: 'mangaCount',
             key: 'mangaCount',
+            render: (text) => <>
+                {
+                    text > 0 ? text : 0
+                }
+            </>
         },
         {
             title: 'Hành động',

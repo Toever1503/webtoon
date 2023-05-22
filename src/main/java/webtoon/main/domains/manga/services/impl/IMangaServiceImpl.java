@@ -20,6 +20,8 @@ import webtoon.main.domains.manga.enums.EMangaType;
 import webtoon.main.domains.manga.enums.EStatus;
 import webtoon.main.domains.manga.mappers.MangaMapper;
 import webtoon.main.domains.manga.models.MangaModel;
+import webtoon.main.domains.manga.services.IMangaAuthorService;
+import webtoon.main.domains.manga.services.IMangaGenreService;
 import webtoon.main.domains.tag.entity.enums.ETagType;
 import webtoon.main.domains.tag.service.ITagService;
 import webtoon.main.domains.manga.repositories.*;
@@ -62,6 +64,12 @@ public class IMangaServiceImpl implements IMangaService {
 
     @Autowired
     private IFileService fileService;
+
+    @Autowired
+    private IMangaAuthorService mangaAuthorService;
+
+    @Autowired
+    private IMangaGenreService mangaGenreService;
 
     @Autowired
     private IMangaViewCountEntityRepository mangaViewCountEntityRepository;
@@ -110,7 +118,8 @@ public class IMangaServiceImpl implements IMangaService {
         else
             mangaEntity.setTags(Collections.EMPTY_LIST);
 
-
+        this.mangaGenreService.refreshGenreCount(model.getGenres());
+        this.mangaAuthorService.refreshAuthorCount(model.getAuthors());
         return this.mangaMapper.toDto(mangaEntity);
     }
 

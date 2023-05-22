@@ -25,6 +25,4 @@ public class MangaGenreEntity {
 
 	@Column(name = "manga_count", columnDefinition = "int default 0")
 	private Integer mangaCount;
-
-
 }

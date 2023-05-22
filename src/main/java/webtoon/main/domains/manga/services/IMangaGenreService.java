@@ -29,4 +29,6 @@ public interface IMangaGenreService {
 	List<MangaGenreEntity> findAllGenre();
 
     List<MangaGenreEntity> getAll();
+
+	void refreshGenreCount(List<Long> genreIds);
 }
