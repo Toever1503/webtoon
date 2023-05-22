@@ -27,7 +27,7 @@
         <p style="font-size: 16px;">THÔNG TIN ĐƠN HÀNG</p>
         <div>
             <p>Mã đơn hàng: <span th:text="${order.getMaDonHang()}"/></p>
-            <p>Thời gian đăng ký: <span th:text="${#dates.format(order.getCreated_at(), 'dd-MM-yyyy HH:mm:ss')}"/></p>
+            <p>Thời gian đăng ký: <span th:text="${#dates.format(order.createdAt, 'dd-MM-yyyy HH:mm:ss')}"/></p>
         </div>
     </div>
     <table cellpadding="10" cellspacing="10">

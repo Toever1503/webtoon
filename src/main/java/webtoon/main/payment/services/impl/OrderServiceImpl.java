@@ -56,7 +56,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderDto add(OrderModel orderModel) {
         OrderEntity orderEntity = OrderEntity.builder()
-                .created_at(orderModel.getCreated_at())
+                .createdAt(orderModel.getCreated_at())
                 .finalPrice(orderModel.getFinalPrice())
                 .orderType(orderModel.getEstatus())
                 .status(orderModel.getStatus())
@@ -73,7 +73,7 @@ public class OrderServiceImpl implements IOrderService {
     @Override
     public OrderDto update(OrderModel orderModel) {
         OrderEntity orderEntity = this.getById(orderModel.getId());
-        orderEntity.setCreated_at(orderModel.getCreated_at());
+        orderEntity.setCreatedAt(orderModel.getCreated_at());
         orderEntity.setFinalPrice(orderModel.getFinalPrice());
         orderEntity.setOrderType(orderModel.getEstatus());
         orderEntity.setStatus(orderModel.getStatus());
@@ -319,8 +319,8 @@ public class OrderServiceImpl implements IOrderService {
     }
 
     @Override
-    public Long countTotalRegisterThisMonth() {
-        return this.orderRepository.countTotalRegisterThisMonth();
+    public Long countTotalNewRegisterThisMonth() {
+        return this.orderRepository.countTotalNewRegisterThisMonth();
     }
 
     @Override
@@ -371,7 +371,7 @@ public class OrderServiceImpl implements IOrderService {
 
     @Override
     public Long countTotalCompletedOrderThisMonth() {
-        return this.orderRepository.countTotalRegisterThisMonth();
+        return this.orderRepository.countTotalCompletedOrderThisMonth();
     }
 
     @Override
@@ -419,11 +419,32 @@ public class OrderServiceImpl implements IOrderService {
         return this.orderRepository.count(spec);
     }
 
+    @Override
+    public List<Object[]> countTotalPeoplePerSubsPackByMonth(String monthDate) {
+        return this.orderRepository.countTotalPeoplePerSubsPackByMonth(monthDate);
+    }
+
     private void sendOrderInfoToMail(OrderEntity orderEntity) {
+        String subTitle = null;
+        if (orderEntity.getOrderType().equals(EOrderType.UPGRADE)) {
+            subTitle = "(Nâng cấp)";
+        } else if (orderEntity.getOrderType().equals(EOrderType.RENEW)) {
+            subTitle = "(Gia hạn)";
+        }
+
         Map<String, Object> context = new HashMap<>();
         context.put("order", orderEntity);
+        context.put("subTitle", subTitle);
 
         try {
+            new Thread(() -> {
+                try {
+                    sendEmailService.sendMail("payments/mail-templates/receipt.html", orderEntity.getUser_id().getEmail(), "Hóa đơn bán hàng", context);
+                } catch (MessagingException e) {
+                    e.printStackTrace();
+                    System.out.println("send receipt error");
+                }
+            }).start();
             this.sendEmailService.sendMail("payments/mail-templates/order_info.html", orderEntity.getUser_id().getEmail(), "Thông tin đặt hàng", context);
         } catch (Exception e) {
             this.logger.error("Send mail failed~");

@@ -105,6 +105,9 @@ public class UserEntity {
     @Column(name = "has_send_renewal_email", columnDefinition = "boolean default false")
     private Boolean hasSendRenewalEmail;
 
+    @Column(name = "created_fake")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createAtFake;
     public static void main(String[] args) {
 
         Double originP = 50000d;

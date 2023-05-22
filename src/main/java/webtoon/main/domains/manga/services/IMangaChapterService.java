@@ -45,6 +45,7 @@ public interface IMangaChapterService {
     MangaChapterDto getLastChapterIndexForChapType(Long mangaId);
     Long getLastChapterIndexForVolType(Long volumeId);
 
+    MangaChapterEntity getFirstIdForVolType(Long volId);
     List<MangaChapterEntity> findByVolume(Long volume);
 
     List<MangaChapterEntity> findAll();
@@ -58,4 +59,10 @@ public interface IMangaChapterService {
     MangaChapterEntity finByMangaId(Long id);
 
     Long countTotalChapterForMangaTypeVol(Long id);
+
+    MangaChapterEntity getFirstIdForChapType(Long mangaId);
+
+    List<MangaChapterEntity> getFreeChaptersForVolType(Long mangaId);
+
+    List<MangaChapterEntity> getFreeChaptersForChapType(Long mangaId);
 }

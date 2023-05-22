@@ -60,6 +60,7 @@ public class LoginServiceImpl implements ILoginService {
             throw new CustomHandleException(1);
         }
 
+        req.getSession().setMaxInactiveInterval(model.isRememberMe() ? 86400 : 3600);
         req.getSession().setAttribute("loggedUser", userEntity);
         CustomUserDetail userDetail = new CustomUserDetail(userEntity);
         UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(userDetail, null, userDetail.getAuthorities());

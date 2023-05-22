@@ -41,7 +41,9 @@ public class WebConfig implements WebMvcConfigurer {
         // session.getAttribute("loggedUser");
         // PUBLIC PATH  
         return new OrRequestMatcher(
+                new AntPathRequestMatcher("/fakeData"),
                 new AntPathRequestMatcher("/index"),
+
                 new AntPathRequestMatcher("/signin"),
                 new AntPathRequestMatcher("/static/**")
                 , new AntPathRequestMatcher("/")
@@ -96,7 +98,11 @@ public class WebConfig implements WebMvcConfigurer {
                         .allowedOrigins(
                                 "http://localhost:5173",
                                 "http://127.0.0.1:5173",
-                                "http://35.229.243.12:5173"
+                                "http://35.229.243.12:5173",
+                                "shikishiki.site",
+                                "34.81.192.98:80",
+                                "34.81.192.98:443",
+                                "34.81.192.98:8080"
                         )
                         .allowedOriginPatterns("*.*.*.*:*")
                         .allowCredentials(true)
