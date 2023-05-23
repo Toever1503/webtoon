@@ -1,6 +1,7 @@
 package webtoon.main;
 
 
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -9,12 +10,7 @@ import webtoon.main.account.enums.EAccountType;
 import webtoon.main.account.enums.EStatus;
 import webtoon.main.account.repositories.IRoleRepository;
 import webtoon.main.account.repositories.IUserRepository;
-import webtoon.main.payment.controllers.VnPayConfig;
-import webtoon.main.payment.entities.OrderEntity;
 import webtoon.main.payment.entities.SubscriptionPackEntity;
-import webtoon.main.payment.enums.EOrderStatus;
-import webtoon.main.payment.enums.EOrderType;
-import webtoon.main.payment.enums.EPaymentMethod;
 import webtoon.main.payment.repositories.IOrderRepository;
 import webtoon.main.payment.repositories.ISubscriptionPackRepository;
 import webtoon.main.utils.ASCIIConverter;
@@ -22,7 +18,6 @@ import webtoon.main.utils.ASCIIConverter;
 import java.io.*;
 import java.sql.Date;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 
 
@@ -38,46 +33,49 @@ public class ComponentLoaderConfiguration {
     private final IOrderRepository orderRepository;
 
     private final IRoleRepository roleRepository;
+    private final PasswordEncoder passwordEncoder;
 
-    public ComponentLoaderConfiguration(IUserRepository userRepository, ISubscriptionPackRepository subscriptionPackRepository, IOrderRepository orderRepository, IRoleRepository roleRepository) throws IOException {
+    public ComponentLoaderConfiguration(IUserRepository userRepository, ISubscriptionPackRepository subscriptionPackRepository, IOrderRepository orderRepository, IRoleRepository roleRepository, PasswordEncoder passwordEncoder) throws IOException {
         this.userRepository = userRepository;
         this.subscriptionPackRepository = subscriptionPackRepository;
         this.orderRepository = orderRepository;
 
         subscriptionPackEntities = subscriptionPackRepository.findAll();
         this.roleRepository = roleRepository;
+        this.passwordEncoder = passwordEncoder;
 
         readFileName();
     }
 
     @RequestMapping
     public String fake()  {
-        for (int i = 0; i < 10; i++) {
-            java.util.Date createdAt =  Date.valueOf("2023-05-22");
+        for (int i = 1; i < 6; i++) {
+            java.util.Date createdAt =  Date.valueOf("2023-05-23");
             UserEntity userEntity = generateUser();
+            userEntity.setUsername("tests"+i);
 
-            int subIndex = generateRange(0, 2);
-            while (subIndex < 0 || subIndex > 2){
-                subIndex = generateRange(0, 2);
-            }
-            SubscriptionPackEntity subs = subscriptionPackEntities.get(subIndex);
-
-            String madonhang = VnPayConfig.getRandomNumber(10); // need check
-
-            while (this.orderRepository.getByMaDonHang(madonhang) != null)
-                madonhang = VnPayConfig.getRandomNumber(10);
-
-            OrderEntity order = OrderEntity.builder()
-                    .orderType(EOrderType.CUSTOM)
-                    .user_id(userEntity)
-                    .paymentMethod(EPaymentMethod.ATM)
-                    .finalPrice(subs.getPrice())
-                    .maDonHang(madonhang)
-                    .modifiedBy(userEntity)
-                    .subs_pack_id(subs)
-                    .status(EOrderStatus.USER_CONFIRMED_BANKING)
-                    .createAtFake(createdAt)
-                    .build();
+//            int subIndex = generateRange(0, 2);
+//            while (subIndex < 0 || subIndex > 2){
+//                subIndex = generateRange(0, 2);
+//            }
+//            SubscriptionPackEntity subs = subscriptionPackEntities.get(subIndex);
+//
+//            String madonhang = VnPayConfig.getRandomNumber(10); // need check
+//
+//            while (this.orderRepository.getByMaDonHang(madonhang) != null)
+//                madonhang = VnPayConfig.getRandomNumber(10);
+//
+//            OrderEntity order = OrderEntity.builder()
+//                    .orderType(EOrderType.NEW)
+//                    .user_id(userEntity)
+//                    .paymentMethod(EPaymentMethod.ATM)
+//                    .finalPrice(subs.getPrice())
+//                    .maDonHang(madonhang)
+//                    .modifiedBy(userEntity)
+//                    .subs_pack_id(subs)
+//                    .status(EOrderStatus.USER_CONFIRMED_BANKING)
+//                    .createAtFake(createdAt)
+//                    .build();
 
             userEntity.setCreateAtFake(createdAt);
 //            userEntity.setCurrentUsedSubsId(subs.getId());
@@ -89,7 +87,7 @@ public class ComponentLoaderConfiguration {
 //            userEntity.setCanReadUntilDate(canReadUntil.getTime());
 
             this.userRepository.saveAndFlush(userEntity);
-            this.orderRepository.saveAndFlush(order);
+//            this.orderRepository.saveAndFlush(order);
         }
 
         return "ok";
@@ -122,7 +120,7 @@ public class ComponentLoaderConfiguration {
                 .username(uName)
                 .email(email)
                 .phone(phone)
-                .password("123456")
+                .password(passwordEncoder.encode("123456"))
                 .accountType(EAccountType.FAKE)
                 .role(roleRepository.findById(3l).get())
                 .hasBlocked(false)
