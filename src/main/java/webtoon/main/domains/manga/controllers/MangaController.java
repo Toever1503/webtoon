@@ -210,8 +210,8 @@ public class MangaController {
 
         boolean canReadChapter = false;
         if (chapterEntity.getRequiredVip() == true) {
-            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-            if (loggedUser != null && loggedUser.getRole().getRoleName().equals(ERoleConstants.CUS)) {
+            SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+            if (loggedUser != null && loggedUser.getRole().getRoleName().equals(ERoleConstants.CUS) && loggedUser.getCanReadUntilDate() != null) {
                 int result = formatter.format(loggedUser.getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
                 canReadChapter = result >= 0;
             }

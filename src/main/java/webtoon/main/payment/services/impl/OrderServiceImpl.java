@@ -402,18 +402,27 @@ public class OrderServiceImpl implements IOrderService {
             orderEntity.getUser_id().setCurrentUsedSubsId(orderEntity.getSubs_pack_id().getId());
         }
 
-        orderEntity.getUser_id().setFirstBoughtSubsDate(Calendar.getInstance().getTime());
-        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-        if(orderEntity.getUser_id().getCanReadUntilDate() == null){
+        if(!orderEntity.getOrderType().equals(EOrderType.UPGRADE)){
+            orderEntity.getUser_id().setFirstBoughtSubsDate(Calendar.getInstance().getTime());
+        }
+
+        SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+        if(orderEntity.getUser_id().getCanReadUntilDate() == null){ // for first time
             canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
         }
         else {
-            int result = formatter.format(orderEntity.getUser_id().getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
-            if (result < 0) {
-                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
-            } else {
-                canReadUntilDate.setTime(orderEntity.getUser_id().getCanReadUntilDate());
-                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+            if(orderEntity.getOrderType().equals(EOrderType.UPGRADE)){
+                canReadUntilDate.setTime(orderEntity.getUser_id().getFirstBoughtSubsDate());
+                canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + orderEntity.getSubs_pack_id().getMonthCount());
+            }
+            else{
+                int result = formatter.format(orderEntity.getUser_id().getCanReadUntilDate()).compareTo(formatter.format(Calendar.getInstance().getTime()));
+                if (result < 0) {
+                    canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+                } else {
+                    canReadUntilDate.setTime(orderEntity.getUser_id().getCanReadUntilDate());
+                    canReadUntilDate.set(Calendar.MONTH, canReadUntilDate.get(Calendar.MONTH) + monthCount);
+                }
             }
         }
         orderEntity.getUser_id().setCanReadUntilDate(canReadUntilDate.getTime());
