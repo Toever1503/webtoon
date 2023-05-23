@@ -138,13 +138,14 @@
                             selectChapter.value = "";
                             let listChapter = [];
                             // call api de set vao listchapter
-                            fetch('/mangachapter/get-all-chapters-by-vol/' + e.target.value, {
+                            fetch('/manga-chapter/get-all-chapters-by-vol/' + e.target.value, {
                                 method: 'GET'
                             })
                                 .then(res => res.json())
 
                                 .then(res => {
                                     // console.log('chapter dât: ', res);
+                                    jQuery('#chapter option').remove()
                                     listChapter = res;
                                     listChapter.forEach(item => {
                                         //  item la chapter item

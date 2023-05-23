@@ -15,7 +15,7 @@ import webtoon.main.domains.manga.services.IMangaChapterService;
 import java.util.List;
 
 @RestController
-@RequestMapping("/mangachapter")
+@RequestMapping("/manga-chapter")
 public class MangaChapterResource {
 
     @Autowired
